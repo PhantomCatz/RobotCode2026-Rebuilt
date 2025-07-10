@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,6 +19,7 @@ public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
+    private static Pose3d[] simMechanismPoses = new Pose3d[1];
 
     // public static final AutoFactory autoFactory = new AutoFactory(
     //                                               CatzRobotTracker.Instance::getEstimatedPose,
@@ -97,4 +99,13 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testExit() {}
+
+    @Override
+    public void simulationPeriodic() {
+        Logger.recordOutput("FinalComponentPoses", simMechanismPoses);
+    }
+
+    public static void setSimPose(int index, Pose3d pose) {
+        simMechanismPoses[index] = pose;
+    }
 }

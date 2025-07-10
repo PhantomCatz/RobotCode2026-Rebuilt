@@ -3,14 +3,16 @@ package frc.robot.CatzSubsystems.CatzArm;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.Robot;
 
 public class ArmIOSim implements ArmIO {
     private final DCMotor m_armGearbox = DCMotor.getKrakenX60Foc(1); // TODO motor type
     private double targetDegreesFinalShaft;
-    private double currentDegrees;
     private final int ARM_INDEX = 0;
 
     private PIDController simPIDController = new PIDController(0.1, 0.0, 0.0);
@@ -30,14 +32,23 @@ public class ArmIOSim implements ArmIO {
     
     @Override
     public void updateInputs(ArmIOInputs inputs) {
-        inputs.positionDegrees = Units.radiansToDegrees(m_armSim.getAngleRads());
+        inputs.positionDegreesFinalShaft = Units.radiansToDegrees(m_armSim.getAngleRads());
 
-        double setVoltage = simPIDController.calculate(inputs.positionDegrees, targetDegreesFinalShaft) * 12.0;
-        m_armSim.update(0.02);
+        double setVoltage = simPIDController.calculate(inputs.positionDegreesFinalShaft, targetDegreesFinalShaft) * 12.0;
         m_armSim.setInputVoltage(setVoltage);
+        m_armSim.update(0.02);
 
         Logger.recordOutput("Arm/Sim target degrees", targetDegreesFinalShaft);
-        Robot.setSimPose(ARM_INDEX, new Pose3d(ArmConstants.ARM_SIM_OFFSET))
+        Robot.setSimPose(ARM_INDEX, new Pose3d(ArmConstants.ARM_SIM_OFFSET, new Rotation3d(0, Units.degreesToRadians(inputs.positionDegreesFinalShaft), 0)));
     }
 
+    @Override
+    public void runSetpointUp(double setpointDegrees) {
+        targetDegreesFinalShaft = setpointDegrees;
+    }
+
+    @Override
+    public void runSetpointDown(double setpointDegrees) {
+        targetDegreesFinalShaft = setpointDegrees;
+    }
 }
