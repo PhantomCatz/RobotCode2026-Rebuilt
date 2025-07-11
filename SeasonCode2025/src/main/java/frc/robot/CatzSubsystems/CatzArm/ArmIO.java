@@ -14,4 +14,6 @@ public interface ArmIO {
     public default void runSetpointUp(double setpointDegrees) {}
 
     public default void runSetpointDown(double setpointDegrees) {}
+
+    public default void setPercentOutput(double percentOutput) {}
 }

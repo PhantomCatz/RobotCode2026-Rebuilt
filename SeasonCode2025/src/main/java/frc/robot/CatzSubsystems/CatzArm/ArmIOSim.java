@@ -44,11 +44,17 @@ public class ArmIOSim implements ArmIO {
 
     @Override
     public void runSetpointUp(double setpointDegrees) {
+        System.out.println("setpoint up"+setpointDegrees);
         targetDegreesFinalShaft = setpointDegrees;
     }
 
     @Override
     public void runSetpointDown(double setpointDegrees) {
         targetDegreesFinalShaft = setpointDegrees;
+    }
+
+    @Override
+    public void setPercentOutput(double percentOutput) {
+        m_armSim.setInputVoltage(percentOutput * 12.0);
     }
 }
