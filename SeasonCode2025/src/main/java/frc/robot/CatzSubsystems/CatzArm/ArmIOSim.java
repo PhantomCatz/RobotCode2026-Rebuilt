@@ -15,7 +15,7 @@ public class ArmIOSim implements ArmIO {
     private double targetDegreesFinalShaft;
     private final int ARM_INDEX = 0;
 
-    private PIDController simPIDController = new PIDController(0.1, 0.0, 0.0);
+    private PIDController simPIDController = new PIDController(0.03, 0.0, 0.0);
 
     private final SingleJointedArmSim m_armSim =
         new SingleJointedArmSim(
@@ -50,6 +50,7 @@ public class ArmIOSim implements ArmIO {
 
     @Override
     public void runSetpointDown(double setpointDegrees) {
+        System.out.println("setpoint down"+setpointDegrees);
         targetDegreesFinalShaft = setpointDegrees;
     }
 

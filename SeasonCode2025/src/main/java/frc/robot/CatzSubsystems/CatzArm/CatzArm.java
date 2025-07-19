@@ -31,7 +31,8 @@ public class CatzArm extends SubsystemBase {
         }
     }
 
-    public CatzArm() {
+    private CatzArm() {
+        System.out.println("making arm");
         if(isArmDisabled) {
             io = new ArmIONull();
             System.out.println("Arm Unconfigured");
@@ -47,7 +48,7 @@ public class CatzArm extends SubsystemBase {
                 break;
                 case SIM:
                     io = new ArmIOSim();
-                    System.out.println("Elevator Configured for Simulation");
+                    System.out.println("Arm Configured for Simulation");
                 break;
                 default:
                     io = new ArmIONull();

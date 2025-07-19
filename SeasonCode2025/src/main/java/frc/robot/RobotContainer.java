@@ -11,6 +11,8 @@ import frc.robot.CatzSubsystems.CatzArm.CatzArm;
 
 public class RobotContainer {
 
+    public static final RobotContainer Instance = new RobotContainer();
+
     private final CommandXboxController xboxDrv = new CommandXboxController(0);
 
     public RobotContainer() {

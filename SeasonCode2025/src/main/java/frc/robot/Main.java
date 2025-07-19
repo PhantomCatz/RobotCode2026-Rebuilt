@@ -10,6 +10,7 @@ public final class Main {
     private Main() {}
 
     public static void main(String... args) {
+      System.out.println("main start robot");
       RobotBase.startRobot(Robot::new);
     }
 }
