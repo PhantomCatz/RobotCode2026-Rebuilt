@@ -32,24 +32,33 @@ public class ArmIOSim implements ArmIO {
     
     @Override
     public void updateInputs(ArmIOInputs inputs) {
-        inputs.positionDegreesFinalShaft = Units.radiansToDegrees(m_armSim.getAngleRads());
-
         double setVoltage = simPIDController.calculate(inputs.positionDegreesFinalShaft, targetDegreesFinalShaft) * 12.0;
         m_armSim.setInputVoltage(setVoltage);
         m_armSim.update(0.02);
+
+        inputs.positionDegreesFinalShaft = Units.radiansToDegrees(m_armSim.getAngleRads());
+        inputs.isArmMotorConnected = true;
+        // limit switch
+        inputs.velocityRPM = Units.radiansPerSecondToRotationsPerMinute(m_armSim.getVelocityRadPerSec());
+        inputs.absoluteEncoderPositionRads = m_armSim.getAngleRads();
+        inputs.relativeEncoderPositionRads = m_armSim.getAngleRads();
+        inputs.appliedVolts = setVoltage;
+        // supply current
+        // torque current
+        // temperature
 
         Logger.recordOutput("Arm/Sim target degrees", targetDegreesFinalShaft);
         Robot.setSimPose(ARM_INDEX, new Pose3d(ArmConstants.ARM_SIM_OFFSET, new Rotation3d(0, Units.degreesToRadians(inputs.positionDegreesFinalShaft), 0)));
     }
 
     @Override
-    public void runSetpointUp(double setpointDegrees) {
+    public void runSetpointUp(double setpointDegrees, double feedforwardVolts) {
         System.out.println("setpoint up"+setpointDegrees);
         targetDegreesFinalShaft = setpointDegrees;
     }
 
     @Override
-    public void runSetpointDown(double setpointDegrees) {
+    public void runSetpointDown(double setpointDegrees, double feedforwardVolts) {
         System.out.println("setpoint down"+setpointDegrees);
         targetDegreesFinalShaft = setpointDegrees;
     }

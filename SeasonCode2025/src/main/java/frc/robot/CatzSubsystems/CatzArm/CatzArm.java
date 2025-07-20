@@ -32,7 +32,6 @@ public class CatzArm extends SubsystemBase {
     }
 
     private CatzArm() {
-        System.out.println("making arm");
         if(isArmDisabled) {
             io = new ArmIONull();
             System.out.println("Arm Unconfigured");
@@ -68,18 +67,16 @@ public class CatzArm extends SubsystemBase {
             targetPosition = ArmPosition.NULL;
         } else {
             if(targetPosition != ArmPosition.NULL) {
-                io.runSetpointUp(targetPosition.getTargetAngle());
+                io.runSetpointUp(targetPosition.getTargetAngle(), 0.0);
             }
         }
     }
 
-    public Command Arm_Stow() {
-        System.out.println("STOW");
+    public Command armStow() {
         return runOnce(() -> setArmPos(ArmPosition.STOW));
     }
 
-    public Command Arm_Up() {
-        System.out.println("UP");
+    public Command armUp() {
         return runOnce(() -> setArmPos(ArmPosition.UP));
     }
 
