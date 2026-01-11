@@ -9,8 +9,12 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.CatzConstants;
+import frc.robot.CatzAbstractions.io.GenericIOSim;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
+import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal;
 import frc.robot.CatzAbstractions.io.MotorIOInputsAutoLogged;
+import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.Setpoint;
 
 public abstract class GenericMotorSubsystem extends SubsystemBase {
@@ -33,7 +37,6 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 		Logger.processInputs(name, inputs);
 	}
 
-
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
 		setpoint.apply(io);
@@ -50,8 +53,9 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 		return runOnce(() -> applySetpoint(setpoint));
 	}
 
-		/**
-	 * Creates a continous command for the subsystem to repeatedly go to a supplied setpoint.
+	/**
+	 * Creates a continous command for the subsystem to repeatedly go to a supplied
+	 * setpoint.
 	 *
 	 * @param setpoint Supplier of setpoint to go to.
 	 * @return Continuous Command for the subsystem.
@@ -60,8 +64,8 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 		return run(() -> applySetpoint(supplier.get()));
 	}
 
-	public double getSetpointInUnits() {
-		return setpoint.baseUnits;
+	public Setpoint getSetpoint() {
+		return setpoint;
 	}
 
 	public AngularVelocity getVelocity() {
@@ -76,7 +80,7 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 		return inputs.supplyCurrentAmps;
 	}
 
-	public double getAcceleration() { //TODO make this an array as well
+	public double getAcceleration() { // TODO make this an array as well
 		return inputs.accelerationRPS;
 	}
 
@@ -86,5 +90,19 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 
 	public double[] getAppliedVoltage() {
 		return inputs.appliedVolts;
+	}
+
+	protected static GenericMotorIO getIOInstance(MotorIOTalonFXConfig motorConfig) {
+		switch (CatzConstants.hardwareMode) {
+			case REAL:
+				System.out.println("Shooter Configured for Real");
+				return new GenericTalonFXIOReal(motorConfig);
+			case SIM:
+				System.out.println("Shooter Configured for Simulation");
+				return new GenericIOSim();
+			default:
+				System.out.println("Shooter Unconfigured; defaulting to simulation");
+				return new GenericIOSim();
+		}
 	}
 }

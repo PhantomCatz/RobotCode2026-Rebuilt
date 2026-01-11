@@ -22,7 +22,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
-public abstract class GenericTalonFXIOReal implements GenericMotorIO {
+public class GenericTalonFXIOReal implements GenericMotorIO {
 
     // initialize follower if needed
     protected TalonFX leaderTalon;

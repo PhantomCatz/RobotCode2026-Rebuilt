@@ -6,13 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import frc.robot.Utilities.Setpoint;
-
-
-
 public interface GenericMotorIO {
-
-
   @AutoLog
   public static class MotorIOInputs {
 

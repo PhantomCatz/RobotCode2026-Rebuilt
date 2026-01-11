@@ -92,7 +92,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 */
 	public boolean nearPosition(Angle mechanismPosition) {
 		return EqualsUtil.epsilonEquals(
-				inputs.position,
+				getPosition().in(Units.Rotations),
 				mechanismPosition.in(Units.Rotations),
 				epsilonThreshold.in(Units.Rotations));
 	}

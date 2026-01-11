@@ -4,20 +4,16 @@ import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
-import frc.robot.CatzAbstractions.Bases.DigitalInOut;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class ShooterConstants {
-	public DigitalInOut BEAMBREAK = new DigitalInOut(0, 0.0, false, "Beam");
-
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
@@ -30,26 +26,15 @@ public class ShooterConstants {
     private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-    private static final LoggedTunableNumber shootingLeftRpm = new LoggedTunableNumber("Flywheels/ShootingLeftRpm",
-            5066.0);
-    private static final LoggedTunableNumber shootingRightRpm = new LoggedTunableNumber("Flywheels/ShootingRightRpm",
-            7733.0);
-    private static final LoggedTunableNumber prepareShootMultiplier = new LoggedTunableNumber(
-            "Flywheels/PrepareShootMultiplier", 1.0);
-    private static final LoggedTunableNumber intakingRpm = new LoggedTunableNumber("Flywheels/IntakingRpm", -3000.0);
-    private static final LoggedTunableNumber demoIntakingRpm = new LoggedTunableNumber("Flywheels/DemoIntakingRpm",
-            -250.0);
     private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
-    private static final LoggedTunableNumber poopingRpm = new LoggedTunableNumber("Flywheels/PoopingRpm", 3000.0);
-    private static final LoggedTunableNumber maxAcceleration = new LoggedTunableNumber(
-            "Flywheels/MaxAccelerationRpmPerSec", 0.0);
 
             
     private static final int SHOOTER_MOTOR_ID = 0;
 
-
     public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());
     public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
+
+	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
