@@ -13,14 +13,16 @@ import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.L
 
 import org.littletonrobotics.junction.Logger;
 
-public class DetectionSubsystem<IO extends DetectionIOLimelight> extends SubsystemBase {
-	protected final IO io;
+public class DetectionSubsystem extends SubsystemBase {
+	public static final DetectionSubsystem Instance = new DetectionSubsystem();
+
+	protected final DetectionIOLimelight io;
 	private final LimelightConfig config;
 	private final DetectionIOInputsAutoLogged inputs = new DetectionIOInputsAutoLogged();
 
-	public DetectionSubsystem(LimelightConfig config, IO io) {
-		this.io = io;
-		this.config = config;
+	private DetectionSubsystem() {
+		this.io = DetectionConstants.getDetectionIO();
+		this.config = DetectionConstants.getDetectionIOConfig();
 		if (Robot.isReal()) {
 			LimelightHelpers.setCameraPose_RobotSpace(
 					config.name,

@@ -195,7 +195,7 @@ public class DetectionIOLimelight extends DetectionIO {
 
 	@Override
 	public Translation2d calcDistToCoral(double tx, double ty) {
-		final Distance heightFromCoral = config.robotToCameraOffset.getMeasureZ().minus(DetectionConstants.kCoralRadius);
+		final Distance heightFromCoral = config.robotToCameraOffset.getMeasureZ().minus(DetectionConstants.FUEL_RADIUS);
 
 		double totalAngleY = Units.degreesToRadians(ty) //pitch
 				- config.robotToCameraOffset.getRotation().getY();
