@@ -6,12 +6,17 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
+import frc.robot.CatzAbstractions.io.DigitalInOutIO;
+import frc.robot.CatzAbstractions.io.DigitalInOutIOBeambreak;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class ShooterConstants {
+
+	private Digital
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);

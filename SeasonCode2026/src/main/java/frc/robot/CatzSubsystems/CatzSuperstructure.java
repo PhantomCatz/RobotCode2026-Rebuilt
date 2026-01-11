@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.InterpolatingDouble;
 
@@ -7,6 +8,11 @@ public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
     private CatzSuperstructure(){}
+
+
+    public Command abcdefg(){
+        return 
+    }
 
     // interpolates distance to target for shooter setpoint along regression
     private double getShooterSetpointFromRegression(double range) {

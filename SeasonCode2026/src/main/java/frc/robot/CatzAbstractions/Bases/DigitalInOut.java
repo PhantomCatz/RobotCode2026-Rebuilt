@@ -4,36 +4,30 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
-import frc.robot.CatzAbstractions.io.DigitalInOutIO;
-import frc.robot.CatzAbstractions.io.DigitalInOutIOInputsAutoLogged;
 
 public class DigitalInOut {
 	private final Debouncer debouncer;
 	private final String name;
 	private final boolean isInverted;
+	private final DigitalInput beambreak;
 
-	private final DigitalInOutIO io;
-	private final DigitalInOutIOInputsAutoLogged inputs = new DigitalInOutIOInputsAutoLogged();
-
-	public DigitalInOut(DigitalInOutIO io, Time debounce, boolean isInverted, String name) {
-		this.io = io;
-		debouncer = new Debouncer(debounce.in(Units.Seconds), DebounceType.kBoth);
+	public DigitalInOut(int id, double debounceTime, boolean isInverted, String name) {
+		debouncer = new Debouncer(debounceTime, DebounceType.kBoth);
 		this.isInverted = isInverted;
 		this.name = name;
+		this.beambreak = new DigitalInput(id);
 	}
 
 	public void periodic() {
-		io.updateInputs(inputs);
-		Logger.processInputs(name, inputs);
+		Logger.recordOutput("BeamBreak: " + name, get());
 	}
 
 	public boolean get() {
-		return isInverted ? !inputs.value : inputs.value;
+		return isInverted ? !beambreak.get() : beambreak.get();
 	}
 
 	public boolean getDebounced() {
@@ -60,7 +54,4 @@ public class DigitalInOut {
 		return Commands.either(
 				stateWaitWithDebounce(state), Commands.waitSeconds(waitSecondsSim), () -> Robot.isReal());
 	}
-
-
-
 }
