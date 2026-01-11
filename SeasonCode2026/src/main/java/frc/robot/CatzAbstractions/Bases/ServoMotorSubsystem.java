@@ -7,6 +7,8 @@ import frc.robot.Utilities.EqualsUtil;
 import java.util.function.Supplier;
 
 import edu.wpi.first.units.BaseUnits;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -15,13 +17,13 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 
 	protected final GenericMotorIO io;
 	protected final String name;
-	protected final double epsilonThreshold;
+	protected final Angle epsilonThreshold;
 
 	private Setpoint setpoint = Setpoint.withBrakeSetpoint();
 	private double manualSpeed = 0.0;
 	private boolean isFullManual = false;
 
-	public ServoMotorSubsystem(GenericMotorIO io, String name, double epsilonThreshold) {
+	public ServoMotorSubsystem(GenericMotorIO io, String name, Angle epsilonThreshold) {
 		super(io, name);
 		this.io = io;
 		this.name = name;
@@ -39,7 +41,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 
 	public void runFullManual(double speed) {
 		if (Math.abs(speed) < 0.1) {
-			io.setMotionMagicSetpoint(getPosition());
+			io.setMotionMagicSetpoint(getPosition().in(Units.Rotations));
 		} else {
 			io.setDutyCycleSetpoint(speed);
 		}
@@ -66,7 +68,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 * @return A new Command to apply setpoint and wait.
 	 */
 	public Command setpointCommandWithWait(Setpoint setpoint) {
-		return waitForPositionCommand(setpoint.baseUnits)
+		return waitForPositionCommand(Units.Rotations.of(setpoint.baseUnits))
 				.deadlineFor(setpointCommand(setpoint));
 	}
 
@@ -76,7 +78,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 * @param mechanismPosition Position to evaluate proximity to.
 	 * @return A wait command.
 	 */
-	public Command waitForPositionCommand(double mechanismPosition) {
+	public Command waitForPositionCommand(Angle mechanismPosition) {
 		return Commands.waitUntil(() -> {
 			return nearPosition(mechanismPosition);
 		});
@@ -88,15 +90,15 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 * @param mechanismPosition Position to compare to.
 	 * @return True if near provided position, false if not.
 	 */
-	public boolean nearPosition(double mechanismPosition) {
+	public boolean nearPosition(Angle mechanismPosition) {
 		return EqualsUtil.epsilonEquals(
 				inputs.position,
-				mechanismPosition,
-				epsilonThreshold);
+				mechanismPosition.in(Units.Rotations),
+				epsilonThreshold.in(Units.Rotations));
 	}
 
-	public void setCurrentPosition(double position) {
-		io.setCurrentPosition(position);
+	public void setCurrentPosition(Angle position) {
+		io.setCurrentPosition(position.in(Units.Rotations));
 	}
 
 	public Command fullManualCommand(Supplier<Double> speed) {

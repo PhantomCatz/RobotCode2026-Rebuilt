@@ -4,6 +4,9 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
@@ -61,12 +64,12 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 		return setpoint.baseUnits;
 	}
 
-	public double getVelocityRPS() {
-		return inputs.velocityRPS;
+	public AngularVelocity getVelocity() {
+		return Units.RotationsPerSecond.of(inputs.velocityRPS);
 	}
 
-	public double getPosition() {
-		return inputs.position;
+	public Angle getPosition() {
+		return Units.Rotations.of(inputs.position);
 	}
 
 	public double[] getSupplyCurrent() {

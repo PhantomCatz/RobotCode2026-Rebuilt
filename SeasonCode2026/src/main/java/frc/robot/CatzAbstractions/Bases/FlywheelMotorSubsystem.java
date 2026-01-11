@@ -8,13 +8,13 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
 public abstract class FlywheelMotorSubsystem extends GenericMotorSubsystem {
-	protected final double epsilonThreshold;
+	protected final AngularVelocity epsilonThreshold;
 
 	private boolean mHoming = false;
 	private boolean mNeedsToHome = true;
 	private DelayedBoolean mHomingDelay;
 
-	public FlywheelMotorSubsystem(GenericMotorIO io, String name, double epsilonThreshold) {
+	public FlywheelMotorSubsystem(GenericMotorIO io, String name, AngularVelocity epsilonThreshold) {
 		super(io, name);
 		this.epsilonThreshold = epsilonThreshold;
 	}

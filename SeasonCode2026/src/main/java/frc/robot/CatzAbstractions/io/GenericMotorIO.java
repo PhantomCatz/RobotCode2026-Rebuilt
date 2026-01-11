@@ -72,7 +72,7 @@ public interface GenericMotorIO {
   /**
    * Sets the motor to use motion magic control to go to a given position. Should not be called directly, only applied through Setpoints.
    *
-   * @param mechanismPosition Mechanism position to go to (radians or degrees depending on implementation).
+   * @param mechanismPosition Mechanism position to go to in rotations.
    */
   public default void setMotionMagicSetpoint(double mechanismPosition) {}
 
@@ -118,7 +118,4 @@ public interface GenericMotorIO {
   public default void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {}
 
   public default void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {}
-
-  public default Setpoint getSetpoint() {}
-
 }
