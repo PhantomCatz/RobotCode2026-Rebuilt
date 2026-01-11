@@ -1,8 +1,5 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -91,17 +88,6 @@ public class DriveConstants {
                 0.0,
                 Mk4iReductions.L2_16t.reduction,
                 Mk4iReductions.steer.reduction);
-        case SN1_2024 ->
-            new ModuleGainsAndRatios(
-                5.0,
-                0.0,
-                1.0 / DCMotor.getKrakenX60Foc(1).KtNMPerAmp, // A/(N*m)
-                0.2,
-                0.0,
-                0.3,
-                0.005,
-                Mk4iReductions.L2_PLUS.reduction,
-                Mk4iReductions.steer.reduction);
       };
   // -------------------------------------------------------------------------------
   // Odometry Constants
@@ -110,7 +96,7 @@ public class DriveConstants {
   public static final double GYRO_UPDATE_FREQUENCY =
       switch (CatzConstants.getRobotType()) {
         case SN_TEST -> 50.0;
-        case SN2, SN1, SN1_2024 -> 100.0;
+        case SN2, SN1 -> 100.0;
         //case SN2 -> 250.0;
       };
 
@@ -147,13 +133,6 @@ public class DriveConstants {
             MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, 0.0, false);
             MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.0, false);
         break;
-
-        case SN1_2024:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 1, 0.7066, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 2, 1.0682, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 3, 1.2969, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 4, 1.4919, false);
-        break;
     }
   }
 
@@ -162,26 +141,7 @@ public class DriveConstants {
   //      Drivebase controller/object definements
   //
   // -----------------------------------------------------------------------------------------------------------------------------
-  public static final PathConstraints PATHFINDING_CONSTRAINTS = new PathConstraints(
-    TRAJECTORY_CONFIG.maxLinearVelocity,
-    TRAJECTORY_CONFIG.maxLinearAcceleration,
-    TRAJECTORY_CONFIG.maxAngularVelocity,
-    TRAJECTORY_CONFIG.maxAngularAcceleration
-  );
 
-  public static final PathConstraints LEFT_RIGHT_CONSTRAINTS = new PathConstraints(
-    2,
-    1.5,
-    TRAJECTORY_CONFIG.maxAngularVelocity,
-    TRAJECTORY_CONFIG.maxAngularAcceleration
-  );
-
-  public static final PathConstraints LEFT_RIGHT_NET_CONSTRAINTS = new PathConstraints(
-    1,
-    4,
-    TRAJECTORY_CONFIG.maxAngularVelocity,
-    TRAJECTORY_CONFIG.maxAngularAcceleration
-  );
 
   public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[4];
   static {
@@ -223,19 +183,7 @@ public class DriveConstants {
   public static final double ROBOT_MASS = 60.0;
   public static final double ROBOT_MOI = (2.0 / 12.0) * ROBOT_MASS * (Math.pow(DRIVE_CONFIG.bumperWidthX(), 2));
 
-  public static final RobotConfig TRAJ_ROBOT_CONFIG = new RobotConfig(
-    ROBOT_MASS,
-    ROBOT_MOI,
-    new ModuleConfig(
-      DRIVE_CONFIG.wheelRadius(),
-      TRAJECTORY_CONFIG.maxLinearVelocity,
-      CARPET_COEF_FRICTION,
-      DCMotor.getKrakenX60(1).withReduction(MODULE_GAINS_AND_RATIOS.driveReduction()),
-      DRIVE_CURRENT_LIMIT,
-      1
-    ),
-    MODULE_TRANSLATIONS
-  );
+
 
   // -----------------------------------------------------------------------------------------------------------------------------
   //

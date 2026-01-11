@@ -12,12 +12,12 @@ import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.units.AngleUnit;
-import edu.wpi.first.units.BaseUnits;
-import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.measure.AngleUnit;
+import edu.wpi.first.units.measure.BaseUnits;
+import edu.wpi.first.units.measure.DistanceUnit;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Unit;
+import edu.wpi.first.units.measure.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
@@ -227,7 +227,7 @@ public class Util {
 		}
 	}
 
-	public static class MeasureInterpolable<T extends Measure<U>, U extends Unit> implements Interpolator<T> {
+	public static class MeasureInterpolable<T extends U, U extends Unit> implements Interpolator<T> {
 		@Override
 		@SuppressWarnings("unchecked")
 		public T interpolate(T startValue, T endValue, double t) {
@@ -235,7 +235,7 @@ public class Util {
 		}
 	}
 
-	public static class MeasureInverseInterpolable<T extends Measure<U>, U extends Unit>
+	public static class MeasureInverseInterpolable<T extends U, U extends Unit>
 			implements InverseInterpolator<T> {
 		@Override
 		public double inverseInterpolate(T startValue, T endValue, T q) {
@@ -245,7 +245,7 @@ public class Util {
 	}
 
 	public static class InterpolatingMeasureMap<
-					J extends Measure<U>, U extends Unit, K extends Measure<Q>, Q extends Unit>
+					J extends U, U extends Unit, K extends Q, Q extends Unit>
 			extends InterpolatingTreeMap<J, K> {
 		public InterpolatingMeasureMap() {
 			super(new MeasureInverseInterpolable<J, U>(), new MeasureInterpolable<K, Q>());
@@ -441,11 +441,11 @@ public class Util {
 				getEmptySubsystemSet());
 	}
 
-	public static <M extends Measure<U>, U extends Unit> M min(M x, M y) {
+	public static <M extends U, U extends Unit> M min(M x, M y) {
 		return x.lt(y) ? x : y;
 	}
 
-	public static <M extends Measure<U>, U extends Unit> M max(M x, M y) {
+	public static <M extends U, U extends Unit> M max(M x, M y) {
 		return x.gt(y) ? x : y;
 	}
 
