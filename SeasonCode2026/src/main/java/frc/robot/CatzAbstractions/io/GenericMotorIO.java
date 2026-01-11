@@ -6,6 +6,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import frc.robot.Utilities.Setpoint;
+
 
 
 public interface GenericMotorIO {
@@ -117,6 +119,6 @@ public interface GenericMotorIO {
 
   public default void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {}
 
-
+  public default Setpoint getSetpoint() {}
 
 }

@@ -1,7 +1,7 @@
 package frc.robot.CatzSubsystems;
 
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.InterpolatingDouble;
-import frc.robot.regressions.ShooterRegression;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();

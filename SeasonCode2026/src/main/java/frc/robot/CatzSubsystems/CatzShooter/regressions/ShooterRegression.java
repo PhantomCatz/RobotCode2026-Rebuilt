@@ -1,4 +1,4 @@
-package frc.robot.regressions;
+package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
 import frc.robot.Utilities.InterpolatingDouble;
 import frc.robot.Utilities.InterpolatingTreeMap;

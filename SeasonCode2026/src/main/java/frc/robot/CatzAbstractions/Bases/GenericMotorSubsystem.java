@@ -28,19 +28,12 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 	public void periodic() {
 		io.updateInputs(inputs);
 		Logger.processInputs(name, inputs);
-
-		if(setpoint != null){
-			setpoint.apply(io);
-		}
-
 	}
 
-	public void setCurrentPosition(double position) {
-		io.setCurrentPosition(position);
-	}
 
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
+		setpoint.apply(io);
 	}
 
 	/**
@@ -62,14 +55,6 @@ public abstract class GenericMotorSubsystem extends SubsystemBase {
 	 */
 	public Command followSetpointCommand(Supplier<Setpoint> supplier) {
 		return run(() -> applySetpoint(supplier.get()));
-	}
-
-	public void setDutyCycle(double dutyCycle) {
-		io.setDutyCycleSetpoint(dutyCycle);
-	}
-
-	public Command setDutyCycleCommand(double dutyCycle) {
-		return runOnce(() -> setDutyCycle(dutyCycle));
 	}
 
 	public double getSetpointInUnits() {

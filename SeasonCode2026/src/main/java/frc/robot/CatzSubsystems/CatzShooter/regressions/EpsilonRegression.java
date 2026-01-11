@@ -1,6 +1,6 @@
-package frc.robot.regressions;
+package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
-public class CompRegression {
+public class EpsilonRegression {
     public static double[][] kHoodManualAngle = {
         /* TEMPLATE REGRESSION */
         // @x --> distance from target (in meters)
@@ -32,27 +32,27 @@ public class CompRegression {
         /* TEMPLATE REGRESSION */
         // @x --> distance from target (in meters)
         // @y --> shooter velocity (in rpm)
-        { 1.0, 2050 },
-        { 1.25, 2050 },
-        { 1.50, 2200 },
-        { 1.75, 2200 },
-        { 2.0, 2200 },
-        { 2.25, 2200 },
-        { 2.5, 2300 },
-        { 2.75, 2300 },
-        { 3.0, 2350 },
-        { 3.25, 2400 },
-        { 3.5, 2420 },
-        { 3.75, 2450 },
-        { 4.0, 2500 },
-        { 4.25, 2520 },
-        { 4.5, 2600 },
-        { 4.75, 2700 },
-        { 5.0, 2710 },
-        { 5.5, 2780 },
-        { 6.0, 2900 },
-        { 6.5, 3000 },
-        { 7.0, 3150 }
+        { 1.0, 2150 },
+        { 1.25, 2150 },
+        { 1.50, 2300 },
+        { 1.75, 2300 },
+        { 2.0, 2300 },
+        { 2.25, 2300 },
+        { 2.5, 2400 },
+        { 2.75, 2400 },
+        { 3.0, 2450 },
+        { 3.25, 2500 },
+        { 3.5, 2550 },
+        { 3.75, 2600 },
+        { 4.0, 2650 },
+        { 4.25, 2670 },
+        { 4.5, 2750 },
+        { 4.75, 2850 },
+        { 5.0, 2860 },
+        { 5.5, 2930 },
+        { 6.0, 3050 },
+        { 6.5, 3150 },
+        { 7.0, 3300 }
 
     };
 }
