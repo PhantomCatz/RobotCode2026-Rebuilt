@@ -81,7 +81,6 @@ public final class CatzConstants {
     SN1,
     SN2,
     SN_TEST, // Select alternate test robot parameters
-    SN1_2024
   }
 
   public static enum AllianceColor {

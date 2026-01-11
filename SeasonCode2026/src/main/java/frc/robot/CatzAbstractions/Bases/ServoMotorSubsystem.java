@@ -1,8 +1,8 @@
 package frc.robot.CatzAbstractions.Bases;
 
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
-import frc.robot.Utilities.EpsilonEquals;
 import frc.robot.Utilities.Setpoint;
+import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
@@ -82,7 +82,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 * @return True if near provided position, false if not.
 	 */
 	public boolean nearPosition(double mechanismPosition) {
-		return EpsilonEquals.epsilonEquals(
+		return EqualsUtil.epsilonEquals(
 				inputs.position,
 				mechanismPosition,
 				epsilonThreshold);
@@ -129,9 +129,4 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 			manualSpeed = 0.0;
 		}));
 	}
-
-
-
-
-
 }

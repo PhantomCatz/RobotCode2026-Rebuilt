@@ -1,37 +1,36 @@
 package frc.robot.CatzAbstractions.Bases;
 
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
-import frc.robot.Utilities.EpsilonEquals;
+import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.Setpoint;
 
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public abstract class PivotMotorSubsystem extends GenericMotorSubsystem {
 
-	protected final GenericMotorIO io;
-	protected final String name;
+	//TODO make this a child of ServoMotorSubsystem
+
 	protected final double epsilonThreshold;
 	private Setpoint setpoint = Setpoint.withBrakeSetpoint();
 	private double manualSpeed = 0.0;
-	private final double slammingThreshold;
 	private boolean isFullManual = false;
 
 
-	public PivotMotorSubsystem(GenericMotorIO io, String name, double epsilonThreshold, double slammingThreshold) {
+	public PivotMotorSubsystem(GenericMotorIO io, String name, double epsilonThreshold) {
 		super(io, name);
-		this.io = io;
-		this.name = name;
 		this.epsilonThreshold = epsilonThreshold;
-		this.slammingThreshold = slammingThreshold;
 	}
 
 
 	@Override
 	public void periodic() {
-		super.periodic();
+		io.updateInputs(inputs);
+		Logger.processInputs(name, inputs);
 
 		if(DriverStation.isDisabled() || setpoint == null) {
 			// Disabled
@@ -47,10 +46,11 @@ public abstract class PivotMotorSubsystem extends GenericMotorSubsystem {
 	}
 
 	public void runFullManual(double speed) {
-		io.setDutyCycleSetpoint(speed);
-
+		
 		if(Math.abs(speed) < 0.1) {
 			io.setMotionMagicSetpoint(getPosition());
+		}else{
+			io.setDutyCycleSetpoint(speed);
 		}
 
 	}
@@ -75,44 +75,12 @@ public abstract class PivotMotorSubsystem extends GenericMotorSubsystem {
 	 * @return True if near provided position, false if not.
 	 */
 	public boolean nearPosition(double mechanismPosition) {
-		return EpsilonEquals.epsilonEquals(
+		return EqualsUtil.epsilonEquals(
 				inputs.position,
 				mechanismPosition,
 				epsilonThreshold);
 	}
-
-	public double getSetpointDoubleInUnits() {
-		return setpoint.baseUnits;
-	}
-
-	public void setCurrentPosition(double position) {
-		io.setCurrentPosition(position);
-	}
-
-	public void applySetpoint(Setpoint setpoint) {
-		this.setpoint = setpoint;
-	}
-
-	/**
-	 * Creates a one time, instantaneus command for the subsystem to go to a given Setpoint.
-	 *
-	 * @param setpoint Setpoint to go to.
-	 * @return One time Command for the subsystem.
-	 */
-	public Command setpointCommand(Setpoint setpoint) {
-		return runOnce(() -> applySetpoint(setpoint));
-	}
-
-	/**
-	 * Creates a continous command for the subsystem to repeatedly go to a supplied setpoint.
-	 *
-	 * @param setpoint Supplier of setpoint to go to.
-	 * @return Continuous Command for the subsystem.
-	 */
-	public Command followSetpointCommand(Supplier<Setpoint> supplier) {
-		return run(() -> applySetpoint(supplier.get()));
-	}
-
+	
 	public Command fullManualCommand(Supplier<Double> speed) {
 		return runOnce(() -> {
 			isFullManual = true;
@@ -122,9 +90,4 @@ public abstract class PivotMotorSubsystem extends GenericMotorSubsystem {
 			manualSpeed = 0.0;
 		}));
 	}
-
-
-
-
-
 }
