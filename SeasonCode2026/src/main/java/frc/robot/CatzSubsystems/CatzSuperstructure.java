@@ -9,11 +9,6 @@ public class CatzSuperstructure {
 
     private CatzSuperstructure(){}
 
-
-    public Command abcdefg(){
-        return 
-    }
-
     // interpolates distance to target for shooter setpoint along regression
     private double getShooterSetpointFromRegression(double range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {

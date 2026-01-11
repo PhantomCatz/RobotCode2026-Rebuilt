@@ -1,22 +1,12 @@
-package frc.robot.CatzSubsystems.CatzShooter;
+package frc.robot.CatzSubsystems.CatzClimb;
 
-import frc.robot.CatzAbstractions.Bases.FlywheelMotorSubsystem;
+import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
-public class CatzShooter extends FlywheelMotorSubsystem {
+public class CatzClimb extends ServoMotorSubsystem {
 
-    private static final ShooterIO io = getIOInstance();
+    public static final CatzClimb Instance = new CatzClimb();
 
-    public static final CatzShooter Instance = new CatzShooter();
-
-    private CatzShooter() {
-
-    }
-
-    static ShooterIO getIOInstance(){
-        if(io != null){
-            return io;
-        }else{
-            switch(C)
-        }
+    private CatzClimb() {
+        super(getIOInstance(ClimbConstants.getIOConfig()), "CatzClimb", ClimbConstants.converter.toAngle(ClimbConstants.ELEVATOR_THRESHOLD));
     }
 }
