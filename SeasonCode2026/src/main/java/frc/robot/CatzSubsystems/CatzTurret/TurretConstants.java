@@ -1,11 +1,11 @@
-package frc.robot.CatzSubsystems.CatzShooter;
+package frc.robot.CatzSubsystems.CatzTurret;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -14,7 +14,7 @@ import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
-public class ShooterConstants {
+public class TurretConstants {
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
@@ -27,12 +27,15 @@ public class ShooterConstants {
     private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-    public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
+    private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
+            
+    private static final int TURRET_MOTOR_ID = 0;
 
-    private static final int SHOOTER_MOTOR_ID = 0;
+    public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());
+    public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
 
-	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
+	public static final Angle TURRET_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -67,13 +70,13 @@ public class ShooterConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = SHOOTER_MOTOR_ID; //TODO magic numbers!!
+		IOConfig.mainID = TURRET_MOTOR_ID; //TODO magic numbers!!
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
+		IOConfig.followerOpposeMain = new boolean[] {false, false};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;

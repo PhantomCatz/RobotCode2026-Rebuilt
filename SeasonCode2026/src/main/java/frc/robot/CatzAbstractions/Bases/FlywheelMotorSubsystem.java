@@ -9,7 +9,6 @@ public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I exte
 
 	protected final AngularVelocity epsilonThreshold;
 
-
 	public FlywheelMotorSubsystem(S io, I inputs, String name, AngularVelocity epsilonThreshold) {
 		super(io, inputs, name);
 		this.epsilonThreshold = epsilonThreshold;
