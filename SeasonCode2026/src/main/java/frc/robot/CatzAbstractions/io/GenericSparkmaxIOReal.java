@@ -19,7 +19,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.RelativeEncoder;
 
-public abstract class GenericSparkmaxIOReal implements GenericMotorIO {
+public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T> {
 
     private final SparkMax leaderMotor;
     private final SparkMax[] followerMotors;

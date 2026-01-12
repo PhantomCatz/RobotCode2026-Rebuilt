@@ -5,12 +5,13 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 import frc.robot.Utilities.Util;
 
-public abstract class FlywheelMotorSubsystem extends GenericMotorSubsystem {
+public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends GenericMotorSubsystem<S, I> {
+
 	protected final AngularVelocity epsilonThreshold;
 
 
-	public FlywheelMotorSubsystem(GenericMotorIO io, String name, AngularVelocity epsilonThreshold) {
-		super(io, name);
+	public FlywheelMotorSubsystem(S io, I inputs, String name, AngularVelocity epsilonThreshold) {
+		super(io, inputs, name);
 		this.epsilonThreshold = epsilonThreshold;
 	}
 	/**

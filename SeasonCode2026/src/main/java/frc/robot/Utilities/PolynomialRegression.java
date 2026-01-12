@@ -1,4 +1,3 @@
-// NOTE: This file is available at http://algs4.cs.princeton.edu/14analysis/PolynomialRegression.java.html
 package frc.robot.Utilities;
 
 /******************************************************************************

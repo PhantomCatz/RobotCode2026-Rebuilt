@@ -19,6 +19,9 @@ public class DetectionConstants {
 
 	public static final Distance FUEL_RADIUS = Units.Inches.of(4.5 / 2);
 	public static final double DETECTION_POSE_BUFFER_SIZE_SEC = 2.0;
+	public static final int kTelePipeline = 3;
+	public static final int kAutoPipeline = 0;
+	public static final int kDisabledPipeline = 1;
 
 	public static final LimelightConfig getDetectionIOConfig() {
 		LimelightConfig config = new LimelightConfig();

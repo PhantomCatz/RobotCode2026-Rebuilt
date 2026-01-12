@@ -22,7 +22,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
-public abstract class GenericTalonFXSIOReal implements GenericMotorIO {
+public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T>  {
 
     // initialize follower if needed
     private TalonFXS leaderTalon;
@@ -63,7 +63,7 @@ public abstract class GenericTalonFXSIOReal implements GenericMotorIO {
 			followerTalons = new TalonFXS[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
 				followerTalons[i] = new TalonFXS(config.followerIDs[i], config.followerBuses[i]);
-				followerTalons[i].setControl(new Follower(config.mainID, config.followerOpposeMain[i]));
+				followerTalons[i].setControl(new Follower(config.mainID, config.followerValue[i]));
 			}
 			setFollowerConfig(followerConfig);
 		}
@@ -319,7 +319,7 @@ public abstract class GenericTalonFXSIOReal implements GenericMotorIO {
 		public int[] followerIDs = new int[0];
 		public String[] followerBuses = new String[0];
 		public TalonFXSConfiguration followerConfig = new TalonFXSConfiguration();
-		public boolean[] followerOpposeMain = new boolean[0];
+		public MotorAlignmentValue[] followerValue = new MotorAlignmentValue[0];
 		public ControlRequestGetter requestGetter = new ControlRequestGetter();
 	}
 

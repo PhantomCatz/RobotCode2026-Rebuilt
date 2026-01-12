@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzIntake;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.CatzConstants;
@@ -63,15 +64,15 @@ public class IntakeConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = INTAKE_MOTOR_ID; 
+		IOConfig.mainID = INTAKE_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerOpposeMain = new boolean[] {false, false};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {}; 
+		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
 }

@@ -1,15 +1,17 @@
 package frc.robot.CatzAbstractions.io;
 
-import org.littletonrobotics.junction.AutoLog;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-public interface GenericMotorIO {
-  @AutoLog
-  public static class MotorIOInputs {
 
+
+
+public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
+
+
+  public static class MotorIOInputs {
     public boolean isLeaderConnected = false;
     public boolean[] isFollowerConnected = new boolean[] {};
 
@@ -23,7 +25,7 @@ public interface GenericMotorIO {
 
   }
 
-  public default void updateInputs(MotorIOInputs inputs) {}
+  public default void updateInputs(T inputs) {}
 
   public default void setCurrentPosition(double mechanismPosition) {}
 
@@ -66,7 +68,7 @@ public interface GenericMotorIO {
   /**
    * Sets the motor to use motion magic control to go to a given position. Should not be called directly, only applied through Setpoints.
    *
-   * @param mechanismPosition Mechanism position to go to in rotations.
+   * @param mechanismPosition Mechanism position to go to (radians or degrees depending on implementation).
    */
   public default void setMotionMagicSetpoint(double mechanismPosition) {}
 
@@ -112,4 +114,7 @@ public interface GenericMotorIO {
   public default void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {}
 
   public default void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {}
+
+
+
 }
