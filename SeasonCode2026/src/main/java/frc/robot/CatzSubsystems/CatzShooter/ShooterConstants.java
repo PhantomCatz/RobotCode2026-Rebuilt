@@ -26,13 +26,10 @@ public class ShooterConstants {
     private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-    private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
+    public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
             
     private static final int SHOOTER_MOTOR_ID = 0;
-
-    public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());
-    public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
 
 	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
 

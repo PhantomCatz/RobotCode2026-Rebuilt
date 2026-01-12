@@ -3,6 +3,7 @@ package frc.robot.CatzSubsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzShooter;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.InterpolatingDouble;
 
@@ -29,5 +30,7 @@ public class CatzSuperstructure {
         }
     }
 
-    
+    public Command shootTuning(){
+        return CatzShooter.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
+    }
 }
