@@ -35,7 +35,7 @@ public class ClimbConstants {
             
     private static final int CLIMB_MOTOR_ID = 0;
 
-	public static final Distance ELEVATOR_THRESHOLD = Units.Inches.of(1.0);
+	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
     public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
 

@@ -8,9 +8,12 @@ import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
+import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
 public class IntakeConstants {
+
+	public static final Setpoint setpoint = Setpoint.withDutyCycleSetpoint(1.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);

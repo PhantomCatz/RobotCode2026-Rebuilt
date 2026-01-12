@@ -16,11 +16,15 @@ import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
@@ -127,6 +131,14 @@ public class Robot extends LoggedRobot {
       System.out.println("Waiting for robot container to initialize");
     }
     System.out.println("Forcing robot container instance" + RobotContainer.Instance);
+
+    CatzConstants.autoFactory = new AutoFactory(
+                                                  CatzRobotTracker.Instance::getEstimatedPose,
+                                                  CatzRobotTracker.Instance::resetPose,
+                                                  CatzDrivetrain.Instance::followChoreoTrajectoryExecute,
+                                                  true,
+                                                  CatzDrivetrain.Instance
+                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
   }
 
   @Override
@@ -149,7 +161,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
