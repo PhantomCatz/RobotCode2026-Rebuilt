@@ -8,7 +8,6 @@ import frc.robot.Utilities.Util;
 public abstract class FlywheelMotorSubsystem extends GenericMotorSubsystem {
 	protected final AngularVelocity epsilonThreshold;
 
-
 	public FlywheelMotorSubsystem(GenericMotorIO io, String name, AngularVelocity epsilonThreshold) {
 		super(io, name);
 		this.epsilonThreshold = epsilonThreshold;
