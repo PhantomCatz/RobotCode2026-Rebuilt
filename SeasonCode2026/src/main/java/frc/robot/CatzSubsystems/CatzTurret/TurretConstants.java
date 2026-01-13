@@ -29,7 +29,6 @@ public class TurretConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
-            
     private static final int TURRET_MOTOR_ID = 0;
 
     public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());

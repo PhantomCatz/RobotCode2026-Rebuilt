@@ -25,6 +25,7 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
     private CatzIndexer() {
         super(io, inputs, "CatzIndexer");
     }
+    
     public static final CatzIndexer Instance = new CatzIndexer();
 
 }
