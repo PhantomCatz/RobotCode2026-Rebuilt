@@ -1,6 +1,9 @@
 package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
 public class EpsilonRegression {
+    public static final double[] CLOSEST_HOOD_ANGLE = {1.0, 11.0}; //distance from target (meters), hood angle (degrees)
+    public static final double[] FARTHEST_HOOD_ANGLE = {7.0, 35.0};
+
     public static double[][] kHoodManualAngle = {
         /* TEMPLATE REGRESSION */
         // @x --> distance from target (in meters)

@@ -55,4 +55,11 @@ public class ShooterRegression {
         kFlywheelAutoAimPolynomial = new PolynomialRegression(kFlywheelRegression, 2);
     }
 
+    private static final double HOOD_ANGLE_SLOPE = (EpsilonRegression.FARTHEST_HOOD_ANGLE[1]-EpsilonRegression.CLOSEST_HOOD_ANGLE[1]) / 
+                                                   (EpsilonRegression.FARTHEST_HOOD_ANGLE[0]-EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
+
+    public static double getHoodAngle(double distance){
+        return HOOD_ANGLE_SLOPE * (distance - EpsilonRegression.CLOSEST_HOOD_ANGLE[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE[1];
+    }
+
 }
