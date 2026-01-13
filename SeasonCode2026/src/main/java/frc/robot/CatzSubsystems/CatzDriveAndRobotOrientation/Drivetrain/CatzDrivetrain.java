@@ -62,18 +62,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
 
-  // TODO Remmove this if we are not going to use it
-  // private SwerveSetpoint currentSetpoint =
-  //     new SwerveSetpoint(
-  //         new ChassisSpeeds(),
-  //         new SwerveModuleState[] {
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState()
-  //         });
-  // private final SwerveSetpointGenerator swerveSetpointGenerator;
-
   private final Field2d field;
 
   private Pose2d pidGoalPose = new Pose2d();
@@ -114,9 +102,9 @@ public class CatzDrivetrain extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
   }
-  
+
   Pose2d pose = new Pose2d();
-  
+
 
   public double getDistanceError(){
     return distanceError;

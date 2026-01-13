@@ -6,16 +6,13 @@ import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
+public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends GenericMotorSubsystem<S, I>  {
 
-	protected final GenericMotorIO io;
 	protected final String name;
 	protected final Angle epsilonThreshold;
 
@@ -23,9 +20,8 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	private double manualSpeed = 0.0;
 	private boolean isFullManual = false;
 
-	public ServoMotorSubsystem(GenericMotorIO io, String name, Angle epsilonThreshold) {
-		super(io, name);
-		this.io = io;
+	public ServoMotorSubsystem(S io, I inputs, String name, Angle epsilonThreshold) {
+		super(io, inputs, name);
 		this.name = name;
 		this.epsilonThreshold = epsilonThreshold;
 	}
@@ -41,7 +37,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 
 	public void runFullManual(double speed) {
 		if (Math.abs(speed) < 0.1) {
-			io.setMotionMagicSetpoint(getPosition().in(Units.Rotations));
+			io.setMotionMagicSetpoint(getPosition());
 		} else {
 			io.setDutyCycleSetpoint(speed);
 		}
@@ -58,7 +54,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 *         in position control.
 	 */
 	public boolean nearPositionSetpoint() {
-		return (setpoint.mode.isPositionControl()) && nearPosition(getPosition());
+		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Rotations.of(getPosition()));
 	}
 
 	/**
@@ -69,7 +65,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 */
 	public Command setpointCommandWithWait(Setpoint setpoint) {
 		return waitForPositionCommand(Units.Rotations.of(setpoint.baseUnits))
-				.deadlineFor(setpointCommand(setpoint));
+				.deadlineFor(followSetpointCommand(()->setpoint));
 	}
 
 	/**
@@ -92,7 +88,7 @@ public abstract class ServoMotorSubsystem extends GenericMotorSubsystem {
 	 */
 	public boolean nearPosition(Angle mechanismPosition) {
 		return EqualsUtil.epsilonEquals(
-				getPosition().in(Units.Rotations),
+				getPosition(),
 				mechanismPosition.in(Units.Rotations),
 				epsilonThreshold.in(Units.Rotations));
 	}

@@ -6,17 +6,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.interpolation.Interpolator;
-import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.DistanceUnit;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -227,35 +222,35 @@ public class Util {
 		}
 	}
 
-	public static class MeasureInterpolable<T extends U, U extends Unit> implements Interpolator<T> {
-		@Override
-		@SuppressWarnings("unchecked")
-		public T interpolate(T startValue, T endValue, double t) {
-			return (T) startValue.plus(endValue.minus(startValue).times(t));
-		}
-	}
+	// public static class MeasureInterpolable<T extends U, U extends Unit> implements Interpolator<T> {
+	// 	@Override
+	// 	@SuppressWarnings("unchecked")
+	// 	public T interpolate(T startValue, T endValue, double t) {
+	// 		return (T) startValue.plus(endValue.minus(startValue).times(t));
+	// 	}
+	// }
 
-	public static class MeasureInverseInterpolable<T extends U, U extends Unit>
-			implements InverseInterpolator<T> {
-		@Override
-		public double inverseInterpolate(T startValue, T endValue, T q) {
-			return q.minus(startValue).baseUnitMagnitude()
-					/ endValue.minus(startValue).baseUnitMagnitude();
-		}
-	}
+	// public static class MeasureInverseInterpolable<T extends U, U extends Unit>
+	// 		implements InverseInterpolator<T> {
+	// 	@Override
+	// 	public double inverseInterpolate(T startValue, T endValue, T q) {
+	// 		return q.minus(startValue).baseUnitMagnitude()
+	// 				/ endValue.minus(startValue).baseUnitMagnitude();
+	// 	}
+	// }
 
-	public static class InterpolatingMeasureMap<
-					J extends U, U extends Unit, K extends Q, Q extends Unit>
-			extends InterpolatingTreeMap<J, K> {
-		public InterpolatingMeasureMap() {
-			super(new MeasureInverseInterpolable<J, U>(), new MeasureInterpolable<K, Q>());
-		}
+	// public static class InterpolatingMeasureMap<
+	// 				J extends U, U extends Unit, K extends Q, Q extends Unit>
+	// 		extends InterpolatingTreeMap<J, K> {
+	// 	public InterpolatingMeasureMap() {
+	// 		super(new MeasureInverseInterpolable<J, U>(), new MeasureInterpolable<K, Q>());
+	// 	}
 
-		public InterpolatingMeasureMap(List<Pair<J, K>> data) {
-			this();
-			data.forEach(point -> put(point.getFirst(), point.getSecond()));
-		}
-	}
+	// 	public InterpolatingMeasureMap(List<Pair<J, K>> data) {
+	// 		this();
+	// 		data.forEach(point -> put(point.getFirst(), point.getSecond()));
+	// 	}
+	// }
 
 	/**
 	 * The inverse of this transform "undoes" the effect of translating by this transform.
@@ -441,13 +436,13 @@ public class Util {
 				getEmptySubsystemSet());
 	}
 
-	public static <M extends U, U extends Unit> M min(M x, M y) {
-		return x.lt(y) ? x : y;
-	}
+	// public static <M extends U, U extends Unit> M min(M x, M y) {
+	// 	return x.lt(y) ? x : y;
+	// }
 
-	public static <M extends U, U extends Unit> M max(M x, M y) {
-		return x.gt(y) ? x : y;
-	}
+	// public static <M extends U, U extends Unit> M max(M x, M y) {
+	// 	return x.gt(y) ? x : y;
+	// }
 
 	public static class ScheduleIfWontCancelOther extends Command {
 		private final Command command;

@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
@@ -28,7 +29,7 @@ public class ShooterConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
-            
+
     private static final int SHOOTER_MOTOR_ID = 0;
 
 	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
@@ -72,7 +73,7 @@ public class ShooterConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerOpposeMain = new boolean[] {false, false};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;

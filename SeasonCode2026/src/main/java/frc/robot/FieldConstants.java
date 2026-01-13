@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
 
 /**
@@ -17,7 +15,12 @@ import lombok.Getter;
  * have a blue alliance origin.
  */
 public class FieldConstants {
-  public static AprilTagFieldLayout APRILTAG_LAYOUT = AprilTagLayoutType.OFFICIAL.getLayout();
+  public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
+  public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
+
+  public static final int aprilTagCount = AprilTagLayoutType.OFFICIAL.getLayout().getTags().size();
+  public static final double aprilTagWidth = Units.inchesToMeters(6.5);
+  public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
   @Getter
   public enum AprilTagLayoutType {
@@ -36,7 +39,7 @@ public class FieldConstants {
           layoutString = new ObjectMapper().writeValueAsString(layout);
         } catch (JsonProcessingException e) {
           throw new RuntimeException(
-              "Failed to serialize AprilTag layout JSON " + toString() + "for Northstar");
+              "Failed to serialize AprilTag layout JSON " + toString() + "for CatzVision");
         }
       }
     }

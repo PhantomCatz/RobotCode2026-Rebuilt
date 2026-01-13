@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzTurret;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
@@ -29,7 +30,6 @@ public class TurretConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
-            
     private static final int TURRET_MOTOR_ID = 0;
 
     public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());
@@ -76,7 +76,7 @@ public class TurretConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerOpposeMain = new boolean[] {false, false};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;

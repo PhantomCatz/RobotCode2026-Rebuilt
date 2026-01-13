@@ -1,13 +1,11 @@
 package frc.robot.CatzSubsystems.CatzClimb;
 
-import java.util.Dictionary;
-
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -32,7 +30,7 @@ public class ClimbConstants {
     private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-            
+
     private static final int CLIMB_MOTOR_ID = 0;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
@@ -78,7 +76,7 @@ public class ClimbConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerOpposeMain = new boolean[] {false, false};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;
