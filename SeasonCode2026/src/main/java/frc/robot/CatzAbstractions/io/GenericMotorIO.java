@@ -1,6 +1,7 @@
 package frc.robot.CatzAbstractions.io;
 
 
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -9,7 +10,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 
 public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
-
 
   public static class MotorIOInputs {
     public boolean isLeaderConnected = false;

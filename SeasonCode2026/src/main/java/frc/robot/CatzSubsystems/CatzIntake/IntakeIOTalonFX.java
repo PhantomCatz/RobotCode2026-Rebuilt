@@ -6,4 +6,5 @@ public class IntakeIOTalonFX extends GenericTalonFXIOReal<IntakeIO.IntakeIOInput
     public IntakeIOTalonFX(MotorIOTalonFXConfig config){
         super(config);
     }
+
 }

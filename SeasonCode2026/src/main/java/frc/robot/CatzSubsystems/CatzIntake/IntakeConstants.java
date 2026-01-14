@@ -14,10 +14,11 @@ import frc.robot.Utilities.MotorUtil.Gains;
 
 public class IntakeConstants {
 
-	public static final Setpoint setpoint = Setpoint.withDutyCycleSetpoint(1.0);
+	public static final Setpoint setpoint = Setpoint.withMotionMagicSetpoint(100.0);
+	public static final Setpoint SETPOINT2 = Setpoint.withMotionMagicSetpoint(0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
+        case SN1 -> new Gains(4.0, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -29,7 +30,7 @@ public class IntakeConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	private static final int INTAKE_MOTOR_ID = 0;
+	private static final int INTAKE_MOTOR_ID = 23;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
