@@ -1,6 +1,7 @@
 package frc.robot.CatzAbstractions.io;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -44,7 +45,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 5, java.util.concurrent.TimeUnit.MILLISECONDS, queue);
 
-
     /**
      * base for constructors
      * 1 motor sets bare minimum to not kill itself
@@ -55,14 +55,14 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
     public GenericTalonFXIOReal(MotorIOTalonFXConfig config) {
 
 		requestGetter = config.requestGetter;
-		leaderTalon = new TalonFX(config.mainID, config.mainBus);
+		leaderTalon = new TalonFX(config.mainID, new CANBus("*"));
 		setMainConfig(config.mainConfig);
 
 
 		if(config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFX(config.followerIDs[i], config.followerBuses[i]);
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus("*"));
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
 			setFollowerConfig(followerConfig);

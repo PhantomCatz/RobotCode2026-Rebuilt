@@ -22,6 +22,7 @@ public class DetectionConstants {
 	public static final int kTelePipeline = 3;
 	public static final int kAutoPipeline = 0;
 	public static final int kDisabledPipeline = 1;
+	public static final double MAX_GROUP_DIST = 0.1; // meters
 
 	public static final LimelightConfig getDetectionIOConfig() {
 		LimelightConfig config = new LimelightConfig();
