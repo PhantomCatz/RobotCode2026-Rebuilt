@@ -65,7 +65,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
                               .smartCurrentLimit(config.currentLimitAmps);
 
                 // Apply config to follower
-                followerMotors[i].configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+                followerMotors[i].configure(followerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
             }
         } else {
             followerMotors = new SparkMax[0];
@@ -73,7 +73,8 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         // 4. Apply Initial Config to Leader
         // We use ResetSafeParameters to clear old state, and NoPersist to avoid wearing out flash during dev
-        leaderMotor.configure(sparkConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        leaderMotor.configure(sparkConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
+
     }
 
     @Override
@@ -126,21 +127,21 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     public void setMotionMagicSetpoint(double mechanismPosition) {
         // Map MotionMagic to REV SmartMotion (Slot 0)
         double targetRotations = mechanismPosition / gearRatio;
-        closedLoopController.setReference(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        closedLoopController.setSetpoint(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
     @Override
     public void setVelocitySetpoint(double mechanismVelocity) {
         // REV units are RPM (Slot 1)
         double targetRPM = (mechanismVelocity / gearRatio) * 60.0;
-        closedLoopController.setReference(targetRPM, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+        closedLoopController.setSetpoint(targetRPM, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     }
 
     @Override
     public void setPositionSetpoint(double mechanismPosition) {
         // REV units are Rotations (Slot 0)
         double targetRotations = mechanismPosition / gearRatio;
-        closedLoopController.setReference(targetRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        closedLoopController.setSetpoint(targetRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     @Override
