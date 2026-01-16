@@ -22,7 +22,7 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
         super(io, inputs, "CatzIntake");
     }
 
-    static IntakeIO getIOInstance() {
+    private static IntakeIO getIOInstance() {
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Intake Configured for Real");

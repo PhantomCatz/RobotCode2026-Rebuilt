@@ -8,7 +8,7 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     private static final HoodIO io = getIOInstance();
     private static final HoodIOInputsAutoLogged inputs = new HoodIOInputsAutoLogged();
 
-    public static HoodIO getIOInstance() {
+    private static HoodIO getIOInstance() {
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Indexer Configured for Real");

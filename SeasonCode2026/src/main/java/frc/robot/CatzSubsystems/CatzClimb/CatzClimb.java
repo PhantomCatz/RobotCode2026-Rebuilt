@@ -9,7 +9,7 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
     private static final ClimbIO io = getIOInstance();
     private static final ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
 
-    public static ClimbIO getIOInstance() {
+    private static ClimbIO getIOInstance() {
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");

@@ -3,9 +3,12 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
+// import com.pathplanner.lib.util.PathPlannerLogging;
 
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
+// import choreo.auto.AutoTrajectory;
+// import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,15 +27,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
+// import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
 import frc.robot.Autonomous.AutonConstants;
+// import frc.robot.Autonomous.AutonConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
 
 import java.util.Arrays;
+// import org.littletonrobotics.junction.AutoLogOutput;
+// import org.littletonrobotics.junction.Logger;
+
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
@@ -61,6 +68,18 @@ public class CatzDrivetrain extends SubsystemBase {
   public final CatzSwerveModule LT_FRNT_MODULE;
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
+
+  // TODO Remmove this if we are not going to use it
+  // private SwerveSetpoint currentSetpoint =
+  //     new SwerveSetpoint(
+  //         new ChassisSpeeds(),
+  //         new SwerveModuleState[] {
+  //           new SwerveModuleState(),
+  //           new SwerveModuleState(),
+  //           new SwerveModuleState(),
+  //           new SwerveModuleState()
+  //         });
+  // private final SwerveSetpointGenerator swerveSetpointGenerator;
 
   private final Field2d field;
 
@@ -101,10 +120,30 @@ public class CatzDrivetrain extends SubsystemBase {
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
+
+    // Logging callback for current robot pose
+    // PathPlannerLogging.setLogCurrentPoseCallback(
+    //     (pose) -> {
+    //       // Do whatever you want with the pose here
+    //       field.setRobotPose(pose);
+    //     });
+
+    // // Logging callback for target robot pose
+    // PathPlannerLogging.setLogTargetPoseCallback(
+    //     (pose) -> {
+    //       //Logger.recordOutput("Drive/targetPos", pose);
+    //       field.getObject("target pose").setPose(pose);
+    //     });
+
+    // // Logging callback for the active path, this is sent as a list of poses
+    // PathPlannerLogging.setLogActivePathCallback(
+    //     (poses) -> {
+    //       // Do whatever you want with the poses here
+    //       field.getObject("path").setPoses(poses);
+    //     });
   }
 
   Pose2d pose = new Pose2d();
-
 
   public double getDistanceError(){
     return distanceError;
@@ -123,10 +162,10 @@ public class CatzDrivetrain extends SubsystemBase {
       module.periodic();
     }
 
-    Logger.recordOutput("Drive/DistanceError", distanceError);
+    //Logger.recordOutput("Drive/DistanceError", distanceError);
 
     pose = pose.interpolate(CatzRobotTracker.Instance.getEstimatedPose(), 0.05);
-    Logger.recordOutput("CatzRobotTracker/interlated pose", pose);
+    //Logger.recordOutput("CatzRobotTracker/interlated pose", pose);
 
     // -----------------------------------------------------------------------------------------------------
     // Attempt to update gyro inputs and log
@@ -136,7 +175,7 @@ public class CatzDrivetrain extends SubsystemBase {
     } catch (Exception e) {
 
     }
-    Logger.processInputs("RealInputs/Drive/gyro ", gyroInputs);
+    //Logger.processInputs("RealInputs/Drive/gyro ", gyroInputs);
     // NOTE Gyro needs to be firmly mounted to rio for accurate results.
     // Set Gyro Disconnect alert to go off when gyro is disconnected
     if (Robot.isReal()) {
@@ -174,9 +213,9 @@ public class CatzDrivetrain extends SubsystemBase {
     // Logging
     // --------------------------------------------------------------
     SmartDashboard.putNumber("Heading", getGyroHeading());
-    Logger.recordOutput("Drive/Odometry module states", getModuleStates());
-    Logger.recordOutput("Drive/Odometry wheel positions", wheelPositions);
-    Logger.recordOutput("Drive/Odometry robot velocity", robotRelativeVelocity);
+    //Logger.recordOutput("Drive/Odometry module states", getModuleStates());
+    //Logger.recordOutput("Drive/Odometry wheel positions", wheelPositions);
+    //Logger.recordOutput("Drive/Odometry robot velocity", robotRelativeVelocity);
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------
@@ -210,8 +249,8 @@ public class CatzDrivetrain extends SubsystemBase {
     // Logging
     // --------------------------------------------------------
 
-    Logger.recordOutput("Drive/chassispeeds", descreteSpeeds);
-    Logger.recordOutput("Drive/modulestates", optimizedDesiredStates);
+    //Logger.recordOutput("Drive/chassispeeds", descreteSpeeds);
+    //Logger.recordOutput("Drive/modulestates", optimizedDesiredStates);
   }
   public void d(ChassisSpeeds s){
     //nothing
@@ -344,7 +383,7 @@ public class CatzDrivetrain extends SubsystemBase {
    */
   public void followChoreoTrajectoryInit(AutoTrajectory traj){
     hoController = DriveConstants.getNewHolController();
-    choreoGoal = traj.getFinalPose().get();
+    // choreoGoal = traj.getFinalPose().get();
   }
 
   /**
@@ -366,7 +405,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
     choreoDistanceError = curPose.minus(choreoGoal).getTranslation().getNorm();
 
-    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
+    //Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
   }
 

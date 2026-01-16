@@ -8,7 +8,7 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
     private static final IndexerIO io = getIOInstance();
     private static final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
-    public static IndexerIO getIOInstance() {
+    private static IndexerIO getIOInstance() {
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Indexer Configured for Real");

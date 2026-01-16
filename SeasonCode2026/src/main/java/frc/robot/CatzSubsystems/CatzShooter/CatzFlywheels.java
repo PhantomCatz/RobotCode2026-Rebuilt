@@ -9,7 +9,7 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
     private static final FlywheelsIO io = getIOInstance();
     private static final FlywheelsIOInputsAutoLogged inputs = new FlywheelsIOInputsAutoLogged();
 
-    public static FlywheelsIO getIOInstance() {
+    private static FlywheelsIO getIOInstance() {
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");

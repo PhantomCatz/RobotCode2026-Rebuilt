@@ -23,6 +23,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
+
+        setCurrentPosition(Angle.ofBaseUnits(0.0, Units.Degrees));
     }
 
     /**
@@ -63,7 +65,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         return Setpoint.withPositionSetpoint(Units.Radians.of(bestSetpoint));
     }
 
-    public static TurretIO getIOInstance(){
+    private static TurretIO getIOInstance(){
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");
