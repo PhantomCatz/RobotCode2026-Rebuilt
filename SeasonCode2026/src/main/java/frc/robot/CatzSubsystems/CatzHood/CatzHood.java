@@ -1,7 +1,6 @@
 package frc.robot.CatzSubsystems.CatzHood;
 
 import frc.robot.CatzConstants;
-import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
 public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
@@ -24,7 +23,7 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     }
 
     private CatzHood() {
-        super(io, inputs, "CatzIndexer");
+        super(io, inputs, "CatzHood", HoodConstants.HOOD_THRESHOLD);
 
         setCurrentPosition(HoodConstants.HOOD_ZERO_POS);
     }

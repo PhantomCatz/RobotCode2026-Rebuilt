@@ -74,7 +74,7 @@ public class TurretConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = TURRET_MOTOR_ID; 
+		IOConfig.mainID = TURRET_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
@@ -84,7 +84,7 @@ public class TurretConstants {
 						.withReverseSoftLimitThreshold(TURRET_MIN));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {}; 
+		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
 }

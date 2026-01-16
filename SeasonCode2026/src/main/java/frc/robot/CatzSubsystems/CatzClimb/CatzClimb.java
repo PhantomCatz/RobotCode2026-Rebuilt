@@ -1,8 +1,6 @@
 package frc.robot.CatzSubsystems.CatzClimb;
 
-import static edu.wpi.first.units.Units.Rotation;
 
-import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 

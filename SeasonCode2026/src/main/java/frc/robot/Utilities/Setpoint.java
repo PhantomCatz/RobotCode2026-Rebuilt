@@ -2,7 +2,6 @@ package frc.robot.Utilities;
 
 import java.util.function.UnaryOperator;
 
-import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;

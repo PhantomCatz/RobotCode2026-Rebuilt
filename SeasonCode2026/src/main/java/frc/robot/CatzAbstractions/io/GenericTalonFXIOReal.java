@@ -347,7 +347,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
 		}
 
-		
+
 		public ControlRequest getVoltageRequest(Voltage voltage) {
 			return new VoltageOut(voltage.in(Units.Volts)).withEnableFOC(false);
 		}

@@ -4,9 +4,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbIOTalonFX;
 import frc.robot.CatzSubsystems.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 

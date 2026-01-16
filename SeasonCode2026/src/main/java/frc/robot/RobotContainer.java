@@ -11,7 +11,7 @@ import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
   public static final RobotContainer Instance = new RobotContainer();
-  
+
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
 
   private final CommandXboxController xboxDrv = new CommandXboxController(0);
