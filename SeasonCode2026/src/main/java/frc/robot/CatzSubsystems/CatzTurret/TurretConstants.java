@@ -15,26 +15,31 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class TurretConstants {
+	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Angle.ofBaseUnits(0.0, Units.Degrees));
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-    private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-    private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
+    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
+    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
+    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", gains.kD());
+    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Turret/kS", gains.kS());
+    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
+    private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
+
 
     private static final int TURRET_MOTOR_ID = 0;
 
-    public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());
-    public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
-
 	public static final Angle TURRET_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
+
+	public static final Angle TURRET_MAX = Angle.ofBaseUnits(130, Units.Degrees);
+	public static final Angle TURRET_MIN = Angle.ofBaseUnits(-130, Units.Degrees);
+
+
+	public static final int NUM_OF_FULL_ROT = 1;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -59,7 +64,7 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 50.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -69,15 +74,17 @@ public class TurretConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = TURRET_MOTOR_ID; //TODO magic numbers!!
+		IOConfig.mainID = TURRET_MOTOR_ID; 
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
-						.withReverseSoftLimitEnable(false));
+						.withReverseSoftLimitEnable(false)
+						.withForwardSoftLimitThreshold(TURRET_MAX)
+						.withReverseSoftLimitThreshold(TURRET_MIN));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
+		IOConfig.followerIDs = new int[] {}; 
 		return IOConfig;
 	}
 }

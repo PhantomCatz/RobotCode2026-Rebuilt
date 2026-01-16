@@ -28,7 +28,7 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
     public static final CatzClimb Instance = new CatzClimb();
 
     private CatzClimb() {
-        super(io, inputs, "CatzClimb", Angle.ofBaseUnits(0.5, Rotation));
+        super(io, inputs, "CatzClimb", ClimbConstants.converter.toAngle(ClimbConstants.CLIMB_THRESHOLD));
     }
 
 }

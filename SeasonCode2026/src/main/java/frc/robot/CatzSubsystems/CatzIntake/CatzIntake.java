@@ -12,6 +12,12 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
 
     public static final CatzIntake Instance = new CatzIntake();
 
+    public enum IntakeState{
+        ON,
+        OFF,
+        AUTO; //object detection mode
+    }
+
     private CatzIntake() {
         super(io, inputs, "CatzIntake");
     }

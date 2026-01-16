@@ -58,7 +58,7 @@ public class ShooterConstants {
 
 		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
 		return FXConfig;
 	}

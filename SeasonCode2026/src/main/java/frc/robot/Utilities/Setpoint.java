@@ -2,7 +2,12 @@ package frc.robot.Utilities;
 
 import java.util.function.UnaryOperator;
 
-
+import edu.wpi.first.units.BaseUnits;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 
 public class Setpoint {
@@ -37,6 +42,75 @@ public class Setpoint {
         return new Setpoint(applier, mode, baseUnits);
     }
 
+    /**
+		 * Creates a setpoint to use motion magic control to go to a position.
+		 *
+		 * @param motionMagicSetpoint Posiiton to go to in mechanism units.
+		 * @return A new Setpoint.
+		 */
+		public static Setpoint withMotionMagicSetpoint(Angle motionMagicSetpoint) {
+			UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
+				io.setMotionMagicSetpoint(motionMagicSetpoint.in(Units.Rotations));
+				return io;
+			};
+			return new Setpoint(applier, Mode.MOTIONMAGIC, motionMagicSetpoint.baseUnitMagnitude());
+		}
+
+		/**
+		 * Creates a setpoint to use PID control to go to a position.
+		 *
+		 * @param positionSetpoint Posiiton to go to in mechanism units.
+		 * @return A new Setpoint.
+		 */
+		public static Setpoint withPositionSetpoint(Angle positionSetpoint) {
+			UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
+				io.setPositionSetpoint(positionSetpoint.in(Units.Rotations));
+				return io;
+			};
+			return new Setpoint(applier, Mode.POSITIONPID, positionSetpoint.baseUnitMagnitude());
+		}
+
+		/**
+		 * Creates a setpoint to go to a velocity.
+		 *
+		 * @param velocitySetpoint Velocity to go to in mechanism units.
+		 * @return A new Setpoint.
+		 */
+		public static Setpoint withVelocitySetpoint(AngularVelocity velocitySetpoint) {
+			UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
+				io.setVelocitySetpoint(velocitySetpoint.in(Units.RotationsPerSecond));
+				return io;
+			};
+			return new Setpoint(applier, Mode.VELOCITY, velocitySetpoint.baseUnitMagnitude());
+		}
+
+		/**
+		 * Creates a setpoint to run at a voltage.
+		 *
+		 * @param voltage Voltage to run at.
+		 * @return A new Setpoint.
+		 */
+		public static Setpoint withVoltageSetpoint(Voltage voltage) {
+			UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
+				io.setVoltageSetpoint(voltage.in(Units.Volts));
+				return io;
+			};
+			return new Setpoint(applier, Mode.VOLTAGE, voltage.baseUnitMagnitude());
+		}
+
+		/**
+		 * Creates a setpoint to run at a percent of maximum voltage.
+		 *
+		 * @param percent Percent to run at.
+		 * @return A new Setpoint.
+		 */
+		public static Setpoint withDutyCycleSetpoint(Dimensionless percent) {
+			UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
+				io.setDutyCycleSetpoint(percent.in(Units.Percent));
+				return io;
+			};
+			return new Setpoint(applier, Mode.DUTY_CYCLE, percent.baseUnitMagnitude());
+		}
 
     /**
      * Creates a setpoint to use motion magic control to go to a position.
@@ -56,7 +130,7 @@ public class Setpoint {
     /**
      * Creates a setpoint to use PID control to go to a position.
      *
-     * @param positionSetpoint Posiiton to go to in mechanism units.
+     * @param positionSetpoint Position to go to in mechanism units.
      * @return A new Setpoint.
      */
     public static Setpoint withPositionSetpoint(double positionSetpoint) {

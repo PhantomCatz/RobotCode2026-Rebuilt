@@ -16,10 +16,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.UnaryOperator;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
@@ -57,7 +59,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		requestGetter = config.requestGetter;
 		leaderTalon = new TalonFX(config.mainID, new CANBus("*"));
 		setMainConfig(config.mainConfig);
-
 
 		if(config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
@@ -156,7 +157,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
         leaderTalon.setControl(new DutyCycleOut(0.0));
     }
 
-    private void setControl(ControlRequest request) {
+    protected void setControl(ControlRequest request) {
 		leaderTalon.setControl(request);
 	}
 
@@ -343,6 +344,27 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getPositionRequest(double mechanismPosition) {
+			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
+		}
+
+		
+		public ControlRequest getVoltageRequest(Voltage voltage) {
+			return new VoltageOut(voltage.in(Units.Volts)).withEnableFOC(false);
+		}
+
+		public ControlRequest getDutyCycleRequest(Dimensionless percent) {
+			return new DutyCycleOut(percent.in(Units.Percent));
+		}
+
+		public ControlRequest getMotionMagicRequest(Angle mechanismPosition) {
+			return new MotionMagicExpoVoltage(mechanismPosition).withSlot(0).withEnableFOC(true);
+		}
+
+		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity) {
+			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(1);
+		}
+
+		public ControlRequest getPositionRequest(Angle mechanismPosition) {
 			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
 		}
 	}
