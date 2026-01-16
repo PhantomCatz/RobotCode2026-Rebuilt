@@ -27,12 +27,12 @@ public class DashboardCmd extends Command {
 
   @Override
   public void initialize() {
-    try {
-      selecteCommand = chooser.getSelected();
-      selecteCommand.schedule();
-    } catch (Exception e) {
-      System.out.println(question + ": No command selected");
-    }
+    // try {
+    //   selecteCommand = chooser.getSelected();
+      // selecteCommand.schedule();
+    // } catch (Exception e) {
+    //   System.out.println(question + ": No command selected");
+    // }
   }
 
   @Override

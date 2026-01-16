@@ -11,13 +11,13 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
 
 public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T> {
 
@@ -74,6 +74,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         // 4. Apply Initial Config to Leader
         // We use ResetSafeParameters to clear old state, and NoPersist to avoid wearing out flash during dev
         leaderMotor.configure(sparkConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
     }
 
     @Override
@@ -126,21 +127,21 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     public void setMotionMagicSetpoint(double mechanismPosition) {
         // Map MotionMagic to REV SmartMotion (Slot 0)
         double targetRotations = mechanismPosition / gearRatio;
-        closedLoopController.setReference(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        closedLoopController.setSetpoint(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
     @Override
     public void setVelocitySetpoint(double mechanismVelocity) {
         // REV units are RPM (Slot 1)
         double targetRPM = (mechanismVelocity / gearRatio) * 60.0;
-        closedLoopController.setReference(targetRPM, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+        closedLoopController.setSetpoint(targetRPM, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     }
 
     @Override
     public void setPositionSetpoint(double mechanismPosition) {
         // REV units are Rotations (Slot 0)
         double targetRotations = mechanismPosition / gearRatio;
-        closedLoopController.setReference(targetRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        closedLoopController.setSetpoint(targetRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     @Override
@@ -179,7 +180,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
             config.closedLoop.p(p, ClosedLoopSlot.kSlot0)
                   .i(i, ClosedLoopSlot.kSlot0)
                   .d(d, ClosedLoopSlot.kSlot0)
-                  .velocityFF(v, ClosedLoopSlot.kSlot0) // Mapping kV to FF
+                  //.velocityFF(v, ClosedLoopSlot.kSlot0) // Mapping kV to FF
                   .iZone(0.0, ClosedLoopSlot.kSlot0);
         });
     }
@@ -190,7 +191,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
             config.closedLoop.p(p, ClosedLoopSlot.kSlot1)
                   .i(i, ClosedLoopSlot.kSlot1)
                   .d(d, ClosedLoopSlot.kSlot1)
-                  .velocityFF(v, ClosedLoopSlot.kSlot1)
+                  //.velocityFF(v, ClosedLoopSlot.kSlot1)
                   .iZone(0.0, ClosedLoopSlot.kSlot1);
         });
     }
@@ -204,9 +205,9 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         applyConfigChange(config -> {
             // Smart Motion is configured under closedLoop.smartMotion
-            config.closedLoop.maxMotion.maxVelocity(cruiseVelRPM, ClosedLoopSlot.kSlot0)
+            config.closedLoop.maxMotion.cruiseVelocity(cruiseVelRPM, ClosedLoopSlot.kSlot0)
                   .maxAcceleration(maxAccRPMs, ClosedLoopSlot.kSlot0)
-                  .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0);
+                  .allowedProfileError(0.01, ClosedLoopSlot.kSlot0);
         });
     }
 

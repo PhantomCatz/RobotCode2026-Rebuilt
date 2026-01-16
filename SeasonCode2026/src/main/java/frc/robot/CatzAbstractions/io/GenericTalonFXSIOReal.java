@@ -1,6 +1,7 @@
 package frc.robot.CatzAbstractions.io;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
@@ -46,6 +47,9 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
     private static double Final_Ratio;
 
+	private CANBus followerTalonCANBus = new CANBus("*");
+	private CANBus leaderTalonCANBus = new CANBus("*");
+
     /**
      * base for constructors
      * 1 motor sets bare minimum to not kill itself
@@ -56,13 +60,13 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
     public GenericTalonFXSIOReal(MotorIOTalonFXSConfig config) {
 
 		requestGetter = config.requestGetter;
-		leaderTalon = new TalonFXS(config.mainID, config.mainBus);
+		leaderTalon = new TalonFXS(config.mainID, leaderTalonCANBus);
 		setMainConfig(config.mainConfig);
 
 		if(config.followerIDs.length != 0) {
 			followerTalons = new TalonFXS[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFXS(config.followerIDs[i], config.followerBuses[i]);
+				followerTalons[i] = new TalonFXS(config.followerIDs[i], followerTalonCANBus);
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerValue[i]));
 			}
 			setFollowerConfig(followerConfig);

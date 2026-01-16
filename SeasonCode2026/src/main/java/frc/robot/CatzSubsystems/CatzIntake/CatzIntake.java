@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems.CatzIntake;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 
@@ -26,5 +28,11 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
                 System.out.println("Intake Unconfigured");
                 return new IntakeIOSim();
         }
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+        Logger.processInputs(name, inputs);
     }
 }

@@ -1,10 +1,6 @@
 package frc.robot.CatzSubsystems;
 
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
-import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.InterpolatingDouble;
 

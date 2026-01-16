@@ -31,7 +31,7 @@ public class ClimbConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    private static final int CLIMB_MOTOR_ID = 0;
+    private static final int CLIMB_MOTOR_ID = 24;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
