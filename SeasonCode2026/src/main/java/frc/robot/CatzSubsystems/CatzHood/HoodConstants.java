@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzShooter;
+package frc.robot.CatzSubsystems.CatzHood;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -6,32 +6,37 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
+import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
-public class ShooterConstants {
+public class HoodConstants {
+	public static final Angle HOOD_ZERO_POS = Angle.ofBaseUnits(28.0, Units.Degrees);
+	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withPositionSetpoint(HOOD_ZERO_POS);
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-    private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-    public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
+    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP", gains.kP());
+    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI", gains.kI());
+    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD", gains.kD());
+    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Hood/kS", gains.kS());
+    private static final LoggedTunableNumber kV = new LoggedTunableNumber("Hood/kV", gains.kV());
+    private static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
+	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodAngle", 0.0);
 
+    private static final int HOOD_MOTOR_ID = 0;
 
-    private static final int SHOOTER_MOTOR_ID = 0;
+	public static final Angle HOOD_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
 
-	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -58,7 +63,7 @@ public class ShooterConstants {
 
 		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
 		return FXConfig;
 	}
@@ -66,7 +71,7 @@ public class ShooterConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = SHOOTER_MOTOR_ID; //TODO magic numbers!!
+		IOConfig.mainID = HOOD_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
@@ -74,7 +79,7 @@ public class ShooterConstants {
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
+		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
 }

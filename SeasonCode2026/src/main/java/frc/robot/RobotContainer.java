@@ -24,7 +24,9 @@ public class RobotContainer {
     CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
 
     xboxDrv.a().onTrue(superstructure.turretTrackCommand());
-    xboxDrv.x().onTrue(superstructure.turretHomeCommand());
+    xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
+
+    xboxDrv.leftBumper().onTrue(superstructure.shootingTuneCommand());
   }
 
   public Command getAutonomousCommand() {

@@ -27,6 +27,6 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
 
 
     private CatzFlywheels() {
-        super(io, inputs, "CatzShooter", ShooterConstants.FLYWHEEL_THRESHOLD);
+        super(io, inputs, "CatzFlywheels", FlywheelConstants.FLYWHEEL_THRESHOLD);
     }
 }

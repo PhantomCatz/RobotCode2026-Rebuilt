@@ -97,6 +97,10 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 		io.setCurrentPosition(position.in(Units.Rotations));
 	}
 
+	public void setPosition(Angle position){
+		io.setCurrentPosition(position.in(Units.Rotations));
+	}
+
 	public Command fullManualCommand(Supplier<Double> speed) {
 		return runOnce(() -> {
 			isFullManual = true;

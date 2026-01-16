@@ -5,9 +5,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
@@ -17,14 +23,21 @@ import frc.robot.Utilities.Setpoint;
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
-    private CatzSuperstructure() {}
+    private CatzSuperstructure() {
+    }
 
-    public Command turretTrackCommand(){
+    public Command turretTrackCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> calculateHubTrackingSetpoint());
     }
 
-    public Command turretHomeCommand(){
+    public Command turretStowCommand() {
         return CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT);
+    }
+
+    public Command hoodFlywheelStowCommand() {
+        return Commands.parallel(
+                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
     }
 
     /**
@@ -34,12 +47,13 @@ public class CatzSuperstructure {
     public Setpoint calculateHubTrackingSetpoint() {
         Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
-        double targetRads = hubDirection.getAngle().getRadians() - MathUtil.angleModulus(robotPose.getRotation().getRadians());
-        
+        double targetRads = hubDirection.getAngle().getRadians()
+                - MathUtil.angleModulus(robotPose.getRotation().getRadians());
+
         return CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(targetRads, Units.Radians));
     }
 
-        // interpolates distance to target for shooter setpoint along regression
+    // interpolates distance to target for shooter setpoint along regression
     private double getShooterSetpointFromRegression(double range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
             return ShooterRegression.kFlywheelAutoAimPolynomial.predict(range);
@@ -57,9 +71,15 @@ public class CatzSuperstructure {
         }
     }
 
-
     // public Command shootTuning(){
     // return
     // CatzFlywheels.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
     // }
+    public Command shootingTuneCommand() {
+        return Commands.parallel(
+                CatzFlywheels.Instance.followSetpointCommand(() -> Setpoint.withVelocitySetpoint(AngularVelocity
+                        .ofBaseUnits(FlywheelConstants.SHOOTING_RPS_TUNABLE.get(), Units.RotationsPerSecond))),
+                CatzHood.Instance.followSetpointCommand(() -> Setpoint.withPositionSetpoint(
+                        Angle.ofBaseUnits(HoodConstants.adjustableHoodAngle.get(), Units.Rotations))));
+    }
 }
