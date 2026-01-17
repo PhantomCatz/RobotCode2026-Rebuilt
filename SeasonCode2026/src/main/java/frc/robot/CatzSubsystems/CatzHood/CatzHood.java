@@ -15,10 +15,10 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
                 return new HoodIOTalonFX(HoodConstants.getIOConfig());
             case SIM:
                 System.out.println("Indexer Configured for Simulation");
-                return new HoodIOSim();
+                return new HoodIOSim(HoodConstants.gains);
                 default:
                 System.out.println("Indexer Unconfigured");
-                return new HoodIOSim();
+                return new HoodIOSim(HoodConstants.gains);
         }
     }
 

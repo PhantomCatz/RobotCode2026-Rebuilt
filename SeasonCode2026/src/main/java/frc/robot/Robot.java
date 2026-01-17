@@ -13,19 +13,24 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
+import frc.robot.CatzSubsystems.SubystemVisualizer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+
+  private final SubystemVisualizer visualizer = new SubystemVisualizer("bigtureert");
 
   public Robot() {
     m_robotContainer = RobotContainer.Instance;
@@ -140,6 +145,7 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
     CommandScheduler.getInstance().run();
+    visualizer.update( Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(CatzTurret.Instance.getPosition()));
   }
 
   @Override

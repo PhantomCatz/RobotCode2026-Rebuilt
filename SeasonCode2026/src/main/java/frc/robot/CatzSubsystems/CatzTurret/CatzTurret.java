@@ -8,10 +8,14 @@ import frc.robot.CatzSubsystems.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
-    public static final CatzTurret Instance = new CatzTurret();
+
+    private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
 
     private static final TurretIO io = getIOInstance();
-    private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
+
+    public static final CatzTurret Instance = new CatzTurret();
+
+
 
     public enum ShooterState{
         HOME,
@@ -72,10 +76,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
                 return new TurretIOTalonFX(TurretConstants.getIOConfig());
             case SIM:
                 System.out.println("Roller Configured for Simulation");
-                return new TurretIOSim();
+                return new TurretIOSim(TurretConstants.gains);
                 default:
                 System.out.println("Roller Unconfigured");
-                return new TurretIOSim();
+                return new TurretIOSim(TurretConstants.gains);
         }
     }
 }

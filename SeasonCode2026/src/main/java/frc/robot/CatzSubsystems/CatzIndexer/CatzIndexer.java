@@ -15,10 +15,10 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
                 return new IndexerIOTalonFX(IndexerConstants.getIOConfig());
             case SIM:
                 System.out.println("Indexer Configured for Simulation");
-                return new IndexerIOSim();
+                return new IndexerIOSim(IndexerConstants.gains);
                 default:
                 System.out.println("Indexer Unconfigured");
-                return new IndexerIOSim();
+                return new IndexerIOSim(IndexerConstants.gains);
         }
     }
 

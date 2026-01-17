@@ -29,10 +29,10 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
                 return new IntakeIOTalonFX(IntakeConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Configured for Simulation");
-                return new IntakeIOSim();
+                return new IntakeIOSim(IntakeConstants.gains);
                 default:
                 System.out.println("Intake Unconfigured");
-                return new IntakeIOSim();
+                return new IntakeIOSim(IntakeConstants.gains);
         }
     }
 

@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
-import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
+import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
@@ -31,9 +31,13 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return Commands.sequence(
-      CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.setpoint).withTimeout(2.0),
-      Commands.waitSeconds(3),
-      CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.SETPOINT2)
+      // CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.setpoint).withTimeout(2.0),
+      // Commands.waitSeconds(3),
+      // CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.SETPOINT2),
+      CatzTurret.Instance.followSetpointCommand(() -> TurretConstants.alittle).withTimeout(5.0),
+      Commands.waitSeconds(6),
+      CatzTurret.Instance.followSetpointCommand(() -> TurretConstants.WEEEEEE).withTimeout(5.0)
+
     );
   }
 }
