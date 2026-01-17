@@ -154,6 +154,14 @@ public class Setpoint {
         return new Setpoint(applier, Mode.VELOCITY, velocitySetpoint);
     }
 
+    public static Setpoint withVelocitySetpointVoltage(double velocitySetpoint) {
+        UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
+            io.setVelocitySetpointVoltage(velocitySetpoint);
+            return io;
+        };
+        return new Setpoint(applier, Mode.VELOCITY, velocitySetpoint);
+    }
+
     /**
      * Creates a setpoint to run at a voltage.
      *

@@ -18,11 +18,6 @@ public class RobotContainer {
   private final CommandXboxController xboxTest = new CommandXboxController(1);
 
   public RobotContainer() {
-    System.out.println("Drivetrain Initializing" + CatzDrivetrain.Instance.getName());
-    System.out.println("Turret Initializing" + CatzTurret.Instance.getName());
-    System.out.println("Hood Initializing" + CatzHood.Instance.getName());
-    System.out.println("Intake Initializing" + CatzIntake.Instance.getName());
-    System.out.println("Initializing Climb" + CatzClimb.Instance.getName());
 
     configureBindings();
   }
@@ -35,7 +30,6 @@ public class RobotContainer {
     xboxDrv.a().onTrue(superstructure.turretTrackCommand());
     xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
 
-    xboxDrv.leftBumper().onTrue(superstructure.shootingTuneCommand());
   }
 
   public Command getAutonomousCommand() {

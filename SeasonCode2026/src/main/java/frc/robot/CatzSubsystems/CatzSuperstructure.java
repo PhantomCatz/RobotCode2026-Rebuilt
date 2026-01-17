@@ -43,7 +43,8 @@ public class CatzSuperstructure {
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
-                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
+        );
     }
 
     /**
@@ -86,11 +87,5 @@ public class CatzSuperstructure {
     // return
     // CatzFlywheels.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
     // }
-    public Command shootingTuneCommand() {
-        return Commands.parallel(
-                CatzFlywheels.Instance.followSetpointCommand(() -> Setpoint.withVelocitySetpoint(AngularVelocity
-                        .ofBaseUnits(FlywheelConstants.SHOOTING_RPS_TUNABLE.get(), Units.RotationsPerSecond))),
-                CatzHood.Instance.followSetpointCommand(() -> Setpoint.withPositionSetpoint(
-                        Angle.ofBaseUnits(HoodConstants.adjustableHoodAngle.get(), Units.Rotations))));
-    }
+
 }
