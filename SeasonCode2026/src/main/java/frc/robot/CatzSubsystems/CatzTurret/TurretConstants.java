@@ -15,7 +15,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class TurretConstants {
-	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Angle.ofBaseUnits(0.0, Units.Degrees));
+	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Units.Degrees.of(0.0));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
@@ -33,10 +33,10 @@ public class TurretConstants {
 
     private static final int TURRET_MOTOR_ID = 0;
 
-	public static final Angle TURRET_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
+	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
-	public static final Angle TURRET_MAX = Angle.ofBaseUnits(180, Units.Degrees);
-	public static final Angle TURRET_MIN = Angle.ofBaseUnits(-180, Units.Degrees);
+	public static final Angle TURRET_MAX = Units.Degrees.of(180);
+	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
 
 
 	public static final int NUM_OF_FULL_ROT = 1;

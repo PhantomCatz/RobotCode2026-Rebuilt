@@ -33,7 +33,7 @@ public class FlywheelConstants {
 
     private static final int FLYWHEEL_MOTOR_ID = 0;
 
-	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
+	public static final AngularVelocity FLYWHEEL_THRESHOLD = Units.RotationsPerSecond.of(5.0);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
