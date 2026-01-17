@@ -336,7 +336,8 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getMotionMagicRequest(double mechanismPosition) {
-			return new MotionMagicExpoVoltage(mechanismPosition).withSlot(0);//.withEnableFOC(true);
+			System.out.println("MotionMagicRequest");
+			return new MotionMagicVoltage(mechanismPosition).withSlot(0);//.withEnableFOC(true);
 		}
 
 		public ControlRequest getVelocityRequest(double mechanismVelocity) {
