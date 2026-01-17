@@ -11,7 +11,6 @@ import edu.wpi.first.units.measure.Time;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzTurret.CatzTurret.ShooterState;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers;
 import frc.robot.Utilities.LimelightHelpers.PoseEstimate;

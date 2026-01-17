@@ -22,7 +22,7 @@ public class FieldConstants {
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
-  public static final Translation2d HUB_LOCATION = new Translation2d(); //TODO fill this out
+  public static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
 
   @Getter
   public enum AprilTagLayoutType {

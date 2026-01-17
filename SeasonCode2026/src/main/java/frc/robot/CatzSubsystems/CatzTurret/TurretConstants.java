@@ -41,6 +41,8 @@ public class TurretConstants {
 
 	public static final int NUM_OF_FULL_ROT = 1;
 
+	public static final double ROBOT_OMEGA_FEEDFORWARD = 0.1;
+
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
