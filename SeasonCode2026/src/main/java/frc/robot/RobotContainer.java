@@ -11,13 +11,17 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.Utilities.Setpoint;
 
 public class RobotContainer {
-  public static final RobotContainer Instance = new RobotContainer();
-
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
 
   private final CommandXboxController xboxDrv = new CommandXboxController(0);
 
-  private RobotContainer() {
+  public RobotContainer() {
+    System.out.println("Drivetrain Initializing" + CatzDrivetrain.Instance.getName());
+    System.out.println("Turret Initializing" + CatzTurret.Instance.getName());
+    System.out.println("Hood Initializing" + CatzHood.Instance.getName());
+    System.out.println("Intake Initializing" + CatzIntake.Instance.getName());
+    System.out.println("Initializing Climb" + CatzClimb.Instance.getName());
+
     configureBindings();
   }
 

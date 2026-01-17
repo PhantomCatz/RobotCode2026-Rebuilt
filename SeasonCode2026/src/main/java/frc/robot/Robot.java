@@ -23,16 +23,19 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
+  private CatzDrivetrain drivetrain = CatzDrivetrain.Instance;
+
+  private RobotContainer m_robotContainer;
+
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
 
   public Robot() {
-    m_robotContainer = RobotContainer.Instance;
   }
 
   @Override
   public void robotInit() {
+    drivetrain.getCharacterizationVelocity();
     System.gc();
     switch (CatzConstants.hardwareMode) {
       case REAL:
@@ -121,11 +124,7 @@ public class Robot extends LoggedRobot {
         }
       }
     }
-
-    while (RobotContainer.Instance == null) {
-      System.out.println("Waiting for robot container to initialize");
-    }
-    System.out.println("Forcing robot container instance" + RobotContainer.Instance);
+    m_robotContainer = new RobotContainer();
 
     CatzConstants.autoFactory = new AutoFactory(
                                                   CatzRobotTracker.Instance::getEstimatedPose,
@@ -134,6 +133,7 @@ public class Robot extends LoggedRobot {
                                                   true,
                                                   CatzDrivetrain.Instance
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+
   }
 
   @Override

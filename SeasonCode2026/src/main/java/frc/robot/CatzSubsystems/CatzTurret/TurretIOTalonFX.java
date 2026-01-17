@@ -18,7 +18,7 @@ public class TurretIOTalonFX extends GenericTalonFXIOReal<TurretIO.TurretIOInput
     public void setPositionSetpoint(double targetRot){
         double targetRads = targetRot * 2*Math.PI;
         double robotAngularVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond;
-        double feedforward = TurretConstants.kV.get() * robotAngularVelocity;
+        double feedforward = -TurretConstants.kV.get() * robotAngularVelocity;
 
         leaderTalon.setControl(
             positionTorqueCurrentRequest.withPosition(Angle.ofBaseUnits(targetRads, Units.Radians))
