@@ -49,7 +49,7 @@ public class TeleopDriveCmd extends Command {
     // subsystem assignment
     this.m_drivetrain = drivetrain;
 
-    addRequirements(m_drivetrain);
+    addRequirements(this.m_drivetrain);
   }
 
   // --------------------------------------------------------------------------------------

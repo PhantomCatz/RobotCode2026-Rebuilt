@@ -1,5 +1,9 @@
 package frc.robot.CatzSubsystems.CatzTurret;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -8,10 +12,10 @@ import frc.robot.CatzSubsystems.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
-    public static final CatzTurret Instance = new CatzTurret();
-
     private static final TurretIO io = getIOInstance();
     private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
+
+    public static final CatzTurret Instance = new CatzTurret();
 
     public enum ShooterState{
         HOME,
@@ -23,8 +27,16 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
-
         setCurrentPosition(Angle.ofBaseUnits(0.0, Units.Degrees));
+    }
+
+    @Override
+    public void periodic(){
+        super.periodic();
+
+        Rotation2d rot = Rotation2d.fromRotations(getSetpoint().baseUnits);
+        Pose2d pos = new Pose2d(2.0, 2.0, rot);
+        Logger.recordOutput("Turret Angle", pos);
     }
 
     /**

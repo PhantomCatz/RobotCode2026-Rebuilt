@@ -35,8 +35,8 @@ public class TurretConstants {
 
 	public static final Angle TURRET_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
 
-	public static final Angle TURRET_MAX = Angle.ofBaseUnits(130, Units.Degrees);
-	public static final Angle TURRET_MIN = Angle.ofBaseUnits(-130, Units.Degrees);
+	public static final Angle TURRET_MAX = Angle.ofBaseUnits(180, Units.Degrees);
+	public static final Angle TURRET_MIN = Angle.ofBaseUnits(-180, Units.Degrees);
 
 
 	public static final int NUM_OF_FULL_ROT = 1;

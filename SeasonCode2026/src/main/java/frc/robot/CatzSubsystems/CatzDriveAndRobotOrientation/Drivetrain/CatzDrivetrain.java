@@ -99,7 +99,6 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroIO = null;
         break;
     }
-
     gyroDisconnected = new Alert("Gyro disconnected!", Alert.AlertType.kWarning);
 
     // Create swerve modules for each corner of the robot

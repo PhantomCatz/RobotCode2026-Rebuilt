@@ -16,7 +16,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	protected final S io;
 	protected final I inputs;
 	protected final String name;
-	protected Setpoint setpoint;
+	protected Setpoint setpoint = Setpoint.withBrakeSetpoint();
 
 	public GenericMotorSubsystem(S io, I inputs, String name) {
 		super(name);
