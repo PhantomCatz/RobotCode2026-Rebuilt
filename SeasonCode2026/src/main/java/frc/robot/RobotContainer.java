@@ -5,14 +5,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-<<<<<<< Updated upstream
-=======
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
