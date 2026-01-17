@@ -156,7 +156,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
+    m_autonomousCommand = m_robotContainer.getTestCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);

@@ -16,7 +16,11 @@ import frc.robot.Utilities.MotorUtil.Gains;
 
 public class HoodConstants {
 	public static final Angle HOOD_ZERO_POS = Angle.ofBaseUnits(28.0, Units.Degrees);
+	public static final Angle HOOD_EXTEND_POS = Angle.ofBaseUnits(56.0, Units.Degrees);
+	public static final Angle HOOD_TEST_POS = Angle.ofBaseUnits(42.0, Units.Degrees);
 	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withPositionSetpoint(HOOD_ZERO_POS);
+	public static final Setpoint HOOD_EXTEND_SETPOINT = Setpoint.withPositionSetpoint(HOOD_EXTEND_POS);
+	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withPositionSetpoint(HOOD_TEST_POS);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);

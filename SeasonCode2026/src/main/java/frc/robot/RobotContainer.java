@@ -4,12 +4,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+<<<<<<< Updated upstream
+=======
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
-import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
@@ -36,6 +41,13 @@ public class RobotContainer {
       CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.setpoint).withTimeout(2.0),
       Commands.waitSeconds(3),
       CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.SETPOINT2)
+    );
+  }
+  public Command getTestCommand() {
+    return Commands.sequence(
+      CatzHood.Instance.followSetpointCommand(()->HoodConstants.HOOD_EXTEND_SETPOINT).withTimeout(5.0),
+      Commands.waitSeconds(3),
+      CatzIntake.Instance.followSetpointCommand(()->HoodConstants.HOOD_STOW_SETPOINT)
     );
   }
 }
