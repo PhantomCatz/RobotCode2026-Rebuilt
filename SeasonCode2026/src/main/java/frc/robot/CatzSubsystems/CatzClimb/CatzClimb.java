@@ -1,6 +1,8 @@
 package frc.robot.CatzSubsystems.CatzClimb;
 
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
@@ -29,4 +31,10 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
         super(io, inputs, "CatzClimb", ClimbConstants.converter.toAngle(ClimbConstants.CLIMB_THRESHOLD));
     }
 
+    @Override
+    public void periodic() {
+        super.periodic();
+
+        Logger.recordOutput("Climb/TargetPosition", setpoint.baseUnits);
+    }
 }

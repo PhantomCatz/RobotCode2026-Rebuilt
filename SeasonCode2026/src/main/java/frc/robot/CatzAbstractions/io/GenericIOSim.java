@@ -48,7 +48,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
     }
 
     public GenericIOSim() {
-        this(1, new Gains(3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+        this(1, new Gains(0.55, 0.1, 0.8, 0.0, 0.0, 0.0, 0.0));
     }
 
     public GenericIOSim(double gearReduction, Gains gains) {

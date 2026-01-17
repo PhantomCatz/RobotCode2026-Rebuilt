@@ -19,7 +19,7 @@ public class ClimbConstants {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
+        case SN1 -> new Gains(0.18, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -30,6 +30,7 @@ public class ClimbConstants {
     private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
+
 	public static final Setpoint Stow = Setpoint.withPositionSetpoint(0.0);
 	public static final Setpoint Extend = Setpoint.withPositionSetpoint(50.0);
 

@@ -49,7 +49,7 @@ public class RobotContainer {
    public Command getClimbCommand() {
     return Commands.sequence(
       CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Extend).withTimeout(2.0),
-      Commands.waitSeconds(3),
+      Commands.waitSeconds(7),
       CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Stow).withTimeout(2.0)
     );
   }
