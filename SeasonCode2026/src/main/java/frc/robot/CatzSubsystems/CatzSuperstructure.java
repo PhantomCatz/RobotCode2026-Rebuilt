@@ -4,8 +4,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -37,7 +35,10 @@ public class CatzSuperstructure {
     }
 
     public Command turretManualTrackCommand() {
-        return CatzTurret.Instance.followSetpointCommand(()-> turretManualSetpoint(xboxTest.getLeftX(), xboxTest.getLeftY()));
+        // return CatzTurret.Instance.setpointCommand(Setpoint.withDutyCycleSetpoint(0.1));
+        // return CatzTurret.Instance.setpointCommand(Setpoint.withPositionSetpoint(Units.Degrees.of(90.0)));
+        // return CatzTurret.Instance.setpointCommand(Setpoint.withVelocitySetpoint(1.0));
+        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(50.0)));
     }
 
     public Command hoodFlywheelStowCommand() {
@@ -61,7 +62,7 @@ public class CatzSuperstructure {
     }
 
     public Setpoint turretManualSetpoint(double x, double y) {
-        // System.out.println(x + " " + y);
+        System.out.println(x + " " + y);
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(Math.atan2(y,x)));
     }
 

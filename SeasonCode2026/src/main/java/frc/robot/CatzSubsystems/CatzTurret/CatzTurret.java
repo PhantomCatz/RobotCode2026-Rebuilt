@@ -73,19 +73,23 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         if(!foundValidOption){
             return null;
         }
-        return Setpoint.withPositionSetpoint(Units.Radians.of(bestSetpoint));
+        return Setpoint.withMotionMagicSetpoint(Units.Radians.of(bestSetpoint));
     }
+
+    // public Command runthefreakingmotor() {
+    //     return runOnce(() -> io.runMotor());
+    // }
 
     private static TurretIO getIOInstance(){
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Roller Configured for Real");
+                System.out.println("Turret Configured for Real");
                 return new TurretIOTalonFX(TurretConstants.getIOConfig());
             case SIM:
-                System.out.println("Roller Configured for Simulation");
+                System.out.println("Turret Configured for Simulation");
                 return new TurretIOSim();
             default:
-                System.out.println("Roller Unconfigured");
+                System.out.println("Turret Unconfigured");
             return new TurretIOSim();
         }
     }

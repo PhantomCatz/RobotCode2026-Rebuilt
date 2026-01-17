@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+
 import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
@@ -29,7 +30,6 @@ public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
 
   private Command m_autonomousCommand;
-
 
   public Robot() {
   }

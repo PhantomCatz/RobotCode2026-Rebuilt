@@ -19,7 +19,7 @@ public class TurretConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.5, 0.5, 0.5, 1, 0.0000, 0.0, 0.0);
+        case SN2 -> new Gains(0.01, 0.0, 0.0, 0.5, 0.0000, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -46,9 +46,11 @@ public class TurretConstants {
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
+		FXConfig.Slot0.kI = gains.kI();
 		FXConfig.Slot0.kD = gains.kD();
 		FXConfig.Slot0.kS = gains.kS();
 		FXConfig.Slot0.kV = gains.kV();
+		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
 		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
@@ -67,9 +69,9 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 1.0 / (75.0/10.0 * 3.0 * 3.0);
+		FXConfig.Feedback.SensorToMechanismRatio = (75.0/10.0 * 3.0 * 3.0);
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
 		return FXConfig;
 	}
@@ -82,9 +84,9 @@ public class TurretConstants {
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
-						.withReverseSoftLimitEnable(false)
-						.withForwardSoftLimitThreshold(TURRET_MAX)
-						.withReverseSoftLimitThreshold(TURRET_MIN));
+						.withReverseSoftLimitEnable(false));
+						// .withForwardSoftLimitThreshold(TURRET_MAX)
+						// .withReverseSoftLimitThreshold(TURRET_MIN));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};

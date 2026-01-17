@@ -187,7 +187,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setVelocitySetpoint(double mechanismVelocity) {
-		System.out.println("velocityz: " + mechanismVelocity);
 		setControl(requestGetter.getVelocityRequest(mechanismVelocity));
 	}
 
@@ -198,8 +197,11 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
+		System.out.println("goal pos:" + mechanismPosition);
 		setControl(requestGetter.getPositionRequest(mechanismPosition));
 	}
+
+
 
 	@Override
 	public void setCurrentPosition(double mechanismPosition) {
@@ -357,7 +359,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
 		}
 
-
 		public ControlRequest getVoltageRequest(Voltage voltage) {
 			return new VoltageOut(voltage.in(Units.Volts)).withEnableFOC(false);
 		}
@@ -371,11 +372,11 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity) {
-			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(1);
+			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(0);
 		}
 
 		public ControlRequest getPositionRequest(Angle mechanismPosition) {
-			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
+			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
 		}
 	}
 
