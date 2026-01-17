@@ -43,6 +43,8 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
+  private final GyroIO gyroIO;
+  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   public static final CatzDrivetrain Instance = new CatzDrivetrain();
 
   private double distanceError = 999999.9; //meters
@@ -51,8 +53,6 @@ public class CatzDrivetrain extends SubsystemBase {
   private double choreoDistanceError = 9999999.9; //meters //set this to a high number initially just in case the trajectory thinks it's at goal as soon as it starts
 
   // Gyro input/output interface
-  private final GyroIO gyroIO;
-  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
 
   // Alerts
   private final Alert gyroDisconnected;
@@ -85,8 +85,8 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private Pose2d pidGoalPose = new Pose2d();
 
-  private CatzDrivetrain() {
-
+  public CatzDrivetrain() {
+    System.out.println("CatzDrivetrain Constructor");
     // Gyro Instantiation
     switch (CatzConstants.hardwareMode) {
       case REAL:

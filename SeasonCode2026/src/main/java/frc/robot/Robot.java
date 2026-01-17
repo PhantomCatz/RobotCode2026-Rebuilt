@@ -23,7 +23,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
-  private CatzDrivetrain drivetrain = CatzDrivetrain.Instance;
 
   private RobotContainer m_robotContainer;
 
@@ -35,7 +34,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-    drivetrain.getCharacterizationVelocity();
+
     System.gc();
     switch (CatzConstants.hardwareMode) {
       case REAL:
@@ -156,7 +155,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
+    m_autonomousCommand = m_robotContainer.getClimbCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);

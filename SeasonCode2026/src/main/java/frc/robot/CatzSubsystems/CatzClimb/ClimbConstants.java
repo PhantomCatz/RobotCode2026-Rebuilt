@@ -30,6 +30,8 @@ public class ClimbConstants {
     private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
+	public static final Setpoint Stow = Setpoint.withPositionSetpoint(0.0);
+	public static final Setpoint Extend = Setpoint.withPositionSetpoint(50.0);
 
     private static final int CLIMB_MOTOR_ID = 24;
 
