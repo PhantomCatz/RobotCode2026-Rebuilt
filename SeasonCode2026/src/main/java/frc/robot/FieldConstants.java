@@ -46,7 +46,7 @@ public class FieldConstants {
       }
     }
 
-    private final AprilTagFieldLayout layout;
+    public final AprilTagFieldLayout layout;
     private final String layoutString;
   }
 }

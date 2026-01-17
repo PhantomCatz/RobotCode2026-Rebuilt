@@ -16,7 +16,7 @@ public class LimelightSubsystem extends SubsystemBase {
 		ios = LimelightConstants.LIMELIGHT_ARRAY;
 
 		if (Robot.isReal()) {
-			for(ApriltagScanningIOLimelight limelight : LimelightConstants.LIMELIGHT_ARRAY){
+			for(ApriltagScanningIO limelight : LimelightConstants.LIMELIGHT_ARRAY){
 				LimelightConfig config = limelight.getConfig();
 
 				LimelightHelpers.setCameraPose_RobotSpace(
@@ -38,7 +38,6 @@ public class LimelightSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		for(int i = 0; i < ios.length; i++){
-			LimelightConstants.LIMELIGHT_ARRAY[i].update();
 			ios[i].update();
 		}
 	}
@@ -47,7 +46,6 @@ public class LimelightSubsystem extends SubsystemBase {
 		for(ApriltagScanningIO io : ios){
 			return io.getNumTags() > 0;
 		}
-		System.out.println("Missing VisionIOs!!!!!!");
 		return false;
 	}
 }
