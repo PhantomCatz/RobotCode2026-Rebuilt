@@ -57,13 +57,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
     public GenericTalonFXIOReal(MotorIOTalonFXConfig config) {
 
 		requestGetter = config.requestGetter;
-		leaderTalon = new TalonFX(config.mainID, new CANBus("*"));
+		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
 		setMainConfig(config.mainConfig);
 
 		if(config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus("*"));
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.mainBus));
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
 			setFollowerConfig(followerConfig);
@@ -187,7 +187,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setVelocitySetpoint(double mechanismVelocity) {
+		System.out.println("velocityz: " + mechanismVelocity);
 		setControl(requestGetter.getVelocityRequest(mechanismVelocity));
+	}
+
+	@Override
+	public void setVelocitySetpointVoltage(double mechanismVelocity){
+		setControl(requestGetter.getVelocityRequestVoltage(mechanismVelocity));
 	}
 
 	@Override
@@ -340,11 +346,15 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getVelocityRequest(double mechanismVelocity) {
-			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(1);
+			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(0);
+		}
+
+		public ControlRequest getVelocityRequestVoltage(double mechanismVelocity){
+			return new VelocityDutyCycle(mechanismVelocity).withFeedForward(0.0);
 		}
 
 		public ControlRequest getPositionRequest(double mechanismPosition) {
-			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
+			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
 		}
 
 
