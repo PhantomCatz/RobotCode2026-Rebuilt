@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -10,41 +9,26 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
-import frc.robot.Utilities.Setpoint;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
-  private final CatzDrivetrain drivetrain = CatzDrivetrain.Instance;
-  private final CatzTurret turret = CatzTurret.Instance;
-  private final CatzHood hood = CatzHood.Instance;
-  private final CatzIntake intake = CatzIntake.Instance;
-  private final CatzClimb climb = CatzClimb.Instance;
-
 
   private final CommandXboxController xboxDrv = new CommandXboxController(0);
 
   public RobotContainer() {
-    System.out.println("Drivetrain Initializing" + CatzDrivetrain.Instance.getName());
-    System.out.println("Turret Initializing" + CatzTurret.Instance.getName());
-    System.out.println("Hood Initializing" + CatzHood.Instance.getName());
-    System.out.println("Intake Initializing" + CatzIntake.Instance.getName());
-    System.out.println("Initializing Climb" + CatzClimb.Instance.getName());
 
     configureBindings();
   }
 
   private void configureBindings() {
-    // CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
 
     xboxDrv.a().onTrue(superstructure.turretTrackCommand());
     xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
 
-    xboxDrv.leftBumper().onTrue(superstructure.shootingTuneCommand());
-
-
-    xboxDrv.b().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVelocitySetpointVoltage(100.0)));
+    xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
   }
 
   public Command getAutonomousCommand() {
