@@ -19,7 +19,7 @@ public class TurretConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN2 -> new Gains(0.5, 0.5, 0.5, 1, 0.0000, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -31,7 +31,7 @@ public class TurretConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
 
-    private static final int TURRET_MOTOR_ID = 0;
+    private static final int TURRET_MOTOR_ID = 12;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
@@ -66,7 +66,7 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 50.0;
+		FXConfig.Feedback.SensorToMechanismRatio = 1.0 / (75.0/10.0 * 3.0 * 3.0);
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

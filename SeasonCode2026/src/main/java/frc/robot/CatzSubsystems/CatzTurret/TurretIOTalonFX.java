@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzTurret;
 
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 
 import edu.wpi.first.units.Units;
@@ -9,7 +10,7 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 
 public class TurretIOTalonFX extends GenericTalonFXIOReal<TurretIO.TurretIOInputs> implements TurretIO{
     private PositionTorqueCurrentFOC positionTorqueCurrentRequest = new PositionTorqueCurrentFOC(0.0).withUpdateFreqHz(0.0);
-
+    private PositionDutyCycle noFOC = new PositionDutyCycle(0.0).withUpdateFreqHz(0.0);
     public TurretIOTalonFX(MotorIOTalonFXConfig config){
         super(config);
     }
@@ -19,10 +20,9 @@ public class TurretIOTalonFX extends GenericTalonFXIOReal<TurretIO.TurretIOInput
         double targetRads = targetRot * 2*Math.PI;
         double robotAngularVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond;
         double feedforward = -TurretConstants.ROBOT_OMEGA_FEEDFORWARD * robotAngularVelocity;
-
-        leaderTalon.setControl(
-            positionTorqueCurrentRequest.withPosition(Angle.ofBaseUnits(targetRads, Units.Radians))
-                                        .withFeedForward(feedforward)
-        );
+        // System.out.println("ni hao: " + targetRads + " roboAngularVafseiih " + robotAngularVelocity + " feedwoard " + feedforward);
+        leaderTalon.setControl(requestGetter.getPositionRequest(Units.Radians.of(targetRads)));
+            // noFOC.withPosition(Angle.ofBaseUnits(targetRads, Units.Radians))
+                                        //.withFeedForward(feedforward)
     }
 }

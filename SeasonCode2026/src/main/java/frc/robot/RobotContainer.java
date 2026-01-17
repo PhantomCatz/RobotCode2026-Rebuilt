@@ -10,12 +10,12 @@ import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
-import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
 
   private final CommandXboxController xboxDrv = new CommandXboxController(0);
+  private final CommandXboxController xboxTest = new CommandXboxController(1);
 
   public RobotContainer() {
     System.out.println("Drivetrain Initializing" + CatzDrivetrain.Instance.getName());
@@ -28,8 +28,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
-
+    // CatzDrivetrain.Instance.s  etDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+    CatzTurret.Instance.setDefaultCommand(
+      superstructure.turretManualTrackCommand()
+    );
     xboxDrv.a().onTrue(superstructure.turretTrackCommand());
     xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
 

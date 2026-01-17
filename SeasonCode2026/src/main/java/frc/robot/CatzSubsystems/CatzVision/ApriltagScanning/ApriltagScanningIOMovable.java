@@ -86,22 +86,22 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
     private Pose3d calculateCurrentCameraOffset() {
         Pose3d originalOffset = config.robotToCameraOffset;
         Angle turretAngle = Units.Rotations.of(CatzTurret.Instance.getPosition());
-        
+
         Translation2d limelightOffsetFromTurretCenter = new Translation2d(
             LimelightConstants.TURRET_RADIUS.in(Units.Meters),
             new Rotation2d(turretAngle)
         );
-        
+
         Translation2d limelightPositionOnRobot = LimelightConstants.TURRET_CENTER
             .plus(limelightOffsetFromTurretCenter);
-        
-    
+
+
         Rotation3d newRotation = new Rotation3d(
             originalOffset.getRotation().getX(),
             originalOffset.getRotation().getY(),
             originalOffset.getRotation().getZ() + turretAngle.in(Units.Radians)
         );
-        
+
         return new Pose3d(
             limelightPositionOnRobot.getX(),
             limelightPositionOnRobot.getY(),
@@ -114,5 +114,5 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
     public int getNumTags() {
         return latestEstimateNumTags;
     }
-    
+
 }
