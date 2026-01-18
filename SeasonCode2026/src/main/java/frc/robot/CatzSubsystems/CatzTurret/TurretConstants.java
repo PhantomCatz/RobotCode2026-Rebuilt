@@ -2,9 +2,12 @@ package frc.robot.CatzSubsystems.CatzTurret;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -19,9 +22,11 @@ public class TurretConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.01, 0.0, 0.0, 0.5, 0.0000, 0.0, 0.0);
+        case SN2 -> new Gains(0.1, 0.0, 0.05, 0.45, 10.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
+
+	public static final Pose2d TURRET_OFFSET = new Pose2d( edu.wpi.first.math.util.Units.inchesToMeters(9.5),  edu.wpi.first.math.util.Units.inchesToMeters(4.0), new Rotation2d());
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
     private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
@@ -69,9 +74,10 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = (75.0/10.0 * 3.0 * 3.0);
+		FXConfig.Feedback.SensorToMechanismRatio = 67.5;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}

@@ -1,9 +1,6 @@
 package frc.robot.CatzSubsystems.CatzTurret;
 
-import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -14,6 +11,7 @@ import frc.robot.Utilities.Setpoint;
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
     private static final TurretIO io = getIOInstance();
     private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
+    private double commandedPos;
 
     public static final CatzTurret Instance = new CatzTurret();
     public enum ShooterState{
@@ -33,9 +31,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     public void periodic(){
         super.periodic();
 
-        Rotation2d rot = Rotation2d.fromRotations(getSetpoint().baseUnits);
-        Pose2d pos = new Pose2d(2.0, 2.0, rot);
-        Logger.recordOutput("Turret Angle", pos);
+
     }
 
     /**
@@ -47,33 +43,16 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double targetRads = target.in(Units.Radians);
         double minLegalRads = TurretConstants.TURRET_MIN.in(Units.Radians);
         double maxLegalRads = TurretConstants.TURRET_MAX.in(Units.Radians);
-        double currentSetpointRads = targetRads;
 
-        double bestSetpoint = currentSetpointRads;
-        boolean foundValidOption = false;
-
-        for(int i = -2; i <= TurretConstants.NUM_OF_FULL_ROT; i++){
-            double potentialSetpoint = targetRads + (2.0 * Math.PI * i);
-
-            // First check if this angle is physically possible for the hardware
-            if (potentialSetpoint < minLegalRads || potentialSetpoint > maxLegalRads) {
-                continue;
-            }
-
-            // If this is the first valid option we found or if it is closer
-            // to our current position than the previous best option then pick it
-            if (!foundValidOption) {
-                bestSetpoint = potentialSetpoint;
-                foundValidOption = true;
-            } else if (Math.abs(currentSetpointRads - potentialSetpoint) < Math.abs(currentSetpointRads - bestSetpoint)) {
-                bestSetpoint = potentialSetpoint;
-            }
+        while (targetRads <= minLegalRads){
+            targetRads += 2*Math.PI;
         }
 
-        if(!foundValidOption){
-            return null;
+        while (targetRads >= maxLegalRads) {
+            targetRads -= 2*Math.PI;
         }
-        return Setpoint.withMotionMagicSetpoint(Units.Radians.of(bestSetpoint));
+
+        return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
 
     // public Command runthefreakingmotor() {
