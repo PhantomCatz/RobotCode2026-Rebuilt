@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -69,11 +70,11 @@ public class CatzSuperstructure {
      * while respecting physical limits and minimizing movement
      */
     public Setpoint calculateHubTrackingSetpoint() {
-        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
-        Pose2d offsetPose = TurretConstants.TURRET_OFFSET.rotateAround(new Translation2d(), robotPose.getRotation());
-        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
+        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d fieldToTurret = fieldToRobot.transformBy(TurretConstants.TURRET_OFFSET);
+        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
-                - MathUtil.angleModulus(robotPose.getRotation().getRadians());
+                - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
         Logger.recordOutput("Turret Commanded Setpoint", targetRads / (2*Math.PI));
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }

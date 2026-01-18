@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -26,7 +27,7 @@ public class TurretConstants {
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-	public static final Pose2d TURRET_OFFSET = new Pose2d( edu.wpi.first.math.util.Units.inchesToMeters(9.5),  edu.wpi.first.math.util.Units.inchesToMeters(4.0), new Rotation2d());
+	public static final Transform2d TURRET_OFFSET = new Transform2d( edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5), new Rotation2d());
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
     private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());

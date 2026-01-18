@@ -1,6 +1,7 @@
 package frc.robot.CatzSubsystems.CatzTurret;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -44,13 +45,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double minLegalRads = TurretConstants.TURRET_MIN.in(Units.Radians);
         double maxLegalRads = TurretConstants.TURRET_MAX.in(Units.Radians);
 
-        while (targetRads <= minLegalRads){
-            targetRads += 2*Math.PI;
-        }
-
-        while (targetRads >= maxLegalRads) {
-            targetRads -= 2*Math.PI;
-        }
+        targetRads = MathUtil.angleModulus(targetRads);
 
         return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
