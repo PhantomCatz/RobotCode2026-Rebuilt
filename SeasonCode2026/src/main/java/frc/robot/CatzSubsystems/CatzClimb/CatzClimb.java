@@ -12,13 +12,13 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
     private static ClimbIO getIOInstance() {
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Roller Configured for Real");
+                System.out.println("Climb Configured for Real");
                 return new ClimbIOTalonFX(ClimbConstants.getIOConfig());
             case SIM:
-                System.out.println("Roller Configured for Simulation");
+                System.out.println("Climb Configured for Simulation");
                 return new ClimbIOSim();
                 default:
-                System.out.println("Roller Unconfigured");
+                System.out.println("Climb Unconfigured");
                 return new ClimbIOSim();
         }
     }

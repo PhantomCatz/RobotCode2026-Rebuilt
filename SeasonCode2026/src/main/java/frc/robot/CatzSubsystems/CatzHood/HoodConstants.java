@@ -60,7 +60,7 @@ public class HoodConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 10.0 / 184.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

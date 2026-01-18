@@ -80,6 +80,12 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
   public default void setVelocitySetpoint(double mechanismVelocity) {}
 
   /**
+   * Doesn't use FOC
+   * @param mechanismVelocity
+   */
+  public default void setVelocitySetpointVoltage(double mechanismVelocity){}
+
+  /**
    * Sets the motor to run at a percentage of its max voltage. Should not be called directly, only applied through Setpoints.
    *
    * @param percent Percentage of max voltage to run at (0.0 to 1.0).

@@ -12,7 +12,9 @@ import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+
 import choreo.auto.AutoFactory;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,7 +30,6 @@ public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
 
   private Command m_autonomousCommand;
-
 
   public Robot() {
   }
@@ -133,6 +134,8 @@ public class Robot extends LoggedRobot {
                                                   true,
                                                   CatzDrivetrain.Instance
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+
+      DriverStation.silenceJoystickConnectionWarning(true);
 
   }
 

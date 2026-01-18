@@ -42,7 +42,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
     protected final List<StatusSignal<Current>> torqueCurrent;
     protected final List<StatusSignal<Temperature>> tempCelsius;
 
-    private ControlRequestGetter requestGetter = new ControlRequestGetter();
+    protected ControlRequestGetter requestGetter = new ControlRequestGetter();
 
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 5, java.util.concurrent.TimeUnit.MILLISECONDS, queue);
@@ -57,13 +57,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
     public GenericTalonFXIOReal(MotorIOTalonFXConfig config) {
 
 		requestGetter = config.requestGetter;
-		leaderTalon = new TalonFX(config.mainID, new CANBus("*"));
+		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
 		setMainConfig(config.mainConfig);
 
 		if(config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus("*"));
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.mainBus));
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
 			setFollowerConfig(followerConfig);
@@ -191,9 +191,17 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	@Override
+	public void setVelocitySetpointVoltage(double mechanismVelocity){
+		setControl(requestGetter.getVelocityRequestVoltage(mechanismVelocity));
+	}
+
+	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
+		System.out.println("goal pos:" + mechanismPosition);
 		setControl(requestGetter.getPositionRequest(mechanismPosition));
 	}
+
+
 
 	@Override
 	public void setCurrentPosition(double mechanismPosition) {
@@ -340,13 +348,16 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getVelocityRequest(double mechanismVelocity) {
-			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(1);
+			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(0);
+		}
+
+		public ControlRequest getVelocityRequestVoltage(double mechanismVelocity){
+			return new VelocityDutyCycle(mechanismVelocity).withFeedForward(0.0);
 		}
 
 		public ControlRequest getPositionRequest(double mechanismPosition) {
-			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
+			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
 		}
-
 
 		public ControlRequest getVoltageRequest(Voltage voltage) {
 			return new VoltageOut(voltage.in(Units.Volts)).withEnableFOC(false);
@@ -361,11 +372,11 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity) {
-			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(1);
+			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(0);
 		}
 
 		public ControlRequest getPositionRequest(Angle mechanismPosition) {
-			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(2);
+			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
 		}
 	}
 
