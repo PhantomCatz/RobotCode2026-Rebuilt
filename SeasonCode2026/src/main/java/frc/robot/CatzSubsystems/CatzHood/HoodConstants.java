@@ -32,7 +32,7 @@ public class HoodConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
 	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodAngle", 0.0);
 
-    private static final int HOOD_MOTOR_ID = 0;
+    private static final int HOOD_MOTOR_ID = 29;
 
 	public static final Angle HOOD_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
 
