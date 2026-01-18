@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems.CatzHood;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
@@ -22,6 +24,7 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
         }
     }
 
+
     private CatzHood() {
         super(io, inputs, "CatzHood", HoodConstants.HOOD_THRESHOLD);
 
@@ -29,5 +32,12 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     }
 
     public static final CatzHood Instance = new CatzHood();
+    @Override
+    public void periodic() {
+        super.periodic();
+
+        Logger.recordOutput("hoodangle", setpoint.baseUnits);
+    }
+
 
 }

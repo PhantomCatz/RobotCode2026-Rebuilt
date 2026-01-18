@@ -16,7 +16,6 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	protected final String name;
 	protected final Angle epsilonThreshold;
 
-	private Setpoint setpoint = Setpoint.withBrakeSetpoint();
 	private double manualSpeed = 0.0;
 	protected boolean isFullManual = false;
 
