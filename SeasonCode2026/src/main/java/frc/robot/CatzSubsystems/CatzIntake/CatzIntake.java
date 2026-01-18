@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 
 public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeIOInputs>{
 
@@ -23,6 +24,10 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
     }
 
     private static IntakeIO getIOInstance() {
+        if (CatzConstants.IntakeOn == false) {
+            System.out.println("Intake Disabled by CatzConstants");
+            return new IntakeIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Intake Configured for Real");

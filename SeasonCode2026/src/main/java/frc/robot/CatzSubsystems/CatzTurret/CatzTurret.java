@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 import frc.robot.CatzSubsystems.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 
@@ -77,6 +78,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     }
 
     private static TurretIO getIOInstance(){
+        if (CatzConstants.TurretOn == false) {
+            System.out.println("Turret Disabled by CatzConstants");
+            return new TurretIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");

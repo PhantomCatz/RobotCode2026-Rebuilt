@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzIndexer;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 
 public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.IndexerIOInputs>{
 
@@ -9,6 +10,10 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
     private static final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
     private static IndexerIO getIOInstance() {
+        if (CatzConstants.IndexerOn == false) {
+            System.out.println("Indexer Disabled by CatzConstants");
+            return new IndexerIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Indexer Configured for Real");

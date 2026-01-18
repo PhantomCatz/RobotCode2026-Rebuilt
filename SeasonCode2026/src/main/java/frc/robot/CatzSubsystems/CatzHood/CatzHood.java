@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzHood;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 
 public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
 
@@ -9,6 +10,10 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     private static final HoodIOInputsAutoLogged inputs = new HoodIOInputsAutoLogged();
 
     private static HoodIO getIOInstance() {
+        if (CatzConstants.HoodOn == false) {
+            System.out.println("Hood Disabled by CatzConstants");
+            return new HoodIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Indexer Configured for Real");

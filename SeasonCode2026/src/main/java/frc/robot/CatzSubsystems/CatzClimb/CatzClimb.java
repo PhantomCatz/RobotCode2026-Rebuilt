@@ -10,6 +10,10 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
     private static final ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
 
     private static ClimbIO getIOInstance() {
+        if (CatzConstants.ClimbOn == false) {
+            System.out.println("Climb Disabled by CatzConstants");
+            return new ClimbIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Climb Configured for Real");
