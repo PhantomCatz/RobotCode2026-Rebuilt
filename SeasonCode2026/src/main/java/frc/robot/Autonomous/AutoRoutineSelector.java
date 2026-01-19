@@ -1,0 +1,25 @@
+package frc.robot.Autonomous;
+
+import choreo.auto.AutoChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+
+public class AutoRoutineSelector {
+    public static final AutoRoutineSelector Instance = new AutoRoutineSelector();
+
+    private AutoChooser autoSelector = new AutoChooser();
+
+    private AutoRoutineSelector(){
+
+
+        SmartDashboard.putData(autoSelector);
+    }
+
+    public Command getSelectedCommand(){
+        return autoSelector.selectedCommandScheduler();
+    }
+
+    public AutoChooser getAutoChooser(){
+        return autoSelector;
+    }
+}

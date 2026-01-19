@@ -1,39 +1,168 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.rlog.RLOGServer;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import choreo.auto.AutoFactory;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.CatzConstants.RobotHardwareMode;
+import frc.robot.CatzConstants.RobotID;
+import frc.robot.CatzSubsystems.SubystemVisualizer;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.Utilities.VirtualSubsystem;
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
 
+  private final SubystemVisualizer visualizer = new SubystemVisualizer("bigtureert");
+
   public Robot() {
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = RobotContainer.Instance;
+  }
+
+  @Override
+  public void robotInit() {
+    System.gc();
+    switch (CatzConstants.hardwareMode) {
+      case REAL:
+        // Running on a real robot, log to a USB stick ("/U/logs")
+        Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
+        Logger.addDataReceiver(new RLOGServer());
+        Logger.addDataReceiver(new WPILOGWriter("/Logs"));
+
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case SIM:
+        // Running a physics simulator, log to NT
+        // Logger.addDataReceiver(new WPILOGWriter("F:/robotics code
+        // projects/loggingfiles/"));
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case REPLAY:
+        // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+    }
+
+    Logger.start();
+
+    // Log active commands
+    Map<String, Integer> commandCounts = new HashMap<>();
+    BiConsumer<Command, Boolean> logCommandFunction = (Command command, Boolean active) -> {
+      String name = command.getName();
+      int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
+      commandCounts.put(name, count);
+      Logger.recordOutput(
+          "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
+      Logger.recordOutput("CommandsAll/" + name, count > 0);
+    };
+    CommandScheduler.getInstance()
+        .onCommandInitialize(
+            (Command command) -> {
+              logCommandFunction.accept(command, true);
+            });
+    CommandScheduler.getInstance()
+        .onCommandFinish(
+            (Command command) -> {
+              logCommandFunction.accept(command, false);
+            });
+    CommandScheduler.getInstance()
+        .onCommandInterrupt(
+            (Command command) -> {
+              logCommandFunction.accept(command, false);
+            });
+
+    // Set Brownout Voltage to WPILIB recommendations
+    RobotController.setBrownoutVoltage(6.3);
+
+    // Print out Catz Constant enums
+    System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());
+    System.out.println("Mode: " + CatzConstants.hardwareMode.toString());
+    System.out.println("Type: " + CatzConstants.getRobotType().toString());
+
+    // Run hardware mode check
+    if (Robot.isReal()) { // REAL ROBOT
+      if (CatzConstants.hardwareMode == RobotHardwareMode.SIM) {
+        System.out.println("Wrong Robot Constant selection, Check CatzConstants hardwareMode");
+        System.exit(0);
+      }
+
+      if (CatzConstants.getRobotType() == RobotID.SN_TEST) {
+        System.out.println("Wrong Robot ID selection, Check CatzConstants robotID");
+        System.exit(0);
+      }
+
+    } else { // SIM ROBOT
+      if (CatzConstants.hardwareMode == RobotHardwareMode.REAL) {
+        System.out.println("Wrong Robot Constant selection, Check CatzConstants hardwareMode");
+        System.exit(0);
+      }
+
+      if (CatzConstants.getRobotType() != RobotID.SN_TEST) {
+        if (CatzConstants.hardwareMode == RobotHardwareMode.SIM) {
+          System.out.println("Wrong Robot ID selection, Check CatzConstants robotID");
+          System.exit(0);
+        }
+      }
+    }
+
+    while (RobotContainer.Instance == null) {
+      System.out.println("Waiting for robot container to initialize");
+    }
+    System.out.println("Forcing robot container instance" + RobotContainer.Instance);
+
+    CatzConstants.autoFactory = new AutoFactory(
+                                                  CatzRobotTracker.Instance::getEstimatedPose,
+                                                  CatzRobotTracker.Instance::resetPose,
+                                                  CatzDrivetrain.Instance::followChoreoTrajectoryExecute,
+                                                  true,
+                                                  CatzDrivetrain.Instance
+                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
   }
 
   @Override
   public void robotPeriodic() {
+    VirtualSubsystem.periodicAll();
     CommandScheduler.getInstance().run();
+    visualizer.update( Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(CatzTurret.Instance.getPosition()));
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+  }
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
@@ -41,10 +170,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+  }
 
   @Override
   public void teleopInit() {
@@ -54,10 +185,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+  }
 
   @Override
   public void testInit() {
@@ -65,8 +198,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 }

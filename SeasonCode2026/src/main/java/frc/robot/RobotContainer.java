@@ -1,20 +1,43 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
-  public RobotContainer() {
+  public static final RobotContainer Instance = new RobotContainer();
+
+  private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
+
+  private final CommandXboxController xboxDrv = new CommandXboxController(0);
+
+  private RobotContainer() {
     configureBindings();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+
+    xboxDrv.a().onTrue(superstructure.turretTrackCommand());
+    xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
+
+    xboxDrv.leftBumper().onTrue(superstructure.shootingTuneCommand());
+  }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return Commands.sequence(
+      // CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.setpoint).withTimeout(2.0),
+      // Commands.waitSeconds(3),
+      // CatzIntake.Instance.followSetpointCommand(()->IntakeConstants.SETPOINT2),
+      CatzTurret.Instance.followSetpointCommand(() -> TurretConstants.alittle).withTimeout(5.0),
+      Commands.waitSeconds(6),
+      CatzTurret.Instance.followSetpointCommand(() -> TurretConstants.WEEEEEE).withTimeout(5.0)
+
+    );
   }
 }

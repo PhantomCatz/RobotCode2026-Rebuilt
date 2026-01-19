@@ -18,8 +18,8 @@ public final class CatzConstants {
   //
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.COMPETITION;
-  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN2;
+  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.SIM;
+  private static RobotID robotType = RobotID.SN_TEST;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
@@ -81,7 +81,6 @@ public final class CatzConstants {
     SN1,
     SN2,
     SN_TEST, // Select alternate test robot parameters
-    SN1_2024
   }
 
   public static enum AllianceColor {

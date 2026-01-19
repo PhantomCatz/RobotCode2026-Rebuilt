@@ -10,6 +10,7 @@ import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -64,13 +65,17 @@ public class ModuleIORealFoc implements ModuleIO {
   private final String MODULE_NAME;
   ModuleIDs m_config;
 
+  public CANBus driveTalonCANBus = new CANBus("*");
+  public CANBus steerTalonCANBus = new CANBus("*");
+
+
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
 
-    encoder = new CANcoder(config.absoluteEncoderChannel(), "*");
+    encoder = new CANcoder(config.absoluteEncoderChannel(), driveTalonCANBus);
     m_config = config;
     // Init drive controllers from config constants
-    driveTalon = new TalonFX(config.driveID(), "*");
+    driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
 
     // Restore Factory Defaults
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
@@ -107,7 +112,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.optimizeBusUtilization(0, 1.0);
 
     // Init steer controllers from config constants
-    steerTalon = new TalonFX(config.steerID(), "*");
+    steerTalon = new TalonFX(config.steerID(), steerTalonCANBus);
     absoluteEncoderOffset = Rotation2d.fromRotations(config.absoluteEncoderOffset());
     // absEncoder = new MT6835(config.absoluteEncoderChannel(), false);
 
@@ -209,8 +214,6 @@ public class ModuleIORealFoc implements ModuleIO {
 
   @Override
   public void runDriveVelocityRPSIO(double velocityMetersPerSec) {
-    // System.out.println("power " + driveTorqueCurrent.getValueAsDouble());
-    // System.out.println("speed " + velocityMetersPerSec);
     driveTalon.setControl(velocityTorqueCurrentFOC.withVelocity(velocityMetersPerSec));
   }
 
@@ -222,7 +225,7 @@ public class ModuleIORealFoc implements ModuleIO {
   public void runSteerPositionSetpoint(double currentAngleRads, double targetAngleRads) {
     steerTalon.setControl(
         dutyCycleOutControl.withOutput(
-            -steerFeedback.calculate(currentAngleRads, targetAngleRads))
+            steerFeedback.calculate(currentAngleRads, targetAngleRads))
     );
 
     Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);
