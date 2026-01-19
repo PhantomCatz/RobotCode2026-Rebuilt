@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -8,6 +10,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
+import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
@@ -42,6 +45,26 @@ public class CatzSuperstructure {
 
     public Command applyShooterSetpoint(){
         return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    }
+
+    public Command flywheelManualCommand(){
+        return CatzFlywheels.Instance.followSetpointCommand(() -> {
+            double input = (RobotContainer.xboxDrv.getLeftY()) * 8;
+            Logger.recordOutput("Xbox Voltage Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
+    }
+
+    public Command hoodManualCommand(){
+        return CatzHood.Instance.followSetpointCommand(() -> {
+            double input = -(RobotContainer.xboxDrv.getLeftY()) * 1;
+            Logger.recordOutput("Xbox Voltage Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
+    }
+
+    public Command applyHoodSetpoint(){
+        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT21q    );
     }
 
     /**

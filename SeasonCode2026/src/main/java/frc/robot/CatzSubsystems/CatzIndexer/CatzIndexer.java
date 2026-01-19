@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzIndexer;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 
 public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.IndexerIOInputs>{
 

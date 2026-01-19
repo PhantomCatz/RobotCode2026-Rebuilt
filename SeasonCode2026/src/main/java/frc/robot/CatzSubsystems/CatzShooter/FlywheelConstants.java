@@ -17,11 +17,11 @@ import frc.robot.Utilities.Setpoint;
 
 public class FlywheelConstants {
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVelocitySetpoint(0.0);
-	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpointVoltage(200.0);
+	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpointVoltage(50.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.1, 0.0, 0.0, 0.33329, 0.5, 0.0, 0.0);
+        case SN2 -> new Gains(0.06, 0.0, 0.0, 0.0, 0.014, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 

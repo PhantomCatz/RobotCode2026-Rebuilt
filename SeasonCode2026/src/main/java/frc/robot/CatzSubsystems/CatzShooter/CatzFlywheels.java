@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.FlywheelMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 
 public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, FlywheelsIO.FlywheelsIOInputs> {
 

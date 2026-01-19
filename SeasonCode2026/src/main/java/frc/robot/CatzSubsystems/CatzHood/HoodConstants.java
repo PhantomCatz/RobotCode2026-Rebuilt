@@ -15,12 +15,14 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
 public class HoodConstants {
-	public static final Angle HOOD_ZERO_POS = Angle.ofBaseUnits(28.0, Units.Degrees);
-	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withPositionSetpoint(HOOD_ZERO_POS);
+	public static final Angle HOOD_ZERO_POS = Angle.ofBaseUnits(27.0, Units.Degrees);
+	public static final Angle HOOD_TEST_POS = Angle.ofBaseUnits(30.0, Units.Degrees);
+	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS);
+	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_TEST_POS);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN2 -> new Gains(0.0000, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -42,6 +44,7 @@ public class HoodConstants {
 		FXConfig.Slot0.kP = gains.kP();
 		FXConfig.Slot0.kD = gains.kD();
 		FXConfig.Slot0.kS = gains.kS();
+		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
 		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;

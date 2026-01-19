@@ -107,6 +107,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
     @Override
     public void updateInputs(T inputs) {
+
         inputs.isLeaderConnected =
             BaseStatusSignal.refreshAll(
                 internalPositionRotations,
@@ -350,13 +351,12 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getVelocityRequestVoltage(double mechanismVelocity){
-			return new VelocityDutyCycle(mechanismVelocity).withFeedForward(0.0);
+			return new VelocityDutyCycle(mechanismVelocity).withSlot(0);
 		}
 
 		public ControlRequest getPositionRequest(double mechanismPosition) {
 			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
 		}
-
 
 		public ControlRequest getVoltageRequest(Voltage voltage) {
 			return new VoltageOut(voltage.in(Units.Volts)).withEnableFOC(false);

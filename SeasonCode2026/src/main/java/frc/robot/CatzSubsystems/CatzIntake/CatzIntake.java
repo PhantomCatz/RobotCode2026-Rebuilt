@@ -4,7 +4,6 @@ import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbIOSim;
 
 public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeIOInputs>{
 
