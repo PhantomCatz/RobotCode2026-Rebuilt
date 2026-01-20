@@ -5,7 +5,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -63,6 +62,14 @@ public class CatzSuperstructure {
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
         );
+    }
+
+    public Command hoodManualCommand(){
+        return CatzHood.Instance.followSetpointCommand(() -> {
+             double input = xboxTest.getLeftY() * 5;
+            Logger.recordOutput("Xbox Inputted", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
     }
 
     /**

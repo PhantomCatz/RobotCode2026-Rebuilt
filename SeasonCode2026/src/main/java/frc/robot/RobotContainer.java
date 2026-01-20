@@ -1,13 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
@@ -30,10 +26,11 @@ public class RobotContainer {
     CatzTurret.Instance.setDefaultCommand(
       superstructure.turretManualTrackCommand()
     );
-    xboxDrv.a().onTrue(superstructure.turretTrackCommand());
-    xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
-    // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());
-    xboxDrv.y().onTrue(new InstantCommand(()->CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
+    // xboxDrv.a().onTrue(superstructure.turretTrackCommand());
+    // xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
+    xboxTest.a().onTrue(superstructure.hoodManualCommand());
+    // xboxDrv.y().onTrue(new InstantCommand(()->CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
+
   }
 
   public Command getAutonomousCommand() {

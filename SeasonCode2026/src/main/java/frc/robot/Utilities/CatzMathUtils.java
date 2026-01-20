@@ -75,7 +75,7 @@ public class CatzMathUtils {
    * If the shortest path is blocked by a limit, it attempts to wrap the other way.
    */
   public static double getOptimizedAngleWithLimits(double currentAngle, double targetAngle, double minLimit, double maxLimit) {
-      
+
       //find shortest path to target angle based off current angle
       double directTarget = placeTargetInAppropriate0To360Scope(currentAngle, targetAngle);
 
