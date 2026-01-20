@@ -1,6 +1,8 @@
 package frc.robot.CatzSubsystems.CatzTurret;
 
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -31,6 +33,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     @Override
     public void periodic(){
         super.periodic();
+        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits );
 
 
     }

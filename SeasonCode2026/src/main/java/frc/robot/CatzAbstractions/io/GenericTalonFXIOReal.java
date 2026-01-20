@@ -182,6 +182,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setMotionMagicSetpoint(double mechanismPosition) {
+		System.out.println("Turret Position Commanded:" + mechanismPosition);
 		setControl(requestGetter.getMotionMagicRequest(mechanismPosition));
 	}
 
@@ -344,7 +345,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getMotionMagicRequest(double mechanismPosition) {
-			return new MotionMagicExpoVoltage(mechanismPosition).withSlot(0);//.withEnableFOC(true);
+			return new MotionMagicVoltage(mechanismPosition).withSlot(0);//.withEnableFOC(true);
 		}
 
 		public ControlRequest getVelocityRequest(double mechanismVelocity) {
@@ -368,7 +369,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 		public ControlRequest getMotionMagicRequest(Angle mechanismPosition) {
-			return new MotionMagicExpoVoltage(mechanismPosition).withSlot(0).withEnableFOC(true);
+			return new MotionMagicVoltage(mechanismPosition).withSlot(0).withEnableFOC(true);
 		}
 
 		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity) {
