@@ -33,7 +33,7 @@ public class FlywheelConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
-	public static final AngularVelocity FLYWHEEL_THRESHOLD = AngularVelocity.ofBaseUnits(10.0, Units.RotationsPerSecond);
+	public static final AngularVelocity FLYWHEEL_THRESHOLD = Units.RotationsPerSecond.of(5.0);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -63,7 +63,7 @@ public class FlywheelConstants {
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}

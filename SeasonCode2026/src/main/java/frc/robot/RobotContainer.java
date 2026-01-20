@@ -27,8 +27,8 @@ public class RobotContainer {
 
     xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
     // xboxDrv.y().onTrue(superstructure.flywheelManualCommand());
-    xboxDrv.a().onTrue(superstructure.)
-    xboxDrv.y().onTrue(superstructure.hoodManualCommand());
+    // xboxDrv.a().onTrue(superstructure.)
+    // xboxDrv.y().onTrue(superstructure.hoodManualCommand());
 
   }
 

@@ -64,7 +64,7 @@ public class CatzSuperstructure {
     }
 
     public Command applyHoodSetpoint(){
-        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT21q    );
+        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
     }
 
     /**
