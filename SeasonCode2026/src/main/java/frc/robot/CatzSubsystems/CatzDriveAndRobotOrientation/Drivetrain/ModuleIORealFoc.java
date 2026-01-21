@@ -214,7 +214,11 @@ public class ModuleIORealFoc implements ModuleIO {
 
   @Override
   public void runDriveVelocityRPSIO(double velocityMetersPerSec) {
-    driveTalon.setControl(velocityTorqueCurrentFOC.withVelocity(velocityMetersPerSec));
+    if(DriveConstants.IS_FOC){
+      driveTalon.setControl(velocityTorqueCurrentFOC.withVelocity(velocityMetersPerSec));
+    }else{
+      driveTalon.setControl(velocityVoltage.withVelocity(velocityMetersPerSec));
+    }
   }
 
   public void runSteerPercentOutput(double percentOutput) {
