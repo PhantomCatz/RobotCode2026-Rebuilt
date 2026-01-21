@@ -69,7 +69,7 @@ public class CatzSuperstructure {
         return Commands.defer(() -> {
             Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
 
-            return CatzHood.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(angle));
+            return CatzHood.Instance.followSetpointCommand(() ->Setpoint.withMotionMagicSetpoint(angle));
         }, Set.of(CatzHood.Instance));
     }
 

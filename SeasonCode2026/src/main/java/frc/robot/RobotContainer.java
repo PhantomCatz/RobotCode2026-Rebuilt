@@ -9,6 +9,8 @@ import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
@@ -32,7 +34,11 @@ public class RobotContainer {
     // xboxDrv.a().onTrue(superstructure.)
     xboxDrv.y().onTrue(superstructure.hoodManualCommand());
     xboxDrv.a().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()));
-    xboxDrv.x().onTrue(CatzHood.Instance.setPositionCommand(HoodConstants.HOOD_ZERO_POS));
+    xboxDrv.b().onTrue(CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT));
+    xboxDrv.x().onTrue(CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS));
+
+    xboxDrv.leftBumper().onTrue(superstructure.hoodTestCommand());
+    xboxDrv.rightBumper().onTrue(superstructure.applyShooterSetpoint());
 
   }
 

@@ -23,7 +23,7 @@ public class HoodConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.05, 0.0, 0.0, 0.4, 3.0, 0.0, 0.0);
+        case SN2 -> new Gains(70.0, 0.0, 0.0, 0.4, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
