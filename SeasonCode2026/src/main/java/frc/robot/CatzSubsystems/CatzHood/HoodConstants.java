@@ -15,14 +15,15 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
 public class HoodConstants {
-	public static final Angle HOOD_ZERO_POS = Angle.ofBaseUnits(27.0, Units.Degrees);
-	public static final Angle HOOD_TEST_POS = Angle.ofBaseUnits(30.0, Units.Degrees);
+	public static final Angle HOOD_ZERO_POS = Units.Degrees.of(30.0);
+	public static final Angle HOOD_MAX_POS = Units.Degrees.of(60.0);
+	public static final Angle HOOD_TEST_POS = Units.Degrees.of(50.0);
 	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS);
 	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_TEST_POS);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0000, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0);
+        case SN2 -> new Gains(0.05, 0.0, 0.0, 0.4, 3.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -47,8 +48,10 @@ public class HoodConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 50.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 5.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 500.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
+
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
@@ -63,7 +66,7 @@ public class HoodConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 10.0 / 184.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 184 / 10.0; //10.0 / 184.0 / 0.015267 * 5514.2857; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

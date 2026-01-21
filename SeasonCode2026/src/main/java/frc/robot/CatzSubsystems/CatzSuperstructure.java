@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems;
 
+import java.util.Set;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -61,6 +63,25 @@ public class CatzSuperstructure {
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
+    }
+
+    public Command applyHoodTuningSetpoint(){
+        return Commands.defer(() -> {
+            Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
+
+            return CatzHood.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(angle));
+        }, Set.of(CatzHood.Instance));
+    }
+
+    public Command applyFlywheelTuningSetpoint(){
+        return Commands.defer(() -> {
+
+            return CatzFlywheels.Instance.setpointCommand(Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
+        }, Set.of(CatzFlywheels.Instance));
+    }
+
+    public Command hoodTestCommand(){
+        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
     }
 
     public Command applyHoodSetpoint(){

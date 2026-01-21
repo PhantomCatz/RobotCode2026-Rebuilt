@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
@@ -25,10 +27,12 @@ public class RobotContainer {
     // xboxDrv.a().onTrue(superstructure.turretTrackCommand());
     // xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
 
-    xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
+    // xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
     // xboxDrv.y().onTrue(superstructure.flywheelManualCommand());
     // xboxDrv.a().onTrue(superstructure.)
-    // xboxDrv.y().onTrue(superstructure.hoodManualCommand());
+    xboxDrv.y().onTrue(superstructure.hoodManualCommand());
+    xboxDrv.a().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()));
+    xboxDrv.x().onTrue(CatzHood.Instance.setPositionCommand(HoodConstants.HOOD_ZERO_POS));
 
   }
 
