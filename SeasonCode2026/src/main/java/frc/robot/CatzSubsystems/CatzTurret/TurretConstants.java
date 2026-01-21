@@ -21,6 +21,7 @@ public class TurretConstants {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(100.0, 0.0, 0.0, 0.045, 0.8, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
