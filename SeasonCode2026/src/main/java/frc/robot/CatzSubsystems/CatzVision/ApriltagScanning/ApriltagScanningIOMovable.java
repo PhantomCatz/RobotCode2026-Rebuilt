@@ -65,6 +65,18 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
 		this.config = config;
 	}
 
+    public Pose2d getLatestEstimate() {
+		return latestEstimate;
+	}
+
+	public Time getLatestEstimateTime() {
+		return latestEstimateTime;
+	}
+
+    public int getLatestEstimateNumTags() {
+        return latestEstimateNumTags;
+    }
+
 	public LimelightConfig getConfig(){
 		return config;
 	}
