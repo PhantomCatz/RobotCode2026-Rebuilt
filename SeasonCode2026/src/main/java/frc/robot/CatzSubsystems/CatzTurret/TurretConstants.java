@@ -2,9 +2,12 @@ package frc.robot.CatzSubsystems.CatzTurret;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -15,14 +18,16 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class TurretConstants {
-	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Angle.ofBaseUnits(0.0, Units.Degrees));
+	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Units.Degrees.of(0.0));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(100.0, 0.0, 0.0, 0.045, 0.8, 0.0, 0.0);
+        case SN2 -> new Gains(0.0, 0.0, 0.00, 0.4, 10.0, 0.0, 0.0); // kd 0.05
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
+
+	public static final Transform2d TURRET_OFFSET = new Transform2d( edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5), new Rotation2d());
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
     private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
@@ -32,29 +37,31 @@ public class TurretConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
 
-    private static final int TURRET_MOTOR_ID = 0;
+    private static final int TURRET_MOTOR_ID = 12;
 
-	public static final Angle TURRET_THRESHOLD = Angle.ofBaseUnits(1.0, Units.Degrees);
+	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
-	public static final Angle TURRET_MAX = Angle.ofBaseUnits(180, Units.Degrees);
-	public static final Angle TURRET_MIN = Angle.ofBaseUnits(-180, Units.Degrees);
+	public static final Angle TURRET_MAX = Units.Degrees.of(180);
+	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
 
-	public static final double ROBOT_OMEGA_FEEDFORWARD = 20.0;
 
 	public static final int NUM_OF_FULL_ROT = 1;
+
+	public static final double ROBOT_OMEGA_FEEDFORWARD = 20;//25;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
+		FXConfig.Slot0.kI = gains.kI();
 		FXConfig.Slot0.kD = gains.kD();
 		FXConfig.Slot0.kS = gains.kS();
 		FXConfig.Slot0.kV = gains.kV();
+		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 400.0;
-		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
-
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;//100.0 / 42.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 10.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
@@ -68,9 +75,10 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 42.0277;
+		FXConfig.Feedback.SensorToMechanismRatio =  75.65; // 67.5
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}
@@ -83,9 +91,9 @@ public class TurretConstants {
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
-						.withReverseSoftLimitEnable(false)
-						.withForwardSoftLimitThreshold(TURRET_MAX)
-						.withReverseSoftLimitThreshold(TURRET_MIN));
+						.withReverseSoftLimitEnable(false));
+						// .withForwardSoftLimitThreshold(TURRET_MAX)
+						// .withReverseSoftLimitThreshold(TURRET_MIN));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};

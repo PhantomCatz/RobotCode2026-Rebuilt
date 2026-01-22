@@ -42,7 +42,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
     protected final List<StatusSignal<Current>> torqueCurrent;
     protected final List<StatusSignal<Temperature>> tempCelsius;
 
-    private ControlRequestGetter requestGetter = new ControlRequestGetter();
+    protected ControlRequestGetter requestGetter = new ControlRequestGetter();
 
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 5, java.util.concurrent.TimeUnit.MILLISECONDS, queue);
@@ -183,6 +183,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setMotionMagicSetpoint(double mechanismPosition) {
+		System.out.println("Turret Position Commanded:" + mechanismPosition);
 		setControl(requestGetter.getMotionMagicRequest(mechanismPosition));
 	}
 
@@ -198,8 +199,11 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
+		System.out.println("goal pos:" + mechanismPosition);
 		setControl(requestGetter.getPositionRequest(mechanismPosition));
 	}
+
+
 
 	@Override
 	public void setCurrentPosition(double mechanismPosition) {

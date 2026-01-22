@@ -11,6 +11,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -26,6 +27,7 @@ import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
+    private final CommandXboxController xboxTest = new CommandXboxController(1);
 
     private CatzSuperstructure() {
     }
@@ -36,6 +38,26 @@ public class CatzSuperstructure {
 
     public Command turretStowCommand() {
         return CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT);
+    }
+
+    public Command turretManualTrackCommand() {
+        // return CatzTurret.Instance.setpointCommand(Setpoint.withDutyCycleSetpoint(0.1));
+        // return CatzTurret.Instance.setpointCommand(Setpoint.withPositionSetpoint(Units.Degrees.of(90.0)));
+        // return CatzTurret.Instance.setpointCommand(Setpoint.withVelocitySetpoint(1.0));
+        return CatzTurret.Instance.followSetpointCommand(() -> {
+                if(Math.hypot(xboxTest.getLeftY(), xboxTest.getLeftX()) < 0.1){
+                    return Setpoint.withDutyCycleSetpoint(0.0);
+                }
+                double angle = Math.atan2(-xboxTest.getLeftY(), xboxTest.getLeftX());
+                Logger.recordOutput("Target rotation", angle / (2*Math.PI));
+                return Setpoint.withMotionMagicSetpoint(Units.Radians.of(angle));
+            }
+        );
+        // return CatzTurret.Instance.followSetpointCommand(() -> {
+        //     double input = xboxTest.getLeftY() * 5;
+        //     Logger.recordOutput("Xbox Inputted", input);
+        //     return Setpoint.withVoltageSetpoint(input);
+        // });
     }
 
     public Command hoodFlywheelStowCommand() {
@@ -93,12 +115,18 @@ public class CatzSuperstructure {
      * while respecting physical limits and minimizing movement
      */
     public Setpoint calculateHubTrackingSetpoint() {
-        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
-        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
+        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d fieldToTurret = fieldToRobot.transformBy(TurretConstants.TURRET_OFFSET);
+        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
-                - MathUtil.angleModulus(robotPose.getRotation().getRadians());
+                - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
+        Logger.recordOutput("Turret Commanded Setpoint", targetRads / (2*Math.PI));
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
 
-        return CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(targetRads, Units.Radians));
+    public Setpoint turretManualSetpoint(double x, double y) {
+        System.out.println(x + " " + y);
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(Math.atan2(y,x)));
     }
 
     // interpolates distance to target for shooter setpoint along regression
