@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimb;
+package frc.robot.CatzSubsystems.CatzClimbTall;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,7 +15,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
-public class ClimbConstants {
+public class ClimbConstantsTall {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
 	public static final Distance FULL_EXTENSION = Units.Inches.of(12.0);

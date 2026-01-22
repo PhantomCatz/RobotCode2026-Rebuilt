@@ -11,8 +11,14 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
+import frc.robot.CatzSubsystems.CatzClimbTall.CatzClimbTall;
+import frc.robot.CatzSubsystems.CatzClimbTall.ClimbConstantsTall;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
@@ -78,6 +84,40 @@ public class CatzSuperstructure {
 
             return CatzFlywheels.Instance.setpointCommand(Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
         }, Set.of(CatzFlywheels.Instance));
+    }
+
+    public Command extendClimbCommand(){
+        return CatzClimb.Instance.setpointCommand(ClimbConstants.FULL_EXTEND);
+    }
+
+    public Command extendClimbTallCommand(){
+        return CatzClimbTall.Instance.setpointCommand(ClimbConstantsTall.FULL_EXTEND);
+    }
+
+    public Command returnOriginalClimbCommand(){
+        return CatzClimb.Instance.setpointCommand(ClimbConstants.HOME);
+    }
+
+    public Command returnOriginalClimbTallCommand(){
+        return CatzClimbTall.Instance.setpointCommand(ClimbConstantsTall.HOME);
+    }
+
+    public Command tallShrinkShortRise(){
+        return new ParallelCommandGroup(
+            returnOriginalClimbTallCommand(),
+            extendClimbCommand()
+        );
+    }
+
+    public Command Climbing(){
+        return new SequentialCommandGroup(
+            extendClimbTallCommand(),
+            tallShrinkShortRise(),
+            extendClimbTallCommand(),
+            tallShrinkShortRise(),
+            extendClimbTallCommand(),
+            tallShrinkShortRise()
+        );
     }
 
     public Command hoodTestCommand(){
