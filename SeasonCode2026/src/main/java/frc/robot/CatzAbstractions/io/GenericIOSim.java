@@ -47,8 +47,8 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
         MOTION_MAGIC // Treated as Position PID for basic sim
     }
 
-    public GenericIOSim() {
-        this(1, new Gains(3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    public GenericIOSim(Gains gains) {
+        this(1, gains);
     }
 
     public GenericIOSim(double gearReduction, Gains gains) {

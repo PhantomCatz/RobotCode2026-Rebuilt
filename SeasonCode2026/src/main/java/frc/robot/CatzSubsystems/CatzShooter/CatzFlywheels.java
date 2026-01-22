@@ -19,10 +19,10 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
                 return new FlywheelsIOTalonFX(FlywheelConstants.getIOConfig());
             case SIM:
                 System.out.println("Roller Configured for Simulation");
-                return new FlywheelsIOSim();
+                return new FlywheelsIOSim(FlywheelConstants.gains);
                 default:
                 System.out.println("Roller Unconfigured");
-                return new FlywheelsIOSim();
+                return new FlywheelsIOSim(FlywheelConstants.gains);
         }
     }
 
