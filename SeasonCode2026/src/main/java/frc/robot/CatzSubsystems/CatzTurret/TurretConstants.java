@@ -59,7 +59,7 @@ public class TurretConstants {
 		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;//100.0 / 42.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.32;//100.0 / 42.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 10.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
