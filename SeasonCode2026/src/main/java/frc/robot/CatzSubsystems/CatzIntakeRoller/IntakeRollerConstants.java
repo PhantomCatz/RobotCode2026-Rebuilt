@@ -14,12 +14,12 @@ import frc.robot.Utilities.MotorUtil.Gains;
 
 public class IntakeRollerConstants {
 
-	public static final Setpoint setpoint = Setpoint.withMotionMagicSetpoint(100.0);
-	public static final Setpoint SETPOINT2 = Setpoint.withMotionMagicSetpoint(0);
+	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(10);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(4.0, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
+        case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
