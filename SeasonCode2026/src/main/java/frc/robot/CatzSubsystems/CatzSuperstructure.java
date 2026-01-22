@@ -16,6 +16,10 @@ import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzSpindexer.SpindexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
+import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
@@ -23,6 +27,8 @@ import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.Utilities.InterpolatingDouble;
 import frc.robot.Utilities.Setpoint;
+import frc.robot.CatzSubsystems.CatzVdexer.CatzVdexer;
+import frc.robot.CatzSubsystems.CatzVdexer.VdexerConstants;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
@@ -45,8 +51,49 @@ public class CatzSuperstructure {
         );
     }
 
+    // shooter test
     public Command applyShooterSetpoint(){
         return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    }
+
+    private boolean intakeState = false;
+    public Command toggleIntake(){
+        if (intakeState == true){
+            intakeState = false;
+            return CatzIntake.Instance.setpointCommand(IntakeConstants.ON);
+        }
+        else {
+            intakeState = true;
+            return CatzIntake.Instance.setpointCommand(IntakeConstants.OFF);
+        }
+    }
+
+    private boolean shooterSequState = false;
+    public Command toggleSpindexer(){
+        if (shooterSequState == true && CatzFlywheels.Instance.spunUp()){
+            return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
+        }
+        else {
+            return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF);
+        }
+    }
+
+    public Command toggleVdexer(){
+        if (shooterSequState == true && CatzFlywheels.Instance.spunUp()){
+            return CatzVdexer.Instance.setpointCommand(VdexerConstants.ON);
+        }
+        else {
+            return CatzVdexer.Instance.setpointCommand(VdexerConstants.OFF);
+        }
+    }
+
+    public Command toggleShooter(){
+        if (shooterSequState == true && CatzFlywheels.Instance.spunUp()){
+            return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.ON_SETPOINT);
+        }
+        else {
+            return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT);
+        }
     }
 
     public Command flywheelManualCommand(){
@@ -123,5 +170,4 @@ public class CatzSuperstructure {
     // return
     // CatzFlywheels.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
     // }
-
 }

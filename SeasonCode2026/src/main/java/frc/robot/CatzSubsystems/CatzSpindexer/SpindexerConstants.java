@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIndexer;
+package frc.robot.CatzSubsystems.CatzSpindexer;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -14,7 +14,7 @@ import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
-public class IndexerConstants {
+public class SpindexerConstants {
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
@@ -31,7 +31,7 @@ public class IndexerConstants {
     private static final LoggedTunableNumber ejectingRPS = new LoggedTunableNumber("Flywheels/EjectingRpm", 1000.0);
 
 
-    private static final int INDEXER_MOTOR_ID = 0;
+    private static final int SPINDEXER_MOTOR_ID = 0;
 
     public static final Setpoint ON = Setpoint.withVelocitySetpoint(ejectingRPS.get());
     public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
@@ -71,7 +71,7 @@ public class IndexerConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = INDEXER_MOTOR_ID;
+		IOConfig.mainID = SPINDEXER_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
