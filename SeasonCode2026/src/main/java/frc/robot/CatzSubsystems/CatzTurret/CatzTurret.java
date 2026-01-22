@@ -33,7 +33,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     @Override
     public void periodic(){
         super.periodic();
-        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits );
+        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits);
 
 
     }

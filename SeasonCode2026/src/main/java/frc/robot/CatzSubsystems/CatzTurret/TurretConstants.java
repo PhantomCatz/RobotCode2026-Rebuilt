@@ -22,7 +22,7 @@ public class TurretConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(100.0, 0.0, 0.00, 0.045, 0.8, 0.0, 0.0); // kd 0.05
+        case SN2 -> new Gains(0.0, 0.0, 0.00, 0.4, 10.0, 0.0, 0.0); // kd 0.05
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -58,9 +58,9 @@ public class TurretConstants {
 		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 400.0;
-		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;//100.0 / 42.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 10.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
@@ -74,7 +74,7 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio =  75.65; //75.65 // 67.5
+		FXConfig.Feedback.SensorToMechanismRatio =  75.65; // 67.5
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
