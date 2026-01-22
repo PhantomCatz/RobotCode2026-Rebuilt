@@ -25,7 +25,7 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
     private static IntakeIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Disabled by CatzConstants");
-            return new IntakeIOSim();
+            return new IntakeIOSim(IntakeConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:

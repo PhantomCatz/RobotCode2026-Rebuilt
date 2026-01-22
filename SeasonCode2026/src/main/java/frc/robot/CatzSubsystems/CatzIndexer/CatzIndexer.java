@@ -11,7 +11,7 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
     private static IndexerIO getIOInstance() {
         if (CatzConstants.IndexerOn == false) {
             System.out.println("Indexer Disabled by CatzConstants");
-            return new IndexerIOSim();
+            return new IndexerIOSim(IndexerConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:

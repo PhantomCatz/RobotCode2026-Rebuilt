@@ -11,7 +11,7 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
     private static FlywheelsIO getIOInstance() {
         if (CatzConstants.ShooterOn == false) {
             System.out.println("Shooter Disabled by CatzConstants");
-            return new FlywheelsIOSim();
+            return new FlywheelsIOSim(FlywheelConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
