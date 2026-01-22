@@ -4,15 +4,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
@@ -36,13 +32,5 @@ public class RobotContainer {
     xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
     // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());
     xboxDrv.y().onTrue(new InstantCommand(()->CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
-  }
-
-  public Command getAutonomousCommand() {
-    return Commands.sequence(
-      CatzIntakeRoller.Instance.followSetpointCommand(()->IntakeRollerConstants.setpoint).withTimeout(2.0),
-      Commands.waitSeconds(3),
-      CatzIntakeRoller.Instance.followSetpointCommand(()->IntakeRollerConstants.SETPOINT2)
-    );
   }
 }

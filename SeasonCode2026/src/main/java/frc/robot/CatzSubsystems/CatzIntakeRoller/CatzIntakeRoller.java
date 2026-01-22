@@ -4,12 +4,11 @@ import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzIntake.IntakeIOInputsAutoLogged;
 
 public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, IntakeRollerIO.IntakeRollerIOInputs>{
 
     private static final IntakeRollerIO io = getIOInstance();
-    private static final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+    private static final IntakeRollerIOInputsAutoLogged inputs = new IntakeRollerIOInputsAutoLogged();
 
     public static final CatzIntakeRoller Instance = new CatzIntakeRoller();
 
