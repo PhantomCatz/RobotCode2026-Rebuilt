@@ -37,12 +37,4 @@ public class RobotContainer {
     // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());
     xboxDrv.y().onTrue(new InstantCommand(()->CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
   }
-
-  public Command getAutonomousCommand() {
-    return Commands.sequence(
-      CatzIntakeRoller.Instance.followSetpointCommand(()->IntakeRollerConstants.setpoint).withTimeout(2.0),
-      Commands.waitSeconds(3),
-      CatzIntakeRoller.Instance.followSetpointCommand(()->IntakeRollerConstants.SETPOINT2)
-    );
-  }
 }
