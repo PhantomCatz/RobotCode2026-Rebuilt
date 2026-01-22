@@ -12,8 +12,8 @@ public interface ModuleIO {
     public double drivePositionUnits;
     public double driveVelocityRPS;
     public double driveAppliedVolts;
-    public double driveSupplyCurrentAmps;
-    public double driveTorqueCurrentAmps;
+    // public double driveSupplyCurrentAmps;
+    // public double driveTorqueCurrentAmps;
 
     public boolean isSteerMotorConnected;
     public double steerAbsoluteInitPosition;

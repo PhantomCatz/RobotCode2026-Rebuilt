@@ -11,7 +11,6 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.CatzConstants;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.LoggedTunableNumber;
-import frc.robot.Utilities.MotorUtil.Gains;
 import lombok.Builder;
 
 public class DriveConstants {
@@ -68,7 +67,7 @@ public class DriveConstants {
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
-        case SN1, SN2 ->
+        case SN1, SN2, SN1_OLD ->
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,
@@ -91,7 +90,7 @@ public class DriveConstants {
                 Mk4iReductions.L2_16t.reduction,
                 Mk4iReductions.steer.reduction);
 
-          default -> 
+          default ->
              new ModuleGainsAndRatios(
                 0.014,
                 0.134,
@@ -110,7 +109,7 @@ public class DriveConstants {
   public static final double GYRO_UPDATE_FREQUENCY =
       switch (CatzConstants.getRobotType()) {
         case SN_TEST -> 50.0;
-        case SN2, SN1 -> 100.0;
+        case SN2, SN1, SN1_OLD -> 100.0;
         //case SN2 -> 250.0;
         default -> 100.0;
       };
@@ -148,7 +147,7 @@ public class DriveConstants {
             MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, 0.0, false);
             MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.0, false);
         break;
-        
+
         case SN1_OLD:
             MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 9, -0.15454+0.5, false);
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, 0.138183, false);
