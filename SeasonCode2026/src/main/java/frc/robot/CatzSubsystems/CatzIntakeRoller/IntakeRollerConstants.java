@@ -31,13 +31,14 @@ public class IntakeRollerConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	private static final int INTAKE_MOTOR_ID = 23;
+	private static final int INTAKE_MOTOR_ID = 14;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
 		FXConfig.Slot0.kD = gains.kD();
 		FXConfig.Slot0.kS = gains.kS();
+		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
 		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
