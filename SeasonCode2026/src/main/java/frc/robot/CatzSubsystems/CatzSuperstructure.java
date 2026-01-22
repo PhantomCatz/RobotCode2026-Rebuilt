@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
-import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
@@ -28,6 +27,8 @@ import frc.robot.Utilities.Setpoint;
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
     private final CommandXboxController xboxTest = new CommandXboxController(1);
+    private final CommandXboxController xboxDrv = new CommandXboxController(0);
+
 
     private CatzSuperstructure() {
     }
@@ -73,7 +74,7 @@ public class CatzSuperstructure {
 
     public Command flywheelManualCommand(){
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
-            double input = (RobotContainer.xboxDrv.getLeftY()) * 8;
+            double input = (xboxDrv.getLeftY()) * 8;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
@@ -81,7 +82,7 @@ public class CatzSuperstructure {
 
     public Command hoodManualCommand(){
         return CatzHood.Instance.followSetpointCommand(() -> {
-            double input = -(RobotContainer.xboxDrv.getLeftY()) * 1;
+            double input = -(xboxDrv.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });

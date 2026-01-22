@@ -13,8 +13,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzIntake.IntakeConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 

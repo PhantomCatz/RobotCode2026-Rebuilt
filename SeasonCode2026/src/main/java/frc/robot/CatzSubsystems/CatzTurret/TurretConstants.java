@@ -78,7 +78,7 @@ public class TurretConstants {
 		FXConfig.Feedback.SensorToMechanismRatio =  75.65; // 67.5
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		return FXConfig;
 	}
