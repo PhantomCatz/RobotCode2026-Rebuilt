@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntake;
+package frc.robot.CatzSubsystems.CatzIntakeRoller;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -12,7 +12,7 @@ import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
-public class IntakeConstants {
+public class IntakeRollerConstants {
 
 	public static final Setpoint setpoint = Setpoint.withMotionMagicSetpoint(100.0);
 	public static final Setpoint SETPOINT2 = Setpoint.withMotionMagicSetpoint(0);

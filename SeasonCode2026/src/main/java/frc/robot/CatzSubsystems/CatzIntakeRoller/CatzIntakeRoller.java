@@ -1,16 +1,17 @@
-package frc.robot.CatzSubsystems.CatzIntake;
+package frc.robot.CatzSubsystems.CatzIntakeRoller;
 
 import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzIntake.IntakeIOInputsAutoLogged;
 
-public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeIOInputs>{
+public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, IntakeRollerIO.IntakeRollerIOInputs>{
 
-    private static final IntakeIO io = getIOInstance();
+    private static final IntakeRollerIO io = getIOInstance();
     private static final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-    public static final CatzIntake Instance = new CatzIntake();
+    public static final CatzIntakeRoller Instance = new CatzIntakeRoller();
 
     public enum IntakeState{
         ON,
@@ -18,25 +19,25 @@ public class CatzIntake extends GenericMotorSubsystem<IntakeIO, IntakeIO.IntakeI
         AUTO; //object detection mode
     }
 
-    private CatzIntake() {
+    private CatzIntakeRoller() {
         super(io, inputs, "CatzIntake");
     }
 
-    private static IntakeIO getIOInstance() {
+    private static IntakeRollerIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Disabled by CatzConstants");
-            return new IntakeIOSim();
+            return new IntakeRollerIOSim();
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Intake Configured for Real");
-                return new IntakeIOTalonFX(IntakeConstants.getIOConfig());
+                return new IntakeRollerIOTalonFX(IntakeRollerConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Configured for Simulation");
-                return new IntakeIOSim();
+                return new IntakeRollerIOSim();
                 default:
                 System.out.println("Intake Unconfigured");
-                return new IntakeIOSim();
+                return new IntakeRollerIOSim();
         }
     }
 
