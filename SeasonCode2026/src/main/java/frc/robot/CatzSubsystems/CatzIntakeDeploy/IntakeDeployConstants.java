@@ -1,25 +1,22 @@
-package frc.robot.CatzSubsystems.CatzIntakeRoller;
+package frc.robot.CatzSubsystems.CatzIntakeDeploy;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
-import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
-public class IntakeRollerConstants {
-
-	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
-	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(5.0);
+public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
+        case SN1 -> new Gains(0.0, 0, 0.0, 0.35, 2.0, 0, 0.0);
         case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -32,7 +29,12 @@ public class IntakeRollerConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	private static final int INTAKE_MOTOR_ID = 19;
+	private static final int INTAKE_DEPLOY_MOTOR_ID = 15;
+
+	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
+	public static final double GRAVITY_FEEDFORWARD = 2.0;
+
+	public static final Angle HOME_POSITION = Units.Degrees.of(-39.9);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -42,9 +44,9 @@ public class IntakeRollerConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 50.0;
-
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 1.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
@@ -58,10 +60,9 @@ public class IntakeRollerConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 2.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}
@@ -69,7 +70,7 @@ public class IntakeRollerConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = INTAKE_MOTOR_ID;
+		IOConfig.mainID = INTAKE_DEPLOY_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()

@@ -1,9 +1,9 @@
 package frc.robot.CatzSubsystems.CatzIntakeRoller;
 
-import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.Utilities.Setpoint;
 
 public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, IntakeRollerIO.IntakeRollerIOInputs>{
 
@@ -11,6 +11,8 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
     private static final IntakeRollerIOInputsAutoLogged inputs = new IntakeRollerIOInputsAutoLogged();
 
     public static final CatzIntakeRoller Instance = new CatzIntakeRoller();
+
+    public IntakeState state = IntakeState.OFF;
 
     public enum IntakeState{
         ON,
@@ -29,7 +31,7 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Intake Configured for Real");
+                System.out.println("Intake Roller Configured for Real");
                 return new IntakeRollerIOTalonFX(IntakeRollerConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Configured for Simulation");
@@ -40,9 +42,13 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
         }
     }
 
-    @Override
-    public void periodic() {
-        super.periodic();
-        Logger.processInputs(name, inputs);
+    public Setpoint toggleIntake(){
+        if(state == IntakeState.OFF){
+            state = IntakeState.ON;
+            return IntakeRollerConstants.ON_SETPOINT;
+        }else{
+            state = IntakeState.OFF;
+            return IntakeRollerConstants.OFF_SETPOINT;
+        }
     }
 }

@@ -16,6 +16,7 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
@@ -71,6 +72,14 @@ public class CatzSuperstructure {
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
         );
+    }
+
+    public Command intakeDeployManualCommand(){
+        return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+            double input = -xboxTest.getLeftY() * 3;
+            Logger.recordOutput("Xbox Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
     }
 
     public Command applyShooterSetpoint(){
