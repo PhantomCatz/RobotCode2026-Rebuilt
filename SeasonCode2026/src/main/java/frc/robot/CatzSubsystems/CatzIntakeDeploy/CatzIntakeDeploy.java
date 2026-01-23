@@ -1,11 +1,10 @@
 package frc.robot.CatzSubsystems.CatzIntakeDeploy;
 
-import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
-import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
-public class CatzIntakeDeploy extends GenericMotorSubsystem<IntakeDeployIO, IntakeDeployIO.IntakeDeployIOInputs>{
+public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, IntakeDeployIO.IntakeDeployIOInputs>{
 
     private static final IntakeDeployIO io = getIOInstance();
     private static final IntakeDeployIOInputsAutoLogged inputs = new IntakeDeployIOInputsAutoLogged();
@@ -19,7 +18,8 @@ public class CatzIntakeDeploy extends GenericMotorSubsystem<IntakeDeployIO, Inta
     }
 
     private CatzIntakeDeploy() {
-        super(io, inputs, "CatzIntake");
+        super(io, inputs, "CatzIntakeDeploy", IntakeDeployConstants.DEPLOY_THRESHOLD);
+        setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
     }
 
     private static IntakeDeployIO getIOInstance() {
@@ -30,7 +30,7 @@ public class CatzIntakeDeploy extends GenericMotorSubsystem<IntakeDeployIO, Inta
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Intake Deploy Configured for Real");
-                return new IntakeDeployIOTalonFX(IntakeDeploy.getIOConfig());
+                return new IntakeDeployIOTalonFX(IntakeDeployConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Deploy Configured for Simulation");
                 return new IntakeDeployIOSim();
@@ -38,11 +38,5 @@ public class CatzIntakeDeploy extends GenericMotorSubsystem<IntakeDeployIO, Inta
                 System.out.println("Intake Deploy Unconfigured");
                 return new IntakeDeployIOSim();
         }
-    }
-
-    @Override
-    public void periodic() {
-        super.periodic();
-        Logger.processInputs(name, inputs);
     }
 }

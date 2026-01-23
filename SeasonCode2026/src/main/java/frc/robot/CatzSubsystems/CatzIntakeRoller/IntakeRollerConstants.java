@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzIntakeRoller;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -15,7 +16,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 public class IntakeRollerConstants {
 
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
-	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(10);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(5.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
@@ -60,6 +61,7 @@ public class IntakeRollerConstants {
 		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}
