@@ -16,6 +16,7 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
@@ -35,6 +36,11 @@ public class CatzSuperstructure {
 
     public Command turretTrackCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> calculateHubTrackingSetpoint());
+    }
+
+    public Command turretTrackCommandNoOffset() {
+        return CatzTurret.Instance.followSetpointCommand(() -> calculateHubTrackingSetpointNoOffset());
+
     }
 
     public Command turretStowCommand() {
@@ -66,6 +72,14 @@ public class CatzSuperstructure {
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
         );
+    }
+
+    public Command intakeDeployManualCommand(){
+        return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+            double input = -xboxTest.getLeftY() * 3;
+            Logger.recordOutput("Xbox Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
     }
 
     public Command applyShooterSetpoint(){
@@ -121,7 +135,16 @@ public class CatzSuperstructure {
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
                 - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
-        Logger.recordOutput("Turret Commanded Setpoint", targetRads / (2*Math.PI));
+        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
+
+    public Setpoint calculateHubTrackingSetpointNoOffset() {
+        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToRobot.getTranslation());
+        double targetRads = hubDirection.getAngle().getRadians()
+                - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
+        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 

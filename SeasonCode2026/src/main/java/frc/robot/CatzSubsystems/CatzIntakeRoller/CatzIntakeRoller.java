@@ -1,10 +1,9 @@
 package frc.robot.CatzSubsystems.CatzIntakeRoller;
 
-import org.littletonrobotics.junction.Logger;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerIOInputsAutoLogged;
+import frc.robot.Utilities.Setpoint;
 
 public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, IntakeRollerIO.IntakeRollerIOInputs>{
 
@@ -13,6 +12,8 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
 
     public static final CatzIntakeRoller Instance = new CatzIntakeRoller();
 
+    public IntakeState state = IntakeState.OFF;
+
     public enum IntakeState{
         ON,
         OFF,
@@ -20,30 +21,34 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
     }
 
     private CatzIntakeRoller() {
-        super(io, inputs, "CatzIntake");
+        super(io, inputs, "CatzIntakeRoller");
     }
 
     private static IntakeRollerIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Disabled by CatzConstants");
-            return new IntakeRollerIOSim();
+            return new IntakeRollerIOSim(IntakeRollerConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Intake Configured for Real");
+                System.out.println("Intake Roller Configured for Real");
                 return new IntakeRollerIOTalonFX(IntakeRollerConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Configured for Simulation");
-                return new IntakeRollerIOSim();
+                return new IntakeRollerIOSim(IntakeRollerConstants.gains);
                 default:
                 System.out.println("Intake Unconfigured");
-                return new IntakeRollerIOSim();
+                return new IntakeRollerIOSim(IntakeRollerConstants.gains);
         }
     }
 
-    @Override
-    public void periodic() {
-        super.periodic();
-        Logger.processInputs(name, inputs);
+    public Setpoint toggleIntake(){
+        if(state == IntakeState.OFF){
+            state = IntakeState.ON;
+            return IntakeRollerConstants.ON_SETPOINT;
+        }else{
+            state = IntakeState.OFF;
+            return IntakeRollerConstants.OFF_SETPOINT;
+        }
     }
 }

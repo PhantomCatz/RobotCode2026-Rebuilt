@@ -51,7 +51,7 @@ public final class CatzConstants {
     if (RobotBase.isReal() && robotType == RobotID.SN_TEST) {
       new Alert("Invalid robot selected, using competition robot as default.", AlertType.kError)
           .set(true);
-      robotType = RobotID.SN2;
+      robotType = RobotID.SN_MANTA;
     }
     return robotType;
   }

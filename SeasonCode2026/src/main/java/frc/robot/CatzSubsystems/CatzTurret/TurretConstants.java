@@ -20,9 +20,15 @@ import frc.robot.Utilities.Setpoint;
 public class TurretConstants {
 	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Units.Degrees.of(0.0));
 
+	public static final Setpoint no = Setpoint.withMotionMagicSetpoint(0);
+	public static final Setpoint alittle = Setpoint.withMotionMagicSetpoint(50);
+	public static final Setpoint alittelbackwrads = Setpoint.withMotionMagicSetpoint(-50);
+	public static final Setpoint WEEEEEE = Setpoint.withMotionMagicSetpoint(135);
+	public static final Setpoint backwordsbeastmode = Setpoint.withMotionMagicSetpoint(-135);
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN_MANTA -> new Gains(0.0, 0.0, 0.00, 0.4, 10.0, 0.0, 0.0); // kd 0.05
+        case SN_MANTA -> new Gains(0.5, 0.0, 0.00, 0.22, 4.8, 0.0, 0.0); // kd 0.05
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -47,7 +53,7 @@ public class TurretConstants {
 
 	public static final int NUM_OF_FULL_ROT = 1;
 
-	public static final double ROBOT_OMEGA_FEEDFORWARD = 20;//25;
+	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -59,7 +65,7 @@ public class TurretConstants {
 		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.32;//100.0 / 42.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0/42.0;//100.0 / 42.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 10.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
@@ -75,10 +81,10 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio =  75.65; // 67.5
+		FXConfig.Feedback.SensorToMechanismRatio = 42.0;//75.65; // 67.5
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}

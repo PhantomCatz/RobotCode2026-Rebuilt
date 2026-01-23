@@ -12,11 +12,11 @@ import frc.robot.CatzSubsystems.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
-    private static final TurretIO io = getIOInstance();
-    private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
-    private double commandedPos;
 
-    public static final CatzTurret Instance = new CatzTurret();
+    private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
+
+    private static final TurretIO io = getIOInstance();
+
     public enum ShooterState{
         HOME,
         TRACKING,
@@ -30,10 +30,12 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         setCurrentPosition(Angle.ofBaseUnits(0.0, Units.Degrees));
     }
 
+    public static final CatzTurret Instance = new CatzTurret();
+
     @Override
     public void periodic(){
         super.periodic();
-        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits);
+        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits / (2*Math.PI));
 
 
     }
@@ -49,6 +51,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double maxLegalRads = TurretConstants.TURRET_MAX.in(Units.Radians);
 
         targetRads = MathUtil.angleModulus(targetRads);
+        Logger.recordOutput("Turret Target Position", targetRads / (2*Math.PI));
 
         return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
@@ -60,7 +63,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     private static TurretIO getIOInstance(){
         if (CatzConstants.TurretOn == false) {
             System.out.println("Turret Disabled by CatzConstants");
-            return new TurretIOSim();
+            return new TurretIOSim(TurretConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -68,10 +71,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
                 return new TurretIOTalonFX(TurretConstants.getIOConfig());
             case SIM:
                 System.out.println("Turret Configured for Simulation");
-                return new TurretIOSim();
-            default:
+                return new TurretIOSim(TurretConstants.gains);
+                default:
                 System.out.println("Turret Unconfigured");
-            return new TurretIOSim();
+                return new TurretIOSim(TurretConstants.gains);
         }
     }
 }
