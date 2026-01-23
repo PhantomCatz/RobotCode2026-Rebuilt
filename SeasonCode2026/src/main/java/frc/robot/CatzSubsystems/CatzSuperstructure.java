@@ -37,6 +37,11 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> calculateHubTrackingSetpoint());
     }
 
+    public Command turretTrackCommandNoOffset() {
+        return CatzTurret.Instance.followSetpointCommand(() -> calculateHubTrackingSetpointNoOffset());
+
+    }
+
     public Command turretStowCommand() {
         return CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT);
     }
@@ -121,7 +126,16 @@ public class CatzSuperstructure {
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
                 - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
-        Logger.recordOutput("Turret Commanded Setpoint", targetRads / (2*Math.PI));
+        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
+
+    public Setpoint calculateHubTrackingSetpointNoOffset() {
+        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToRobot.getTranslation());
+        double targetRads = hubDirection.getAngle().getRadians()
+                - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
+        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 

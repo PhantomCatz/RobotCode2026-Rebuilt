@@ -37,7 +37,7 @@ public class TurretConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
 
-    private static final int TURRET_MOTOR_ID = 20;
+    private static final int TURRET_MOTOR_ID = 12;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
@@ -47,7 +47,7 @@ public class TurretConstants {
 
 	public static final int NUM_OF_FULL_ROT = 1;
 
-	public static final double ROBOT_OMEGA_FEEDFORWARD = 20;//25;
+	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -77,8 +77,8 @@ public class TurretConstants {
 
 		FXConfig.Feedback.SensorToMechanismRatio = 42.0;//75.65; // 67.5
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}

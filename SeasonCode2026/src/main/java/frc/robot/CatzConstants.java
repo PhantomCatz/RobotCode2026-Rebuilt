@@ -27,12 +27,12 @@ public final class CatzConstants {
 
   public static AutoFactory autoFactory;
 
-  public static final boolean ClimbOn = false;
-  public static final boolean HoodOn = false;
-  public static final boolean IndexerOn = false;
-  public static final boolean IntakeOn = false;
-  public static final boolean ShooterOn = false;
-  public static final boolean TurretOn = false;
+  public static final boolean ClimbOn = true;
+  public static final boolean HoodOn = true;
+  public static final boolean IndexerOn = true;
+  public static final boolean IntakeOn = true;
+  public static final boolean ShooterOn = true;
+  public static final boolean TurretOn = true;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers
