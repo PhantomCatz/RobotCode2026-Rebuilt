@@ -25,7 +25,7 @@ public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, Intake
     private static IntakeDeployIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Deploy Disabled by CatzConstants");
-            return new IntakeDeployIOSim();
+            return new IntakeDeployIOSim(IntakeDeployConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -33,10 +33,10 @@ public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, Intake
                 return new IntakeDeployIOTalonFX(IntakeDeployConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Deploy Configured for Simulation");
-                return new IntakeDeployIOSim();
+                return new IntakeDeployIOSim(IntakeDeployConstants.gains);
                 default:
                 System.out.println("Intake Deploy Unconfigured");
-                return new IntakeDeployIOSim();
+                return new IntakeDeployIOSim(IntakeDeployConstants.gains);
         }
     }
 }
