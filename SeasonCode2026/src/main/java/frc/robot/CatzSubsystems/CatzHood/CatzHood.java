@@ -9,15 +9,19 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     private static final HoodIOInputsAutoLogged inputs = new HoodIOInputsAutoLogged();
 
     private static HoodIO getIOInstance() {
+        if (CatzConstants.HoodOn == false) {
+            System.out.println("Hood Disabled by CatzConstants");
+            return new HoodIOSim(HoodConstants.gains);
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Indexer Configured for Real");
+                System.out.println("Hood Configured for Real");
                 return new HoodIOTalonFX(HoodConstants.getIOConfig());
             case SIM:
-                System.out.println("Indexer Configured for Simulation");
+                System.out.println("Hood Configured for Simulation");
                 return new HoodIOSim(HoodConstants.gains);
                 default:
-                System.out.println("Indexer Unconfigured");
+                System.out.println("Hood Unconfigured");
                 return new HoodIOSim(HoodConstants.gains);
         }
     }

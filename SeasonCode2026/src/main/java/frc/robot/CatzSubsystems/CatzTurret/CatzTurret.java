@@ -1,5 +1,9 @@
 package frc.robot.CatzSubsystems.CatzTurret;
 
+
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -13,22 +17,27 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     private static final TurretIO io = getIOInstance();
 
-    public static final CatzTurret Instance = new CatzTurret();
-
-
-
     public enum ShooterState{
         HOME,
         TRACKING,
         MANUAL;
     }
-
+    
     public ShooterState state = ShooterState.HOME;
-
+    
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
-
         setCurrentPosition(Angle.ofBaseUnits(0.0, Units.Degrees));
+    }
+    
+    public static final CatzTurret Instance = new CatzTurret();
+
+    @Override
+    public void periodic(){
+        super.periodic();
+        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits);
+
+
     }
 
     /**
@@ -40,45 +49,30 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double targetRads = target.in(Units.Radians);
         double minLegalRads = TurretConstants.TURRET_MIN.in(Units.Radians);
         double maxLegalRads = TurretConstants.TURRET_MAX.in(Units.Radians);
-        double currentSetpointRads = targetRads;
 
-        double bestSetpoint = currentSetpointRads;
-        boolean foundValidOption = false;
+        targetRads = MathUtil.angleModulus(targetRads);
 
-        for(int i = -2; i <= TurretConstants.NUM_OF_FULL_ROT; i++){
-            double potentialSetpoint = targetRads + (2.0 * Math.PI * i);
-
-            // First check if this angle is physically possible for the hardware
-            if (potentialSetpoint < minLegalRads || potentialSetpoint > maxLegalRads) {
-                continue;
-            }
-
-            // If this is the first valid option we found or if it is closer
-            // to our current position than the previous best option then pick it
-            if (!foundValidOption) {
-                bestSetpoint = potentialSetpoint;
-                foundValidOption = true;
-            } else if (Math.abs(currentSetpointRads - potentialSetpoint) < Math.abs(currentSetpointRads - bestSetpoint)) {
-                bestSetpoint = potentialSetpoint;
-            }
-        }
-
-        if(!foundValidOption){
-            return null;
-        }
-        return Setpoint.withPositionSetpoint(Units.Radians.of(bestSetpoint));
+        return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
 
+    // public Command runthefreakingmotor() {
+    //     return runOnce(() -> io.runMotor());
+    // }
+
     private static TurretIO getIOInstance(){
+        if (CatzConstants.TurretOn == false) {
+            System.out.println("Turret Disabled by CatzConstants");
+            return new TurretIOSim(TurretConstants.gains);
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Roller Configured for Real");
+                System.out.println("Turret Configured for Real");
                 return new TurretIOTalonFX(TurretConstants.getIOConfig());
             case SIM:
-                System.out.println("Roller Configured for Simulation");
+                System.out.println("Turret Configured for Simulation");
                 return new TurretIOSim(TurretConstants.gains);
                 default:
-                System.out.println("Roller Unconfigured");
+                System.out.println("Turret Unconfigured");
                 return new TurretIOSim(TurretConstants.gains);
         }
     }

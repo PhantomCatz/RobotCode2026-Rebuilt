@@ -1,6 +1,5 @@
 package frc.robot.CatzSubsystems.CatzClimb;
 
-
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
@@ -10,15 +9,19 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
     private static final ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
 
     private static ClimbIO getIOInstance() {
+        if (CatzConstants.ClimbOn == false) {
+            System.out.println("Climb Disabled by CatzConstants");
+            return new ClimbIOSim(ClimbConstants.gains);
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Roller Configured for Real");
+                System.out.println("Climb Configured for Real");
                 return new ClimbIOTalonFX(ClimbConstants.getIOConfig());
             case SIM:
-                System.out.println("Roller Configured for Simulation");
+                System.out.println("Climb Configured for Simulation");
                 return new ClimbIOSim(ClimbConstants.gains);
                 default:
-                System.out.println("Roller Unconfigured");
+                System.out.println("Climb Unconfigured");
                 return new ClimbIOSim(ClimbConstants.gains);
         }
     }

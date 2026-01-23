@@ -17,15 +17,22 @@ public final class CatzConstants {
   //  Robot Modes
   //
   // --------------------------------------------------/
-  public static final RobotScenario robotScenario = RobotScenario.COMPETITION;
-  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.SIM;
-  private static RobotID robotType = RobotID.SN_TEST;
+  public static final RobotScenario robotScenario = RobotScenario.TUNING;
+  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
+  private static RobotID robotType = RobotID.SN2;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
   public static final double LOOP_TIME = 0.02;
 
   public static AutoFactory autoFactory;
+
+  public static final boolean ClimbOn = true;
+  public static final boolean HoodOn = true;
+  public static final boolean IndexerOn = true;
+  public static final boolean IntakeOn = true;
+  public static final boolean ShooterOn = true;
+  public static final boolean TurretOn = true;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers
@@ -80,6 +87,7 @@ public final class CatzConstants {
   public static enum RobotID {
     SN1,
     SN2,
+    SN1_OLD,
     SN_TEST, // Select alternate test robot parameters
   }
 

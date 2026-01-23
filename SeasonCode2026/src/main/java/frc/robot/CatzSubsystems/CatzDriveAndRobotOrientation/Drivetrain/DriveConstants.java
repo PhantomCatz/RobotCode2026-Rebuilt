@@ -18,6 +18,7 @@ public class DriveConstants {
   // Disabled flag for testing
   // ---------------------------------------------------------------------------------------------------------------
   public static final boolean IS_DRIVE_DISABLED = false; //bruh
+  public static final boolean IS_FOC = true;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Module organizations
@@ -88,6 +89,18 @@ public class DriveConstants {
                 0.0,
                 Mk4iReductions.L2_16t.reduction,
                 Mk4iReductions.steer.reduction);
+
+          default ->
+             new ModuleGainsAndRatios(
+                0.014,
+                0.134,
+                0.0,
+                0.1,
+                0.0,
+                1.0,
+                0.0,
+                Mk4iReductions.L2_16t.reduction,
+                Mk4iReductions.steer.reduction);
       };
   // -------------------------------------------------------------------------------
   // Odometry Constants
@@ -98,6 +111,7 @@ public class DriveConstants {
         case SN_TEST -> 50.0;
         case SN2, SN1 -> 100.0;
         //case SN2 -> 250.0;
+        default -> 100.0;
       };
 
   // ---------------------------------------------------------------------------------------------------------------------
@@ -132,6 +146,13 @@ public class DriveConstants {
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, 0.0, false);
             MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, 0.0, false);
             MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.0, false);
+        break;
+
+        case SN1_OLD:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 9, -0.15454+0.5, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, 0.138183, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, -0.020507, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.2780761+0.5, false);
         break;
     }
   }
