@@ -23,11 +23,11 @@ public class RobotContainer {
   }
   private void configureBindings() {
     CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
-    CatzTurret.Instance.setDefaultCommand(
-      superstructure.turretManualTrackCommand()
-    );
-    xboxDrv.a().onTrue(superstructure.turretTrackCommand());
-
+    // CatzTurret.Instance.setDefaultCommand(
+    //   superstructure.turretManualTrackCommand()
+    // );
+    xboxDrv.a().onTrue(superstructure.turretTrackCommandNoOffset());
+    // xboxDrv.a().onTrue(CatzTurret.Instance.followSetpointCommand(() -> CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(0.0, Units.Radians))));
     xboxDrv.b().onTrue(CatzTurret.Instance.followSetpointCommand(() -> CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(21*Math.PI, Units.Radians))));
     xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
     // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());

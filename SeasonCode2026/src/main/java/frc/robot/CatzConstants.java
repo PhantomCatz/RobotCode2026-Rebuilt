@@ -19,7 +19,7 @@ public final class CatzConstants {
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN2;
+  private static RobotID robotType = RobotID.SN_MANTA;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
@@ -51,7 +51,7 @@ public final class CatzConstants {
     if (RobotBase.isReal() && robotType == RobotID.SN_TEST) {
       new Alert("Invalid robot selected, using competition robot as default.", AlertType.kError)
           .set(true);
-      robotType = RobotID.SN2;
+      robotType = RobotID.SN_MANTA;
     }
     return robotType;
   }
