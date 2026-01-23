@@ -12,10 +12,8 @@ public class IntakeDeployIOTalonFX extends GenericTalonFXIOReal<IntakeDeployIO.I
 
     @Override
     public void setMotionMagicSetpoint(double target){
-        double feedforward = 0.0;
-        if(CatzIntakeDeploy.Instance.getPosition() > 0.0){
-            feedforward = -IntakeDeployConstants.GRAVITY_FEEDFORWARD * Math.sin(CatzIntakeDeploy.Instance.getPosition() * 2 * Math.PI);
-        }
+        double feedforward = -IntakeDeployConstants.GRAVITY_FEEDFORWARD * Math.sin(CatzIntakeDeploy.Instance.getPosition() * 2 * Math.PI);;
+
         System.out.println("ff: " + feedforward);
         System.out.println("target:" + target);
         setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
