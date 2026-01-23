@@ -4,15 +4,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
@@ -30,8 +26,8 @@ public class RobotContainer {
     CatzTurret.Instance.setDefaultCommand(
       superstructure.turretManualTrackCommand()
     );
-    xboxDrv.a().onTrue(superstructure.turretTrackCommand());
-
+    // xboxDrv.a().onTrue(superstructure.turretTrackCommand());
+    xboxDrv.a().onTrue(CatzTurret.Instance.followSetpointCommand(() -> CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(0.0, Units.Radians))));
     xboxDrv.b().onTrue(CatzTurret.Instance.followSetpointCommand(() -> CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(21*Math.PI, Units.Radians))));
     xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
     // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());

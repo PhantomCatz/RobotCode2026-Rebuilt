@@ -19,7 +19,7 @@ public final class CatzConstants {
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN2;
+  private static RobotID robotType = RobotID.SN_MANTA;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
@@ -27,12 +27,12 @@ public final class CatzConstants {
 
   public static AutoFactory autoFactory;
 
-  public static final boolean ClimbOn = true;
-  public static final boolean HoodOn = true;
-  public static final boolean IndexerOn = true;
-  public static final boolean IntakeOn = true;
-  public static final boolean ShooterOn = true;
-  public static final boolean TurretOn = true;
+  public static final boolean ClimbOn = false;
+  public static final boolean HoodOn = false;
+  public static final boolean IndexerOn = false;
+  public static final boolean IntakeOn = false;
+  public static final boolean ShooterOn = false;
+  public static final boolean TurretOn = false;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers
@@ -51,7 +51,7 @@ public final class CatzConstants {
     if (RobotBase.isReal() && robotType == RobotID.SN_TEST) {
       new Alert("Invalid robot selected, using competition robot as default.", AlertType.kError)
           .set(true);
-      robotType = RobotID.SN2;
+      robotType = RobotID.SN_MANTA;
     }
     return robotType;
   }
