@@ -25,7 +25,7 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
     private static IntakeRollerIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Disabled by CatzConstants");
-            return new IntakeRollerIOSim();
+            return new IntakeRollerIOSim(IntakeRollerConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -33,10 +33,10 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
                 return new IntakeRollerIOTalonFX(IntakeRollerConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Configured for Simulation");
-                return new IntakeRollerIOSim();
+                return new IntakeRollerIOSim(IntakeRollerConstants.gains);
                 default:
                 System.out.println("Intake Unconfigured");
-                return new IntakeRollerIOSim();
+                return new IntakeRollerIOSim(IntakeRollerConstants.gains);
         }
     }
 

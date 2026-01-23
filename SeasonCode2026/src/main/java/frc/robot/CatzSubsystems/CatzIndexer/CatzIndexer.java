@@ -11,7 +11,7 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
     private static IndexerIO getIOInstance() {
         if (CatzConstants.IndexerOn == false) {
             System.out.println("Indexer Disabled by CatzConstants");
-            return new IndexerIOSim();
+            return new IndexerIOSim(IndexerConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -19,10 +19,10 @@ public class CatzIndexer extends GenericMotorSubsystem<IndexerIO, IndexerIO.Inde
                 return new IndexerIOTalonFX(IndexerConstants.getIOConfig());
             case SIM:
                 System.out.println("Indexer Configured for Simulation");
-                return new IndexerIOSim();
+                return new IndexerIOSim(IndexerConstants.gains);
                 default:
                 System.out.println("Indexer Unconfigured");
-                return new IndexerIOSim();
+                return new IndexerIOSim(IndexerConstants.gains);
         }
     }
 

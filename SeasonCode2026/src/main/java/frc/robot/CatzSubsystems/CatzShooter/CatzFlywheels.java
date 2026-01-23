@@ -11,7 +11,7 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
     private static FlywheelsIO getIOInstance() {
         if (CatzConstants.ShooterOn == false) {
             System.out.println("Shooter Disabled by CatzConstants");
-            return new FlywheelsIOSim();
+            return new FlywheelsIOSim(FlywheelConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -19,10 +19,10 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
                 return new FlywheelsIOTalonFX(FlywheelConstants.getIOConfig());
             case SIM:
                 System.out.println("Roller Configured for Simulation");
-                return new FlywheelsIOSim();
+                return new FlywheelsIOSim(FlywheelConstants.gains);
                 default:
                 System.out.println("Roller Unconfigured");
-                return new FlywheelsIOSim();
+                return new FlywheelsIOSim(FlywheelConstants.gains);
         }
     }
 
