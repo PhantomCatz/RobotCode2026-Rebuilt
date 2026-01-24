@@ -16,7 +16,6 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
 
     public static final CatzTurret Instance = new CatzTurret();
-
     public enum ShooterState{
         HOME,
         TRACKING,
@@ -78,6 +77,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     }
 
     private static TurretIO getIOInstance(){
+        if (CatzConstants.TurretOn == false) {
+            System.out.println("Turret Disabled by CatzConstants");
+            return new TurretIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");
@@ -85,9 +88,9 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
             case SIM:
                 System.out.println("Roller Configured for Simulation");
                 return new TurretIOSim();
-                default:
+            default:
                 System.out.println("Roller Unconfigured");
-                return new TurretIOSim();
+            return new TurretIOSim();
         }
     }
 }

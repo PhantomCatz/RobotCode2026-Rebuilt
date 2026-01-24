@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
@@ -15,28 +16,20 @@ public class LimelightSubsystem extends SubsystemBase {
 		ios = LimelightConstants.LIMELIGHT_ARRAY;
 
 		if (Robot.isReal()) {
-			for(ApriltagScanningIOLimelight limelight : LimelightConstants.LIMELIGHT_ARRAY){
+			for(ApriltagScanningIO limelight : LimelightConstants.LIMELIGHT_ARRAY){
 				LimelightConfig config = limelight.getConfig();
 
-				// LimelightHelpers.setCameraPose_RobotSpace(
-				// 		config.name,
-				// 		config.robotToCameraOffset.getX(),
-				// 		config.robotToCameraOffset.getY(),
-				// 		config.robotToCameraOffset.getZ(),
-				// 		Units.radiansToDegrees(
-				// 				config.robotToCameraOffset.getRotation().getX()),
-				// 		Units.radiansToDegrees(
-				// 				config.robotToCameraOffset.getRotation().getY()),
-				// 		Units.radiansToDegrees(
-				// 				config.robotToCameraOffset.getRotation().getZ()));
-
-				System.out.println("Configured " + config.name + "'s offset");
-				System.out.println("NK DEBUG: " + limelight.getConfig().robotToCameraOffset);
-				System.out.println("NK DEBUG " + ios.length);
-
-				LimelightHelpers.setLEDMode_ForceOn(config.name);
-
-
+				LimelightHelpers.setCameraPose_RobotSpace(
+						config.name,
+						config.robotToCameraOffset.getX(),
+						config.robotToCameraOffset.getY(),
+						config.robotToCameraOffset.getZ(),
+						Units.radiansToDegrees(
+								config.robotToCameraOffset.getRotation().getX()),
+						Units.radiansToDegrees(
+								config.robotToCameraOffset.getRotation().getY()),
+						Units.radiansToDegrees(
+								config.robotToCameraOffset.getRotation().getZ()));
 
 			}
 		}
@@ -45,7 +38,6 @@ public class LimelightSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		for(int i = 0; i < ios.length; i++){
-			LimelightConstants.LIMELIGHT_ARRAY[i].update();
 			ios[i].update();
 		}
 	}
@@ -54,7 +46,6 @@ public class LimelightSubsystem extends SubsystemBase {
 		for(ApriltagScanningIO io : ios){
 			return io.getNumTags() > 0;
 		}
-		System.out.println("Missing VisionIOs!!!!!!");
 		return false;
 	}
 }

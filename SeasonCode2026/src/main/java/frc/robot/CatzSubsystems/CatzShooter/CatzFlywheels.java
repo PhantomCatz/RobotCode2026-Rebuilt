@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.FlywheelMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 
 public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, FlywheelsIO.FlywheelsIOInputs> {
 
@@ -10,10 +9,14 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
     private static final FlywheelsIOInputsAutoLogged inputs = new FlywheelsIOInputsAutoLogged();
 
     private static FlywheelsIO getIOInstance() {
+        if (CatzConstants.ShooterOn == false) {
+            System.out.println("Shooter Disabled by CatzConstants");
+            return new FlywheelsIOSim();
+        }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");
-                return new FlywheelsIOTalonFX(ClimbConstants.getIOConfig());
+                return new FlywheelsIOTalonFX(FlywheelConstants.getIOConfig());
             case SIM:
                 System.out.println("Roller Configured for Simulation");
                 return new FlywheelsIOSim();

@@ -53,7 +53,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	@Override
 	public void update() {
 		updateGyro();
-		// setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 1);
+		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 1);
 	}
 
 	@Override
