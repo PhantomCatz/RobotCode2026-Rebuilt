@@ -24,7 +24,7 @@ public class TurretConstants {
 	public static final Setpoint alittle = Setpoint.withMotionMagicSetpoint(50);
 	public static final Setpoint alittelbackwrads = Setpoint.withMotionMagicSetpoint(-50);
 	public static final Setpoint WEEEEEE = Setpoint.withMotionMagicSetpoint(135);
-	public static final Setpoint backwordsbeastmode = Setpoint.withMotionMagicSetpoint(-135);
+	public static final Setpoint backwordsbeastmode = Setpoint.withDutyCycleSetpoint(0.7);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);

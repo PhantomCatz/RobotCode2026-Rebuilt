@@ -3,9 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
@@ -36,9 +38,11 @@ public class RobotContainer {
 
 
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
-    xboxDrv.x().onTrue(superstructure.SlapDown());
+    xboxDrv.x().onTrue(CatzHood.Instance.setpointCommand(() -> IntakeRollerConstants.S_SETPOINT));
+    xboxDrv.b().onTrue(CatzTurret.Instance.setpointCommand(() -> TurretConstants.backwordsbeastmode));
     xboxDrv.y().onTrue(superstructure.IntakeOn());
     xboxDrv.a().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
+
 
   }
 }

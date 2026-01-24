@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -33,8 +34,11 @@ public class CatzSuperstructure {
     private final CommandXboxController xboxTest = new CommandXboxController(1);
     private final CommandXboxController xboxDrv = new CommandXboxController(0);
 
+    private final SubsystemVisualizer visualizer;
+
 
     private CatzSuperstructure() {
+        this.visualizer = new SubsystemVisualizer("SuperstructureViz");
     }
 
     public Command turretTrackCommand() {
@@ -190,5 +194,13 @@ public class CatzSuperstructure {
     // return
     // CatzFlywheels.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
     // }
+
+    public void UpdateSim() {
+        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzIntakeRoller.Instance.getPosition());
+        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getPosition());
+        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getPosition());
+
+        visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
+    }
 
 }
