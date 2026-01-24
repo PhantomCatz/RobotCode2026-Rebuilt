@@ -9,8 +9,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -135,16 +133,22 @@ public class CatzSuperstructure {
         Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
         Pose2d fieldToTurret = fieldToRobot.transformBy(TurretConstants.TURRET_OFFSET);
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
+        Logger.recordOutput("Hub Location", FieldConstants.HUB_LOCATION);
+        Logger.recordOutput("Turret Location", fieldToTurret);
+        Logger.recordOutput("Hub Direction", hubDirection);
         double targetRads = hubDirection.getAngle().getRadians()
                 - fieldToRobot.getRotation().getRadians();
-
-        if(DriverStation.getAlliance().get() == Alliance.Red){
-            targetRads -= Math.PI;
-        }
-
-        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
-        // return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads)); TODO PUT THE WRAPPING BACK
-        return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
+        // if(DriverStation.getAlliance().get() == Alliance.Red){
+        //     targetRads -= Math.PI;
+        // }
+        double currentRads = CatzTurret.Instance.getPosition() * 2*Math.PI;
+        // Logger.recordOutput("Turret Current Location", fieldToTurret.rotateBy(Rotation2d.fromRadians(currentRads)));
+        // Logger.recordOutput("Turret Target Location", fieldToTurret.rotateBy(Rotation2d.fromRadians(targetRads)));
+        double angleError = targetRads - currentRads;
+        angleError = MathUtil.angleModulus(angleError);
+        // Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads)); //TODO PUT THE WRAPPING BACK
+        // return Setpoint.withMotionMagicSetpoint(Units.Radians.of(currentRads+angleError)); THIS IS THE NO WRAP
     }
 
     public Setpoint calculateHubTrackingSetpointNoOffset() {

@@ -27,7 +27,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
-        setCurrentPosition(Angle.ofBaseUnits(0.0, Units.Degrees));
+        setCurrentPosition(TurretConstants.HOME_POSITION);
     }
 
     public static final CatzTurret Instance = new CatzTurret();

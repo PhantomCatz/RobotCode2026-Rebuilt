@@ -28,12 +28,14 @@ public class TurretConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN_MANTA -> new Gains(0.5, 0.0, 0.00, 0.22, 4.8, 0.0, 0.0); // kd 0.05
+        case SN_MANTA -> new Gains(100.0, 0.0, 0.00, 0.22, 4.8, 0.0, 0.0); // kd 0.05
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-	public static final Transform2d TURRET_OFFSET = new Transform2d( edu.wpi.first.math.util.Units.inchesToMeters(-4.0),  edu.wpi.first.math.util.Units.inchesToMeters(9.5), new Rotation2d());
+	public static final Transform2d TURRET_OFFSET = new Transform2d( edu.wpi.first.math.util.Units.inchesToMeters(-4.0),  edu.wpi.first.math.util.Units.inchesToMeters(9.5), new Rotation2d()){
+
+	};
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
     private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
@@ -42,7 +44,7 @@ public class TurretConstants {
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
-
+	public static final Angle HOME_POSITION = Units.Degrees.of(180.0);
     private static final int TURRET_MOTOR_ID = 12;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
@@ -54,6 +56,7 @@ public class TurretConstants {
 	public static final int NUM_OF_FULL_ROT = 1;
 
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
+	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -65,7 +68,7 @@ public class TurretConstants {
 		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0/42.0;//100.0 / 42.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0/42.5;//100.0 / 42.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 10.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
@@ -81,7 +84,7 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 42.0;//75.65; // 67.5
+		FXConfig.Feedback.SensorToMechanismRatio = 42.5;//75.65; // 67.5
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
