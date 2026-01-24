@@ -22,7 +22,8 @@ public class FieldConstants {
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
-  public static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
+  // public static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376); THIS IS THE HUB LOCATION
+  public static final Translation2d HUB_LOCATION = new Translation2d(11.919516563415527, 0.6012147665023804 ); // TODO THIS IS NOT THE HUB LOCATION THIS IS THE APRILTAG 7 POSITION NEED TO CHANGE BACK
 
   @Getter
   public enum AprilTagLayoutType {

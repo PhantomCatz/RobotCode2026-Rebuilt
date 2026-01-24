@@ -1,11 +1,15 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
@@ -19,14 +23,15 @@ public class RobotContainer {
   }
   private void configureBindings() {
     CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
-    CatzTurret.Instance.setDefaultCommand(
-      superstructure.turretManualTrackCommand()
-    );
-    // xboxDrv.a().onTrue(superstructure.turretTrackCommand());
+    // CatzTurret.Instance.setDefaultCommand(
+    //   superstructure.turretManualTrackCommand()
+    xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
+    // );
+    xboxDrv.a().onTrue(superstructure.turretTrackCommand());
 
     // xboxDrv.b().onTrue(CatzTurret.Instance.followSetpointCommand(() -> CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(21*Math.PI, Units.Radians))));
     // xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
-    // // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());
+    // xboxTest.a().onTrue(superstructure.turretManualTrackCommand());
     // xboxDrv.y().onTrue(new InstantCommand(()->CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
     // xboxDrv.b().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> CatzIntakeRoller.Instance.toggleIntake()));
     // xboxDrv.a().onTrue(CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(60.0)));
@@ -38,7 +43,7 @@ public class RobotContainer {
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
     xboxDrv.x().onTrue(superstructure.SlapDown());
     xboxDrv.y().onTrue(superstructure.IntakeOn());
-    xboxDrv.a().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
+    xboxDrv.a().onTrue(CatzIntakeRoller.Instance.followSetpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
 
   }
 }
