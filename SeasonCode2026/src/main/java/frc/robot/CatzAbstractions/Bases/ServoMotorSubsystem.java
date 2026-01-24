@@ -56,6 +56,10 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Rotations.of(getPosition()));
 	}
 
+	public void setPDSVGains(double p, double d, double s, double v){
+		io.setGainsSlot0(p, 0.0, d, s, v, 0.0, 0.0);
+	}
+
 	/**
 	 * Creates a Command that goes to a setpoint and then waits until the mechanism is the setpoint's position.
 	 *
