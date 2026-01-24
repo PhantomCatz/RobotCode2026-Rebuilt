@@ -47,7 +47,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
     public void update(){
         updateGyro();
         updateCameraOffset();
-		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 2);
+		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 1);
     }
 
     @Override
@@ -82,6 +82,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
 	}
 
     private void updateCameraOffset(){
+        // System.out.println("update camera offset");
         Pose3d newCameraOffset = calculateCurrentCameraOffset();
 
         LimelightHelpers.setCameraPose_RobotSpace(

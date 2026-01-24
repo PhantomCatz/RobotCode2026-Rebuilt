@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -134,9 +136,15 @@ public class CatzSuperstructure {
         Pose2d fieldToTurret = fieldToRobot.transformBy(TurretConstants.TURRET_OFFSET);
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
-                - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
+                - fieldToRobot.getRotation().getRadians();
+
+        if(DriverStation.getAlliance().get() == Alliance.Red){
+            targetRads -= Math.PI;
+        }
+
         Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
-        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+        // return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads)); TODO PUT THE WRAPPING BACK
+        return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
 
     public Setpoint calculateHubTrackingSetpointNoOffset() {
