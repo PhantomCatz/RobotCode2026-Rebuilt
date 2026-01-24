@@ -222,7 +222,9 @@ public class CatzDrivetrain extends SubsystemBase {
   //          Driving methods
   //
   // --------------------------------------------------------------------------------------------------------------------------
+  public ChassisSpeeds appliedChassisSpeeds = new ChassisSpeeds();
   public void drive(ChassisSpeeds chassisSpeeds) {
+    appliedChassisSpeeds = chassisSpeeds;
     // System.out.println("speeed; " + chassisSpeeds);
     ChassisSpeeds descreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, CatzConstants.LOOP_TIME);
     // --------------------------------------------------------
@@ -422,8 +424,12 @@ public class CatzDrivetrain extends SubsystemBase {
    *
    * @return The Heading of the robot dependant on where it's been instantiated
    */
-  private double getGyroHeading() {
+  public double getGyroHeading() {
     return gyroInputs.gyroAngle; // Negative on Forte due to instalation, gyro's left is not robot left
+  }
+
+  public double getGyroVel(){
+    return gyroInputs.gyroYawVel;
   }
 
   /** Get the Rotation2d object based on the gyro angle */

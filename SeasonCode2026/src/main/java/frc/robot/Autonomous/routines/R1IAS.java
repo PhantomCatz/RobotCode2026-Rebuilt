@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import frc.robot.Autonomous.AutoRoutineBase;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class R1IAS extends AutoRoutineBase{
     public R1IAS(){
@@ -21,12 +20,12 @@ public class R1IAS extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj3),
             // CatzSuperstructure.Instance.ScoreFuel(),
             followTrajectoryWithAccuracy(traj4),
-            // CatzSuperstructure.Instance.IntakeFuel(),  
+            // CatzSuperstructure.Instance.IntakeFuel(),
             followTrajectoryWithAccuracy(traj5),
             // CatzSuperstructure.Instance.ScoreFuel(),
             followTrajectoryWithAccuracy(traj6)
             // CatzSuperstructure.Instance.IntakeFuel(),
-            // CatzSuperstructure.Instance.Hoard(),
+            // CatzSuperstructure.Instance.AutonStartHoard(),
         );
     }
 }

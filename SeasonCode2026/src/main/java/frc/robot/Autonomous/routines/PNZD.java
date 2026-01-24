@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import frc.robot.Autonomous.AutoRoutineBase;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class PNZD extends AutoRoutineBase{
     public PNZD(){
@@ -21,7 +20,7 @@ public class PNZD extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj3),
             // CatzSuperstructure.Instance.IntakeFuel(),
             followTrajectoryWithAccuracy(traj4),
-            // CatzSuperstructure.Instance.ScoreFuel(),  
+            // CatzSuperstructure.Instance.ScoreFuel(),
             followTrajectoryWithAccuracy(traj5)
             // CatzSuperstructure.Instance.IntakeFuel(),
             // CatzSuperstructure.Instance.ScoreFuel(),

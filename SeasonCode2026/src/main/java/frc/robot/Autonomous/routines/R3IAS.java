@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import frc.robot.Autonomous.AutoRoutineBase;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class R3IAS extends AutoRoutineBase{
     public R3IAS(){
