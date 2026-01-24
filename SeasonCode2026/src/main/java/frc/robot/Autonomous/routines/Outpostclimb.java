@@ -3,8 +3,8 @@ package frc.robot.Autonomous.routines;
 import choreo.auto.AutoTrajectory;
 import frc.robot.Autonomous.AutoRoutineBase;
 
-public class Outpostclimb extends AutoRoutineBase{
-    public Outpostclimb(){
+public class OutpostClimb extends AutoRoutineBase{
+    public OutpostClimb(){
         super("Outpostclimb");
 
         AutoTrajectory traj1 = getTrajectory("Outpostclimb",0);

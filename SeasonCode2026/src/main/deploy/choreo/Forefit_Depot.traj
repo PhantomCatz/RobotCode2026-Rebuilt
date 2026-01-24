@@ -3,9 +3,9 @@
  "version":3,
  "snapshot":{
   "waypoints":[
-    {"x":3.738630771636963, "y":7.473488807678223, "heading":0.0, "intervals":31, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":8.190526008605957, "y":5.820689678192139, "heading":0.0, "intervals":16, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":8.590396881103516, "y":4.4611287117004395, "heading":0.0, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":3.738630771636963, "y":7.473488807678223, "heading":0.0, "intervals":31, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":8.190526008605957, "y":5.820689678192139, "heading":0.0, "intervals":16, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":8.590396881103516, "y":4.4611287117004395, "heading":0.0, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -103,7 +103,7 @@
     {"t":1.78382, "x":8.58965, "y":4.48446, "heading":0.00002, "vx":0.02515, "vy":-0.64831, "omega":-0.00045, "ax":-0.46921, "ay":9.00346, "alpha":0.00595, "fx":[-8.01125,-8.01457,-7.95096,-7.94766], "fy":[153.14479,153.14454,153.14785,153.1481]},
     {"t":1.8198, "x":8.59025, "y":4.46696, "heading":0.00001, "vx":0.00827, "vy":-0.32434, "omega":-0.00024, "ax":-0.22984, "ay":9.01351, "alpha":0.00657, "fx":[-3.94372,-3.94553,-3.87513,-3.87336], "fy":[153.31643,153.3163,153.3181,153.31822]},
     {"t":1.85578, "x":8.5904, "y":4.46113, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0]
+  "splits":[0,31]
  },
  "events":[
    {"name":"Score Preload", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},

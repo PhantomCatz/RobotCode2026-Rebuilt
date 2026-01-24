@@ -14,6 +14,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
 
         prepRoutine(
             trajpre,
+            followTrajectoryWithAccuracy(trajpre),
             // CatzSuperstructure.Instance.ScoreFuel(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),

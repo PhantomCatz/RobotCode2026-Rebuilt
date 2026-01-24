@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
+import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.Utilities.VirtualSubsystem;
@@ -133,6 +134,7 @@ public class Robot extends LoggedRobot {
                                                   true,
                                                   CatzDrivetrain.Instance
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+    System.out.println(AutoRoutineSelector.Instance);
 
   }
 
@@ -156,7 +158,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
+    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);

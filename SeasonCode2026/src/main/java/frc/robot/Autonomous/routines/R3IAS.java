@@ -17,6 +17,7 @@ public class R3IAS extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
+            followTrajectoryWithAccuracy(traj1),
             // CatzSuperstructure.Instance.ScoreFuel(),
             // CatzSuperstructure.Instance.IntakeFuel(),
             followTrajectoryWithAccuracy(traj2),
