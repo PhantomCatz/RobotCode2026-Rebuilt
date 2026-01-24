@@ -12,27 +12,30 @@ import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
+import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 
+	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(3.0);
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.0, 0, 0.0, 0.35, 2.0, 0, 0.0);
+        case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
         case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-    private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
+    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Deploy/kD", gains.kD());
+    public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
+    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 15;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 2.0;
+	public static final double GRAVITY_FEEDFORWARD = 2.5;
+	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
+
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(-39.9);
 

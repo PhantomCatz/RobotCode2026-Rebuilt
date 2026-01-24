@@ -22,6 +22,23 @@ public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, Intake
         setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
     }
 
+    double p = 0.0;
+    double d = 0.0;
+    double s = 0.0;
+    double v = 0.0;
+    @Override
+    public void periodic(){
+        super.periodic();
+
+        if(IntakeDeployConstants.kP.get() != p || IntakeDeployConstants.kD.get() != d || IntakeDeployConstants.kS.get() != s || IntakeDeployConstants.kV.get() != v){
+            setPDSVGains(IntakeDeployConstants.kP.get(), IntakeDeployConstants.kD.get(), IntakeDeployConstants.kS.get(), IntakeDeployConstants.kV.get());
+            p = IntakeDeployConstants.kP.get();
+            d = IntakeDeployConstants.kD.get();
+            s = IntakeDeployConstants.kS.get();
+            v = IntakeDeployConstants.kV.get();
+        }
+    }
+
     private static IntakeDeployIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Deploy Disabled by CatzConstants");

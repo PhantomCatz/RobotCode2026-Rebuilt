@@ -17,6 +17,9 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzIntakeDeploy.CatzIntakeDeploy;
+import frc.robot.CatzSubsystems.CatzIntakeDeploy.IntakeDeployConstants;
+import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
@@ -74,13 +77,13 @@ public class CatzSuperstructure {
         );
     }
 
-    public Command intakeDeployManualCommand(){
-        return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
-            double input = -xboxTest.getLeftY() * 3;
-            Logger.recordOutput("Xbox Input", input);
-            return Setpoint.withVoltageSetpoint(input);
-        });
-    }
+    // public Command intakeDeployManualCommand(){
+    //     return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+    //         double input = -xboxTest.getLeftY() * 3;
+    //         Logger.recordOutput("Xbox Input", input);
+    //         return Setpoint.withVoltageSetpoint(input);
+    //     });
+    // }
 
     public Command applyShooterSetpoint(){
         return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
@@ -123,6 +126,18 @@ public class CatzSuperstructure {
 
     public Command applyHoodSetpoint(){
         return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
+    }
+
+    public Command IntakeOn(){
+        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.H_SETPOINT);
+    }
+
+    public Command IntakeOff(){
+        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT);
+    }
+
+    public Command SlapDown() {
+        return CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.HoldDown);
     }
 
     /**
