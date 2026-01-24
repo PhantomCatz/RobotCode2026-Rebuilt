@@ -65,7 +65,7 @@ public class TurretConstants {
 		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0/42.0;//100.0 / 42.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0/42.5;//100.0 / 42.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 10.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
@@ -81,7 +81,7 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 42.0;//75.65; // 67.5
+		FXConfig.Feedback.SensorToMechanismRatio = 42.5;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -99,7 +99,7 @@ public class TurretConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 						// .withForwardSoftLimitThreshold(TURRET_MAX)
-						// .withReverseSoftLimitThreshold(TURRET_MIN));
+						// .withReverseSoftLimitThreshold(TURRET_MIN)); //NOTE add back soft limits
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};

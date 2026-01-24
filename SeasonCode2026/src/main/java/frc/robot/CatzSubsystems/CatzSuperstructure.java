@@ -29,6 +29,7 @@ public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
     private final CommandXboxController xboxTest = new CommandXboxController(1);
     private final CommandXboxController xboxDrv = new CommandXboxController(0);
+    //NOTE use suppliers instead of creating two different objects
 
 
     private CatzSuperstructure() {
