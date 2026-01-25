@@ -11,6 +11,7 @@ import edu.wpi.first.units.measure.Time;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers;
 import frc.robot.Utilities.LimelightHelpers.PoseEstimate;
@@ -47,7 +48,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
     public void update(){
         updateGyro();
         updateCameraOffset();
-		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 2);
+		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 1);
     }
 
     @Override
@@ -82,6 +83,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
 	}
 
     private void updateCameraOffset(){
+        // System.out.println("update camera offset");
         Pose3d newCameraOffset = calculateCurrentCameraOffset();
 
         LimelightHelpers.setCameraPose_RobotSpace(
@@ -107,13 +109,17 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
         Translation2d limelightPositionOnRobot = LimelightConstants.TURRET_CENTER
             .plus(limelightOffsetFromTurretCenter);
 
+        double deltaTurretAngle = turretAngle.in(Units.Radians) - TurretConstants.HOME_POSITION.in(Units.Radians);
+
 
         Rotation3d newRotation = new Rotation3d(
             originalOffset.getRotation().getX(),
             originalOffset.getRotation().getY(),
-            originalOffset.getRotation().getZ() + turretAngle.in(Units.Radians)
+            originalOffset.getRotation().getZ() + deltaTurretAngle
         );
 
+
+        
         return new Pose3d(
             limelightPositionOnRobot.getX(),
             limelightPositionOnRobot.getY(),

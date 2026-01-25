@@ -19,14 +19,13 @@ public class LimelightConstants {
 	//offsets are forward/back, left/right, up/down
 	// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
 	public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
-		new ApriltagScanningIOMovable(new LimelightConfig("limelight-b",
-			new Pose3d(new Translation3d(8.23178, -0.2794, 0.23114), new Rotation3d(0.0, 15.0, -18.0))
+		new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
+			new Pose3d(new Translation3d(edu.wpi.first.math.util.Units.inchesToMeters(0), edu.wpi.first.math.util.Units.inchesToMeters(0), edu.wpi.first.math.util.Units.inchesToMeters(21.0)), new Rotation3d(edu.wpi.first.math.util.Units.degreesToRadians(3.0), edu.wpi.first.math.util.Units.degreesToRadians(12.0), edu.wpi.first.math.util.Units.degreesToRadians(165.0)))
 		))
 	};
 
-
-	public static final Translation2d TURRET_CENTER = new Translation2d(0.0, 0.0); //TODO Fill out
-	public static final Distance TURRET_RADIUS = Units.Centimeters.of(0.0); //TODO Fill out
+	public static final Translation2d TURRET_CENTER = new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5)); //TODO Fill out
+	public static final Distance TURRET_RADIUS = Units.Inches.of(9.0); //TODO Fill out
 
 	public static class LimelightConfig {
 		public String name = "no-name-assigned";

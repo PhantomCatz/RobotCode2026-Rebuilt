@@ -22,20 +22,20 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         TRACKING,
         MANUAL;
     }
-    
+
     public ShooterState state = ShooterState.HOME;
-    
+
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
-        setCurrentPosition(Angle.ofBaseUnits(0.0, Units.Degrees));
+        setCurrentPosition(TurretConstants.HOME_POSITION);
     }
-    
+
     public static final CatzTurret Instance = new CatzTurret();
 
     @Override
     public void periodic(){
         super.periodic();
-        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits);
+        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits / (2*Math.PI));
 
 
     }
@@ -51,6 +51,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double maxLegalRads = TurretConstants.TURRET_MAX.in(Units.Radians);
 
         targetRads = MathUtil.angleModulus(targetRads);
+        Logger.recordOutput("Turret Target Position", targetRads / (2*Math.PI));
 
         return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }

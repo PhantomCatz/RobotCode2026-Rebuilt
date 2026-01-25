@@ -34,8 +34,6 @@ public class FlywheelConstants {
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRps", 1000.0);
 
-    private static final int FLYWHEEL_MOTOR_ID = 0;
-
 	public static final AngularVelocity FLYWHEEL_THRESHOLD = Units.RotationsPerSecond.of(5.0);
 
     public static final TalonFXConfiguration getFXConfig() {
