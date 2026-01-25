@@ -128,10 +128,10 @@ public class DriveConstants {
   static{
     switch(CatzConstants.getRobotType()){
         case SN_MANTA:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.900146484375+1, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.022705078125+1, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.844482421875, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.89990234375, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248+0.5, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211+0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281+0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.916016, false);
         break;
 
         case SN1:
