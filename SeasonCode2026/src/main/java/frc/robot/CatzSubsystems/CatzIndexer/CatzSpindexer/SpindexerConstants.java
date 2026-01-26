@@ -6,6 +6,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -14,7 +16,9 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class SpindexerConstants {
-	public static final Setpoint ON = Setpoint.withVoltageSetpoint(12.0);
+	private static final Voltage ON_VOLTS = Units.Volts.of(12.0);
+
+	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
@@ -31,7 +35,7 @@ public class SpindexerConstants {
     // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("Spindexer/Spede");
+	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("Spindexer/Applied Volts", ON_VOLTS.in(Units.Volts));
 
     private static final int SPINDEXER_MOTOR_ID = 40;
 
