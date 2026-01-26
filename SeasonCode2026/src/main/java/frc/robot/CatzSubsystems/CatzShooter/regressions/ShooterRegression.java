@@ -1,24 +1,19 @@
 package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.Utilities.InterpolatingDouble;
 import frc.robot.Utilities.InterpolatingTreeMap;
+import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.PolynomialRegression;
 
 public class ShooterRegression {
-    public static final double kHoodPaddingDegrees = 2;
-    public static final double kShooterPaddingVelocity = 100;
-
-    public static final double[] kPadding = {
-            kShooterPaddingVelocity, kHoodPaddingDegrees};
-
-
-    public static boolean kUseSmartdashboard = false;
-
     //shooter
     public static double kDefaultShootingRPM = 2950.0;
     public static boolean kUseFlywheelAutoAimPolynomial = false;
@@ -60,10 +55,29 @@ public class ShooterRegression {
         return HOOD_ANGLE_SLOPE * (distance.in(Units.Meters) - EpsilonRegression.CLOSEST_HOOD_ANGLE[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE[1];
     }
 
-    public static double getFutureDistance(Translation2d robotSpeed){
-        Translation2d robotPose = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-        
-        Translation2d displacementVector = 
+    public static double getFutureDistance(){
+        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        double robotAngle = robotPose.getRotation().getRadians();
+
+        double cosRobotAngle = Math.cos(robotAngle);
+        double sinRobotAngle = Math.sin(robotAngle);
+
+        double turretVelocityX =
+            robotVelocity.vxMetersPerSecond
+                + robotVelocity.omegaRadiansPerSecond
+                    * (TurretConstants.TURRET_CENTER.getY() * cosRobotAngle
+                        - TurretConstants.TURRET_CENTER.getX() * sinRobotAngle);
+        double turretVelocityY =
+            robotVelocity.vyMetersPerSecond
+                + robotVelocity.omegaRadiansPerSecond
+                    * (TurretConstants.TURRET_CENTER.getX() * cosRobotAngle
+                        - TurretConstants.TURRET_CENTER.getY() * sinRobotAngle);
+
+        Translation2d hubVelocity = new Translation2d(-turretVelocityX, -turretVelocityY); //imagine the hub moving instead of the robot
+        Translation2d robotToHub = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
+
+        return 0.0;
     }
 
 }

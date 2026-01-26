@@ -5,8 +5,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -42,6 +44,9 @@ public class TurretConstants {
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 20.0;
 
 	public static final int NUM_OF_FULL_ROT = 1;
+
+	public static final Translation2d TURRET_CENTER = new Translation2d(0.0, 0.0); //TODO Fill out
+	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_CENTER.getNorm());
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

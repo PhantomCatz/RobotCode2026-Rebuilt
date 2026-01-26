@@ -11,6 +11,7 @@ import edu.wpi.first.units.measure.Time;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers;
 import frc.robot.Utilities.LimelightHelpers.PoseEstimate;
@@ -100,11 +101,11 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
         Angle turretAngle = Units.Rotations.of(CatzTurret.Instance.getPosition());
 
         Translation2d limelightOffsetFromTurretCenter = new Translation2d(
-            LimelightConstants.TURRET_RADIUS.in(Units.Meters),
+            TurretConstants.TURRET_RADIUS.in(Units.Meters),
             new Rotation2d(turretAngle)
         );
 
-        Translation2d limelightPositionOnRobot = LimelightConstants.TURRET_CENTER
+        Translation2d limelightPositionOnRobot = TurretConstants.TURRET_CENTER
             .plus(limelightOffsetFromTurretCenter);
 
 

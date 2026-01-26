@@ -24,10 +24,6 @@ public class LimelightConstants {
 		))
 	};
 
-
-	public static final Translation2d TURRET_CENTER = new Translation2d(0.0, 0.0); //TODO Fill out
-	public static final Distance TURRET_RADIUS = Units.Centimeters.of(0.0); //TODO Fill out
-
 	public static class LimelightConfig {
 		public String name = "no-name-assigned";
 		public Pose3d robotToCameraOffset = new Pose3d();
