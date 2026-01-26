@@ -3,7 +3,7 @@ package frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 
-public class CatzSpindexer extends GenericMotorSubsystem{
+public class CatzSpindexer extends GenericMotorSubsystem<SpindexerIO, SpindexerIO.SpindexerIOInputs>{
     private static final SpindexerIO io = getIOInstance();
     private static final SpindexerIOInputsAutoLogged inputs = new SpindexerIOInputsAutoLogged();
 

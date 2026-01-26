@@ -9,7 +9,10 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
+import frc.robot.Utilities.Setpoint;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
@@ -42,8 +45,10 @@ public class RobotContainer {
 
     // xboxDrv.a().onTrue(CatzSpindexer.Instance.setpointCommand(()->Setpoint.withVoltageSetpoint(SpindexerConstants.SPEED.get())).alongWith(CatzYdexer.Instance.setpointCommand(()->Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()))));
     // xboxDrv.b().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)));
-    xboxTest.a().onTrue(superstructure.hoodManualCommand());
-    xboxTest.b().onTrue(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT));
+    xboxTest.b().onTrue(CatzHood.Instance.setpointCommand(()->Setpoint.withMotionMagicSetpoint(HoodConstants.adjustableHoodAngle.get()))
+                        .alongWith(CatzFlywheels.Instance.setpointCommand(()->Setpoint.withVelocitySetpoint(FlywheelConstants.SHOOTING_RPS_TUNABLE.get()))));
+    xboxTest.a().onTrue(superstructure.startIndexers());
+    xboxTest.x().onTrue(superstructure.stopAllShooting());
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
     // xboxDrv.x().onTrue(superstructure.SlapDown());
     // xboxDrv.y().onTrue(superstructure.IntakeOn());

@@ -16,6 +16,10 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.CatzSubsystems.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
@@ -25,7 +29,6 @@ import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
-import frc.robot.Utilities.InterpolatingDouble;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -86,8 +89,22 @@ public class CatzSuperstructure {
     //     });
     // }
 
-    public Command applyShooterSetpoint(){
-        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    public Command startIndexers(){
+        return Commands.parallel(
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)
+        );
+    }
+
+    public Command stopIndexers(){
+        return Commands.parallel(
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+        );
+    }
+
+    public Command stopAllShooting(){
+        return hoodFlywheelStowCommand().alongWith(stopIndexers());
     }
 
     public Command flywheelManualCommand(){
@@ -106,28 +123,6 @@ public class CatzSuperstructure {
         });
     }
 
-    public Command applyHoodTuningSetpoint(){
-        return Commands.defer(() -> {
-            Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
-
-            return CatzHood.Instance.followSetpointCommand(() ->Setpoint.withMotionMagicSetpoint(angle));
-        }, Set.of(CatzHood.Instance));
-    }
-
-    public Command applyFlywheelTuningSetpoint(){
-        return Commands.defer(() -> {
-
-            return CatzFlywheels.Instance.setpointCommand(Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
-        }, Set.of(CatzFlywheels.Instance));
-    }
-
-    public Command hoodTestCommand(){
-        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
-    }
-
-    public Command applyHoodSetpoint(){
-        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
-    }
 
     public Command IntakeOn(){
         return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.H_SETPOINT);
@@ -176,26 +171,12 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public Setpoint turretManualSetpoint(double x, double y) {
-        System.out.println(x + " " + y);
-        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(Math.atan2(y,x)));
-    }
-
     // interpolates distance to target for shooter setpoint along regression
     private double getShooterSetpointFromRegression(double range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return ShooterRegression.kFlywheelAutoAimPolynomial.predict(range);
+            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
         } else {
-            return ShooterRegression.kFlywheelAutoAimMap.getInterpolated(new InterpolatingDouble(range)).value;
-        }
-    }
-
-    // interpolates distance to target for hood setpoint along regression
-    private double getHoodSetpointFromRegression(double range) {
-        if (ShooterRegression.kUseHoodAutoAimPolynomial) {
-            return ShooterRegression.kHoodAutoAimPolynomial.predict(range);
-        } else {
-            return ShooterRegression.kHoodAutoAimMap.getInterpolated(new InterpolatingDouble(range)).value;
+            return ShooterRegression.flywheelAutoAimMap.get(range);
         }
     }
 

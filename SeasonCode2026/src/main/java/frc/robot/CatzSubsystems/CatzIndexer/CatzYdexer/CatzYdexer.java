@@ -3,7 +3,7 @@ package frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 
-public class CatzYdexer extends GenericMotorSubsystem{
+public class CatzYdexer extends GenericMotorSubsystem<YdexerIO, YdexerIO.YdexerIOInputs>{
     private static final YdexerIO io = getIOInstance();
     private static final YdexerIOInputsAutoLogged inputs = new YdexerIOInputsAutoLogged();
 

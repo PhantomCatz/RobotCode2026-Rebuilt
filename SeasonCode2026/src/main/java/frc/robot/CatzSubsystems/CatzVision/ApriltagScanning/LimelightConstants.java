@@ -4,7 +4,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.Units;
@@ -23,9 +22,6 @@ public class LimelightConstants {
 			new Pose3d(new Translation3d(edu.wpi.first.math.util.Units.inchesToMeters(0), edu.wpi.first.math.util.Units.inchesToMeters(0), edu.wpi.first.math.util.Units.inchesToMeters(21.0)), new Rotation3d(edu.wpi.first.math.util.Units.degreesToRadians(3.0), edu.wpi.first.math.util.Units.degreesToRadians(12.0), edu.wpi.first.math.util.Units.degreesToRadians(165.0)))
 		))
 	};
-
-	public static final Translation2d TURRET_CENTER = new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5)); //TODO Fill out
-	public static final Distance TURRET_RADIUS = Units.Inches.of(9.0); //TODO Fill out
 
 	public static class LimelightConfig {
 		public String name = "no-name-assigned";
