@@ -261,7 +261,9 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	public void setAllConfig(TalonFXConfiguration configuration){
 		setMainConfig(configuration);
-		setFollowerConfig(configuration);
+		if(followerTalons != null && followerTalons.length != 0){
+			setFollowerConfig(configuration);
+		}
 	}
 
 	@Override

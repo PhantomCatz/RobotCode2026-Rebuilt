@@ -100,7 +100,7 @@ public class CatzSuperstructure {
 
     public Command hoodManualCommand(){
         return CatzHood.Instance.followSetpointCommand(() -> {
-            double input = -(xboxDrv.getLeftY()) * 1;
+            double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });

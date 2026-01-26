@@ -7,12 +7,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
-import frc.robot.Utilities.Setpoint;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
@@ -43,9 +40,10 @@ public class RobotContainer {
     // xboxDrv.x().onTrue(CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.HOME_POSITION)));
     // xboxDrv.rightBumper().onTrue(CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withVoltageSetpoint(0.0)));
 
-    xboxDrv.a().onTrue(CatzSpindexer.Instance.setpointCommand(()->Setpoint.withVoltageSetpoint(SpindexerConstants.SPEED.get())).alongWith(CatzYdexer.Instance.setpointCommand(()->Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()))));
-    xboxDrv.b().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)));
-
+    // xboxDrv.a().onTrue(CatzSpindexer.Instance.setpointCommand(()->Setpoint.withVoltageSetpoint(SpindexerConstants.SPEED.get())).alongWith(CatzYdexer.Instance.setpointCommand(()->Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()))));
+    // xboxDrv.b().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)));
+    xboxTest.a().onTrue(superstructure.hoodManualCommand());
+    xboxTest.b().onTrue(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT));
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
     // xboxDrv.x().onTrue(superstructure.SlapDown());
     // xboxDrv.y().onTrue(superstructure.IntakeOn());
