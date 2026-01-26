@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
@@ -27,7 +28,9 @@ public class RobotContainer {
     //   superstructure.turretManualTrackCommand()
     xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
     // );
-    xboxDrv.a().onTrue(superstructure.turretTrackCommand());
+    // xboxDrv.a().onTrue(CatzFlywheels.Instance.followSetpointCommand(() -> {
+    //   return Setpoint.withVelocitySetpoint(FlywheelConstants.SHOOTING_RPS_TUNABLE.get());
+    // }));
 
     // xboxDrv.b().onTrue(CatzTurret.Instance.followSetpointCommand(() -> CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(21*Math.PI, Units.Radians))));
     // xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
@@ -39,11 +42,13 @@ public class RobotContainer {
     // xboxDrv.x().onTrue(CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.HOME_POSITION)));
     // xboxDrv.rightBumper().onTrue(CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withVoltageSetpoint(0.0)));
 
+    xboxDrv.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
+    xboxDrv.b().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)));
 
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
-    xboxDrv.x().onTrue(superstructure.SlapDown());
-    xboxDrv.y().onTrue(superstructure.IntakeOn());
-    xboxDrv.a().onTrue(CatzIntakeRoller.Instance.followSetpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
+    // xboxDrv.x().onTrue(superstructure.SlapDown());
+    // xboxDrv.y().onTrue(superstructure.IntakeOn());
+    // xboxDrv.a().onTrue(CatzIntakeRoller.Instance.followSetpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
 
   }
 }
