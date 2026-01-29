@@ -3,6 +3,9 @@ package frc.robot.CatzSubsystems.CatzTurret;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.hardware.CANcoder;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -14,7 +17,8 @@ import frc.robot.Utilities.Setpoint;
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
 
     private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
-
+    private final CANcoder encoder;
+    
     private static final TurretIO io = getIOInstance();
 
     public enum ShooterState{
@@ -28,6 +32,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
         setCurrentPosition(TurretConstants.HOME_POSITION);
+        encoder = new CANcoder(26, new CANBus("*")); //TODO confirm this is the id we want to use
+
     }
 
     public static final CatzTurret Instance = new CatzTurret();

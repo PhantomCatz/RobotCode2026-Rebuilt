@@ -48,6 +48,7 @@ public class TurretConstants {
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
+	private static final int TURRET_CANCODER_ID = 26;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
