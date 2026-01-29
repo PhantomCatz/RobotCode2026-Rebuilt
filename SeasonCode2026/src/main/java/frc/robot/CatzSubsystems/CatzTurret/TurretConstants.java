@@ -46,8 +46,8 @@ public class TurretConstants {
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
-	public static final Angle HOME_POSITION = Units.Degrees.of(180.0);
-    private static final int TURRET_MOTOR_ID = 12;
+	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
+    private static final int TURRET_MOTOR_ID = 25;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
@@ -88,6 +88,11 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = TURRET_MAX.in(Units.Rotations);
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = TURRET_MIN.in(Units.Rotations);
 
 		FXConfig.Feedback.SensorToMechanismRatio = 42.5;
 

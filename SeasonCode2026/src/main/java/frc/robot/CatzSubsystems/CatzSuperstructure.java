@@ -1,6 +1,5 @@
 package frc.robot.CatzSubsystems;
 
-import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -8,7 +7,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -59,12 +57,10 @@ public class CatzSuperstructure {
         // return CatzTurret.Instance.setpointCommand(Setpoint.withPositionSetpoint(Units.Degrees.of(90.0)));
         // return CatzTurret.Instance.setpointCommand(Setpoint.withVelocitySetpoint(1.0));
         return CatzTurret.Instance.followSetpointCommand(() -> {
-                if(Math.hypot(xboxTest.getLeftY(), xboxTest.getLeftX()) < 0.1){
-                    return Setpoint.withDutyCycleSetpoint(0.0);
-                }
-                double angle = Math.atan2(-xboxTest.getLeftY(), xboxTest.getLeftX());
-                Logger.recordOutput("Target rotation", angle / (2*Math.PI));
-                return Setpoint.withMotionMagicSetpoint(Units.Radians.of(angle));
+
+                double input = xboxTest.getLeftY();
+
+                return Setpoint.withVoltageSetpoint(input);
             }
         );
         // return CatzTurret.Instance.followSetpointCommand(() -> {

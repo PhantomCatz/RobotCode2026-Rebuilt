@@ -49,6 +49,8 @@ public class RobotContainer {
                         .alongWith(CatzFlywheels.Instance.setpointCommand(()->Setpoint.withVelocitySetpoint(FlywheelConstants.SHOOTING_RPS_TUNABLE.get()))));
     xboxTest.a().onTrue(superstructure.startIndexers());
     xboxTest.x().onTrue(superstructure.stopAllShooting());
+
+    xboxTest.leftBumper().onTrue(superstructure.turretManualTrackCommand());
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
     // xboxDrv.x().onTrue(superstructure.SlapDown());
     // xboxDrv.y().onTrue(superstructure.IntakeOn());

@@ -39,7 +39,7 @@ public class HoodConstants {
 
 	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodAngle", HOOD_ZERO_POS.in(Units.Degrees));
 
-    private static final int HOOD_MOTOR_ID = 50;
+    private static final int HOOD_MOTOR_ID = 22;
 
 	public static final Angle HOOD_THRESHOLD = Units.Degrees.of(1.0);
 
