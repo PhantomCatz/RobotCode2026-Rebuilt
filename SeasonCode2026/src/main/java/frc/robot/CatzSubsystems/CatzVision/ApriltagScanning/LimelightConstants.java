@@ -7,40 +7,55 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
+// Import the base Units class
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
+
+// Static import the specific units we need to keep code clean
+import static edu.wpi.first.units.Units.*;
+
 public class LimelightConstants {
 
-	public static final int kEnabledPipeline = 0;
-	public static final int kDisabledPipeline = 1; //TODO try fiddling with pipelines through website
-	public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
+    public static final int kEnabledPipeline = 0;
+    public static final int kDisabledPipeline = 1; 
+    public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
+    public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
+        new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
+            new Pose3d(
+                new Translation3d(
+                    Inches.of(0.0).in(Meters), 
+                    Inches.of(0.0).in(Meters), 
+                    Inches.of(21.0).in(Meters)
+                ), 
+                new Rotation3d(
+                    Degrees.of(3.0).in(Radians), 
+                    Degrees.of(12.0).in(Radians), 
+                    Degrees.of(165.0).in(Radians)
+                )
+            )
+        ))
+    };
 
-	//offsets are forward/back, left/right, up/down
-	// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
-	public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
-		new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
-			new Pose3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(21.0)), new Rotation3d(Units.degreesToRadians(3.0), Units.degreesToRadians(12.0), Units.degreesToRadians(165.0)))
-		))
-	};
+    public static final Translation2d TURRET_CENTER = new Translation2d(
+        Inches.of(4.0).in(Meters), 
+        Inches.of(-9.5).in(Meters)
+    ); 
 
-	public static final Translation2d TURRET_CENTER = new Translation2d(Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5)); //TODO Fill out
-	public static final Distance TURRET_RADIUS = edu.wpi.first.units.Units.Inches.of(9.0); //TODO Fill out
+    public static final Distance TURRET_RADIUS = Inches.of(9.0);
 
-	public static class LimelightConfig {
-		public String name = "no-name-assigned";
-		public Pose3d robotToCameraOffset = new Pose3d();
-		public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
+    public static class LimelightConfig {
+        public String name = "no-name-assigned";
+        public Pose3d robotToCameraOffset = new Pose3d();
+        public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
-		public LimelightConfig(String name, Pose3d robotToCameraOffset){
-			this.name = name;
-			this.robotToCameraOffset = robotToCameraOffset;
-		}
+        public LimelightConfig(String name, Pose3d robotToCameraOffset){
+            this.name = name;
+            this.robotToCameraOffset = robotToCameraOffset;
+        }
+        public LimelightConfig(){}
+    }
 
-		public LimelightConfig(){}
-	}
-
-	//TODO Use this instead of vision shift for auto aim
-	public static final int agreedTranslationUpdatesThreshold = 100;
-	public static final Distance agreedTranslationUpdateEpsilon = edu.wpi.first.units.Units.Centimeters.of(10.0);
+    public static final int agreedTranslationUpdatesThreshold = 100;
+    public static final Distance agreedTranslationUpdateEpsilon = Centimeters.of(10.0);
 }
