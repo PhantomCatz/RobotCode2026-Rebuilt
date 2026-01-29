@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems;
 
+
 import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
@@ -16,12 +17,15 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
-import frc.robot.Utilities.InterpolatingDouble;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -45,8 +49,30 @@ public class CatzSuperstructure {
         );
     }
 
-    public Command applyShooterSetpoint(){
-        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    // public Command intakeDeployManualCommand(){
+    //     return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+    //         double input = -xboxTest.getLeftY() * 3;
+    //         Logger.recordOutput("Xbox Input", input);
+    //         return Setpoint.withVoltageSetpoint(input);
+    //     });
+    // }
+
+    public Command startIndexers(){
+        return Commands.parallel(
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)
+        );
+    }
+
+    public Command stopIndexers(){
+        return Commands.parallel(
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+        );
+    }
+
+    public Command stopAllShooting(){
+        return hoodFlywheelStowCommand().alongWith(stopIndexers());
     }
 
     public Command flywheelManualCommand(){
@@ -59,7 +85,7 @@ public class CatzSuperstructure {
 
     public Command hoodManualCommand(){
         return CatzHood.Instance.followSetpointCommand(() -> {
-            double input = -(xboxDrv.getLeftY()) * 1;
+            double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
@@ -104,18 +130,9 @@ public class CatzSuperstructure {
     // interpolates distance to target for shooter setpoint along regression
     private double getShooterSetpointFromRegression(double range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return ShooterRegression.kFlywheelAutoAimPolynomial.predict(range);
+            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
         } else {
-            return ShooterRegression.kFlywheelAutoAimMap.getInterpolated(new InterpolatingDouble(range)).value;
-        }
-    }
-
-    // interpolates distance to target for hood setpoint along regression
-    private double getHoodSetpointFromRegression(double range) {
-        if (ShooterRegression.kUseHoodAutoAimPolynomial) {
-            return ShooterRegression.kHoodAutoAimPolynomial.predict(range);
-        } else {
-            return ShooterRegression.kHoodAutoAimMap.getInterpolated(new InterpolatingDouble(range)).value;
+            return ShooterRegression.flywheelAutoAimMap.get(range);
         }
     }
 

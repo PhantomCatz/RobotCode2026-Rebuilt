@@ -8,8 +8,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -38,8 +40,8 @@ public class TurretConstants {
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
-	public static final Angle HOME_POSITION = Units.Degrees.of(180.0);
-    private static final int TURRET_MOTOR_ID = 12;
+	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
+    private static final int TURRET_MOTOR_ID = 25;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
 
@@ -48,6 +50,9 @@ public class TurretConstants {
 
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
+
+	public static final Translation2d TURRET_CENTER = new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5));
+	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_CENTER.getNorm());
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -74,6 +79,11 @@ public class TurretConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = TURRET_MAX.in(Units.Rotations);
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = TURRET_MIN.in(Units.Rotations);
 
 		FXConfig.Feedback.SensorToMechanismRatio = 42.5;
 
