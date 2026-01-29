@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 public class LimelightConstants {
 
@@ -20,12 +20,12 @@ public class LimelightConstants {
 	// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
 	public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
 		new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
-			new Pose3d(new Translation3d(edu.wpi.first.math.util.Units.inchesToMeters(0), edu.wpi.first.math.util.Units.inchesToMeters(0), edu.wpi.first.math.util.Units.inchesToMeters(21.0)), new Rotation3d(edu.wpi.first.math.util.Units.degreesToRadians(3.0), edu.wpi.first.math.util.Units.degreesToRadians(12.0), edu.wpi.first.math.util.Units.degreesToRadians(165.0)))
+			new Pose3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(21.0)), new Rotation3d(Units.degreesToRadians(3.0), Units.degreesToRadians(12.0), Units.degreesToRadians(165.0)))
 		))
 	};
 
-	public static final Translation2d TURRET_CENTER = new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5)); //TODO Fill out
-	public static final Distance TURRET_RADIUS = Units.Inches.of(9.0); //TODO Fill out
+	public static final Translation2d TURRET_CENTER = new Translation2d(Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5)); //TODO Fill out
+	public static final Distance TURRET_RADIUS = edu.wpi.first.units.Units.Inches.of(9.0); //TODO Fill out
 
 	public static class LimelightConfig {
 		public String name = "no-name-assigned";
@@ -42,5 +42,5 @@ public class LimelightConstants {
 
 	//TODO Use this instead of vision shift for auto aim
 	public static final int agreedTranslationUpdatesThreshold = 100;
-	public static final Distance agreedTranslationUpdateEpsilon = Units.Centimeters.of(10.0);
+	public static final Distance agreedTranslationUpdateEpsilon = edu.wpi.first.units.Units.Centimeters.of(10.0);
 }

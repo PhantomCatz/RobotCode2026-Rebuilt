@@ -41,8 +41,6 @@ public class RobotContainer {
 
 
     //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
-    xboxDrv.x().onTrue(superstructure.SlapDown());
-    xboxDrv.y().onTrue(superstructure.IntakeOn());
     xboxDrv.a().onTrue(CatzIntakeRoller.Instance.followSetpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
 
   }
