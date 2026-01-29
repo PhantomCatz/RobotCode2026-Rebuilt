@@ -135,33 +135,7 @@ public class CatzLED extends VirtualSubsystem {
   @Override
   public void periodic() {
     // Update alliance color
-    if (DriverStation.isDSAttached()) {
-      alliance = DriverStation.getAlliance();
-      allianceColor =
-          alliance
-              .map(alliance -> alliance == Alliance.Blue ? Color.kAqua : Color.kOrangeRed)
-              .orElse(Color.kPurple);
-      secondaryDisabledColor = alliance.isPresent() ? Color.kYellow : Color.kBlack;
-    }
-
-    // Update auto state
-    if (DriverStation.isDisabled()) {
-
-    } else {
-      lastEnabledAuto = DriverStation.isAutonomous();
-      lastEnabledTime = Timer.getFPGATimestamp();
-    }
-
-    // Update estop state
-    if (DriverStation.isEStopped()) {
-      estopped = true;
-    }
-
-    // Exit during initial cycles
-    loopCycleCount += 1;
-    if (loopCycleCount < minLoopCycleCount) {
-      return;
-    }
+    rainbowElevator(rainbowCycleLength, rainbowDuration);
 
     // Stop loading notifier if running
     loadingNotifier.stop();

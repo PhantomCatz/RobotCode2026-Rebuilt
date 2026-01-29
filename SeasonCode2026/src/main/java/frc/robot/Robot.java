@@ -24,6 +24,7 @@ import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
 import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
@@ -145,6 +146,8 @@ public class Robot extends LoggedRobot {
       Notifier.setHALThreadPriority(false, 0);
       System.out.println("Starting deteciton threaadf==================");
       coralDetectionThread.startPeriodic(0.1);
+
+      System.out.println("Initializing LED: " + CatzLED.Instance);
   }
 
   @Override
