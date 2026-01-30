@@ -1,6 +1,5 @@
 package frc.robot.CatzSubsystems;
 
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -32,8 +31,7 @@ public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
     private final CommandXboxController xboxTest = new CommandXboxController(1);
     private final CommandXboxController xboxDrv = new CommandXboxController(0);
-    //NOTE use suppliers instead of creating two different objects
-
+    // NOTE use suppliers instead of creating two different objects
 
     private CatzSuperstructure() {
     }
@@ -52,57 +50,57 @@ public class CatzSuperstructure {
     }
 
     public Command turretManualTrackCommand() {
-        // return CatzTurret.Instance.setpointCommand(Setpoint.withDutyCycleSetpoint(0.1));
-        // return CatzTurret.Instance.setpointCommand(Setpoint.withPositionSetpoint(Units.Degrees.of(90.0)));
-        // return CatzTurret.Instance.setpointCommand(Setpoint.withVelocitySetpoint(1.0));
+        // return
+        // CatzTurret.Instance.setpointCommand(Setpoint.withDutyCycleSetpoint(0.1));
+        // return
+        // CatzTurret.Instance.setpointCommand(Setpoint.withPositionSetpoint(Units.Degrees.of(90.0)));
+        // return
+        // CatzTurret.Instance.setpointCommand(Setpoint.withVelocitySetpoint(1.0));
         return CatzTurret.Instance.followSetpointCommand(() -> {
 
-                double input = xboxTest.getLeftY();
+            double input = xboxTest.getLeftY();
 
-                return Setpoint.withVoltageSetpoint(input);
-            }
-        );
+            return Setpoint.withVoltageSetpoint(input);
+        });
         // return CatzTurret.Instance.followSetpointCommand(() -> {
-        //     double input = xboxTest.getLeftY() * 5;
-        //     Logger.recordOutput("Xbox Inputted", input);
-        //     return Setpoint.withVoltageSetpoint(input);
+        // double input = xboxTest.getLeftY() * 5;
+        // Logger.recordOutput("Xbox Inputted", input);
+        // return Setpoint.withVoltageSetpoint(input);
         // });
     }
 
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT)
-                // CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
+        // CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
         );
     }
 
     // public Command intakeDeployManualCommand(){
-    //     return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
-    //         double input = -xboxTest.getLeftY() * 3;
-    //         Logger.recordOutput("Xbox Input", input);
-    //         return Setpoint.withVoltageSetpoint(input);
-    //     });
+    // return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+    // double input = -xboxTest.getLeftY() * 3;
+    // Logger.recordOutput("Xbox Input", input);
+    // return Setpoint.withVoltageSetpoint(input);
+    // });
     // }
 
-    public Command startIndexers(){
+    public Command startIndexers() {
         return Commands.parallel(
-            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
-            CatzYdexer.Instance.setpointCommand(() -> Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()))
-        );
+                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
+                CatzYdexer.Instance.setpointCommand(() -> Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get())));
     }
 
-    public Command stopIndexers(){
+    public Command stopIndexers() {
         return Commands.parallel(
-            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
-        );
+                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
+                CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF));
     }
 
-    public Command stopAllShooting(){
+    public Command stopAllShooting() {
         return hoodFlywheelStowCommand().alongWith(stopIndexers());
     }
 
-    public Command flywheelManualCommand(){
+    public Command flywheelManualCommand() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
             double input = (xboxDrv.getLeftY()) * 8;
             Logger.recordOutput("Xbox Voltage Input", input);
@@ -110,7 +108,7 @@ public class CatzSuperstructure {
         });
     }
 
-    public Command hoodManualCommand(){
+    public Command hoodManualCommand() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
@@ -118,12 +116,11 @@ public class CatzSuperstructure {
         });
     }
 
-
-    public Command IntakeOn(){
+    public Command IntakeOn() {
         return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.H_SETPOINT);
     }
 
-    public Command IntakeOff(){
+    public Command IntakeOff() {
         return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT);
     }
 
@@ -145,16 +142,21 @@ public class CatzSuperstructure {
         double targetRads = hubDirection.getAngle().getRadians()
                 - fieldToRobot.getRotation().getRadians();
         // if(DriverStation.getAlliance().get() == Alliance.Red){
-        //     targetRads -= Math.PI;
+        // targetRads -= Math.PI;
         // }
-        double currentRads = CatzTurret.Instance.getPosition() * 2*Math.PI;
-        // Logger.recordOutput("Turret Current Location", fieldToTurret.rotateBy(Rotation2d.fromRadians(currentRads)));
-        // Logger.recordOutput("Turret Target Location", fieldToTurret.rotateBy(Rotation2d.fromRadians(targetRads)));
+        double currentRads = CatzTurret.Instance.getPosition() * 2 * Math.PI;
+        // Logger.recordOutput("Turret Current Location",
+        // fieldToTurret.rotateBy(Rotation2d.fromRadians(currentRads)));
+        // Logger.recordOutput("Turret Target Location",
+        // fieldToTurret.rotateBy(Rotation2d.fromRadians(targetRads)));
         double angleError = targetRads - currentRads;
         angleError = MathUtil.angleModulus(angleError);
-        // Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
-        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads)); //TODO PUT THE WRAPPING BACK
-        // return Setpoint.withMotionMagicSetpoint(Units.Radians.of(currentRads+angleError)); THIS IS THE NO WRAP
+        // Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads /
+        // (2*Math.PI));
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads)); // TODO PUT THE WRAPPING BACK
+        // return
+        // Setpoint.withMotionMagicSetpoint(Units.Radians.of(currentRads+angleError));
+        // THIS IS THE NO WRAP
     }
 
     public Setpoint calculateHubTrackingSetpointNoOffset() {
@@ -162,8 +164,50 @@ public class CatzSuperstructure {
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToRobot.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
                 - MathUtil.angleModulus(fieldToRobot.getRotation().getRadians());
-        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2*Math.PI));
+        Logger.recordOutput("Turret Calculate Commanded Setpoint", targetRads / (2 * Math.PI));
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
+
+    /**
+     * Calculates the required velocity vector for the shooter flywheel/turret
+     * to compensate for the indexer feed velocity.
+     * * @return Translation2d where x/y represents the shooter's velocity vector
+     * (in RPS) relative to the robot.
+     */
+    public Translation2d calculateShootingVector() {
+        // 1. Get positions
+        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d fieldToTurret = fieldToRobot.transformBy(TurretConstants.TURRET_OFFSET);
+
+        // 2. Calculate the vector pointing to the Hub
+        Translation2d robotToHubVec = FieldConstants.HUB_LOCATION.minus(fieldToTurret.getTranslation());
+
+        // 3. Determine the "Goal Magnitude" (Total Exit Velocity Needed)
+        // The regression gives the Flywheel RPS needed for a straight shot.
+        // The ACTUAL ball speed in that test was (Flywheel_RPS + Feeder_Speed).
+        double regressionRPS = getShooterSetpointFromRegression(robotToHubVec.getNorm());
+        double feederSpeedRPS = FlywheelConstants.VDEXER_FEED_COMPENSATION.getNorm();
+        double totalRequiredSpeed = regressionRPS + feederSpeedRPS;
+
+        // 4. Create the Goal Vector (Robot Relative)
+        // This represents the path the ball must take through the air.
+        // We take the direction to the hub (rotated to be robot-relative) and scale it
+        // to the totalRequiredSpeed.
+        Translation2d goalVector = robotToHubVec
+                .rotateBy(fieldToRobot.getRotation().unaryMinus()) // Transform Field -> Robot
+                .div(robotToHubVec.getNorm()) // Normalize to unit vector
+                .times(totalRequiredSpeed); // Scale to the physics-true speed
+
+        // 5. Get the Feeder Vector (Robot Relative)
+        // This is the bias we need to cancel out.
+        Translation2d feedVector = FlywheelConstants.VDEXER_FEED_COMPENSATION;
+
+        // 6. Calculate the Shoot Vector
+        // The Law of Velocities: V_goal = V_shooter + V_feed
+        // Therefore: V_shooter = V_goal - V_feed
+        Translation2d shootVector = goalVector.minus(feedVector);
+
+        return shootVector;
     }
 
     // interpolates distance to target for shooter setpoint along regression
