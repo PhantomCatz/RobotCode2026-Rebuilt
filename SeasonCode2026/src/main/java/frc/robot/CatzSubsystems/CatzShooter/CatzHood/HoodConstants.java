@@ -55,8 +55,6 @@ public class HoodConstants {
         FXConfig.MotionMagic.MotionMagicAcceleration = 500.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
 
-
-
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
@@ -68,6 +66,11 @@ public class HoodConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = HOOD_MAX_POS.in(Units.Rotations);
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = HOOD_ZERO_POS.in(Units.Rotations);
 
 		FXConfig.Feedback.SensorToMechanismRatio = 184 / 10.0; //10.0 / 184.0 / 0.015267 * 5514.2857; //TODO dont use magic number
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

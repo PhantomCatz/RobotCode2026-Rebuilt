@@ -36,8 +36,8 @@ public class CatzSuperstructure {
 
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
-                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT)
-        // CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
+                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
         );
     }
 

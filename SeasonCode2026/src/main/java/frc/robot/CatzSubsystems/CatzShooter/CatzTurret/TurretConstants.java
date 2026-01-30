@@ -29,10 +29,6 @@ public class TurretConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-	public static final Transform2d TURRET_OFFSET = new Transform2d( edu.wpi.first.math.util.Units.inchesToMeters(-4.0),  edu.wpi.first.math.util.Units.inchesToMeters(9.5), new Rotation2d()){
-
-	};
-
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
     private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
     private static final LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", gains.kD());
@@ -51,8 +47,8 @@ public class TurretConstants {
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
-	public static final Translation2d TURRET_CENTER = new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(4.0),  edu.wpi.first.math.util.Units.inchesToMeters(-9.5));
-	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_CENTER.getNorm());
+	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-4.0).in(Units.Meters),  Units.Inches.of(9.5).in(Units.Meters));
+	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_OFFSET.getNorm());
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

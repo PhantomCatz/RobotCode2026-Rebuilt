@@ -7,6 +7,7 @@ import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.PolynomialRegression;
+import frc.robot.Utilities.Setpoint;
 
 public class ShooterRegression {
     //shooter
@@ -77,6 +78,10 @@ public class ShooterRegression {
         double angle = HOOD_ANGLE_SLOPE * (distance.in(Units.Meters) - EpsilonRegression.CLOSEST_HOOD_ANGLE[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE[1];
         return MathUtil.clamp(angle, HoodConstants.HOOD_ZERO_POS.in(Units.Degrees), HoodConstants.HOOD_MAX_POS.in(Units.Degrees));
     }
+    
+    public static Setpoint getHoodSetpoint(Distance distance){
+        return Setpoint.withMotionMagicSetpoint(Units.Degrees.of(getHoodAngle(distance)));
+    }
 
     /**
      * Calculates the hood angle using the live TunableNumbers from the dashboard.
@@ -103,5 +108,14 @@ public class ShooterRegression {
      */
     public static double getHoodAngleTunable() {
         return getHoodAngleTunable(Units.Meters.of(TUNABLE_DIST.get()));
+    }
+
+    // interpolates distance to target for shooter setpoint along regression
+    public static double getShooterRPSFromRegression(double range) {
+        if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
+            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
+        } else {
+            return ShooterRegression.flywheelAutoAimMap.get(range);
+        }
     }
 }

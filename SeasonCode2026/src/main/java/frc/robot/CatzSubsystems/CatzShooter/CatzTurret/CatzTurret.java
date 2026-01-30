@@ -4,12 +4,15 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
 
@@ -47,19 +50,17 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
      */
     public Setpoint calculateWrappedSetpoint(Angle target){
         double targetRads = target.in(Units.Radians);
-        double minLegalRads = TurretConstants.TURRET_MIN.in(Units.Radians);
-        double maxLegalRads = TurretConstants.TURRET_MAX.in(Units.Radians);
 
         targetRads = MathUtil.angleModulus(targetRads);
-        Logger.recordOutput("Turret Target Position", targetRads / (2*Math.PI));
 
         return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
 
-    // public Command runthefreakingmotor() {
-    //     return runOnce(() -> io.runMotor());
-    // }
-
+    public Translation2d getFieldToTurret(){
+        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        return fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(fieldToRobot.getRotation()));
+    }
+    
     private static TurretIO getIOInstance(){
         if (CatzConstants.TurretOn == false) {
             System.out.println("Turret Disabled by CatzConstants");

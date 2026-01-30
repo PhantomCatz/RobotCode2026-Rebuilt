@@ -106,7 +106,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
             new Rotation2d(turretAngle)
         );
 
-        Translation2d limelightPositionOnRobot = TurretConstants.TURRET_CENTER
+        Translation2d limelightPositionOnRobot = TurretConstants.TURRET_OFFSET
             .plus(limelightOffsetFromTurretCenter);
 
         double deltaTurretAngle = turretAngle.in(Units.Radians) - TurretConstants.HOME_POSITION.in(Units.Radians);
