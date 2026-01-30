@@ -9,7 +9,6 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
-import frc.robot.CatzSubsystems.CatzTurret.TurretIOInputsAutoLogged;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{

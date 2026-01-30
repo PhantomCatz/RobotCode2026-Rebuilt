@@ -3,7 +3,6 @@ package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzIntakeDeploy.IntakeDeployIOInputsAutoLogged;
 
 public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, IntakeDeployIO.IntakeDeployIOInputs>{
 

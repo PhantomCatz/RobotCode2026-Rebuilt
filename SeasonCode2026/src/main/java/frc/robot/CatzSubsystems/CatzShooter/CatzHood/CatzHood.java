@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzHood;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzHood.HoodIOInputsAutoLogged;
 
 public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
 

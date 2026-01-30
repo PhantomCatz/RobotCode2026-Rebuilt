@@ -3,7 +3,6 @@ package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzIntakeRoller.IntakeRollerIOInputsAutoLogged;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, IntakeRollerIO.IntakeRollerIOInputs>{
