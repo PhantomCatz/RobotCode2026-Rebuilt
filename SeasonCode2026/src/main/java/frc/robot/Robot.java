@@ -15,15 +15,16 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
-import frc.robot.CatzSubsystems.SubystemVisualizer;
+import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
@@ -139,6 +140,11 @@ public class Robot extends LoggedRobot {
 
       DriverStation.silenceJoystickConnectionWarning(true);
 
+      System.out.println("Initializing " + Detection.Instance.getName());
+      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      Notifier.setHALThreadPriority(false, 0);
+      System.out.println("Starting deteciton threaadf==================");
+      coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override
@@ -161,7 +167,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();//AutoRoutineSelector.Instance.getSelectedCommand();
+    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
