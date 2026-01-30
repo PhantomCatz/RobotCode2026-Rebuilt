@@ -2,12 +2,11 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -50,6 +49,10 @@ public class TurretConstants {
 	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-4.0).in(Units.Meters),  Units.Inches.of(9.5).in(Units.Meters));
 	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_OFFSET.getNorm());
 
+	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
+	public static final double CANCODER_OFFSET = -0.272; //in rotations
+	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
+
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
@@ -83,7 +86,7 @@ public class TurretConstants {
 
 		FXConfig.Feedback.SensorToMechanismRatio = 42.5;
 
-		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; 
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;

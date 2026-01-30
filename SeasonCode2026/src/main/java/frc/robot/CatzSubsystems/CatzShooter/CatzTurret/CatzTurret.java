@@ -3,6 +3,9 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -30,7 +33,13 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     private CatzTurret(){
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
-        setCurrentPosition(TurretConstants.HOME_POSITION);
+
+        MagnetSensorConfigs magConfig = new MagnetSensorConfigs();
+        magConfig.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        TurretConstants.TURRET_CANCODER.getConfigurator().apply(magConfig);
+
+        double CAN_ABS_POS = TurretConstants.TURRET_CANCODER.getPosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO - TurretConstants.CANCODER_OFFSET;
+        setCurrentPosition(Units.Rotations.of(CAN_ABS_POS));
     }
 
     public static final CatzTurret Instance = new CatzTurret();
@@ -38,8 +47,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     @Override
     public void periodic(){
         super.periodic();
-        Logger.recordOutput("Turret Commanded Setpoint", setpoint.baseUnits / (2*Math.PI));
-
+        Logger.recordOutput("Turret/ Commanded Setpoint", setpoint.baseUnits / (2*Math.PI));
+        Logger.recordOutput("Turret/ CANCoder Absolute Rotations", TurretConstants.TURRET_CANCODER.getPosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO);
 
     }
 
@@ -60,7 +69,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
         return fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(fieldToRobot.getRotation()));
     }
-    
+
     private static TurretIO getIOInstance(){
         if (CatzConstants.TurretOn == false) {
             System.out.println("Turret Disabled by CatzConstants");

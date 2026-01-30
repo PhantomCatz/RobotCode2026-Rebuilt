@@ -78,7 +78,7 @@ public class ShooterRegression {
         double angle = HOOD_ANGLE_SLOPE * (distance.in(Units.Meters) - EpsilonRegression.CLOSEST_HOOD_ANGLE[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE[1];
         return MathUtil.clamp(angle, HoodConstants.HOOD_ZERO_POS.in(Units.Degrees), HoodConstants.HOOD_MAX_POS.in(Units.Degrees));
     }
-    
+
     public static Setpoint getHoodSetpoint(Distance distance){
         return Setpoint.withMotionMagicSetpoint(Units.Degrees.of(getHoodAngle(distance)));
     }
