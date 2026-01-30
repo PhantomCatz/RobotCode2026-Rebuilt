@@ -14,17 +14,17 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.CatzSubsystems.CatzHood.CatzHood;
-import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
-import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {

@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzHood.CatzHood;
-import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.Setpoint;
 

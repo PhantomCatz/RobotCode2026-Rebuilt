@@ -9,8 +9,8 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
-import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.PolynomialRegression;
 
