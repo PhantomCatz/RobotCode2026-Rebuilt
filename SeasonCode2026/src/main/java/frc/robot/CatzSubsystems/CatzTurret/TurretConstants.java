@@ -22,12 +22,6 @@ import frc.robot.Utilities.Setpoint;
 public class TurretConstants {
 	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Units.Degrees.of(0.0));
 
-	public static final Setpoint no = Setpoint.withMotionMagicSetpoint(0);
-	public static final Setpoint alittle = Setpoint.withMotionMagicSetpoint(50);
-	public static final Setpoint alittelbackwrads = Setpoint.withMotionMagicSetpoint(-50);
-	public static final Setpoint WEEEEEE = Setpoint.withMotionMagicSetpoint(135);
-	public static final Setpoint backwordsbeastmode = Setpoint.withMotionMagicSetpoint(-135);
-
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN_MANTA -> new Gains(100.0, 0.0, 0.00, 0.22, 4.8, 0.0, 0.0); // kd 0.05
@@ -53,9 +47,6 @@ public class TurretConstants {
 
 	public static final Angle TURRET_MAX = Units.Degrees.of(180);
 	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
-
-
-	public static final int NUM_OF_FULL_ROT = 1;
 
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
