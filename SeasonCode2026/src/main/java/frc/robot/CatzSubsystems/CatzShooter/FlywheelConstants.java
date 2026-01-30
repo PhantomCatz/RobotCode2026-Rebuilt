@@ -16,7 +16,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class FlywheelConstants {
-	public static final Setpoint OFF_SETPOINT = Setpoint.withVelocitySetpoint(0.0);
+	public static final Setpoint OFF_SETPOINT = Setpoint.withDutyCycleSetpoint(0.0);
 	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpoint(60.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
@@ -65,7 +65,7 @@ public class FlywheelConstants {
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		return FXConfig;
 	}

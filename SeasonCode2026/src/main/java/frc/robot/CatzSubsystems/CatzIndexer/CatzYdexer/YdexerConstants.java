@@ -32,6 +32,11 @@ public class YdexerConstants {
 
     private static final int YDEXER_MOTOR_ID = 50;
 
+	private static final double[][] FLYWHEEL_VS_VOLTS = {
+		//flywheel rps vs vdexer volts
+		{60, }
+	};
+
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();

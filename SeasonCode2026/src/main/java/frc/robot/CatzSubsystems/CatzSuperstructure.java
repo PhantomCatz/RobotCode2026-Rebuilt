@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
-import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -72,8 +71,8 @@ public class CatzSuperstructure {
 
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
-                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
-                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
+                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT)
+                // CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT)
         );
     }
 
@@ -88,7 +87,7 @@ public class CatzSuperstructure {
     public Command startIndexers(){
         return Commands.parallel(
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)
+            CatzYdexer.Instance.setpointCommand(() -> Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()))
         );
     }
 
