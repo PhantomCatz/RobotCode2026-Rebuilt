@@ -46,11 +46,6 @@ import org.littletonrobotics.junction.Logger;
 public class CatzDrivetrain extends SubsystemBase {
   public static final CatzDrivetrain Instance = new CatzDrivetrain();
 
-  private double distanceError = 999999.9; //meters
-
-  private Pose2d choreoGoal = new Pose2d();
-  private double choreoDistanceError = 9999999.9; //meters //set this to a high number initially just in case the trajectory thinks it's at goal as soon as it starts
-
   // Gyro input/output interface
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
@@ -70,21 +65,9 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
 
-  // TODO Remmove this if we are not going to use it
-  // private SwerveSetpoint currentSetpoint =
-  //     new SwerveSetpoint(
-  //         new ChassisSpeeds(),
-  //         new SwerveModuleState[] {
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState()
-  //         });
-  // private final SwerveSetpointGenerator swerveSetpointGenerator;
-
   private final Field2d field;
 
-  private Pose2d pidGoalPose = new Pose2d();
+  public double timeToReachTrench = 0.0;
 
   private CatzDrivetrain() {
 
@@ -120,38 +103,9 @@ public class CatzDrivetrain extends SubsystemBase {
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
-
-    // Logging callback for current robot pose
-    // PathPlannerLogging.setLogCurrentPoseCallback(
-    //     (pose) -> {
-    //       // Do whatever you want with the pose here
-    //       field.setRobotPose(pose);
-    //     });
-
-    // // Logging callback for target robot pose
-    // PathPlannerLogging.setLogTargetPoseCallback(
-    //     (pose) -> {
-    //       //Logger.recordOutput("Drive/targetPos", pose);
-    //       field.getObject("target pose").setPose(pose);
-    //     });
-
-    // // Logging callback for the active path, this is sent as a list of poses
-    // PathPlannerLogging.setLogActivePathCallback(
-    //     (poses) -> {
-    //       // Do whatever you want with the poses here
-    //       field.getObject("path").setPoses(poses);
-    //     });
   }
 
   Pose2d pose = new Pose2d();
-
-  public double getDistanceError(){
-    return distanceError;
-  }
-
-  public void setDistanceError(double d){
-    this.distanceError = d;
-  }
 
   @Override
   public void periodic() {
@@ -359,14 +313,6 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
-  public boolean closeEnoughToRaiseElevator(){
-    return choreoDistanceError <= DriveConstants.PREDICT_DISTANCE_SCORE;
-  }
-
-  public boolean closeEnoughToStartIntake(){
-    return choreoDistanceError <= DriveConstants.PREDICT_DISTANCE_INTAKE;
-  }
-
   /** command to cancel running auto trajectories */
   public Command cancelTrajectory() {
     Command cancel = new InstantCommand();
@@ -385,7 +331,6 @@ public class CatzDrivetrain extends SubsystemBase {
    */
   public void followChoreoTrajectoryInit(AutoTrajectory traj){
     hoController = DriveConstants.getNewHolController();
-    choreoGoal = traj.getFinalPose().get();
   }
 
   /**
@@ -405,14 +350,9 @@ public class CatzDrivetrain extends SubsystemBase {
     Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
-    choreoDistanceError = curPose.minus(choreoGoal).getTranslation().getNorm();
 
     Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
-  }
-
-  public boolean isRobotAtPoseChoreo(){
-    return choreoDistanceError <= AutonConstants.ACCEPTABLE_DIST_METERS;
   }
 
   // -----------------------------------------------------------------------------------------------------------
@@ -467,13 +407,5 @@ public class CatzDrivetrain extends SubsystemBase {
     return Arrays.stream(DriveConstants.MODULE_TRANSLATIONS)
         .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
         .toArray(Rotation2d[]::new);
-  }
-
-  public Pose2d getPIDGoalPose(){
-    return pidGoalPose;
-  }
-
-  public void setPIDGoalPose(Pose2d p){
-    this.pidGoalPose = p;
   }
 }

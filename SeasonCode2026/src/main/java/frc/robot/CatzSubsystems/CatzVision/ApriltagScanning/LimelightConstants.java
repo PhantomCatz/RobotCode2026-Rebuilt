@@ -42,6 +42,6 @@ public class LimelightConstants {
 	}
 
 	//TODO Use this instead of vision shift for auto aim
-	public static final int agreedTranslationUpdatesThreshold = 100;
-	public static final Distance agreedTranslationUpdateEpsilon = Units.Centimeters.of(10.0);
+	public static final int agreedTranslationUpdatesThreshold = 10;
+	public static final Distance agreedTranslationUpdateEpsilon = Units.Centimeters.of(4.0);
 }

@@ -22,7 +22,6 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"3.627091884613037 m", "val":3.627091884613037}, "y":{"exp":"5.223577499389648 m", "val":5.223577499389648}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":0, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.627091884613037 m", "val":3.627091884613037}, "y":{"exp":"5.223577499389648 m", "val":5.223577499389648}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":23, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"0.7850856781005859 m", "val":0.7850856781005859}, "y":{"exp":"5.88740348815918 m", "val":5.88740348815918}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":22, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"2.1127381324768066 m", "val":2.112738132476806}, "y":{"exp":"3.7714574337005615 m", "val":3.7714574337005615}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":26, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
@@ -33,10 +32,10 @@
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"-82.9782634973526 mm", "val":-0.0829782634973526}, "y":{"exp":"238.41857910156247 nm", "val":2.384185791015625e-7}, "w":{"exp":"16.541 m", "val":16.541}, "h":{"exp":"8.0692 m", "val":8.0692}}}, "enabled":true},
-    {"from":2, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
-    {"from":2, "to":4, "data":{"type":"KeepOutCircle", "props":{"x":{"exp":"0.49786972999572754 m", "val":0.49786972999572754}, "y":{"exp":"3.692533642053604 m", "val":3.692533642053604}, "r":{"exp":"1 m", "val":1.0}}}, "enabled":true},
-    {"from":5, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
-    {"from":4, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
+    {"from":1, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":1, "to":3, "data":{"type":"KeepOutCircle", "props":{"x":{"exp":"0.49786972999572754 m", "val":0.49786972999572754}, "y":{"exp":"3.692533642053604 m", "val":3.692533642053604}, "r":{"exp":"1 m", "val":1.0}}}, "enabled":true},
+    {"from":4, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":3, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
   "targetDt":{
    "exp":"0.05 s",
    "val":0.05
@@ -180,10 +179,10 @@
   "splits":[0,0,23,45,71,96]
  },
  "events":[
-   {"name":"Score", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake", "from":{"target":2, "targetTimestamp":1.13929, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Score", "from":{"target":2, "targetTimestamp":1.13929, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake", "from":{"target":4, "targetTimestamp":2.97171, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Score", "from":{"target":4, "targetTimestamp":2.97171, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Climb", "from":{"target":5, "targetTimestamp":4.21104, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}}]
+   {"name":"Score", "from":{"target":null, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Intake", "from":{"target":1, "targetTimestamp":1.13929, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Score", "from":{"target":1, "targetTimestamp":1.13929, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Intake", "from":{"target":3, "targetTimestamp":2.97171, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Score", "from":{"target":3, "targetTimestamp":2.97171, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Climb", "from":{"target":4, "targetTimestamp":4.21104, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}}]
 }

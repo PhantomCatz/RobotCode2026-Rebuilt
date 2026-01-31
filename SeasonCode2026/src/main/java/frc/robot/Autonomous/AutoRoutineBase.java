@@ -41,6 +41,10 @@ public class AutoRoutineBase {
                              );
     }
 
+    protected Command trajectoryToObjectDetection() {
+        
+    }
+
     private boolean isAtPose(AutoTrajectory trajectory){
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
