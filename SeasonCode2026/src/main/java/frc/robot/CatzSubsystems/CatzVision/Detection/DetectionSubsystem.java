@@ -66,7 +66,7 @@ public class DetectionSubsystem extends SubsystemBase {
 	 */
 	public Pose2d getCoralTranslationAndPoint() {
 		Translation2d t = getCoralPose().getTranslation();
-		Rotation2d r = t.minus(CatzRobotTracker.Instance.getEstimatedPose().getTranslation()).getAngle();
+		Rotation2d r = t.minus(CatzRobotTracker.getInstance().getEstimatedPose().getTranslation()).getAngle();
 		// LogUtil.recordPose2d("Detection PID/Coral Translation And Point", new Pose2d(t, r));
 		return new Pose2d(t, r);
 	}

@@ -14,18 +14,18 @@ import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
-  private final CatzDrivetrain drivetrain = CatzDrivetrain.Instance;
+  private final CatzDrivetrain drivetrain = CatzDrivetrain.getInstance();
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
 
   public RobotContainer() {
     System.out.println("Drivetrain in RC = " + drivetrain);
-    System.out.println("Drivetrain.Instance = " + CatzDrivetrain.Instance);
+    System.out.println("Drivetrain.Instance = " + CatzDrivetrain.getInstance());
     configureBindings();
   }
 
   private void configureBindings() {
-    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), drivetrain));
+    CatzDrivetrain.getInstance().setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), drivetrain));
 
     // xboxDrv.a().onTrue(superstructure.turretTrackCommand());
     // xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
@@ -41,7 +41,7 @@ public class RobotContainer {
     // xboxDrv.leftBumper().onTrue(superstructure.hoodTestCommand());
     // xboxDrv.rightBumper().onTrue(superstructure.applyShooterSetpoint());
 
-    xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(new Pose2d())));
+    xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(new Pose2d())));
 
   }
 

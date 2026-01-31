@@ -99,14 +99,14 @@ public class DetectionIOLimelight extends DetectionIO {
 		mStopwatch.startIfNotRunning();
 		if (pipelineToSet == LimelightHelpers.getCurrentPipelineIndex(config.name)) {
 			if (pipelineToSet == DetectionMode.AUTO.index) {
-				Translation2d base = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+				Translation2d base = CatzRobotTracker.getInstance().getEstimatedPose().getTranslation();
 				RawDetection[] all = LimelightHelpers.getRawDetections(config.name);
 				double latencyMs = LimelightHelpers.getLatency_Capture(config.name) + LimelightHelpers.getLatency_Pipeline(config.name);
 				Translation2d bestTranslation = null;
 				Pose2d bestCoralPose = null;
 				Pose2d bestGroupCoralPose = null;
 				double now = Timer.getFPGATimestamp(); // Account for latency in storing timestamp
-				Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
+				Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
 				POSE_BUFFER.addSample(now, curPose);
 				Optional<Pose2d> poseFromCapture = POSE_BUFFER.getSample(now - latencyMs/1000.0);
 				if (poseFromCapture != null && poseFromCapture.isEmpty()) {
@@ -223,7 +223,7 @@ public class DetectionIOLimelight extends DetectionIO {
 	public Pose2d getCoralPose() {
 		Translation2d bestTranslation = null;
 		Pose2d bestCoralPose = null;
-		Translation2d robotPose = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+		Translation2d robotPose = CatzRobotTracker.getInstance().getEstimatedPose().getTranslation();
 		for (Coral coral : tracker) {
 			if (bestTranslation == null
 					|| bestCoralPose.getTranslation().getDistance(robotPose)
@@ -286,7 +286,7 @@ public class DetectionIOLimelight extends DetectionIO {
 	}
 
 	private void updateGyro() {
-		Rotation2d theta = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
+		Rotation2d theta = CatzRobotTracker.getInstance().getEstimatedPose().getRotation();
 		LimelightHelpers.SetRobotOrientation(config.name, theta.getDegrees(), 0, 0, 0, 0, 0);
 	}
 
@@ -304,7 +304,7 @@ public class DetectionIOLimelight extends DetectionIO {
 			latestEstimate = poseEstimate.pose;
 			latestEstimateTime = edu.wpi.first.units.Units.Seconds.of(poseEstimate.timestampSeconds);
 			aprilTagPose.set(poseEstimate.pose);
-			CatzRobotTracker.Instance.addVisionObservation(
+			CatzRobotTracker.getInstance().addVisionObservation(
                 new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}

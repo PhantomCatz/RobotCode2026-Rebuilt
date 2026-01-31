@@ -97,7 +97,7 @@ public class CatzSuperstructure {
      * while respecting physical limits and minimizing movement
      */
     public Setpoint calculateHubTrackingSetpoint() {
-        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d robotPose = CatzRobotTracker.getInstance().getEstimatedPose();
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
                 - MathUtil.angleModulus(robotPose.getRotation().getRadians());

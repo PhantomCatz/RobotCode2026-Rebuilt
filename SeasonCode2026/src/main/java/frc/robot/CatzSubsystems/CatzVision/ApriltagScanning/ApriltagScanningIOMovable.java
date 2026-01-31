@@ -37,7 +37,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
 		if (poseEstimate.tagCount >= minTagNum) {
 			latestEstimate = poseEstimate.pose;
 			latestEstimateTime = Units.Seconds.of(poseEstimate.timestampSeconds);
-			CatzRobotTracker.Instance.addVisionObservation(
+			CatzRobotTracker.getInstance().addVisionObservation(
                 new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}
@@ -57,7 +57,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
 	}
 
     private void updateGyro() {
-		Rotation2d theta = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
+		Rotation2d theta = CatzRobotTracker.getInstance().getEstimatedPose().getRotation();
 		LimelightHelpers.SetRobotOrientation(config.name, theta.getDegrees(), 0, 0, 0, 0, 0);
 	}
 

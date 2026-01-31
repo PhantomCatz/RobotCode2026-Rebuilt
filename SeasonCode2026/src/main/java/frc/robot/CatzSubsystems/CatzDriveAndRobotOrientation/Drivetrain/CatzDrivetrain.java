@@ -43,7 +43,7 @@ import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
-  public static final CatzDrivetrain Instance = new CatzDrivetrain();
+  private static CatzDrivetrain Instance = new CatzDrivetrain();
 
   // Gyro input/output interface
   private final GyroIO gyroIO;
@@ -117,7 +117,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
     //Logger.recordOutput("Drive/DistanceError", distanceError);
 
-    pose = pose.interpolate(CatzRobotTracker.Instance.getEstimatedPose(), 0.05);
+    pose = pose.interpolate(CatzRobotTracker.getInstance().getEstimatedPose(), 0.05);
     //Logger.recordOutput("CatzRobotTracker/interlated pose", pose);
 
     // -----------------------------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ public class CatzDrivetrain extends SubsystemBase {
                                                     gyroAngle2d,
                                                     Timer.getFPGATimestamp()
                                           );
-    CatzRobotTracker.Instance.addOdometryObservation(observation);
+    CatzRobotTracker.getInstance().addOdometryObservation(observation);
 
     // Update current velocities use gyro when possible
     Twist2d robotRelativeVelocity = getTwist2dSpeeds();
@@ -160,7 +160,7 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroInputs.gyroConnected
             ? Math.toRadians(gyroInputs.gyroYawVel)
             : robotRelativeVelocity.dtheta;
-    CatzRobotTracker.Instance.addVelocityData(robotRelativeVelocity);
+    CatzRobotTracker.getInstance().addVelocityData(robotRelativeVelocity);
 
     // --------------------------------------------------------------
     // Logging
@@ -346,7 +346,7 @@ public class CatzDrivetrain extends SubsystemBase {
       0.0
     );
 
-    Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
+    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
 
@@ -407,4 +407,11 @@ public class CatzDrivetrain extends SubsystemBase {
         .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
         .toArray(Rotation2d[]::new);
   }
+  public static CatzDrivetrain getInstance() {
+    if (Instance == null) {
+      Instance = new CatzDrivetrain();
+    }
+    return Instance;
+  }
+
 }
