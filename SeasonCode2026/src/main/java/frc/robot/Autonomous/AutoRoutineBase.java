@@ -41,9 +41,9 @@ public class AutoRoutineBase {
                              );
     }
 
-    protected Command trajectoryToObjectDetection() {
-        
-    }
+    // protected Command trajectoryToObjectDetection() {
+
+    // }
 
     private boolean isAtPose(AutoTrajectory trajectory){
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);

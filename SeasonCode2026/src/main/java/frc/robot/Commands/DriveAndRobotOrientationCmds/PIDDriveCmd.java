@@ -58,7 +58,7 @@ public class PIDDriveCmd extends Command {
     public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy) {
         addRequirements(CatzDrivetrain.Instance);
         this.goalPos = goal;
-        
+
         this.REQUIRES_ACCURACY = requiresAccuracy;
         this.POSITION_TOLERANCE_METERS = 0.02;
         this.VELOCITY_TOLERANCE_MPS = 0.1;
@@ -78,7 +78,7 @@ public class PIDDriveCmd extends Command {
                 720.0);
         this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
         this.rotationController.enableContinuousInput(-180.0, 180.0);
-        
+
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PIDDriveCmd extends Command {
 
         double targetOmega = -Math.toRadians(rotationController.calculate(angleError, 0.0));
         ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
-        
+
         CatzDrivetrain.Instance.drive(goalChassisSpeeds);
 
         if(DriverStation.isAutonomous()){
@@ -112,7 +112,7 @@ public class PIDDriveCmd extends Command {
 
     @Override
     public boolean isFinished(){
-        boolean atTargetState = isAtTargetState(); 
+        boolean atTargetState = isAtTargetState();
         if(REQUIRES_ACCURACY){
             return  atTargetState && LimelightSubsystem.Instance.isSeeingApriltag() && CatzRobotTracker.Instance.getVisionPoseShift().getNorm() < ALLOWABLE_VISION_ADJUST;
         }else{
@@ -128,7 +128,7 @@ public class PIDDriveCmd extends Command {
         double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
 
         double rotationError = Math.abs(MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0));
-    
+
         return distanceError < POSITION_TOLERANCE_METERS &&
                linearVelocity < VELOCITY_TOLERANCE_MPS &&
                rotationError < ANGLE_TOLERANCE_DEGREES;

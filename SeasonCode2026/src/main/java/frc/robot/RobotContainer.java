@@ -14,6 +14,7 @@ import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
+  private final CatzDrivetrain drivetrain = CatzDrivetrain.Instance;
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
 
@@ -23,7 +24,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), drivetrain));
 
     // xboxDrv.a().onTrue(superstructure.turretTrackCommand());
     // xboxDrv.x().onTrue(superstructure.turretStowCommand().alongWith(superstructure.hoodFlywheelStowCommand()));
