@@ -48,6 +48,8 @@ public class TeleopDriveCmd extends Command {
 
     // subsystem assignment
     this.m_drivetrain = drivetrain;
+    System.out.println("TeleopDriveCmd drivetrain = " + drivetrain);
+
 
     addRequirements(this.m_drivetrain);
   }

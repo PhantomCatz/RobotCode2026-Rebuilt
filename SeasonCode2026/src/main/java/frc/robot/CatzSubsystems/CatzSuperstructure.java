@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -16,6 +17,7 @@ import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntake;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
@@ -26,8 +28,10 @@ import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
+    private final SubsystemVisualizer visualizer;
 
     private CatzSuperstructure() {
+        this.visualizer = new SubsystemVisualizer("SuperstructureViz");
     }
 
     public Command turretTrackCommand() {
@@ -123,5 +127,13 @@ public class CatzSuperstructure {
     // return
     // CatzFlywheels.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
     // }
+
+    public void UpdateSim() {
+        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzIntake.Instance.getPosition());
+        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getPosition());
+        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getPosition());
+
+        visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
+    }
 
 }

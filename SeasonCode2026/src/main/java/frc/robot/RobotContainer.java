@@ -19,7 +19,8 @@ public class RobotContainer {
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
 
   public RobotContainer() {
-
+    System.out.println("Drivetrain in RC = " + drivetrain);
+    System.out.println("Drivetrain.Instance = " + CatzDrivetrain.Instance);
     configureBindings();
   }
 
