@@ -23,25 +23,25 @@ public class LimelightConstants {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
-                    Inches.of(0.0).in(Meters),
-                    Inches.of(0.0).in(Meters),
+                    Inches.of(18.125).in(Meters),
+                    Inches.of(-5.0).in(Meters),
                     Inches.of(21.0).in(Meters)
                 ),
                 new Rotation3d(
-                    Degrees.of(3.0).in(Radians),
-                    Degrees.of(12.0).in(Radians),
-                    Degrees.of(165.0).in(Radians)
+                    Degrees.of(0.0).in(Radians),
+                    Degrees.of(20.0).in(Radians), // 12.0
+                    Degrees.of(0.0).in(Radians)
                 )
             )
         ))
     };
 
     public static final Translation2d TURRET_CENTER = new Translation2d(
-        Inches.of(4.0).in(Meters),
-        Inches.of(-9.5).in(Meters)
+        Inches.of(5.0).in(Meters),
+        Inches.of(5.0).in(Meters)
     );
 
-    public static final Distance TURRET_RADIUS = Inches.of(9.0);
+    public static final Distance TURRET_RADIUS = Inches.of(6.5);
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";
