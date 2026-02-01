@@ -58,7 +58,7 @@ public class CatzRobotTracker {
   private Pose2d odometryPose = new Pose2d();
 
   @Getter
-  private Pose2d estimatedPose = new Pose2d(8.0, 4.0, Rotation2d.k180deg);
+  private Pose2d estimatedPose = new Pose2d(8.0, 4.0, new Rotation2d());
   @Getter
   @AutoLogOutput(key = "CatzRobotTracker/TxTyPose")
   private Pose2d txTyPose = new Pose2d();
@@ -242,7 +242,7 @@ public class CatzRobotTracker {
   public void resetPose(Pose2d initialPose) {
     // System.out.println(initialPose.getRotation().getDegrees());
     estimatedPose = initialPose;
-    odometryPose = initialPose;
+  odometryPose = initialPose;
     POSE_BUFFER.clear();
   }
 

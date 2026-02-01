@@ -1,13 +1,12 @@
-package frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer;
+package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -15,38 +14,42 @@ import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
-public class YdexerConstants {
-	private static final Voltage ON_VOLTS = Units.Volts.of(12.0);
+public class IntakeDeployConstants {
 
-	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
-	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
+	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(3.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
+        case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("YDexer/Applied Volts", ON_VOLTS.in(Units.Volts));
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
+    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Deploy/kD", gains.kD());
+    public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
+    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
 
-    private static final int YDEXER_MOTOR_ID = 50;
+	private static final int INTAKE_DEPLOY_MOTOR_ID = 15;
 
-	private static final double[][] FLYWHEEL_VS_VOLTS = {
-		//flywheel rps vs vdexer volts
-		{60, }
-	};
+	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
+	public static final double GRAVITY_FEEDFORWARD = 2.5;
+	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
+
+
+	public static final Angle HOME_POSITION = Units.Degrees.of(-39.9);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
 		FXConfig.Slot0.kD = gains.kD();
 		FXConfig.Slot0.kS = gains.kS();
+		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 50.0;
-
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 1.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
@@ -60,8 +63,7 @@ public class YdexerConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.Feedback.SensorToMechanismRatio = 2.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -71,7 +73,7 @@ public class YdexerConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = YDEXER_MOTOR_ID;
+		IOConfig.mainID = INTAKE_DEPLOY_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()

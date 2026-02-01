@@ -15,7 +15,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -141,10 +140,10 @@ public class Robot extends LoggedRobot {
       DriverStation.silenceJoystickConnectionWarning(true);
 
       System.out.println("Initializing " + Detection.Instance.getName());
-      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
-      Notifier.setHALThreadPriority(false, 0);
-      System.out.println("Starting deteciton threaadf==================");
-      coralDetectionThread.startPeriodic(0.1);
+      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      // Notifier.setHALThreadPriority(false, 0);
+      // System.out.println("Starting deteciton threaadf==================");
+      // coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override
