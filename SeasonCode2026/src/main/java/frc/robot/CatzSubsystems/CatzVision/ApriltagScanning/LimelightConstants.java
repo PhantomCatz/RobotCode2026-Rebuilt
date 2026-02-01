@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 // Import the base Units class
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 
 // Static import the specific units we need to keep code clean
@@ -17,20 +16,20 @@ import static edu.wpi.first.units.Units.*;
 public class LimelightConstants {
 
     public static final int kEnabledPipeline = 0;
-    public static final int kDisabledPipeline = 1; 
+    public static final int kDisabledPipeline = 1;
     public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
-                    Inches.of(0.0).in(Meters), 
-                    Inches.of(0.0).in(Meters), 
+                    Inches.of(0.0).in(Meters),
+                    Inches.of(0.0).in(Meters),
                     Inches.of(21.0).in(Meters)
-                ), 
+                ),
                 new Rotation3d(
-                    Degrees.of(3.0).in(Radians), 
-                    Degrees.of(12.0).in(Radians), 
+                    Degrees.of(3.0).in(Radians),
+                    Degrees.of(12.0).in(Radians),
                     Degrees.of(165.0).in(Radians)
                 )
             )
@@ -38,9 +37,9 @@ public class LimelightConstants {
     };
 
     public static final Translation2d TURRET_CENTER = new Translation2d(
-        Inches.of(4.0).in(Meters), 
+        Inches.of(4.0).in(Meters),
         Inches.of(-9.5).in(Meters)
-    ); 
+    );
 
     public static final Distance TURRET_RADIUS = Inches.of(9.0);
 
