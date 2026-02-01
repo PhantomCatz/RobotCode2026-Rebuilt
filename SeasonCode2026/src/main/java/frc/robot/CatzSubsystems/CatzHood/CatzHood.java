@@ -32,6 +32,25 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
         setCurrentPosition(HoodConstants.HOOD_ZERO_POS);
     }
 
+    double p = 0.0;
+    double d = 0.0;
+    double s = 0.0;
+    double v = 0.0;
+    double g = 0.0;
+    @Override
+    public void periodic(){
+        super.periodic();
+
+        if(HoodConstants.kP.get() != p || HoodConstants.kD.get() != d || HoodConstants.kS.get() != s || HoodConstants.kV.get() != v || HoodConstants.kG.get() != g){
+            setPDSVGGains(HoodConstants.kP.get(), HoodConstants.kD.get(), HoodConstants.kS.get(), HoodConstants.kV.get(), HoodConstants.kG.get());
+            p = HoodConstants.kP.get();
+            d = HoodConstants.kD.get();
+            s = HoodConstants.kS.get();
+            v = HoodConstants.kV.get();
+            g = HoodConstants.kG.get();
+        }
+    }
+
     public static final CatzHood Instance = new CatzHood();
 
 }

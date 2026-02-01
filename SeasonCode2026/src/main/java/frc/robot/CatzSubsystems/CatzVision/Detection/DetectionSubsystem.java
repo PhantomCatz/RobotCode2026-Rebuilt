@@ -13,16 +13,14 @@ import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.L
 
 import org.littletonrobotics.junction.Logger;
 
-public class DetectionSubsystem extends SubsystemBase {
-	public static final DetectionSubsystem Instance = new DetectionSubsystem();
-
-	protected final DetectionIOLimelight io;
+public class DetectionSubsystem<IO extends DetectionIOLimelight> extends SubsystemBase implements Runnable {
+	protected final IO io;
 	private final LimelightConfig config;
 	private final DetectionIOInputsAutoLogged inputs = new DetectionIOInputsAutoLogged();
 
-	private DetectionSubsystem() {
-		this.io = DetectionConstants.getDetectionIO();
-		this.config = DetectionConstants.getDetectionIOConfig();
+	public DetectionSubsystem(LimelightConfig config, IO io) {
+		this.io = io;
+		this.config = config;
 		if (Robot.isReal()) {
 			LimelightHelpers.setCameraPose_RobotSpace(
 					config.name,
@@ -57,6 +55,14 @@ public class DetectionSubsystem extends SubsystemBase {
 	 */
 	public Pose2d getCoralPose() {
 		return io.getCoralPose();
+	}
+
+	public Pose2d getNearestGroupPose() {
+		return io.getNearestGroupPose();
+	}
+
+	public void setNearestGroupPose() {
+		io.setNearestGroupPose();
 	}
 
 	/**
@@ -94,5 +100,13 @@ public class DetectionSubsystem extends SubsystemBase {
 				config.name + "/Latest Pipeline Index",
 				() -> LimelightHelpers.getCurrentPipelineIndex(config.name),
 				null);
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			System.out.println("thread running");
+			setNearestGroupPose();
+		}
 	}
 }

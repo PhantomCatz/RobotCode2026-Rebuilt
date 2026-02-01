@@ -171,6 +171,10 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		setMainConfig(configChanger.apply(config));
 	}
 
+	public void changeAllConfig(UnaryOperator<TalonFXConfiguration> configChanger){
+		setAllConfig(configChanger.apply(config));
+	}
+
     @Override
 	public void setVoltageSetpoint(double voltage) {
 		setControl(requestGetter.getVoltageRequest(voltage));
@@ -183,7 +187,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setMotionMagicSetpoint(double mechanismPosition) {
-		System.out.println("Turret Position Commanded:" + mechanismPosition);
 		setControl(requestGetter.getMotionMagicRequest(mechanismPosition));
 	}
 
@@ -199,7 +202,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
-		System.out.println("goal pos:" + mechanismPosition);
 		setControl(requestGetter.getPositionRequest(mechanismPosition));
 	}
 
@@ -257,6 +259,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 	}
 
+	public void setAllConfig(TalonFXConfiguration configuration){
+		setMainConfig(configuration);
+		if(followerTalons != null && followerTalons.length != 0){
+			setFollowerConfig(configuration);
+		}
+	}
+
 	@Override
 	public void setGainsSlot0(double p, double i, double d, double s, double v, double a, double g) {
 		UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
@@ -270,7 +279,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 			return config;
 		};
 
-		changeMainConfig(configChanger);
+		changeAllConfig(configChanger);
 	}
 
 	@Override
