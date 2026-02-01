@@ -67,7 +67,7 @@ public class DriveConstants {
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
-        case SN1, SN2, BUBBLES ->
+        case SN1, SN2, BUBBLES, SN1_OLD ->
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,
@@ -135,10 +135,10 @@ public class DriveConstants {
         break;
 
         case SN1_OLD:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 9, -0.15454+0.5, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, 0.138183, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, -0.020507, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.2780761+0.5, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 9, 0.043701, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, -0.368164, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, -0.017822, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.58374, false);
         break;
 
         case SN2:

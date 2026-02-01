@@ -43,7 +43,7 @@ import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
-  private static CatzDrivetrain Instance = new CatzDrivetrain();
+  private static CatzDrivetrain Instance;
 
   // Gyro input/output interface
   private final GyroIO gyroIO;
