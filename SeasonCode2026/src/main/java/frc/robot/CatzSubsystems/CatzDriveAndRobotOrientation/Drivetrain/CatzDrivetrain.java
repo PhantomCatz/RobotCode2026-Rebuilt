@@ -25,8 +25,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
+import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 // import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
 import frc.robot.Autonomous.AutonConstants;
@@ -40,6 +42,7 @@ import java.util.Arrays;
 // import org.littletonrobotics.junction.Logger;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
@@ -211,7 +214,11 @@ public class CatzDrivetrain extends SubsystemBase {
     // --------------------------------------------------------------
     // Logging
     // --------------------------------------------------------------
-    SmartDashboard.putNumber("Heading", getGyroHeading());
+    // SmartDashboard.putNumber("Heading", getGyroHeading());
+    Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), Rotation2d.fromRotations(CatzTurret.Instance.getPosition()).plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()));
+    Logger.recordOutput("Shooter Location", turretPose);
+    double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
+    Logger.recordOutput("Distance from Hub", distFromHub);
     //Logger.recordOutput("Drive/Odometry module states", getModuleStates());
     //Logger.recordOutput("Drive/Odometry wheel positions", wheelPositions);
     //Logger.recordOutput("Drive/Odometry robot velocity", robotRelativeVelocity);

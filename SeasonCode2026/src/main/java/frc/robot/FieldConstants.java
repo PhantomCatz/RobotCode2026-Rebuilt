@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
 
 /**
@@ -22,11 +23,19 @@ public class FieldConstants {
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
-  // public static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376); THIS IS THE HUB LOCATION
-  public static final Translation2d HUB_LOCATION = new Translation2d(11.919516563415527, 0.6012147665023804 ); // TODO THIS IS NOT THE HUB LOCATION THIS IS THE APRILTAG 7 POSITION NEED TO CHANGE BACK
+  public static final Translation2d HUB_LOCATION = new Translation2d(11.934619903564453, 4.034599781036377);//new Translation2d(4.6256194, 4.0346376);
+  // public static final Translation2d HUB_LOCATION = new Translation2d(11.919516563415527, 0.6012147665023804 ); // TODO THIS IS NOT THE HUB LOCATION THIS IS THE APRILTAG 7 POSITION NEED TO CHANGE BACK
 
+  public static Translation2d getHubLocation(){
+    if(AllianceFlipUtil.shouldFlip()){
+      return HUB_LOCATION;
+    }else{
+      return HUB_LOCATION;
+    }
+  }
   @Getter
   public enum AprilTagLayoutType {
+
     OFFICIAL("2026-official");
 
     AprilTagLayoutType(String name) {

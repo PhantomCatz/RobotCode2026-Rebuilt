@@ -12,7 +12,7 @@ import frc.robot.Utilities.Setpoint;
 public class ShooterRegression {
     //shooter
     public static double kDefaultShootingRPM = 2950.0;
-    public static boolean kUseFlywheelAutoAimPolynomial = false;
+    public static boolean kUseFlywheelAutoAimPolynomial = true;
     public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MIN = new LoggedTunableNumber("Regression/hood angle min", EpsilonRegression.CLOSEST_HOOD_ANGLE[1]);
     public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MIN = new LoggedTunableNumber("Regression/hood dist min", EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
 

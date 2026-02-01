@@ -25,13 +25,14 @@ public class TurretConstants {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
         case SN_MANTA -> new Gains(100.0, 0.0, 0.00, 0.22, 4.8, 0.0, 0.0); // kd 0.05
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		case SN2 -> new Gains(203.0, 0.0, 9.0, 0.4, 4.8, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
-    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
-    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", gains.kD());
-    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Turret/kS", gains.kS());
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", gains.kP());
+    public static final LoggedTunableNumber kI = new LoggedTunableNumber("Turret/kI", gains.kI());
+    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", gains.kD());
+    public static final LoggedTunableNumber kS = new LoggedTunableNumber("Turret/kS", gains.kS());
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
@@ -43,14 +44,15 @@ public class TurretConstants {
 	public static final Angle TURRET_MAX = Units.Degrees.of(180);
 	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
 
-	public static final double ROBOT_OMEGA_FEEDFORWARD = 1.0;//25;
+	public static final LoggedTunableNumber omegaFF = new LoggedTunableNumber("Turret/omegaFF", 5.0);
+	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.3;//25;
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
-	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-4.0).in(Units.Meters),  Units.Inches.of(9.5).in(Units.Meters));
+	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(5.5).in(Units.Meters),  Units.Inches.of(5.5).in(Units.Meters));
 	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_OFFSET.getNorm());
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
-	public static final double CANCODER_OFFSET = -0.272; //in rotations
+	public static final double CANCODER_OFFSET = 0.077; //in rotations
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 
     public static final TalonFXConfiguration getFXConfig() {

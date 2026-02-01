@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 // Import the base Units class
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.Utilities.LoggedTunableNumber;
 
 // Static import the specific units we need to keep code clean
 import static edu.wpi.first.units.Units.*;
@@ -23,25 +24,37 @@ public class LimelightConstants {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
-                    Inches.of(18.125).in(Meters),
-                    Inches.of(-5.0).in(Meters),
-                    Inches.of(21.0).in(Meters)
+                    Inches.of(5.5).in(Meters),
+                    Inches.of(-1.25).in(Meters),
+                    Inches.of(19.75).in(Meters)
                 ),
                 new Rotation3d(
-                    Degrees.of(0.0).in(Radians),
-                    Degrees.of(20.0).in(Radians), // 12.0
+                    Degrees.of(180.0).in(Radians),
+                    Degrees.of(18.0).in(Radians), // 12.0
                     Degrees.of(0.0).in(Radians)
                 )
             )
         ))
     };
 
+    public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", 5.5);
+    public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
+    public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
+    public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
+    public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", 5.0);
+    public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
+    public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", -1.0);
+    public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.0);
+
+
     public static final Translation2d TURRET_CENTER = new Translation2d(
-        Inches.of(5.0).in(Meters),
-        Inches.of(5.0).in(Meters)
+        Inches.of(5.5).in(Meters),
+        Inches.of(5.5).in(Meters)
     );
 
-    public static final Distance TURRET_RADIUS = Inches.of(6.5);
+    public static final Translation2d LIMELIGHT_TO_TURRET = new Translation2d(Inches.of(0.25), Inches.of(-8.7));
+
+    public static final Distance TURRET_RADIUS = Inches.of(6.0);
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";

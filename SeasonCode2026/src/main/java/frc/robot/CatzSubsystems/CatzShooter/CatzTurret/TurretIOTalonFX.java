@@ -21,7 +21,7 @@ public class TurretIOTalonFX extends GenericTalonFXIOReal<TurretIO.TurretIOInput
         double timePassed = curTimestamp-prevTimestamp;
         double velDiff = curAngularVel-prevAngularVel;
         double accFeedforward = TurretConstants.ROBOT_ACCELERATION_FEEDFORWARD * velDiff/timePassed;
-        double velFeedforward = TurretConstants.ROBOT_OMEGA_FEEDFORWARD * curAngularVel;
+        double velFeedforward = -TurretConstants.omegaFF.get() * curAngularVel;
         prevAngularVel = curAngularVel;
         prevTimestamp = curTimestamp;
         leaderTalon.setControl(new MotionMagicVoltage(targetRot).withFeedForward(accFeedforward+velFeedforward));

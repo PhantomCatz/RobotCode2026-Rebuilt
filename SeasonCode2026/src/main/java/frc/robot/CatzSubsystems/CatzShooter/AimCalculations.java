@@ -35,19 +35,17 @@ public class AimCalculations {
      */
     public static Setpoint calculateHubTrackingSetpoint() {
         Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
-        Translation2d fieldToTurret = fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET);
-        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(fieldToTurret);
+
+        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(CatzTurret.Instance.getFieldToTurret());
 
         double targetRads = hubDirection.getAngle().getRadians()
                 - fieldToRobot.getRotation().getRadians();
         // if(DriverStation.getAlliance().get() == Alliance.Red){
         // targetRads -= Math.PI;
         // }
-        double currentRads = CatzTurret.Instance.getPosition() * 2 * Math.PI;
-        double angleError = targetRads - currentRads;
-        angleError = MathUtil.angleModulus(angleError);
 
-        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(currentRads + angleError));
+
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
     /**

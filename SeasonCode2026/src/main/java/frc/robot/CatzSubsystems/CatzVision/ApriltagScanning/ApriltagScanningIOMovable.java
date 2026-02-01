@@ -1,10 +1,14 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Time;
@@ -85,7 +89,8 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
     private void updateCameraOffset(){
         // System.out.println("update camera offset");
         Pose3d newCameraOffset = calculateCurrentCameraOffset();
-
+        Transform2d transform = new Transform2d(newCameraOffset.getX(), newCameraOffset.getY(), Rotation2d.fromRadians(newCameraOffset.getRotation().getZ()));
+        Logger.recordOutput("Turret Camera New Offset", CatzRobotTracker.Instance.getEstimatedPose().transformBy(transform));
         LimelightHelpers.setCameraPose_RobotSpace(
             config.name,
             newCameraOffset.getX(),
@@ -97,16 +102,20 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
         );
     }
 
+    private Pose3d cameraPose() {
+        return new Pose3d(new Translation3d(Units.Inches.of(LimelightConstants.forward.get()).in(Units.Meters),Units.Inches.of(LimelightConstants.leftward.get()).in(Units.Meters), Units.Inches.of(LimelightConstants.upward.get()).in(Units.Meters)), new Rotation3d(Units.Degrees.of(180.0).in(Units.Radians), Units.Degrees.of(LimelightConstants.pitch.get()).in(Units.Radians), Units.Degrees.of(0.0).in(Units.Radians)));
+    }
+
     private Pose3d calculateCurrentCameraOffset() {
-        Pose3d originalOffset = config.robotToCameraOffset;
+        Pose3d originalOffset = cameraPose();
         Angle turretAngle = Units.Rotations.of(CatzTurret.Instance.getPosition());
 
-        Translation2d limelightOffsetFromTurretCenter = new Translation2d(
-            TurretConstants.TURRET_RADIUS.in(Units.Meters),
-            new Rotation2d(turretAngle)
-        );
+        Translation2d limelightOffsetFromTurretCenter = new Translation2d(Units.Inches.of(LimelightConstants.limelightx.get()), Units.Inches.of(LimelightConstants.limelighty.get())).rotateBy(new Rotation2d(turretAngle));//new Translation2d(
+            //LimelightConstants.TURRET_RADIUS.in(Units.Meters),
+            //new Rotation2d(turretAngle)
+        //);
 
-        Translation2d limelightPositionOnRobot = TurretConstants.TURRET_OFFSET
+        Translation2d limelightPositionOnRobot = new Translation2d(Units.Inches.of(LimelightConstants.turretcenterx.get()), Units.Inches.of(LimelightConstants.turretcentery.get()))
             .plus(limelightOffsetFromTurretCenter);
 
         double deltaTurretAngle = turretAngle.in(Units.Radians) - TurretConstants.HOME_POSITION.in(Units.Radians);
