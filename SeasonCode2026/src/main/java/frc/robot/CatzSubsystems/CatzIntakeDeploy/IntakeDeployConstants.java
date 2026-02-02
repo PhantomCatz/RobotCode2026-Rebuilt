@@ -16,8 +16,9 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 
-	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(3.0);
-	public static final Setpoint Up = Setpoint.withMotionMagicSetpoint(Units.Degrees.of(60));
+	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
+	public static final Setpoint Zero = Setpoint.withVoltageSetpoint(0.0);
+	public static final Setpoint Sixty = Setpoint.withMotionMagicSetpoint(Units.Degrees.of(60));
 
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {

@@ -28,9 +28,11 @@ public class RobotContainer {
     // }));
     // xboxTest.b().onTrue(CatzHood.Instance.setpointCommand(()->Setpoint.withMotionMagicSetpoint(HoodConstants.adjustableHoodAngle.get()))
     //                     .alongWith(CatzFlywheels.Instance.setpointCommand(()->Setpoint.withVelocitySetpoint(FlywheelConstants.SHOOTING_RPS_TUNABLE.get()))));
-    xboxDrv.b().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> CatzIntakeRoller.Instance.toggleIntake()));
-    xboxDrv.a().onTrue(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.Up));
+    xboxDrv.a().onTrue(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.Zero));
+    xboxDrv.b().onTrue(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.Sixty));
     xboxDrv.y().onTrue(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.HoldDown));
+    xboxDrv.x().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> CatzIntakeRoller.Instance.toggleIntake()));
+
     // xboxTest.b().onTrue(superstructure.stopAllShooting());
 
 
