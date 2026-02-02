@@ -101,7 +101,7 @@ public class AimCalculations {
         // This angle includes the offset needed to fight the feeder's push.
         double targetRads = shootVector.getAngle().getRadians();
 
-        double currentRads = CatzTurret.Instance.getPosition() * 2 * Math.PI;
+        double currentRads = CatzTurret.Instance.getLatencyCompensatedPosition() * 2 * Math.PI;
 
         double angleError = targetRads - currentRads;
         angleError = MathUtil.angleModulus(angleError);

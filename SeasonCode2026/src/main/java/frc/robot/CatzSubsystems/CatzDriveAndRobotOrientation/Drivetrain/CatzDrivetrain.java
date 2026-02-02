@@ -215,7 +215,7 @@ public class CatzDrivetrain extends SubsystemBase {
     // Logging
     // --------------------------------------------------------------
     // SmartDashboard.putNumber("Heading", getGyroHeading());
-    Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), Rotation2d.fromRotations(CatzTurret.Instance.getPosition()).plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()));
+    Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition()).plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()));
     Logger.recordOutput("Shooter Location", turretPose);
     double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
     Logger.recordOutput("Distance from Hub", distFromHub);

@@ -24,12 +24,12 @@ public class LimelightConstants {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
-                    Inches.of(5.5).in(Meters),
-                    Inches.of(-1.25).in(Meters),
-                    Inches.of(19.75).in(Meters)
+                    Inches.of(0.25).in(Meters), //NOTE this offset is limelight's offset relative to the turret. 
+                    Inches.of(-6.5).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
+                    Inches.of(19.75).in(Meters) //This makes it easy to account for latency. 
                 ),
                 new Rotation3d(
-                    Degrees.of(180.0).in(Radians),
+                    Degrees.of(0.0).in(Radians),
                     Degrees.of(18.0).in(Radians), // 12.0
                     Degrees.of(0.0).in(Radians)
                 )
@@ -51,9 +51,6 @@ public class LimelightConstants {
         Inches.of(5.5).in(Meters),
         Inches.of(5.0).in(Meters)
     );
-
-    public static final Translation2d LIMELIGHT_TO_TURRET = new Translation2d(Inches.of(0.25), Inches.of(-6.5));
-
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";

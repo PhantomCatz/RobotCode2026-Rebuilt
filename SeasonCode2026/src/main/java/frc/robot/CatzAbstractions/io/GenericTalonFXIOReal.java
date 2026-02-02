@@ -134,7 +134,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 
-        inputs.position = internalPositionRotations.getValueAsDouble(); //TODO Constants should be ALL_CAPS // Yuyhun said that because we get it from constructor that it should be lowercase
+        inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
         inputs.velocityRPS = velocityRps.getValueAsDouble();
         inputs.accelerationRPS = acceleration.getValueAsDouble();
         inputs.appliedVolts = appliedVoltage.stream()

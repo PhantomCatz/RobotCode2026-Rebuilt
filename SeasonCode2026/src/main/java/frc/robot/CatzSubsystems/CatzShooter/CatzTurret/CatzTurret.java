@@ -9,8 +9,10 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
@@ -18,6 +20,11 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs>{
+
+    /**
+     * Angle history of the turret in radians
+     */
+    private final TimeInterpolatableBuffer<Double> angleHistory = TimeInterpolatableBuffer.createDoubleBuffer(1.5);
 
     private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
 
@@ -63,7 +70,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         Logger.recordOutput("Turret/ Commanded Setpoint", setpoint.baseUnits / (2*Math.PI));
         Logger.recordOutput("Turret/ CANCoder Absolute Rotations", TurretConstants.TURRET_CANCODER.getPosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO);
-
+        angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }
 
     /**
@@ -82,6 +89,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     public Translation2d getFieldToTurret(){
         Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
         return fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(fieldToRobot.getRotation()));
+    }
+
+    public double getAngleAtTime(double time){
+        return angleHistory.getSample(time).orElse(getLatencyCompensatedPosition()*2*Math.PI);
     }
 
     private static TurretIO getIOInstance(){

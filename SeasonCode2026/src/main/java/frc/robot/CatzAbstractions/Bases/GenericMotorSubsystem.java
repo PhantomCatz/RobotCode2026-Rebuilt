@@ -67,7 +67,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return Units.RotationsPerSecond.of(inputs.velocityRPS);
 	}
 
-	public double getPosition() {
+	public double getLatencyCompensatedPosition() {
 		return inputs.position;
 	}
 

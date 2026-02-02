@@ -15,6 +15,9 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
     public boolean isLeaderConnected = false;
     public boolean[] isFollowerConnected = new boolean[] {};
 
+    /**
+     * This position has latency compensation
+     */
     public double position = 0.0;
     public double velocityRPS = 0.0;
     public double accelerationRPS = 0.0;
