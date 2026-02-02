@@ -23,7 +23,7 @@ public class HoodConstants {
 	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_TEST_POS);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
+        case SN1 -> new Gains(35.0, 0.0, 3.0, 0.25, 1.4,0.0, 0.2);
         case SN2 -> new Gains(35.0, 0.0, 3.0, 0.25, 1.4,0.0, 0.2);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

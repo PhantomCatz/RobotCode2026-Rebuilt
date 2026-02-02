@@ -1,16 +1,10 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Time;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
@@ -52,10 +46,10 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     private void updateGyroWithTurret() {
         Rotation2d robotYaw = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
         Rotation2d turretYaw = Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition());
-        
+
         // Sum them to get the direction the "Camera Mount" structure is facing globally.
         double totalCameraHeading = robotYaw.plus(turretYaw).getDegrees();
-        
+
         // Send to Limelight (yaw is index 0). Set rates to 0.
         LimelightHelpers.SetRobotOrientation(config.name, totalCameraHeading, 0, 0, 0, 0, 0);
     }
@@ -70,7 +64,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
             double timestamp = poseEstimate.timestampSeconds;
 
             // --- LATENCY COMPENSATION LOGIC ---
-            
+
             // 1. The Pose Limelight gave us (Where the TURRET was)
             Pose2d turretPoseFieldSpace = poseEstimate.pose;
 
@@ -96,9 +90,9 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
 
             CatzRobotTracker.Instance.addVisionObservation(
                 new VisionObservation(
-                    config.name, 
+                    config.name,
                     robotPoseFieldSpace, // Use our corrected robot pose
-                    timestamp, 
+                    timestamp,
                     LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist)
                 )
             );

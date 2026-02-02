@@ -22,7 +22,7 @@ public class TurretConstants {
 	public static final Setpoint HOME_SETPOINT = Setpoint.withPositionSetpoint(Units.Degrees.of(0.0));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
+		case SN1 -> new Gains(203.0, 0.0, 9.0, 0.4, 4.8, 0.0, 0.0);
         case SN_MANTA -> new Gains(100.0, 0.0, 0.00, 0.22, 4.8, 0.0, 0.0); // kd 0.05
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		case SN2 -> new Gains(203.0, 0.0, 9.0, 0.4, 4.8, 0.0, 0.0);
