@@ -41,20 +41,19 @@ public class LimelightConstants {
     public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
     public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
     public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
-    public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", 5.0);
+    public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", 5.5);
     public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
-    public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", -1.0);
-    public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.0);
+    public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
+    public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5);
 
 
     public static final Translation2d TURRET_CENTER = new Translation2d(
         Inches.of(5.5).in(Meters),
-        Inches.of(5.5).in(Meters)
+        Inches.of(5.0).in(Meters)
     );
 
-    public static final Translation2d LIMELIGHT_TO_TURRET = new Translation2d(Inches.of(0.25), Inches.of(-8.7));
+    public static final Translation2d LIMELIGHT_TO_TURRET = new Translation2d(Inches.of(0.25), Inches.of(-6.5));
 
-    public static final Distance TURRET_RADIUS = Inches.of(6.0);
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";

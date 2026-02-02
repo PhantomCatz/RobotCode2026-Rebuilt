@@ -55,8 +55,8 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return runOnce(() -> applySetpoint(supplier.get()));
 	}
 
-	public void setGainsP(double p){
-		io.setGainsSlot0(p, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	public void setGainsPV(double p, double v){
+		io.setGainsSlot0(p, 0.0, 0.0, 0.0, v, 0.0, 0.0);
 	}
 
 	public Setpoint getSetpoint() {

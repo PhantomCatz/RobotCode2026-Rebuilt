@@ -94,7 +94,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
         LimelightHelpers.setCameraPose_RobotSpace(
             config.name,
             newCameraOffset.getX(),
-            newCameraOffset.getY(),
+            -newCameraOffset.getY(),
             newCameraOffset.getZ(),
             Math.toDegrees(newCameraOffset.getRotation().getX()),
             Math.toDegrees(newCameraOffset.getRotation().getY()),

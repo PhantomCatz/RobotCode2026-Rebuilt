@@ -29,14 +29,17 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
     public static final CatzFlywheels Instance = new CatzFlywheels();
 
     double prevP = 0.0;
+    double prevV = 0.0;
     @Override
     public void periodic(){
         super.periodic();
 
         double newP = FlywheelConstants.kP.get();
-        if(newP != prevP){
-            setGainsP(newP);
+        double newV = FlywheelConstants.kV.get();
+        if(newP != prevP || newV != prevV){
+            prevV = newV;
             prevP = newP;
+            setGainsPV(newP, newV);
         }
     }
 
