@@ -38,8 +38,7 @@ public class AimCalculations {
 
         Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(CatzTurret.Instance.getFieldToTurret());
 
-        double targetRads = hubDirection.getAngle().getRadians()
-                - fieldToRobot.getRotation().minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
+        double targetRads = hubDirection.getAngle().minus(fieldToRobot.getRotation()).minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
         // if(DriverStation.getAlliance().get() == Alliance.Red){
         // targetRads -= Math.PI;
         // }
