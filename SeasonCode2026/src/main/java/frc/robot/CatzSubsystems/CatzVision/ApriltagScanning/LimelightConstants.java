@@ -46,12 +46,6 @@ public class LimelightConstants {
     public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
     public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5);
 
-
-    public static final Translation2d TURRET_CENTER = new Translation2d(
-        Inches.of(5.5).in(Meters),
-        Inches.of(5.0).in(Meters)
-    );
-
     public static class LimelightConfig {
         public String name = "no-name-assigned";
         public Pose3d robotToCameraOffset = new Pose3d();

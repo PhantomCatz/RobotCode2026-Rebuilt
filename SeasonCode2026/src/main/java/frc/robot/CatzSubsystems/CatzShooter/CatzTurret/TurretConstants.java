@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -49,7 +50,7 @@ public class TurretConstants {
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
 	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(5.5).in(Units.Meters),  Units.Inches.of(5.5).in(Units.Meters));
-	public static final Distance TURRET_RADIUS = Units.Meters.of(TURRET_OFFSET.getNorm());
+	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.k180deg;
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
 	public static final double CANCODER_OFFSET = 0.077; //in rotations

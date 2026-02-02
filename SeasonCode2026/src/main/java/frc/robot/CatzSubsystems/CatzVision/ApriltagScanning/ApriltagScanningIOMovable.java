@@ -45,7 +45,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
 
     private void updateGyroWithTurret() {
         Rotation2d robotYaw = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
-        Rotation2d turretYaw = Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition());
+        Rotation2d turretYaw = Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition()).plus(TurretConstants.TURRET_ROTATION_OFFSET);
 
         // Sum them to get the direction the "Camera Mount" structure is facing globally.
         double totalCameraHeading = robotYaw.plus(turretYaw).getDegrees();
