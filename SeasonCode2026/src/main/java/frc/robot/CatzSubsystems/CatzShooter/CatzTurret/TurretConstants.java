@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -49,8 +48,8 @@ public class TurretConstants {
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.3;//25;
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
-	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(5.5).in(Units.Meters),  Units.Inches.of(5.5).in(Units.Meters));
-	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.k180deg;
+	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-5).in(Units.Meters),  Units.Inches.of(5).in(Units.Meters));
+	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(90.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
 	public static final double CANCODER_OFFSET = 0.077; //in rotations

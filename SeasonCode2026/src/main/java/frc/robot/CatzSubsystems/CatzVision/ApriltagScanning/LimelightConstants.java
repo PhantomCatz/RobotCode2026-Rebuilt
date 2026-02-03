@@ -4,7 +4,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 // Import the base Units class
@@ -31,7 +30,7 @@ public class LimelightConstants {
                 new Rotation3d(
                     Degrees.of(0.0).in(Radians),
                     Degrees.of(18.0).in(Radians), // 12.0
-                    Degrees.of(0.0).in(Radians)
+                    Degrees.of(90.0).in(Radians)
                 )
             )
         ))
@@ -41,10 +40,10 @@ public class LimelightConstants {
     public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
     public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
     public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
-    public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", 5.5);
+    public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
     public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
     public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
-    public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5);
+    public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5); //-13??
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";

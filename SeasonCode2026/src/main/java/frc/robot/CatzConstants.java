@@ -32,7 +32,7 @@ public final class CatzConstants {
   public static final boolean IndexerOn = true;
   public static final boolean SpindexerOn = true;
   public static final boolean YdexerOn = true;
-  public static final boolean IntakeOn = true;
+  public static final boolean IntakeOn = false;
   public static final boolean ShooterOn = true;
   public static final boolean TurretOn = true;
 

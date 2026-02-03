@@ -34,7 +34,7 @@ public class IntakeRollerConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	private static final int INTAKE_MOTOR_ID = 14;
+	private static final int INTAKE_MOTOR_ID = 15;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

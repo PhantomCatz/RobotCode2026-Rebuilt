@@ -29,6 +29,7 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 // import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
 import frc.robot.Autonomous.AutonConstants;
@@ -215,7 +216,7 @@ public class CatzDrivetrain extends SubsystemBase {
     // Logging
     // --------------------------------------------------------------
     // SmartDashboard.putNumber("Heading", getGyroHeading());
-    Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition()).plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()));
+    Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition()).plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()).plus(TurretConstants.TURRET_ROTATION_OFFSET));
     Logger.recordOutput("Shooter Location", turretPose);
     double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
     Logger.recordOutput("Distance from Hub", distFromHub);

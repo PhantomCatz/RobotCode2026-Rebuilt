@@ -21,8 +21,8 @@ public class FlywheelConstants {
 	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpoint(60.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.084, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
-        case SN2 -> new Gains(0.084, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN1 -> new Gains(0.07, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN2 -> new Gains(0.07, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -48,7 +48,7 @@ public class FlywheelConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 80.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 50.0;
 
 
@@ -83,6 +83,7 @@ public class FlywheelConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
+
 		IOConfig.followerBuses = new String[] {""};
 		IOConfig.followerIDs = new int[] {31}; //TODO magic numbers!!
 		return IOConfig;
