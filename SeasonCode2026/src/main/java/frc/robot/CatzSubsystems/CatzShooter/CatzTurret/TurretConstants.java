@@ -52,7 +52,7 @@ public class TurretConstants {
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(90.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
-	public static final double CANCODER_OFFSET = 0.077; //in rotations
+	public static final double CANCODER_OFFSET = 0.021; //in rotations
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 
     public static final TalonFXConfiguration getFXConfig() {

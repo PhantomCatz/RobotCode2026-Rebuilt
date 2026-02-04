@@ -46,7 +46,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         TurretConstants.TURRET_CANCODER.getConfigurator().apply(magConfig);
 
         double CAN_ABS_POS = TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO - TurretConstants.CANCODER_OFFSET;
-        setCurrentPosition(Units.Rotations.of(0.0));
+        setCurrentPosition(Units.Rotations.of(CAN_ABS_POS));
     }
 
     public static final CatzTurret Instance = new CatzTurret();
