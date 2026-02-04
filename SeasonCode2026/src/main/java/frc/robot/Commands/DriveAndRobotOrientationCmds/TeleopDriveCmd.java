@@ -73,7 +73,7 @@ public void initialize() {}
     // Obtain realtime joystick inputs with supplier methods
     m_headingAndVelocity_X = -m_headingPctOutput_Y.get(); //Raw accel
     m_headingAndVelocity_Y = -m_headingPctOutput_X.get();
-    turningVelocity        = m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
+    turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
 
     // Flip Directions for left joystick if alliance is red\[]
 
