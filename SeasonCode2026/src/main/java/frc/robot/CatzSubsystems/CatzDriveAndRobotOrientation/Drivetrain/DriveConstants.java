@@ -128,17 +128,17 @@ public class DriveConstants {
   static{
     switch(CatzConstants.getRobotType()){
         case SN_MANTA:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248+0.5, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211+0.5, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281+0.5, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.916016, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.416016, false);
         break;
 
         case SN1:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.6604 + 0.5, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.06396, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.3889 + 0.5, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.80566, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.3125, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0896, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.4382 + 0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.1447 + 0.5, false);
         break;
 
         case SN1_OLD:
