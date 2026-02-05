@@ -5,8 +5,8 @@ import org.littletonrobotics.junction.AutoLog;
 
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 
-public interface ClimbIOTall extends GenericMotorIO<ClimbIOTall.ClimbIOInputs> {
+public interface ClimbIOTall extends GenericMotorIO<ClimbIOTall.ClimbTallIOInputs> {
 
     @AutoLog
-    public static class ClimbIOInputs extends GenericMotorIO.MotorIOInputs{}
+    public static class ClimbTallIOInputs extends GenericMotorIO.MotorIOInputs{}
 }

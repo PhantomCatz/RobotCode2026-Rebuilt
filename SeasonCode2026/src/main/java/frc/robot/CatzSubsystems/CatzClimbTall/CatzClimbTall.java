@@ -4,7 +4,7 @@ package frc.robot.CatzSubsystems.CatzClimbTall;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
-public class CatzClimbTall extends ServoMotorSubsystem<ClimbIOTall, ClimbIOTall.ClimbIOInputs> {
+public class CatzClimbTall extends ServoMotorSubsystem<ClimbIOTall, ClimbIOTall.ClimbTallIOInputs> {
 
     private static final ClimbIOTall io = getIOInstance();
     private static final ClimbTallIOInputsAutoLogged inputs = new ClimbTallIOInputsAutoLogged();
