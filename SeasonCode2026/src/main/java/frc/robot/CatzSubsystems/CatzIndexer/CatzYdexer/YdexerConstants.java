@@ -16,7 +16,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class YdexerConstants {
-	private static final Voltage ON_VOLTS = Units.Volts.of(12.0);
+	private static final Voltage ON_VOLTS = Units.Volts.of(8.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);

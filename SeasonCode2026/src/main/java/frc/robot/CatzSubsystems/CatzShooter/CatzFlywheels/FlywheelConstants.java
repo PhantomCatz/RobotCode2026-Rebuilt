@@ -21,8 +21,8 @@ public class FlywheelConstants {
 	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpoint(60.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.07, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
-        case SN2 -> new Gains(0.07, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN1 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN2 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };

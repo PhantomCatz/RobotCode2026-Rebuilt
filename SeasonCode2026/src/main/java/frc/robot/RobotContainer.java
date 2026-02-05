@@ -32,11 +32,12 @@ public class RobotContainer {
     //   superstructure.turretManualTrackCommand()
     xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.HUB_LOCATION, new Rotation2d()))));
     // );
-    // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()).alongWith(superstructure.turretTrackCommand()));
-    xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint());
+    xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()).alongWith(superstructure.turretTrackCommand()));
+    // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint());
     // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
     //                     .alongWith(superstructure.interpolateShooterSpeed()).alongWith(superstructure.turretTrackCommand()));
     xboxTest.leftBumper().onTrue(superstructure.turretTrackCommand());
+
     // xboxTest.leftBumper().onTrue(superstructure.turret90Degrees());
     // xboxTest.rightBumper().onTrue(superstructure.turret90DegreesMinus());
 
