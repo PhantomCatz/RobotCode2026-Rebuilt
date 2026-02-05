@@ -17,7 +17,6 @@ public class LimelightConstants {
 
     public static final int kEnabledPipeline = 0;
     public static final int kDisabledPipeline = 1;
-    public static final int kDisabledPipeline = 1;
     public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
@@ -29,22 +28,22 @@ public class LimelightConstants {
                     Inches.of(19.75).in(Meters) //This makes it easy to account for latency.
                 ),
                 new Rotation3d(
-                    Degrees.of(0.0).in(Radians),
-                    Degrees.of(18.0).in(Radians), // 12.0
-                    Degrees.of(87.0).in(Radians)
+                    Degrees.of(178.0).in(Radians),
+                    Degrees.of(18.0).in(Radians), 
+                    Degrees.of(-3.0).in(Radians)
                 )
             )
         ))
     };
 
-    public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
-    public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
-    public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
-    public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
-    public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
-    public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
-    public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
-    public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5); //-13??
+    // public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
+    // public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
+    // public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
+    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
+    // public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
+    // public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
+    // public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
+    // public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5); //-13??
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";
