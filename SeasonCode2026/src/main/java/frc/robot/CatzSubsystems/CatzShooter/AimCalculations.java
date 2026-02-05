@@ -131,5 +131,9 @@ public class AimCalculations {
         return 0.0;
     }
 
+    public static Angle getShootAngle() {
+        Pose2d robotPose = CatzRobotTracker.getEstimatedPose();
+    }
+
     public record ShooterSetpoints(Setpoint turretSetpoint, Setpoint hoodSetpoint, Setpoint flywheelSetpoint){}
 }

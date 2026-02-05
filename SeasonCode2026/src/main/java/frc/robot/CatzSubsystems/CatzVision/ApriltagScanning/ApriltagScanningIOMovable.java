@@ -103,7 +103,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO{
     }
 
     private Pose3d cameraPose() {
-        return new Pose3d(new Translation3d(Units.Inches.of(LimelightConstants.forward.get()).in(Units.Meters),Units.Inches.of(LimelightConstants.leftward.get()).in(Units.Meters), Units.Inches.of(LimelightConstants.upward.get()).in(Units.Meters)), new Rotation3d(Units.Degrees.of(180.0).in(Units.Radians), Units.Degrees.of(LimelightConstants.pitch.get()).in(Units.Radians), Units.Degrees.of(90.0).in(Units.Radians)));
+        return new Pose3d(new Translation3d(Units.Inches.of(LimelightConstants.forward.get()).in(Units.Meters),Units.Inches.of(LimelightConstants.leftward.get()).in(Units.Meters), Units.Inches.of(LimelightConstants.upward.get()).in(Units.Meters)), new Rotation3d(Units.Degrees.of(178.0).in(Units.Radians), Units.Degrees.of(LimelightConstants.pitch.get()).in(Units.Radians), Units.Degrees.of(87.0).in(Units.Radians)));
     }
 
     private Pose3d calculateCurrentCameraOffset() {

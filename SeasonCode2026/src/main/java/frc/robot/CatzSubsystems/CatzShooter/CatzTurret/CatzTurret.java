@@ -43,9 +43,9 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         MagnetSensorConfigs magConfig = new MagnetSensorConfigs();
         magConfig.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        TurretConstants.TURRET_CANCODER.getConfigurator().apply(magConfig);
+        // TurretConstants.TURRET_CANCODER.getConfigurator().apply(magConfig);
 
-        double CAN_ABS_POS = TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO - TurretConstants.CANCODER_OFFSET;
+        double CAN_ABS_POS = TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO;
         setCurrentPosition(Units.Rotations.of(CAN_ABS_POS));
     }
 
@@ -69,7 +69,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         }
 
         Logger.recordOutput("Turret/ Commanded Setpoint", setpoint.baseUnits / (2*Math.PI));
-        Logger.recordOutput("Turret/ CANCoder Absolute Rotations", TurretConstants.TURRET_CANCODER.getPosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO);
+        Logger.recordOutput("Turret/ CANCoder Absolute Rotations", TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO);
         angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }
 

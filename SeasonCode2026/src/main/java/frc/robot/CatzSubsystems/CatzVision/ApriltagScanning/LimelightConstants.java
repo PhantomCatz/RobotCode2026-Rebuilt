@@ -30,13 +30,13 @@ public class LimelightConstants {
                 new Rotation3d(
                     Degrees.of(0.0).in(Radians),
                     Degrees.of(18.0).in(Radians), // 12.0
-                    Degrees.of(90.0).in(Radians)
+                    Degrees.of(87.0).in(Radians)
                 )
             )
         ))
     };
 
-    public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", 5.5);
+    public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
     public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
     public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
     public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
