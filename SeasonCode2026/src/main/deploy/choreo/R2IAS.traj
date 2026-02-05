@@ -212,10 +212,9 @@
   "splits":[0,57,86,116]
  },
  "events":[
-   {"name":"Intake", "from":{"target":1, "targetTimestamp":1.36483, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Score", "from":{"target":2, "targetTimestamp":2.81923, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake", "from":{"target":3, "targetTimestamp":4.26357, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score", "from":{"target":4, "targetTimestamp":5.72397, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Intake", "from":{"target":5, "targetTimestamp":7.15307, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Hoard", "from":{"target":5, "targetTimestamp":7.15307, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.36483, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Score3", "from":{"target":2, "targetTimestamp":2.81923, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Intake4", "from":{"target":3, "targetTimestamp":4.26357, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Score5", "from":{"target":4, "targetTimestamp":5.72397, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Intake + Hoard6", "from":{"target":5, "targetTimestamp":7.15307, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}}]
 }

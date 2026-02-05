@@ -106,7 +106,7 @@
   "splits":[0,31]
  },
  "events":[
-   {"name":"Score Preload", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Hoard", "from":{"target":1, "targetTimestamp":1.28005, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Hoard", "from":{"target":2, "targetTimestamp":1.85578, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}},
+   {"name":"Hoard2", "from":{"target":1, "targetTimestamp":1.28005, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Hoard2"}}},
+   {"name":"Hoard3", "from":{"target":2, "targetTimestamp":1.85578, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Hoard3"}}}]
 }

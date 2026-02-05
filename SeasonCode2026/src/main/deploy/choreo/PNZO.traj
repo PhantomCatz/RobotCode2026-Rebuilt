@@ -149,9 +149,8 @@
   "splits":[0,0,29,59]
  },
  "events":[
-   {"name":"Score", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake", "from":{"target":2, "targetTimestamp":1.42578, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake", "from":{"target":4, "targetTimestamp":4.07195, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score", "from":{"target":3, "targetTimestamp":2.94776, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Score", "from":{"target":4, "targetTimestamp":4.07195, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}}]
+   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}},
+   {"name":"Intake3", "from":{"target":2, "targetTimestamp":1.42578, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake3"}}},
+   {"name":"Intake + Score5", "from":{"target":4, "targetTimestamp":4.07195, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"IntakeScore5"}}},
+   {"name":"Score4", "from":{"target":3, "targetTimestamp":2.94776, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score4"}}}]
 }

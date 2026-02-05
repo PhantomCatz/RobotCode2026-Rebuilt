@@ -155,8 +155,8 @@
   "splits":[0,0,31,62]
  },
  "events":[
-   {"name":"Intaking", "from":{"target":2, "targetTimestamp":1.57442, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Intaking + Scoring", "from":{"target":4, "targetTimestamp":4.4191, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Scoring", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Scoring", "from":{"target":3, "targetTimestamp":3.15143, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Intake3", "from":{"target":2, "targetTimestamp":1.57442, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake3"}}},
+   {"name":"Intake + Score5", "from":{"target":4, "targetTimestamp":4.4191, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Score4", "from":{"target":3, "targetTimestamp":3.15143, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

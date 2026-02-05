@@ -235,9 +235,9 @@
   "splits":[0,29,93,126]
  },
  "events":[
-   {"name":"Intaking", "from":{"target":1, "targetTimestamp":1.42975, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Intaking", "from":{"target":3, "targetTimestamp":4.65572, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Scoring", "from":{"target":4, "targetTimestamp":6.30614, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Scoring", "from":{"target":2, "targetTimestamp":3.01178, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.42975, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Intake4", "from":{"target":3, "targetTimestamp":4.65572, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Score5", "from":{"target":4, "targetTimestamp":6.30614, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Score3", "from":{"target":2, "targetTimestamp":3.01178, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Climb", "from":{"target":6, "targetTimestamp":8.06413, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

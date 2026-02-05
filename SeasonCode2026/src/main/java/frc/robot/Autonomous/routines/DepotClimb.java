@@ -4,11 +4,11 @@ import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
 
 public class DepotClimb extends AutoRoutineBase{
     public DepotClimb(){
         super("DepotClimb");
-
         AutoTrajectory trajpre = getTrajectory("DepotClimb");
         // AutoTrajectory traj1 = getTrajectory("DepotClimb",1);
         // AutoTrajectory traj2 = getTrajectory("DepotClimb",2);
@@ -24,10 +24,14 @@ public class DepotClimb extends AutoRoutineBase{
                 // Commands.waitUntil(traj1.atTime("Intake2")).andThen(CatzSuperstructure.Instance.Intake()),
                 // Commands.waitUntil(traj1.atTime("Score3")).andThen(CatzSuperstructure.Instance.Shoot()),
                 // Commands.waitUntil(traj1.atTime("Climb5")).andThen(CatzSuperstructure.Instance.Climb())
-                Commands.waitUntil(trajpre.atTranslation("Score1", 10)).andThen(Commands.print("ONE \n\n")),
-                Commands.waitUntil(trajpre.atTime("Intake2")).andThen(Commands.print("TWO \n\n")),
-                Commands.waitUntil(trajpre.atTime("Score3")).andThen(Commands.print("THREE \n\n")),
-                Commands.waitUntil(trajpre.atTime("Climb5")).andThen(Commands.print("FIVE \n\n"))
+                Commands.waitUntil(trajpre.atPose("Score1", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
+                        .andThen(() -> System.out.println("ONE \n")),
+                Commands.waitUntil(trajpre.atPose("Intake2", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
+                        .andThen(Commands.print("TWO \n")),
+                Commands.waitUntil((trajpre.atTime("Score3")))
+                        .andThen(Commands.print("THREE \n")),
+                Commands.waitUntil(trajpre.atPose("Climb5", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
+                        .andThen(Commands.print("FIVE \n"))
 
             )
 

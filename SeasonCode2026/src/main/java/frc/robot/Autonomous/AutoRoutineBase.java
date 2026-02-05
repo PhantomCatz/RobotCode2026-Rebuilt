@@ -29,16 +29,19 @@ public class AutoRoutineBase {
     }
 
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj){
-        return Commands.defer(() ->
-                                new FunctionalCommand
+        return Commands.defer(() -> {
+                                final Command choreoCommand = traj.cmd();
+                                return new FunctionalCommand
                                 (
-                                    () -> {CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj); traj.cmd().initialize();},
-                                    traj.cmd()::execute,
-                                    traj.cmd()::end,
+                                    () -> {
+                                        CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
+                                        choreoCommand.initialize();
+                                          },
+                                    choreoCommand::execute,
+                                    choreoCommand::end,
                                     () -> isAtPose(traj)
-                                ),
-                                Set.of(CatzDrivetrain.getInstance())
-                             );
+                                );
+        }, Set.of(CatzDrivetrain.getInstance()));
     }
 
     // protected Command trajectoryToObjectDetection() {

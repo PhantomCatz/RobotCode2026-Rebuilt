@@ -185,8 +185,8 @@
   "splits":[0]
  },
  "events":[
-   {"name":"Climb", "from":{"target":4, "targetTimestamp":5.72687, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Climb5"}}},
-   {"name":"Score", "from":{"target":2, "targetTimestamp":3.81644, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score3"}}},
-   {"name":"Intake", "from":{"target":1, "targetTimestamp":1.90881, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
-   {"name":"Score", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}}]
+   {"name":"Climb5", "from":{"target":4, "targetTimestamp":5.72687, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Climb5"}}},
+   {"name":"Score3", "from":{"target":2, "targetTimestamp":3.81644, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score3"}}},
+   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.90881, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
+   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}}]
 }

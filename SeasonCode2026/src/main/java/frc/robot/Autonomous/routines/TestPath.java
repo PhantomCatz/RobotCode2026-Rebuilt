@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 
@@ -17,19 +18,13 @@ public class TestPath extends AutoRoutineBase{
         prepRoutine(
             traj1,
             followTrajectoryWithAccuracy(traj1),
-            Commands.print("Done With path 1, Waiting"),
-            // Commands.waitSeconds(2),
-            Commands.print("Running traj 2"),
+            Commands.print("1: " + Timer.getFPGATimestamp()),
             followTrajectoryWithAccuracy(traj2),
-            Commands.print("Done With path 2, Waiting"),
-            // Commands.waitSeconds(2),
-            Commands.print("Running traj 3"),
+            Commands.print("2: " + Timer.getFPGATimestamp()),
             followTrajectoryWithAccuracy(traj3),
-            Commands.print("Done With path 3, Waiting"),
-            // Commands.waitSeconds(2),
-            Commands.print("Running traj 4"),
+            Commands.print("3: " + Timer.getFPGATimestamp()),
             followTrajectoryWithAccuracy(traj4),
-            Commands.print("Finished")
+            Commands.print("4: " + Timer.getFPGATimestamp())
         );
     }
 }
