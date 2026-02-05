@@ -27,7 +27,7 @@ public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I exte
 	/**
 	 * Gets whether or not the subsystem is within an acceptable threshold of it's velocity setpoint.
 	 *
-	 * @return Whether the subsystem is acceptably near it's setpoint's velocity. Returns false if not in velcity coontrol mode.
+	 * @return Whether the subsystem is acceptably near it's setpoint's velocity. Returns false if not in velcity control mode.
 	 */
 	public boolean spunUp() {
 		return nearVelocity(BaseUnits.AngleUnit.per(BaseUnits.TimeUnit).of(getSetpoint().baseUnits))

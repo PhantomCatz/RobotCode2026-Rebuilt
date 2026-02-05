@@ -63,7 +63,6 @@ public class FlywheelConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-
 		FXConfig.Feedback.SensorToMechanismRatio = 1.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;

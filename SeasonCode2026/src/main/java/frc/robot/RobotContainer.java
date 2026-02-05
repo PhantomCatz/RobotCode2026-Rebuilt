@@ -3,6 +3,9 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -16,8 +19,8 @@ import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
 
-  private final CommandXboxController xboxDrv = new CommandXboxController(0);
-  private final CommandXboxController xboxTest = new CommandXboxController(1);
+  private static final CommandXboxController xboxDrv = new CommandXboxController(0);
+  private static final CommandXboxController xboxTest = new CommandXboxController(1);
 
   public RobotContainer(){
     configureBindings();
@@ -33,6 +36,13 @@ public class RobotContainer {
     //   superstructure.turretManualTrackCommand()
     xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(), new Rotation2d()))));
     // );
+
+    //----------------------Shooting-----------------------
+    xboxDrv.leftBumper().onTrue(superstructure.prepareForShooting());
+    xboxDrv.leftBumper().onFalse(superstructure.setShootingAllowed(true));
+    xboxDrv.x().onTrue(superstructure.stopAllShooting());
+
+    //---------------------Testing Controls--------------------
     xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()).alongWith(superstructure.turretTrackHubCommand()));
     // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint());
     // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
@@ -44,5 +54,9 @@ public class RobotContainer {
 
     xboxTest.a().onTrue(superstructure.startIndexers());
     xboxTest.x().onTrue(superstructure.stopAllShooting());
+  }
+
+  public static void rumbleDrv(double val){
+    xboxDrv.setRumble(RumbleType.kBothRumble, val);
   }
 }

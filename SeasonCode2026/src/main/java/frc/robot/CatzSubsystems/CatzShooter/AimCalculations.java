@@ -7,28 +7,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Distance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 
 public class AimCalculations {
-
-    public static ShooterSetpoints calculateAllShooterSetpoint(){
-        Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
-        Distance distToHub = Units.Meters.of(FieldConstants.getHubLocation().minus(fieldToTurret).getNorm());
-
-        Translation2d compensatedShootingVector = calculateCompensatedShootingVector(distToHub);
-
-        Setpoint turretSetpoint = calculateCompensatedHubTrackingSetpoint(compensatedShootingVector);
-        Setpoint hoodSetpoint = ShooterRegression.getHoodSetpoint(distToHub);
-        Setpoint flywheelSetpoint = getCompensatedFlywheelSetpoint(compensatedShootingVector);
-        return new ShooterSetpoints(turretSetpoint, hoodSetpoint, flywheelSetpoint);
-    }
     /**
      * Calculates the best turret angle setpoint to point to the hub
      * while respecting physical limits and minimizing movement
@@ -71,9 +57,7 @@ public class AimCalculations {
         return 0.0;
     }
 
-    // public static Angle getShootAngle() {
-    //     Pose2d robotPose = CatzRobotTracker.getEstimatedPose();
-    // }
-
-    public record ShooterSetpoints(Setpoint turretSetpoint, Setpoint hoodSetpoint, Setpoint flywheelSetpoint){}
+    public static boolean readyToShoot(){
+        return CatzTurret.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
+    }
 }

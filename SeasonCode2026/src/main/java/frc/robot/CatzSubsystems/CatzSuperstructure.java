@@ -9,11 +9,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
+import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -33,6 +35,8 @@ public class CatzSuperstructure {
     private final CommandXboxController xboxDrv = new CommandXboxController(0);
     // NOTE use suppliers instead of creating two different objects
 
+    private boolean isShootingAllowed = false; //TODO set to always true during auton
+
     private CatzSuperstructure() {
     }
 
@@ -43,18 +47,11 @@ public class CatzSuperstructure {
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
-                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
+                setShootingAllowed(false));
     }
 
-    public Command interpolateShooterValues(){
-        return Commands.defer(() -> {
-            Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), new Rotation2d());
-            double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
-
-        }, Set.of(CatzFlywheels.Instance, CatzHood.Instance));
-    }
-
-    public Command interpolateHoodAngle(){
+    public Command interpolateHoodAngle() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), new Rotation2d());
             double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
@@ -63,13 +60,50 @@ public class CatzSuperstructure {
         });
     }
 
-    public Command interpolateShooterSpeed(){
+    public Command interpolateFlywheelSpeed() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
             Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
             double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose);
 
-            return Setpoint.withVelocitySetpoint(ShooterRegression.getShooterRPSFromRegression(distFromHub));
+            return ShooterRegression.getShooterSetpointFromRegression(Units.Meters.of(distFromHub));
         });
+    }
+
+    public Command interpolateShootingValues() {
+        return Commands.run(() -> {
+            Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
+            Distance distFromHub = Units.Meters.of(FieldConstants.getHubLocation().getDistance(turretPose));
+
+            CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpointFromRegression(distFromHub));
+            CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(distFromHub));
+        }, CatzFlywheels.Instance, CatzHood.Instance);
+    }
+
+    public Command prepareForShooting(){
+        return Commands.parallel(
+            interpolateShootingValues(),
+            turretTrackHubCommand(),
+            shootIfReady(),
+            setShootingAllowed(false)  
+        );
+    }
+
+    public Command shootIfReady() {
+        return Commands.run(() -> {
+            boolean readyToShoot = AimCalculations.readyToShoot();
+            if(readyToShoot && !isShootingAllowed){
+                RobotContainer.rumbleDrv(1.0);
+            }
+
+            if (readyToShoot && isShootingAllowed) {
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+                CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
+                RobotContainer.rumbleDrv(0.0);
+            } else {
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
+            }
+        }, CatzSpindexer.Instance, CatzYdexer.Instance).finallyDo(() -> RobotContainer.rumbleDrv(0.0));
     }
 
     public Command startIndexers() {
@@ -85,7 +119,11 @@ public class CatzSuperstructure {
     }
 
     public Command stopAllShooting() {
-        return hoodFlywheelStowCommand().alongWith(stopIndexers());
+        return hoodFlywheelStowCommand().alongWith(stopIndexers()).alongWith(setShootingAllowed(false));
+    }
+
+    public Command setShootingAllowed(boolean val) {
+        return Commands.runOnce(() -> isShootingAllowed = val);
     }
 
     public Command flywheelManualCommand() {
@@ -119,4 +157,5 @@ public class CatzSuperstructure {
                     Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
         }, Set.of(CatzFlywheels.Instance));
     }
+
 }

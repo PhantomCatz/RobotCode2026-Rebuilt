@@ -29,16 +29,7 @@ public class DriveConstants {
   public static final int INDEX_BL = 2;
   public static final int INDEX_FL = 3;
 
-  public static final int TRAJ_INDEX_FL = 0;
-  public static final int TRAJ_INDEX_FR = 1;
-  public static final int TRAJ_INDEX_BL = 2;
-  public static final int TRAJ_INDEX_BR = 3;
-
   public static final int GYRO_ID = 10;
-
-
-  public static final double PREDICT_DISTANCE_SCORE = 0.1;
-  public static final double PREDICT_DISTANCE_INTAKE = 1.0;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info

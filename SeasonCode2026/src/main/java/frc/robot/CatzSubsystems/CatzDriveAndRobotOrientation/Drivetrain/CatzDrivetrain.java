@@ -216,10 +216,7 @@ public class CatzDrivetrain extends SubsystemBase {
     // Logging
     // --------------------------------------------------------------
     // SmartDashboard.putNumber("Heading", getGyroHeading());
-    Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition()).plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()).plus(TurretConstants.TURRET_ROTATION_OFFSET));
-    Logger.recordOutput("Shooter Location", turretPose);
-    double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
-    Logger.recordOutput("Distance from Hub", distFromHub);
+    
     //Logger.recordOutput("Drive/Odometry module states", getModuleStates());
     //Logger.recordOutput("Drive/Odometry wheel positions", wheelPositions);
     //Logger.recordOutput("Drive/Odometry robot velocity", robotRelativeVelocity);
@@ -260,9 +257,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
     //Logger.recordOutput("Drive/chassispeeds", descreteSpeeds);
     //Logger.recordOutput("Drive/modulestates", optimizedDesiredStates);
-  }
-  public void d(ChassisSpeeds s){
-    //nothing
   }
 
   public void simpleDrive(ChassisSpeeds speeds) {
@@ -364,14 +358,6 @@ public class CatzDrivetrain extends SubsystemBase {
     for (CatzSwerveModule module : m_swerveModules) {
       module.setNeutralModeSteer(type);
     }
-  }
-
-  public boolean closeEnoughToRaiseElevator(){
-    return choreoDistanceError <= DriveConstants.PREDICT_DISTANCE_SCORE;
-  }
-
-  public boolean closeEnoughToStartIntake(){
-    return choreoDistanceError <= DriveConstants.PREDICT_DISTANCE_INTAKE;
   }
 
   /** command to cancel running auto trajectories */

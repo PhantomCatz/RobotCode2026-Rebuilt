@@ -53,7 +53,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 *         in position control.
 	 */
 	public boolean nearPositionSetpoint() {
-		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Rotations.of(getLatencyCompensatedPosition()));
+		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Radians.of(setpoint.baseUnits));
 	}
 
 	public void setPDSVGGains(double p, double d, double s, double v, double g){
@@ -67,7 +67,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 * @return A new Command to apply setpoint and wait.
 	 */
 	public Command setpointCommandWithWait(Setpoint setpoint) {
-		return waitForPositionCommand(Units.Rotations.of(setpoint.baseUnits))
+		return waitForPositionCommand(Units.Radians.of(setpoint.baseUnits))
 				.deadlineFor(followSetpointCommand(()->setpoint));
 	}
 
