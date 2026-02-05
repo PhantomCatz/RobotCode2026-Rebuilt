@@ -4,11 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-<<<<<<< HEAD
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
-=======
->>>>>>> 1e9341778a3b3de058c55a3f7049665d3172726b
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
@@ -20,14 +17,9 @@ import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
-<<<<<<< HEAD
   private final CatzClimb climb = CatzClimb.Instance;
   private final CatzDrivetrain drivetrain = new CatzDrivetrain();
-  private final CommandXboxController xboxDrv = new CommandXboxController(0);
-=======
-
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
->>>>>>> 1e9341778a3b3de058c55a3f7049665d3172726b
 
   public RobotContainer() {
 
@@ -61,11 +53,11 @@ public class RobotContainer {
     );
   }
 
-   public Command getClimbCommand() {
-    return Commands.sequence(
-      CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Extend).withTimeout(2.0),
-      Commands.waitSeconds(7),
-      CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Stow).withTimeout(2.0)
-    );
-  }
+  //  public Command getClimbCommand() {
+  //   return Commands.sequence(
+  //     CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Extend).withTimeout(2.0),
+  //     Commands.waitSeconds(7),
+  //     CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Stow).withTimeout(2.0)
+  //   );
+  // }
 }
