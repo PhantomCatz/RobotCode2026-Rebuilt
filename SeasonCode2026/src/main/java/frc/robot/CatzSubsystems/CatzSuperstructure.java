@@ -21,6 +21,7 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
@@ -49,13 +50,13 @@ public class CatzSuperstructure {
         );
     }
 
-    // public Command intakeDeployManualCommand(){
-    //     return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
-    //         double input = -xboxTest.getLeftY() * 3;
-    //         Logger.recordOutput("Xbox Input", input);
-    //         return Setpoint.withVoltageSetpoint(input);
-    //     });
-    // }
+     public Command intakeDeployManualCommand(){
+         return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+             double input = -xboxTest.getLeftY() * 3;
+             Logger.recordOutput("Xbox Input", input);
+             return Setpoint.withVoltageSetpoint(input);
+         });
+     }
 
     public Command startIndexers(){
         return Commands.parallel(

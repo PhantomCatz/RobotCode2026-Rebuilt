@@ -242,7 +242,7 @@ public class CatzRobotTracker {
   public void resetPose(Pose2d initialPose) {
     // System.out.println(initialPose.getRotation().getDegrees());
     estimatedPose = initialPose;
-    odometryPose = initialPose;
+    odometryPose = pose2d;
     POSE_BUFFER.clear();
   }
 
@@ -311,4 +311,9 @@ public class CatzRobotTracker {
       int tagId, int camera, double tx, double ty, double distance, double timestamp) {}
 
   public record TxTyPoseRecord(Pose2d pose, double distance, double timestamp) {}
+
+public Object resetPose(Pose2d pose2d) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'resetPose'");
+}
 }
