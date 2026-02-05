@@ -6,9 +6,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
-// Import the base Units class
-import edu.wpi.first.units.measure.Distance;
-import frc.robot.Utilities.LoggedTunableNumber;
 
 // Static import the specific units we need to keep code clean
 import static edu.wpi.first.units.Units.*;
@@ -56,8 +53,5 @@ public class LimelightConstants {
         }
         public LimelightConfig(){}
     }
-
-    public static final int agreedTranslationUpdatesThreshold = 100;
-    public static final Distance agreedTranslationUpdateEpsilon = Centimeters.of(10.0);
 }
 

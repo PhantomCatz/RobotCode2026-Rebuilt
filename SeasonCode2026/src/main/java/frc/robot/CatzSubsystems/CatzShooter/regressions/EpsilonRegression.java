@@ -8,7 +8,7 @@ public class EpsilonRegression {
         /* TEMPLATE REGRESSION */
         // @x --> distance from target (in meters)
         // @y --> shooter velocity (in rps)
-        {1.288, }
+        {1.288, 0.0},
         {5.350, 42}
     };
 

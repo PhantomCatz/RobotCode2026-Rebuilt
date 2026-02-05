@@ -6,10 +6,12 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
@@ -34,22 +36,22 @@ public class CatzSuperstructure {
     private CatzSuperstructure() {
     }
 
-    public Command turretTrackCommand() {
+    public Command turretTrackHubCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
-    }
-
-    public Command turret90Degrees(){
-        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(0.25));
-    }
-
-    public Command turret90DegreesMinus(){
-        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(-0.25));
     }
 
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
+    }
+
+    public Command interpolateShooterValues(){
+        return Commands.defer(() -> {
+            Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), new Rotation2d());
+            double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
+
+        }, Set.of(CatzFlywheels.Instance, CatzHood.Instance));
     }
 
     public Command interpolateHoodAngle(){
@@ -63,20 +65,12 @@ public class CatzSuperstructure {
 
     public Command interpolateShooterSpeed(){
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
-            Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), new Rotation2d());
-            double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
+            Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
+            double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose);
 
             return Setpoint.withVelocitySetpoint(ShooterRegression.getShooterRPSFromRegression(distFromHub));
         });
     }
-
-    // public Command intakeDeployManualCommand(){
-    // return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
-    // double input = -xboxTest.getLeftY() * 3;
-    // Logger.recordOutput("Xbox Input", input);
-    // return Setpoint.withVoltageSetpoint(input);
-    // });
-    // }
 
     public Command startIndexers() {
         return Commands.parallel(

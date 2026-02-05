@@ -7,11 +7,11 @@ import frc.robot.Utilities.Util;
 
 public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends GenericMotorSubsystem<S, I> {
 
-	protected final AngularVelocity epsilonThreshold;
+	protected double epsilonPercentThreshold;
 
-	public FlywheelMotorSubsystem(S io, I inputs, String name, AngularVelocity epsilonThreshold) {
+	public FlywheelMotorSubsystem(S io, I inputs, String name, double epsilonPercentThreshold) {
 		super(io, inputs, name);
-		this.epsilonThreshold = epsilonThreshold;
+		this.epsilonPercentThreshold = epsilonPercentThreshold;
 	}
 	/**
 	 * Gets whether or not the subsystem is within an acceptable threshold of a provided velocity.
@@ -21,7 +21,7 @@ public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I exte
 	 */
 	public boolean nearVelocity(AngularVelocity velocity) {
 		return Util.epsilonEquals(
-				velocity.baseUnitMagnitude(), getVelocity().baseUnitMagnitude(), epsilonThreshold.baseUnitMagnitude());
+				velocity.baseUnitMagnitude(), getVelocity().baseUnitMagnitude(), velocity.baseUnitMagnitude() * epsilonPercentThreshold);
 	}
 
 	/**

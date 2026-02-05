@@ -22,6 +22,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
 
     public ApriltagScanningIOMovable(LimelightConfig config) {
         this.config = config;
+
     }
 
     @Override

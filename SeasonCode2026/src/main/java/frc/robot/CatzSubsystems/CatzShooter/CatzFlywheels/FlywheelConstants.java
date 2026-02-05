@@ -35,7 +35,7 @@ public class FlywheelConstants {
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRps", 60.0);
 
-	public static final AngularVelocity FLYWHEEL_THRESHOLD = Units.RotationsPerSecond.of(5.0);
+	public static final double FLYWHEEL_THRESHOLD = 0.04;
 
 	public static final Translation2d VDEXER_FEED_COMPENSATION = new Translation2d(2.0, 0.0); //Because of the way we feed the balls into the shooter with the indexer, there is a directional bias in the ball trajectory.
 	public static final double VDEXER_FEED_COMPENSATION_NORM = VDEXER_FEED_COMPENSATION.getNorm();
