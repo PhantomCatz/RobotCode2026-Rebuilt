@@ -13,6 +13,7 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.EpsilonRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 
@@ -107,7 +108,7 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(currentRads + angleError));
     }
 
-    public static double getFutureDistance() {
+    public static Translation2d getHubVelocity() {
         Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
         double robotAngle = robotPose.getRotation().getRadians();
@@ -126,14 +127,37 @@ public class AimCalculations {
 
         Translation2d hubVelocity = new Translation2d(-turretVelocityX, -turretVelocityY); // imagine the hub moving
                                                                                            // instead of the robot
-        Translation2d robotToHub = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
-
-        return 0.0;
+        return hubVelocity;
     }
 
-    public static Angle getShootAngle() {
-        Pose2d robotPose = CatzRobotTracker.getEstimatedPose();
+    public static double getShootAirtime() {
+        Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
+        Translation2d hubVelocity = getHubVelocity();
+        double distToHub = fieldToTurret.getDistance(FieldConstants.HUB_LOCATION);
+        Translation2d hubToTurret = fieldToTurret.minus(FieldConstants.HUB_LOCATION);
+        double hubDistance = hubToTurret.getNorm();
+        double turretHubRadians = Math.abs(MathUtil.angleModulus(hubToTurret.getAngle().getRadians() - hubVelocity.getAngle().getRadians()));
+        double regressionATerm=0, regressionBTerm=0, regressionCTerm=0; // ax^2 + bx + c = 0 TODO
+        double hubSpeed = hubVelocity.getNorm();
+        double a = hubSpeed*hubSpeed - regressionATerm;
+        double b = -2*hubSpeed*hubDistance*Math.cos(turretHubRadians) - regressionBTerm;
+        double c = hubDistance*hubDistance - regressionCTerm;
+        double discriminant = b*b - 4*a*c;
+        if (discriminant < 0) {
+            return 0.0; // no solution
+        }
+        double smallRoot = (-b-Math.sqrt(discriminant))/(2*a);
+        double bigRoot = (-b+Math.sqrt(discriminant))/(2*a);
+        if (smallRoot > 0) {
+            return smallRoot;
+        }
+        if (bigRoot > 0) {
+            return bigRoot;
+        }
+        return 0.0; // both roots negative (if that's even possible)
     }
+
+
 
     public record ShooterSetpoints(Setpoint turretSetpoint, Setpoint hoodSetpoint, Setpoint flywheelSetpoint){}
 }
