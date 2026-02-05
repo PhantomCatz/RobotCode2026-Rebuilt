@@ -51,6 +51,7 @@ public class CatzSuperstructure {
     }
 
      public Command intakeDeployManualCommand(){
+            System.out.println("intakeDeployManual");
          return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
              double input = -xboxTest.getLeftY() * 3;
              Logger.recordOutput("Xbox Input", input);
@@ -73,10 +74,12 @@ public class CatzSuperstructure {
     }
 
     public Command stopAllShooting(){
+            System.out.println("stopShootManual");
         return hoodFlywheelStowCommand().alongWith(stopIndexers());
     }
 
     public Command flywheelManualCommand(){
+            System.out.println("flyWheelManual");
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
             double input = (xboxDrv.getLeftY()) * 8;
             Logger.recordOutput("Xbox Voltage Input", input);
@@ -85,6 +88,7 @@ public class CatzSuperstructure {
     }
 
     public Command hoodManualCommand(){
+            System.out.println("hoodManual");
         return CatzHood.Instance.followSetpointCommand(() -> {
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
