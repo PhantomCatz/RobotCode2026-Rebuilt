@@ -17,6 +17,7 @@ public class LimelightConstants {
 
     public static final int kEnabledPipeline = 0;
     public static final int kDisabledPipeline = 1;
+    public static final int kDisabledPipeline = 1;
     public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
@@ -60,3 +61,4 @@ public class LimelightConstants {
     public static final int agreedTranslationUpdatesThreshold = 100;
     public static final Distance agreedTranslationUpdateEpsilon = Centimeters.of(10.0);
 }
+
