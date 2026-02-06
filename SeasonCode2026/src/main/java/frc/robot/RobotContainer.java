@@ -1,12 +1,18 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
+import frc.robot.Utilities.AllianceFlipUtil;
+import frc.robot.Utilities.DoublePressTracker;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
@@ -19,6 +25,14 @@ public class RobotContainer {
   }
   private void configureBindings() {
     CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(), () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+
+    DoublePressTracker.createTrigger(xboxDrv.back()).onTrue(new InstantCommand(() -> {
+      if(AllianceFlipUtil.shouldFlip()){
+        CatzRobotTracker.Instance.resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), Rotation2d.k180deg));
+      }else{
+        CatzRobotTracker.Instance.resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
+      }
+    }));
     // CatzTurret.Instance.setDefaultCommand(
     //   superstructure.turretManualTrackCommand()
     //xboxDrv.start().onTrue(new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(0,0,new Rotation2d()))));
