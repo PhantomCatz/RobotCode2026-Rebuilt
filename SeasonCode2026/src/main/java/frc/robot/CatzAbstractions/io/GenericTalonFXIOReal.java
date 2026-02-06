@@ -108,6 +108,65 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
 	}
 
+	public GenericTalonFXIOReal(MotorIOTalonFXConfig config, boolean requiresFastUpdate) {
+		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
+		setMainConfig(config.mainConfig);
+
+		if (config.followerIDs.length != 0) {
+			followerTalons = new TalonFX[config.followerIDs.length];
+			for (int i = 0; i < config.followerIDs.length; i++) {
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.mainBus));
+				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
+			}
+			setFollowerConfig(followerConfig);
+		}
+
+		internalPositionRotations = leaderTalon.getPosition();
+		velocityRps = leaderTalon.getVelocity();
+		acceleration = leaderTalon.getAcceleration();
+
+		var applied = new ArrayList<StatusSignal<Voltage>>();
+		var supply = new ArrayList<StatusSignal<Current>>();
+		var torque = new ArrayList<StatusSignal<Current>>();
+		var temps = new ArrayList<StatusSignal<Temperature>>();
+
+		applied.add(leaderTalon.getMotorVoltage());
+		supply.add(leaderTalon.getSupplyCurrent());
+		torque.add(leaderTalon.getTorqueCurrent());
+		temps.add(leaderTalon.getDeviceTemp());
+
+		if (followerTalons != null) {
+			for (TalonFX talon : followerTalons) {
+				applied.add(talon.getMotorVoltage());
+				supply.add(talon.getSupplyCurrent());
+				torque.add(talon.getTorqueCurrent());
+				temps.add(talon.getDeviceTemp());
+			}
+		}
+
+		appliedVoltage = List.copyOf(applied);
+		supplyCurrent = List.copyOf(supply);
+		torqueCurrent = List.copyOf(torque);
+		tempCelsius = List.copyOf(temps);
+
+		List<BaseStatusSignal> signalList = new ArrayList<>();
+		signalList.add(internalPositionRotations);
+		signalList.add(velocityRps);
+		signalList.add(acceleration);
+		signalList.addAll(appliedVoltage);
+		signalList.addAll(supplyCurrent);
+		signalList.addAll(torqueCurrent);
+		signalList.addAll(tempCelsius);
+
+		allSignals = signalList.toArray(new BaseStatusSignal[0]);
+
+		if(requiresFastUpdate){
+			BaseStatusSignal.setUpdateFrequencyForAll(100.0, internalPositionRotations, velocityRps);
+		}else{
+			BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
+		}
+	}
+
 	@Override
 	public BaseStatusSignal[] getSignals() {
 		return allSignals;
