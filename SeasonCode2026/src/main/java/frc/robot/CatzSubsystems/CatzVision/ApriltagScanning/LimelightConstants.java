@@ -16,18 +16,21 @@ public class LimelightConstants {
     public static final int kDisabledPipeline = 1;
     public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
+    private static final double limelightCrosshairCompensationPitch = 0.0;
+    private static final double limelightCrosshairCompensationYaw = 0.0; // -3.0 for sushi
+
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
                     Inches.of(0.25).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
-                    Inches.of(-6.5).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
+                    Inches.of(6.5).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
                     Inches.of(19.75).in(Meters) //This makes it easy to account for latency.
                 ),
                 new Rotation3d(
                     Degrees.of(182.0).in(Radians),
-                    Degrees.of(18.0).in(Radians),
-                    Degrees.of(-3.0).in(Radians)
+                    Degrees.of(18.0 + limelightCrosshairCompensationPitch).in(Radians),
+                    Degrees.of(limelightCrosshairCompensationYaw).in(Radians)
                 )
             )
         ))

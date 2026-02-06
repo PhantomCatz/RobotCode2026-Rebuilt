@@ -107,7 +107,7 @@ public class CatzSuperstructure {
 
     public Command startIndexers() {
         return Commands.parallel(
-                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
+                // CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
                 CatzYdexer.Instance.setpointCommand(() -> Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get())));
     }
 
