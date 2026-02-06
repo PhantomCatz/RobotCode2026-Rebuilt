@@ -2,10 +2,7 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -16,6 +13,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -82,30 +80,30 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     // Log active commands
-    Map<String, Integer> commandCounts = new HashMap<>();
-    BiConsumer<Command, Boolean> logCommandFunction = (Command command, Boolean active) -> {
-      String name = command.getName();
-      int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
-      commandCounts.put(name, count);
-      Logger.recordOutput(
-          "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
-      Logger.recordOutput("CommandsAll/" + name, count > 0);
-    };
-    CommandScheduler.getInstance()
-        .onCommandInitialize(
-            (Command command) -> {
-              logCommandFunction.accept(command, true);
-            });
-    CommandScheduler.getInstance()
-        .onCommandFinish(
-            (Command command) -> {
-              logCommandFunction.accept(command, false);
-            });
-    CommandScheduler.getInstance()
-        .onCommandInterrupt(
-            (Command command) -> {
-              logCommandFunction.accept(command, false);
-            });
+    // Map<String, Integer> commandCounts = new HashMap<>();
+    // BiConsumer<Command, Boolean> logCommandFunction = (Command command, Boolean active) -> {
+    //   String name = command.getName();
+    //   int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
+    //   commandCounts.put(name, count);
+    //   Logger.recordOutput(
+    //       "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
+    //   Logger.recordOutput("CommandsAll/" + name, count > 0);
+    // };
+    // CommandScheduler.getInstance()
+    //     .onCommandInitialize(
+    //         (Command command) -> {
+    //           logCommandFunction.accept(command, true);
+    //         });
+    // CommandScheduler.getInstance()
+    //     .onCommandFinish(
+    //         (Command command) -> {
+    //           logCommandFunction.accept(command, false);
+    //         });
+    // CommandScheduler.getInstance()
+    //     .onCommandInterrupt(
+    //         (Command command) -> {
+    //           logCommandFunction.accept(command, false);
+    //         });
 
     // Set Brownout Voltage to WPILIB recommendations
     RobotController.setBrownoutVoltage(6.3);
@@ -114,6 +112,7 @@ public class Robot extends LoggedRobot {
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());
     System.out.println("Mode: " + CatzConstants.hardwareMode.toString());
     System.out.println("Type: " + CatzConstants.getRobotType().toString());
+    SignalLogger.enableAutoLogging(false);
 
     // Run hardware mode check
     if (Robot.isReal()) { // REAL ROBOT

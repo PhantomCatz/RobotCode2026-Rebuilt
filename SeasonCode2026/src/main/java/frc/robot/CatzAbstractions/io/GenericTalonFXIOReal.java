@@ -53,6 +53,8 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	protected final VelocityDutyCycle velocityVoltRequest = new VelocityDutyCycle(0).withSlot(0);
 	protected final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0).withSlot(0);
 
+	private final boolean[] connectedBuffer;
+
 	public GenericTalonFXIOReal(MotorIOTalonFXConfig config) {
 		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
 		setMainConfig(config.mainConfig);
@@ -106,6 +108,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		allSignals = signalList.toArray(new BaseStatusSignal[0]);
 
 		BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
+		connectedBuffer = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
 	}
 
 	public GenericTalonFXIOReal(MotorIOTalonFXConfig config, boolean requiresFastUpdate) {
@@ -165,6 +168,8 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}else{
 			BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
 		}
+		connectedBuffer = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
+
 	}
 
 	@Override
@@ -177,7 +182,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 		inputs.isLeaderConnected = true;
 
-		inputs.isFollowerConnected = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
+		inputs.isFollowerConnected = connectedBuffer;
 
 		inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
 		inputs.velocityRPS = velocityRps.getValueAsDouble();
