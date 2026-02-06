@@ -122,8 +122,6 @@ public class CatzDrivetrain extends SubsystemBase {
     SmartDashboard.putData("Field", field);
   }
 
-  Pose2d pose = new Pose2d();
-
   public double getDistanceError(){
     return distanceError;
   }
@@ -144,8 +142,6 @@ public class CatzDrivetrain extends SubsystemBase {
     for (CatzSwerveModule module : m_swerveModules) {
       module.periodic();
     }
-
-    pose = pose.interpolate(CatzRobotTracker.Instance.getEstimatedPose(), 0.05);
 
     // -----------------------------------------------------------------------------------------------------
     // Attempt to update gyro inputs and log
