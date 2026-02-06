@@ -14,9 +14,9 @@ public class EpsilonRegression {
 
     public static double[][] airtime = {
         /* TEMPLATE REGRESSION */
-        // @x --> distance from target (in inches)
+        // @x --> distance from target (in meters)
         // @y --> shooter velocity (in rps)
-        { 53.0, 20 }
+        { 5.350, 1.20 }
 
     };
 }

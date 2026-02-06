@@ -2,10 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -55,9 +52,9 @@ public class RobotContainer {
     xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
     // ---------------------Testing Controls--------------------
-    xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint())
-        .alongWith(superstructure.turretTrackHubCommand()));
-    // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint());
+    // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint())
+    //     .alongWith(superstructure.turretTrackHubCommand()));
+    xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()));
     // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
     // .alongWith(superstructure.interpolateShooterSpeed()).alongWith(superstructure.turretTrackCommand()));
     xboxTest.leftBumper().onTrue(superstructure.turretTrackHubCommand());

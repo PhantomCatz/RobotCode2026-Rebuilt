@@ -25,8 +25,8 @@ public class LimelightConstants {
                     Inches.of(19.75).in(Meters) //This makes it easy to account for latency.
                 ),
                 new Rotation3d(
-                    Degrees.of(178.0).in(Radians),
-                    Degrees.of(18.0).in(Radians), 
+                    Degrees.of(182.0).in(Radians),
+                    Degrees.of(18.0).in(Radians),
                     Degrees.of(-3.0).in(Radians)
                 )
             )
@@ -54,4 +54,3 @@ public class LimelightConstants {
         public LimelightConfig(){}
     }
 }
-

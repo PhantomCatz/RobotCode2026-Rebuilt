@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -38,7 +40,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
         Rotation2d turretYaw = Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
                 .plus(TurretConstants.TURRET_ROTATION_OFFSET);
 
-        double totalCameraHeading = robotYaw.plus(turretYaw).getDegrees();
+        double totalCameraHeading = (robotYaw.plus(turretYaw)).getDegrees();
 
         // TODO add yaw rate for better accuracy?
         LimelightHelpers.SetRobotOrientation(config.name, totalCameraHeading, 0, 0, 0, 0, 0);
@@ -55,10 +57,10 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
             /*
              * The previous method of just updating turret's position relative to the robot every loop doesnt work because
              * there is latency between the limelight capturing the image data and actually processing it. If it captures
-             * an image when turret's at 10 degrees and the turret rotates between the time of capture and time of process 
+             * an image when turret's at 10 degrees and the turret rotates between the time of capture and time of process
              * and we send a new turret position during that time, it will calculate the robot position with an old image but
              * with a new turret position.
-             * 
+             *
              * We make the turret a "mini robot" on top of the real robot and reverse calculate the robot's position based off of the turret's position.
              * So we have a static limelight offset relative to the turret. The limelight calculates the turret's position correctly,
              * and using a time lookup table grabbing the past turret angle that matches the time of turret position calculations,
@@ -67,8 +69,9 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
             double timestamp = poseEstimate.timestampSeconds;
 
             Pose2d turretPoseFieldSpace = poseEstimate.pose;
+            Logger.recordOutput("Turret Pose Field Space", turretPoseFieldSpace);
 
-            Rotation2d pastTurretRot = new Rotation2d(CatzTurret.Instance.getAngleAtTime(timestamp));
+            Rotation2d pastTurretRot = new Rotation2d(CatzTurret.Instance.getAngleAtTime(timestamp)).plus(TurretConstants.TURRET_ROTATION_OFFSET);
 
             Transform2d robotToTurret = new Transform2d(
                     TurretConstants.TURRET_OFFSET,

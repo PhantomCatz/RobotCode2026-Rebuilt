@@ -12,7 +12,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
@@ -84,7 +83,7 @@ public class CatzSuperstructure {
             interpolateShootingValues(),
             turretTrackHubCommand(),
             shootIfReady(),
-            setShootingAllowed(false)  
+            setShootingAllowed(false)
         );
     }
 

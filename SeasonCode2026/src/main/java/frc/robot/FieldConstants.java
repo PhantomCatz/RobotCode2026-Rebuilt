@@ -24,13 +24,13 @@ public class FieldConstants {
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
   private static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
-  
+
   /**
    * Returns the position of the hub in the correct alliance.
    */
   public static Translation2d getHubLocation(){
     //This apply method correctly accounts for alliance color
-    return AllianceFlipUtil.apply(HUB_LOCATION); 
+    return AllianceFlipUtil.apply(HUB_LOCATION);
   }
   @Getter
   public enum AprilTagLayoutType {
