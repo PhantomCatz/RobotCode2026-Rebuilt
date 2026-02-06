@@ -26,8 +26,6 @@ public interface ModuleIO {
 
     public double steerTorqueCurrentAmps;
     public double steerSupplyCurrentAmps;
-    public double[] odometryDrivePositionsMeters = new double[0];
-    public Rotation2d[] odometrySteerPositions = new Rotation2d[0];
 
     // Simulation Inputs
     public Rotation2d steerPosition = new Rotation2d();
@@ -75,5 +73,5 @@ public interface ModuleIO {
   // ---------------------------------------------------------------------------
   public default void resetMagEncoderIO() {}
 
-  
+
 }

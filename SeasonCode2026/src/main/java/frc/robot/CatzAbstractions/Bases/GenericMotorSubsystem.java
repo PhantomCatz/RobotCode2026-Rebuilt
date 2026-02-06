@@ -80,7 +80,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return inputs.supplyCurrentAmps;
 	}
 
-	public double getAcceleration() { 
+	public double getAcceleration() {
 		return inputs.accelerationRPS;
 	}
 

@@ -25,7 +25,7 @@ public class CatzSwerveModule {
 
   // Module Strings for Logging
   private final String m_moduleName;
-  
+
   // OPTIMIZATION: Pre-calculate logging keys to avoid string concatenation in loops
   private final String logKeyDriveRecFPS;
   private final String logKeyDriveTargFPS;
@@ -46,7 +46,7 @@ public class CatzSwerveModule {
 
   public CatzSwerveModule(ModuleIDs config, String moduleName) {
     this.m_moduleName = moduleName;
-    
+
     // Init Logging Strings once
     logKeyDriveRecFPS = "Module " + m_moduleName + "/drive recorded fps";
     logKeyDriveTargFPS = "Module " + m_moduleName + "/drive target fps";
@@ -57,7 +57,7 @@ public class CatzSwerveModule {
     smartDashAbsEnc = "absencposrad" + m_moduleName;
     smartDashAngle = "angle" + m_moduleName;
     motorOutputs = "RealInputs/Drive/Motors " + m_moduleName;
-    
+
     // Run Subsystem disconnect check
     if (DriveConstants.IS_DRIVE_DISABLED) {
       io = new ModuleIONull();
@@ -113,7 +113,7 @@ public class CatzSwerveModule {
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
 
-  } 
+  }
 
   public void debugLogsSwerve() {
     // OPTIMIZATION: Use pre-cached keys
@@ -136,7 +136,7 @@ public class CatzSwerveModule {
     this.m_swerveModuleState = state;
     double targetAngleRads = state.angle.getRadians();
     double currentAngleRads = getAbsEncRadians();
-    
+
     io.runDriveVelocityRPSIO(Conversions.MPSToRPS(state.speedMetersPerSecond));
     io.runSteerPositionSetpoint(currentAngleRads, targetAngleRads);
   }

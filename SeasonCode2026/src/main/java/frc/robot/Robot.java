@@ -1,7 +1,6 @@
 package frc.robot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,6 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
@@ -163,10 +161,13 @@ public class Robot extends LoggedRobot {
 
       DriverStation.silenceJoystickConnectionWarning(true);
 
-      if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL || 
+      if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
         List<BaseStatusSignal> signalList = new ArrayList<>();
         for(GenericMotorSubsystem subsystem : allSubsystems){
+          if(subsystem == null){
+            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+          }
           Collections.addAll(signalList, subsystem.getSignals());
         }
         allSignals = signalList.toArray(new BaseStatusSignal[0]);

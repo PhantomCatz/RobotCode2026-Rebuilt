@@ -33,7 +33,7 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
 
   public default void setCurrentPosition(double mechanismPosition) {}
 
-  public default BaseStatusSignal[] getSignals() {return null;}
+  public default BaseStatusSignal[] getSignals() {return new BaseStatusSignal[0];}
 
   /**
    * Set's the mechanism's current location as zero.

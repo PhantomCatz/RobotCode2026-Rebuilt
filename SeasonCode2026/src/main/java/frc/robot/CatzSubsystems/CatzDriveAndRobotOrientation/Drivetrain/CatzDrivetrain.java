@@ -95,16 +95,6 @@ public class CatzDrivetrain extends SubsystemBase {
     }
     gyroDisconnected = new Alert("Gyro disconnected!", Alert.AlertType.kWarning);
 
-    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL || 
-        CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
-        List<BaseStatusSignal> signalList = new ArrayList<>();
-        for (CatzSwerveModule module : m_swerveModules) {
-            Collections.addAll(signalList, module.getPhoenixSignals());
-        }
-        allSignals = signalList.toArray(new BaseStatusSignal[0]);
-    } else {
-        allSignals = new BaseStatusSignal[0];
-    }
 
     // Create swerve modules for each corner of the robot
     RT_FRNT_MODULE = new CatzSwerveModule(DriveConstants.MODULE_CONFIGS[INDEX_FR], MODULE_NAMES[INDEX_FR]);
@@ -117,6 +107,17 @@ public class CatzDrivetrain extends SubsystemBase {
     m_swerveModules[INDEX_BR] = RT_BACK_MODULE;
     m_swerveModules[INDEX_BL] = LT_BACK_MODULE;
     m_swerveModules[INDEX_FL] = LT_FRNT_MODULE;
+
+    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
+        CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
+        List<BaseStatusSignal> signalList = new ArrayList<>();
+        for (CatzSwerveModule module : m_swerveModules) {
+            Collections.addAll(signalList, module.getPhoenixSignals());
+        }
+        allSignals = signalList.toArray(new BaseStatusSignal[0]);
+    } else {
+        allSignals = new BaseStatusSignal[0];
+    }
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);

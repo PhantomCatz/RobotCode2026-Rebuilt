@@ -183,9 +183,6 @@ public class ModuleIORealFoc implements ModuleIO {
     inputs.steerVelocityRadsPerSec = Units.rotationsToRadians(steerVelocity.getValueAsDouble());
     inputs.steerSupplyCurrentAmps  = steerSupplyCurrent.getValueAsDouble();
     inputs.steerTorqueCurrentAmps  = steerTorqueCurrent.getValueAsDouble();
-
-    inputs.odometryDrivePositionsMeters = new double[] {drivePosition.getValueAsDouble() * DRIVE_CONFIG.wheelRadius()};
-    inputs.odometrySteerPositions       = new Rotation2d[] {inputs.steerAbsPosition};
   }
 
   public void runDriveVolts(double volts) {

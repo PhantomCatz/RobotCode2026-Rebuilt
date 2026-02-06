@@ -35,7 +35,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	protected final StatusSignal<Angle> internalPositionRotations;
 	protected final StatusSignal<AngularVelocity> velocityRps;
-	protected final StatusSignal<AngularAcceleration> acceleration; 
+	protected final StatusSignal<AngularAcceleration> acceleration;
 	protected final List<StatusSignal<Voltage>> appliedVoltage;
 	protected final List<StatusSignal<Current>> supplyCurrent;
 	protected final List<StatusSignal<Current>> torqueCurrent;
@@ -175,7 +175,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	@Override
 	public void updateInputs(T inputs) {
 
-		inputs.isLeaderConnected = true; 
+		inputs.isLeaderConnected = true;
 
 		inputs.isFollowerConnected = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
 
@@ -230,13 +230,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
-	 * 
+	 *
 	 * Applies a TalonFXConfiguration to all follower motors.
 	 *
-	 * 
-	 * 
+	 *
+	 *
 	 * @param configuration Configuration to apply.
-	 * 
+	 *
 	 */
 
 	public void setFollowerConfig(TalonFXConfiguration configuration) {
@@ -252,11 +252,11 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
-	 * 
+	 *
 	 * Applies a TalonFXConfiguration to the main motor.
-	 * 
+	 *
 	 * @param configuration Configuration to apply.
-	 * 
+	 *
 	 */
 
 	public void setMainConfig(TalonFXConfiguration configuration) {
