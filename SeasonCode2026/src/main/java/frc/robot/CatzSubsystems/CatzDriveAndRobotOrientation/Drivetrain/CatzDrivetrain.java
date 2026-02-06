@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 // import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -35,9 +36,12 @@ import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 // import org.littletonrobotics.junction.AutoLogOutput;
 // import org.littletonrobotics.junction.Logger;
+import java.util.Collections;
+import java.util.List;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -69,19 +73,9 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
 
-  // TODO Remmove this if we are not going to use it
-  // private SwerveSetpoint currentSetpoint =
-  //     new SwerveSetpoint(
-  //         new ChassisSpeeds(),
-  //         new SwerveModuleState[] {
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState(),
-  //           new SwerveModuleState()
-  //         });
-  // private final SwerveSetpointGenerator swerveSetpointGenerator;
-
   private final Field2d field;
+
+  private BaseStatusSignal[] allSignals;
 
   private Pose2d pidGoalPose = new Pose2d();
 
@@ -101,6 +95,17 @@ public class CatzDrivetrain extends SubsystemBase {
     }
     gyroDisconnected = new Alert("Gyro disconnected!", Alert.AlertType.kWarning);
 
+    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL || 
+        CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
+        List<BaseStatusSignal> signalList = new ArrayList<>();
+        for (CatzSwerveModule module : m_swerveModules) {
+            Collections.addAll(signalList, module.getPhoenixSignals());
+        }
+        allSignals = signalList.toArray(new BaseStatusSignal[0]);
+    } else {
+        allSignals = new BaseStatusSignal[0];
+    }
+
     // Create swerve modules for each corner of the robot
     RT_FRNT_MODULE = new CatzSwerveModule(DriveConstants.MODULE_CONFIGS[INDEX_FR], MODULE_NAMES[INDEX_FR]);
     RT_BACK_MODULE = new CatzSwerveModule(DriveConstants.MODULE_CONFIGS[INDEX_BR], MODULE_NAMES[INDEX_BR]);
@@ -113,33 +118,8 @@ public class CatzDrivetrain extends SubsystemBase {
     m_swerveModules[INDEX_BL] = LT_BACK_MODULE;
     m_swerveModules[INDEX_FL] = LT_FRNT_MODULE;
 
-    // swerveSetpointGenerator =
-    //     new SwerveSetpointGenerator(DriveConstants.SWERVE_KINEMATICS, DriveConstants.MODULE_TRANSLATIONS);
-    // TODO Remmove this if we are not going to use it
-
     field = new Field2d();
     SmartDashboard.putData("Field", field);
-
-    // Logging callback for current robot pose
-    // PathPlannerLogging.setLogCurrentPoseCallback(
-    //     (pose) -> {
-    //       // Do whatever you want with the pose here
-    //       field.setRobotPose(pose);
-    //     });
-
-    // // Logging callback for target robot pose
-    // PathPlannerLogging.setLogTargetPoseCallback(
-    //     (pose) -> {
-    //       //Logger.recordOutput("Drive/targetPos", pose);
-    //       field.getObject("target pose").setPose(pose);
-    //     });
-
-    // // Logging callback for the active path, this is sent as a list of poses
-    // PathPlannerLogging.setLogActivePathCallback(
-    //     (poses) -> {
-    //       // Do whatever you want with the poses here
-    //       field.getObject("path").setPoses(poses);
-    //     });
   }
 
   Pose2d pose = new Pose2d();
@@ -157,14 +137,15 @@ public class CatzDrivetrain extends SubsystemBase {
     // ----------------------------------------------------------------------------------------------------
     // Update inputs (sensors/encoders) for code logic and advantage kit
     // ----------------------------------------------------------------------------------------------------
+    if (allSignals.length > 0) {
+        BaseStatusSignal.refreshAll(allSignals);
+    }
+
     for (CatzSwerveModule module : m_swerveModules) {
       module.periodic();
     }
 
-    //Logger.recordOutput("Drive/DistanceError", distanceError);
-
     pose = pose.interpolate(CatzRobotTracker.Instance.getEstimatedPose(), 0.05);
-    //Logger.recordOutput("CatzRobotTracker/interlated pose", pose);
 
     // -----------------------------------------------------------------------------------------------------
     // Attempt to update gyro inputs and log
@@ -174,7 +155,6 @@ public class CatzDrivetrain extends SubsystemBase {
     } catch (Exception e) {
 
     }
-    //Logger.processInputs("RealInputs/Drive/gyro ", gyroInputs);
     // NOTE Gyro needs to be firmly mounted to rio for accurate results.
     // Set Gyro Disconnect alert to go off when gyro is disconnected
     if (Robot.isReal()) {
@@ -208,14 +188,6 @@ public class CatzDrivetrain extends SubsystemBase {
             : robotRelativeVelocity.dtheta;
     CatzRobotTracker.Instance.addVelocityData(robotRelativeVelocity);
 
-    // --------------------------------------------------------------
-    // Logging
-    // --------------------------------------------------------------
-    // SmartDashboard.putNumber("Heading", getGyroHeading());
-
-    //Logger.recordOutput("Drive/Odometry module states", getModuleStates());
-    //Logger.recordOutput("Drive/Odometry wheel positions", wheelPositions);
-    //Logger.recordOutput("Drive/Odometry robot velocity", robotRelativeVelocity);
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------
@@ -226,7 +198,6 @@ public class CatzDrivetrain extends SubsystemBase {
   public ChassisSpeeds appliedChassisSpeeds = new ChassisSpeeds();
   public void drive(ChassisSpeeds chassisSpeeds) {
     appliedChassisSpeeds = chassisSpeeds;
-    // System.out.println("speeed; " + chassisSpeeds);
     ChassisSpeeds descreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, CatzConstants.LOOP_TIME);
     // --------------------------------------------------------
     // Convert chassis speeds to individual module states and set module states
@@ -246,13 +217,6 @@ public class CatzDrivetrain extends SubsystemBase {
       // Set module states to each of the swerve modules
       m_swerveModules[i].setModuleAngleAndVelocity(optimizedDesiredStates[i]);
     }
-
-    // --------------------------------------------------------
-    // Logging
-    // --------------------------------------------------------
-
-    //Logger.recordOutput("Drive/chassispeeds", descreteSpeeds);
-    //Logger.recordOutput("Drive/modulestates", optimizedDesiredStates);
   }
 
   public void simpleDrive(ChassisSpeeds speeds) {
@@ -374,7 +338,6 @@ public class CatzDrivetrain extends SubsystemBase {
    */
   public void followChoreoTrajectoryInit(AutoTrajectory traj){
     hoController = DriveConstants.getNewHolController();
-    // choreoGoal = traj.getFinalPose().get();
   }
 
   /**
