@@ -32,6 +32,10 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
         setCurrentPosition(HoodConstants.HOOD_ZERO_POS);
     }
 
+    public boolean isReadyToShoot(){
+        return super.nearPositionSetpoint() && setpoint.baseUnits != HoodConstants.HOOD_STOW_SETPOINT.baseUnits;
+    }
+
     double p = 0.0;
     double d = 0.0;
     double s = 0.0;

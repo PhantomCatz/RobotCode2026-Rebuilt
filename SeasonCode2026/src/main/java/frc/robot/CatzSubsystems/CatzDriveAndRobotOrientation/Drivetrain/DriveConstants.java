@@ -31,6 +31,8 @@ public class DriveConstants {
 
   public static final int GYRO_ID = 10;
 
+  public static final LoggedTunableNumber TUNABLE_TORQUE_CURRENT = new LoggedTunableNumber("Drive Torque Current", 40.0);
+
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info
   // ---------------------------------------------------------------------------------------------------------------

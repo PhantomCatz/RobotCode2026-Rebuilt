@@ -80,6 +80,8 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private Pose2d pidGoalPose = new Pose2d();
 
+  public double timeToReachTrench = 0.0;
+
   private CatzDrivetrain() {
 
     // Gyro Instantiation

@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
+
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.BaseStatusSignal; // Import added
 
@@ -98,6 +99,7 @@ public class CatzSwerveModule {
       return io.getSignals();
   }
 
+  double prevCur = 0.0;
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
@@ -109,9 +111,16 @@ public class CatzSwerveModule {
     LoggedTunableNumber.ifChanged(
         hashCode(), () -> io.setSteerPID(steerkP.get(), 0, steerkD.get()), steerkP, steerkD);
 
+
+    if(DriveConstants.TUNABLE_TORQUE_CURRENT.get() != prevCur){
+      prevCur = DriveConstants.TUNABLE_TORQUE_CURRENT.get();
+      io.setTorqueCurrent(prevCur);
+    }
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
+
+
 
   }
 
