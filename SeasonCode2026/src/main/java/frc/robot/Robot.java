@@ -174,6 +174,8 @@ public class Robot extends LoggedRobot {
         allSignals = new BaseStatusSignal[0];
       }
 
+      System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);
       // System.out.println("Starting deteciton threaadf==================");
@@ -204,7 +206,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
-
+    System.out.println("auton: " + m_autonomousCommand);
     //  CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
