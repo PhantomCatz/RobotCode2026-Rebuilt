@@ -18,23 +18,17 @@ public class DepotClimb extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            // new ParallelCommandGroup(
-            //     followTrajectoryWithAccuracy(traj1),
-            //     Commands.waitUntil(traj1.atPose("Score1", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
-            //             .andThen(() -> System.out.println("ONE \n"))
-            //     // Commands.waitUntil(trajpre.atPose("Intake2", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
-            //     //         .andThen(Commands.print("TWO \n")),
-            //     // Commands.waitUntil((trajpre.atTime("Score3")))
-            //     //         .andThen(Commands.print("THREE \n")),
-            //     // Commands.waitUntil(trajpre.atPose("Climb5", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
-            //     //         .andThen(Commands.print("FIVE \n"))
-
-            // ),
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     followTrajectoryWithAccuracy(traj1),
                     Commands.waitUntil(traj1.atPose("Score1", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
                             .andThen(() -> System.out.println("ONE \n"))
+                ),
+                Commands.waitSeconds(5),
+                new ParallelCommandGroup(
+                    followTrajectoryWithAccuracy(traj2),
+                    Commands.waitUntil(traj2.atPose("Intake2", AutonConstants.EM_ACCEPTABLE_DIST_METERS, AutonConstants.EM_ACCEPTABLE_RADS))
+                            .andThen(() -> System.out.println("TWO \n"))
                 )
             )
         );
