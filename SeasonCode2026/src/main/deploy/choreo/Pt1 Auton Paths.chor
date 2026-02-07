@@ -4,7 +4,36 @@
  "type":"Swerve",
  "variables":{
   "expressions":{},
-  "poses":{}
+  "poses":{
+   "TestDetection":{
+    "x":{
+     "exp":"7.858984470367432 m",
+     "val":7.858984470367432
+    },
+    "y":{
+     "exp":"0.6741251945495605 m",
+     "val":0.6741251945495605
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   },
+   "TrenchShoot":{
+    "x":{
+     "exp":"4.3927130699157715 m",
+     "val":4.3927130699157715
+    },
+    "y":{
+     "exp":"0.6425298452377319 m",
+     "val":0.6425298452377319
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   }
+  }
  },
  "config":{
   "frontLeft":{
