@@ -109,9 +109,9 @@ public class ShooterRegression {
     // interpolates distance to target for shooter setpoint along regression
     public static Setpoint getShooterSetpointFromRegression(Distance range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return Setpoint.withVelocitySetpoint(ShooterRegression.flywheelAutoAimPolynomial.predict(range.in(Units.Meters)));
+            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimPolynomial.predict(range.in(Units.Meters)));
         } else {
-            return Setpoint.withVelocitySetpoint(ShooterRegression.flywheelAutoAimMap.get(range.in(Units.Meters)));
+            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimMap.get(range.in(Units.Meters)));
         }
     }
 }

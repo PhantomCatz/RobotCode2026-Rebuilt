@@ -72,7 +72,6 @@ public class CatzSuperstructure {
         return Commands.run(() -> {
             Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
             Distance distFromHub = Units.Meters.of(FieldConstants.getHubLocation().getDistance(turretPose));
-
             CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpointFromRegression(distFromHub));
             CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(distFromHub));
         }, CatzFlywheels.Instance, CatzHood.Instance);
