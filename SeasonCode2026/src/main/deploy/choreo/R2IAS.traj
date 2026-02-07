@@ -182,5 +182,6 @@
   "splits":[0,46,69,92]
  },
  "events":[
-   {"name":"ShooterOn", "from":{"target":4, "targetTimestamp":4.47435, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"ShooterOn", "from":{"target":4, "targetTimestamp":4.47435, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"TurretAim", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

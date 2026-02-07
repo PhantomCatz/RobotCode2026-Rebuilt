@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
@@ -356,7 +357,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
     choreoDistanceError = curPose.minus(choreoGoal).getTranslation().getNorm();
 
-    //Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
+    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
   }
 
