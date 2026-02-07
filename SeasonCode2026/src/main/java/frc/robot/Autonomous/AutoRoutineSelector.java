@@ -17,7 +17,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("R2IAS", () -> new R2IAS().getRoutine());
         autoSelector.addRoutine("R1IAS", () -> new R1IAS().getRoutine());
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
-        autoSelector.addRoutine("PNZD", () -> new PNZD().getRoutine());
+        autoSelector.addRoutine("PNZD", () -> new PZND().getRoutine());
         autoSelector.addRoutine("Outpostclimb", () -> new Outpostclimb().getRoutine());
         autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
