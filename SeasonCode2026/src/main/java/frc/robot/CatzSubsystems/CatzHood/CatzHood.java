@@ -34,4 +34,6 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
 
     public static final CatzHood Instance = new CatzHood();
 
+
+
 }

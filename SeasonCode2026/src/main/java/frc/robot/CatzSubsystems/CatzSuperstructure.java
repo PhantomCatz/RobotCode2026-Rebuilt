@@ -102,6 +102,28 @@ public class CatzSuperstructure {
         return CatzClimbTall.Instance.setpointCommand(ClimbConstantsTall.HOME);
     }
 
+    public SequentialCommandGroup fullClimb() {
+        return new SequentialCommandGroup(
+            extendClimbTallCommand(),
+            Commands.waitSeconds(1.0),
+            returnOriginalClimbTallCommand(),
+            Commands.waitSeconds(1.0),
+            extendClimbCommand(),
+            Commands.waitSeconds(1.0),
+            returnOriginalClimbCommand(),
+            Commands.waitSeconds(1.0),
+            extendClimbTallCommand(),
+            Commands.waitSeconds(1.0),
+            returnOriginalClimbTallCommand(),
+            Commands.waitSeconds(1.0),
+            extendClimbCommand(),
+            Commands.waitSeconds(1.0),
+            returnOriginalClimbCommand(),
+            Commands.waitSeconds(1.0)
+
+        );
+    }
+
     public Command tallShrinkShortRise(){
         return new ParallelCommandGroup(
             returnOriginalClimbTallCommand(),

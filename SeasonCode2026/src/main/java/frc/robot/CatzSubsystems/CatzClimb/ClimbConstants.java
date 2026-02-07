@@ -66,7 +66,7 @@ public class ClimbConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
