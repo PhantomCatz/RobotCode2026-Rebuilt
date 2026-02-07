@@ -1,23 +1,18 @@
 package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
-import frc.robot.FieldConstants;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
-import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.PolynomialRegression;
+import frc.robot.Utilities.Setpoint;
 
 public class ShooterRegression {
     //shooter
     public static double kDefaultShootingRPM = 2950.0;
-    public static boolean kUseFlywheelAutoAimPolynomial = false;
+    public static boolean kUseFlywheelAutoAimPolynomial = true;
     public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MIN = new LoggedTunableNumber("Regression/hood angle min", EpsilonRegression.CLOSEST_HOOD_ANGLE[1]);
     public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MIN = new LoggedTunableNumber("Regression/hood dist min", EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
 
@@ -84,10 +79,10 @@ public class ShooterRegression {
         return MathUtil.clamp(angle, HoodConstants.HOOD_ZERO_POS.in(Units.Degrees), HoodConstants.HOOD_MAX_POS.in(Units.Degrees));
     }
 
-    /**
-     * Calculates the hood angle using the live TunableNumbers from the dashboard.
-     * Use this during the match with the real camera distance.
-     */
+    public static Setpoint getHoodSetpoint(Distance distance){
+        return Setpoint.withMotionMagicSetpoint(Units.Degrees.of(getHoodAngle(distance)));
+    }
+
     public static double getHoodAngleTunable(Distance distance) {
         // 1. Get the live values from the dashboard
         double minAngle = TUNABLE_HOOD_ANGLE_MIN.get();
@@ -111,29 +106,12 @@ public class ShooterRegression {
         return getHoodAngleTunable(Units.Meters.of(TUNABLE_DIST.get()));
     }
 
-    public static double getFutureDistance(){
-        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
-        double robotAngle = robotPose.getRotation().getRadians();
-
-        double cosRobotAngle = Math.cos(robotAngle);
-        double sinRobotAngle = Math.sin(robotAngle);
-
-        double turretVelocityX =
-            robotVelocity.vxMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                    * (TurretConstants.TURRET_CENTER.getY() * cosRobotAngle
-                        - TurretConstants.TURRET_CENTER.getX() * sinRobotAngle);
-        double turretVelocityY =
-            robotVelocity.vyMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                    * (TurretConstants.TURRET_CENTER.getX() * cosRobotAngle
-                        - TurretConstants.TURRET_CENTER.getY() * sinRobotAngle);
-
-        Translation2d hubVelocity = new Translation2d(-turretVelocityX, -turretVelocityY); //imagine the hub moving instead of the robot
-        Translation2d robotToHub = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
-
-        return 0.0;
+    // interpolates distance to target for shooter setpoint along regression
+    public static Setpoint getShooterSetpointFromRegression(Distance range) {
+        if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
+            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimPolynomial.predict(range.in(Units.Meters)));
+        } else {
+            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimMap.get(range.in(Units.Meters)));
+        }
     }
-
 }

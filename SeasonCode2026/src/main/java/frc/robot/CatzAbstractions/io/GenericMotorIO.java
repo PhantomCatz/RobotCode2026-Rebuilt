@@ -2,6 +2,7 @@ package frc.robot.CatzAbstractions.io;
 
 
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,6 +16,9 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
     public boolean isLeaderConnected = false;
     public boolean[] isFollowerConnected = new boolean[] {};
 
+    /**
+     * This position has latency compensation
+     */
     public double position = 0.0;
     public double velocityRPS = 0.0;
     public double accelerationRPS = 0.0;
@@ -28,6 +32,8 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
   public default void updateInputs(T inputs) {}
 
   public default void setCurrentPosition(double mechanismPosition) {}
+
+  public default BaseStatusSignal[] getSignals() {return new BaseStatusSignal[0];}
 
   /**
    * Set's the mechanism's current location as zero.
@@ -120,7 +126,5 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
   public default void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {}
 
   public default void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {}
-
-
 
 }

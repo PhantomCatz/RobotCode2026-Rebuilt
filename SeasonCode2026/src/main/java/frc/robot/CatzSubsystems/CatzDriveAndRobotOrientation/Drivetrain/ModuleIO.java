@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
@@ -25,8 +26,6 @@ public interface ModuleIO {
 
     public double steerTorqueCurrentAmps;
     public double steerSupplyCurrentAmps;
-    public double[] odometryDrivePositionsMeters = new double[0];
-    public Rotation2d[] odometrySteerPositions = new Rotation2d[0];
 
     // Simulation Inputs
     public Rotation2d steerPosition = new Rotation2d();
@@ -35,6 +34,9 @@ public interface ModuleIO {
 
   /** Updates the set of loggable inputs. */
   public default void updateInputs(ModuleIOInputs inputs) {}
+
+  public default BaseStatusSignal[] getSignals() {return null;}
+
 
   // ---------------------------------------------------------------------------
   //   Drive Access Methods
@@ -70,4 +72,6 @@ public interface ModuleIO {
   //   Mag Enc Access Methods
   // ---------------------------------------------------------------------------
   public default void resetMagEncoderIO() {}
+
+
 }

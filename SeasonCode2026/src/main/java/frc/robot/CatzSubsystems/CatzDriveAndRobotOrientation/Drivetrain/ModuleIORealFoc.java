@@ -106,7 +106,7 @@ public class ModuleIORealFoc implements ModuleIO {
 
     // Set Update Frequency
     BaseStatusSignal.setUpdateFrequencyForAll(
-        100.0, driveVelocity, driveAppliedVolts, driveSupplyCurrent, driveTorqueCurrent); //our robot runs on 50 hertz. this update frequency is twice as fast
+        100.0, drivePosition, driveVelocity); //our robot runs on 50 hertz. this update frequency is twice as fast
 
     // Optimize bus utilization
     driveTalon.optimizeBusUtilization(0, 1.0);
@@ -139,7 +139,7 @@ public class ModuleIORealFoc implements ModuleIO {
 
     // Set Update Frequency
     BaseStatusSignal.setUpdateFrequencyForAll(
-        100.0, steerVelocity, steerAppliedVolts, steerSupplyCurrent, steerTorqueCurrent); //frequency twice as fast again
+        100.0, steerPosition, steerVelocity); //frequency twice as fast again
 
     steerTalon.optimizeBusUtilization(0, 1.0);
 
@@ -158,26 +158,15 @@ public class ModuleIORealFoc implements ModuleIO {
   }
 
   @Override
+  public BaseStatusSignal[] getSignals() {
+      return new BaseStatusSignal[] {
+          drivePosition, driveVelocity, driveAppliedVolts, driveSupplyCurrent, driveTorqueCurrent,
+          steerPosition, steerVelocity, steerAppliedVolts, steerSupplyCurrent, steerTorqueCurrent
+      };
+  }
+
+  @Override
   public void updateInputs(ModuleIOInputs inputs) {
-    // Refresh Drive Kraken status signals
-    inputs.isDriveMotorConnected =  //this refreshAll is taking the largest chunk of processing time.
-        BaseStatusSignal.refreshAll(
-                drivePosition,
-                driveVelocity,
-                driveAppliedVolts,
-                driveSupplyCurrent,
-                driveTorqueCurrent)
-            .isOK();
-
-    inputs.isSteerMotorConnected =
-        BaseStatusSignal.refreshAll(
-                steerPosition,
-                steerVelocity,
-                steerAppliedVolts,
-                steerSupplyCurrent,
-                steerTorqueCurrent)
-            .isOK();
-
     inputs.isAbsEncoderConnected = encoder.isConnected();
 
     // Refresh drive motor valuesp
@@ -194,9 +183,6 @@ public class ModuleIORealFoc implements ModuleIO {
     inputs.steerVelocityRadsPerSec = Units.rotationsToRadians(steerVelocity.getValueAsDouble());
     inputs.steerSupplyCurrentAmps  = steerSupplyCurrent.getValueAsDouble();
     inputs.steerTorqueCurrentAmps  = steerTorqueCurrent.getValueAsDouble();
-
-    inputs.odometryDrivePositionsMeters = new double[] {drivePosition.getValueAsDouble() * DRIVE_CONFIG.wheelRadius()};
-    inputs.odometrySteerPositions       = new Rotation2d[] {inputs.steerAbsPosition};
   }
 
   public void runDriveVolts(double volts) {
@@ -233,7 +219,6 @@ public class ModuleIORealFoc implements ModuleIO {
     );
 
     Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);
-    Logger.recordOutput("Module " + MODULE_NAME + "/steer current Angle", currentAngleRads);
   }
 
   @Override
