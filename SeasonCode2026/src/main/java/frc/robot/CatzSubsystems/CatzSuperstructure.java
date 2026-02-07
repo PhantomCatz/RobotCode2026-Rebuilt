@@ -68,6 +68,14 @@ public class CatzSuperstructure {
         });
     }
 
+    public Command setHomePositionStep1() {
+        return Commands.parallel(
+            CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_HOME_SETPOINT),
+            Commands.waitSeconds(1.0).andThen(() -> CatzHood.Instance.setCurrentPosition(Units.Degree.of(0)))
+            .andThen(() -> CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_STOP))
+        );
+    }
+
     public Command interpolateShootingValues() {
         return Commands.run(() -> {
             Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
