@@ -10,16 +10,16 @@ import frc.robot.Robot;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 
 public class DetectionConstants {
-	public static final String kLimelightName = "limelight-sushi";
+	public static final String kLimelightName = "limelight-cheese";
 	public static final Pose3d kRobotToCameraOffset = new Pose3d(
 			// forward/back, left/right, up/down
-			new Translation3d(Units.Inches.of(-17.0), Units.Inches.of(0.0), Units.Inches.of(27.7)),
+			new Translation3d(Units.Inches.of(4.5), Units.Inches.of(-10.75), Units.Inches.of(20.5)),
 			// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
 			new Rotation3d(Units.Degree.of(0.0), Units.Degree.of(-48.0), Units.Degree.of(180.0)));
 	public static final int kTelePipeline = 3;
 	public static final int kAutoPipeline = 0;
 	public static final int kDisabledPipeline = 1;
-	public static final Distance kCoralRadius = Units.Inches.of(4.5 / 2);
+	public static final Distance kFuelRadius = Units.Inches.of(3.0);
 	public static final double DETECTION_POSE_BUFFER_SIZE_SEC = 2.0;
 	public static final double MAX_GROUP_DIST_SQUARED = 0.25; // meters, square of the max distance
 

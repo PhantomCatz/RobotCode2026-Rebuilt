@@ -41,19 +41,19 @@ public class DetectionIOLimelight extends DetectionIO {
 	private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
 	private int maxI = 0;
 	private ArrayList<StructPublisher<Pose2d>> publishers = new ArrayList<StructPublisher<Pose2d>>();
-	private ArrayList<Coral> newDet = new ArrayList<>();
-	private AtomicReference<ArrayList<Coral>> tracker = new AtomicReference<>(newDet);
-	private Pose2d closestCoralGroupPose = null;
-	//private ArrayList<Coral> tracker = new ArrayList<Coral>();
+	private ArrayList<Fuel> newDet = new ArrayList<>();
+	private AtomicReference<ArrayList<Fuel>> tracker = new AtomicReference<>(newDet);
+	private Pose2d closestFuelGroupPose = null;
+	//private ArrayList<Fuel> tracker = new ArrayList<Fuel>();
 	private Stopwatch mStopwatch = new Stopwatch();
 	private int pipelineToSet = 0;
 	private Stopwatch mResetStopwatch = new Stopwatch();
 	private LimelightConfig config = new LimelightConfig();
 	private final NetworkTable visTable = ntInstance.getTable("SmartDashboard/Detection");
-	private final StructPublisher<Pose2d> closestCoralPose =
-			visTable.getStructTopic("BestCoralPose", Pose2d.struct).publish();
-	private final StructPublisher<Translation2d> closestCoralTranslation = visTable.getStructTopic(
-					"BestCoralTranslation", Translation2d.struct)
+	private final StructPublisher<Pose2d> closestFuelPose =
+			visTable.getStructTopic("BestFuelPose", Pose2d.struct).publish();
+	private final StructPublisher<Translation2d> closestFuelTranslation = visTable.getStructTopic(
+					"BestFuelTranslation", Translation2d.struct)
 			.publish();
 
 	private Pose2d latestEstimate = new Pose2d();
@@ -67,14 +67,14 @@ public class DetectionIOLimelight extends DetectionIO {
 	private final TimeInterpolatableBuffer<Pose2d> POSE_BUFFER =
       TimeInterpolatableBuffer.createBuffer(POSE_BUFFER_SIZE_SEC);
 
-	class Coral {
-		Pose2d coralPose;
-		Translation2d coralTranslation;
+	class Fuel {
+		Pose2d fuelPose;
+		Translation2d fuelTranslation;
 		double detectionTime;
 
-		public Coral(Pose2d coralPose, Translation2d coralTranslation, double detectionTime) {
-			this.coralPose = coralPose;
-			this.coralTranslation = coralTranslation;
+		public Fuel(Pose2d fuelPose, Translation2d fuelTranslation, double detectionTime) {
+			this.fuelPose = fuelPose;
+			this.fuelTranslation = fuelTranslation;
 			this.detectionTime = detectionTime;
 		}
 	}
@@ -98,8 +98,8 @@ public class DetectionIOLimelight extends DetectionIO {
 	@Override
 	public void updateInputs(DetectionIOInputs inputs) {
 
-		inputs.nearestCoral = getCoralPose();
-		// System.out.println("nearest coral "+inputs.nearestCoral);
+		inputs.nearestFuel = getFuelPose();
+		// System.out.println("nearest fuel "+inputs.nearestFuel);
 		mStopwatch.startIfNotRunning();
 		if (pipelineToSet == LimelightHelpers.getCurrentPipelineIndex(config.name)) {
 			if (pipelineToSet == DetectionMode.AUTO.index) {
@@ -107,7 +107,7 @@ public class DetectionIOLimelight extends DetectionIO {
 				RawDetection[] all = LimelightHelpers.getRawDetections(config.name);
 				double latencyMs = LimelightHelpers.getLatency_Capture(config.name) + LimelightHelpers.getLatency_Pipeline(config.name);
 				Translation2d bestTranslation = null;
-				Pose2d bestCoralPose = null;
+				Pose2d bestFuelPose = null;
 				double now = Timer.getFPGATimestamp(); // Account for latency in storing timestamp
 				Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
 				POSE_BUFFER.addSample(now, curPose);
@@ -116,8 +116,8 @@ public class DetectionIOLimelight extends DetectionIO {
 					System.out.println("failing detection"+now);
 					return;
 				}
-				newDet = new ArrayList<Coral>();
-				// tracker.removeIf((coral) -> now - coral.detectionTime > 0.2);
+				newDet = new ArrayList<Fuel>();
+				// tracker.removeIf((fuel) -> now - fuel.detectionTime > 0.2);
 
 				// while (tracker.size() > 0) {
 				// 	tracker.remove(0);
@@ -127,35 +127,35 @@ public class DetectionIOLimelight extends DetectionIO {
 					if (detection.classId == 0) continue;
 					double tx = detection.txnc;
 					double ty = detection.tync;
-					Translation2d coralTranslation = calcDistToCoral(tx, ty)
-					// Logger.recordOutput("Detection/coralTranslation", coralTranslation);
+					Translation2d fuelTranslation = calcDistToFuel(tx, ty)
+					// Logger.recordOutput("Detection/fuelTranslation", fuelTranslation);
 							.plus(config.robotToCameraOffset.getTranslation().toTranslation2d());
-					Rotation2d coralRotation = coralTranslation.getAngle().plus(Rotation2d.k180deg);
-					// System.out.println(coralRotation);
-					Pose2d coralPose =
-						poseFromCapture.get().transformBy(new Transform2d(coralTranslation, coralRotation));
+					Rotation2d fuelRotation = fuelTranslation.getAngle().plus(Rotation2d.k180deg);
+					// System.out.println(fuelRotation);
+					Pose2d fuelPose =
+						poseFromCapture.get().transformBy(new Transform2d(fuelTranslation, fuelRotation));
 
 
-					if (FieldLayout.outsideField(coralPose)) {
-						SmartDashboard.putBoolean("Outside Field", FieldLayout.outsideField(coralPose));
-						// LogUtil.recordPose2d(config.name + "Last Coral Pose Outside Field", coralPose);
+					if (FieldLayout.outsideField(fuelPose)) {
+						SmartDashboard.putBoolean("Outside Field", FieldLayout.outsideField(fuelPose));
+						// LogUtil.recordPose2d(config.name + "Last Fuel Pose Outside Field", fuelPose);
 						continue;
 					}
-					newDet.add(new Coral(coralPose, coralTranslation, now - (latencyMs / 1000)));
+					newDet.add(new Fuel(fuelPose, fuelTranslation, now - (latencyMs / 1000)));
 				}
 
-				for (Coral coral : newDet) {
+				for (Fuel fuel : newDet) {
 					if (bestTranslation == null
-							|| bestCoralPose.getTranslation().getDistance(base)
-									> coral.coralPose.getTranslation().getDistance(base)) {
-						bestTranslation = coral.coralTranslation;
-						bestCoralPose = coral.coralPose;
+							|| bestFuelPose.getTranslation().getDistance(base)
+									> fuel.fuelPose.getTranslation().getDistance(base)) {
+						bestTranslation = fuel.fuelTranslation;
+						bestFuelPose = fuel.fuelPose;
 					}
 				}
 
-				if (bestCoralPose != null) {
-					closestCoralPose.set(bestCoralPose);
-					closestCoralTranslation.set(bestTranslation);
+				if (bestFuelPose != null) {
+					closestFuelPose.set(bestFuelPose);
+					closestFuelTranslation.set(bestTranslation);
 				}
 			} else if (pipelineToSet == DetectionMode.TELE.index) {
 				updateAprilTagDetection();
@@ -175,19 +175,19 @@ public class DetectionIOLimelight extends DetectionIO {
 	}
 
 	@Override
-	public Pose2d getCoralPose() {
+	public Pose2d getFuelPose() {
 		Translation2d bestTranslation = null;
-		Pose2d bestCoralPose = null;
+		Pose2d bestFuelPose = null;
 		Translation2d robotPose = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-		for (Coral coral : tracker.get()) {
+		for (Fuel fuel : tracker.get()) {
 			if (bestTranslation == null
-					|| bestCoralPose.getTranslation().getDistance(robotPose)
-							> coral.coralPose.getTranslation().getDistance(robotPose)) {
-				bestTranslation = coral.coralTranslation;
-				bestCoralPose = coral.coralPose;
+					|| bestFuelPose.getTranslation().getDistance(robotPose)
+							> fuel.fuelPose.getTranslation().getDistance(robotPose)) {
+				bestTranslation = fuel.fuelTranslation;
+				bestFuelPose = fuel.fuelPose;
 			}
 		}
-		return bestCoralPose; // will return null if no coral
+		return bestFuelPose; // will return null if no fuel
 	}
 
 	private double getSquaredDistance(Translation2d iTranslation, Translation2d jTranslation) {
@@ -198,20 +198,20 @@ public class DetectionIOLimelight extends DetectionIO {
 
 	@Override
 	public synchronized void setNearestGroupPose() {
-		ArrayList<Coral> currentCoral = tracker.get();
-		if (currentCoral.size() == 0) { // if can't see, use old pose
+		ArrayList<Fuel> currentFuel = tracker.get();
+		if (currentFuel.size() == 0) { // if can't see, use old pose
 			return;
 		}
 		double now = Timer.getFPGATimestamp();
-		Pose2d bestGroupCoralPose = null;
-		Boolean[] visited = new Boolean[currentCoral.size()];
+		Pose2d bestGroupFuelPose = null;
+		Boolean[] visited = new Boolean[currentFuel.size()];
 		Translation2d base = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-		for (int i = 0; i < currentCoral.size(); i++) {
+		for (int i = 0; i < currentFuel.size(); i++) {
 			visited[i] = false;
 		}
-		// make arraylist of groups, each group hold indices of corals in the group
+		// make arraylist of groups, each group hold indices of fuels in the group
 		ArrayList<ArrayList<Integer>> groups = new ArrayList<>();
-		for (int i=0; i<currentCoral.size(); i++) {
+		for (int i=0; i<currentFuel.size(); i++) {
 			if (visited[i]) continue;
 			visited[i] = true;
 			Queue<Integer> q = new LinkedList<>();
@@ -220,47 +220,47 @@ public class DetectionIOLimelight extends DetectionIO {
 			while (!q.isEmpty()) {
 				Integer cur = q.poll();
 				groups.get(groups.size()-1).add(cur);
-				for (int j=0; j<currentCoral.size(); j++) {
+				for (int j=0; j<currentFuel.size(); j++) {
 					if (visited[j]) continue;
-					if (getSquaredDistance(currentCoral.get(i).coralTranslation, currentCoral.get(j).coralTranslation) < DetectionConstants.MAX_GROUP_DIST_SQUARED) {
+					if (getSquaredDistance(currentFuel.get(i).fuelTranslation, currentFuel.get(j).fuelTranslation) < DetectionConstants.MAX_GROUP_DIST_SQUARED) {
 						visited[j] = true;
 						q.add(j);
 					}
 				}
 			}
 		}
-		// System.out.println("number of corals"+tracker.size());
+		// System.out.println("number of fuels"+tracker.size());
 		// System.out.println("number of groups"+groups.size());
 		// for (int i=0; i<groups.size(); i++) {
 		// 	System.out.println("group"+i+" size"+groups.get(i).size());
 		// }
 		// loop through groups and find which has best ratio
-		double bestRatio = 0.0; // ratio of size of group to distance of closest coral in group
+		double bestRatio = 0.0; // ratio of size of group to distance of closest fuel in group
 		for (int i=0; i<groups.size(); i++) {
 			double closestDistInGroup = 1e9;
-			Pose2d closestCoralPoseInGroup = null;
+			Pose2d closestFuelPoseInGroup = null;
 			for (int c : groups.get(i)) {
-				Pose2d thisCoralPose = currentCoral.get(c).coralPose;
-				double thisDist = thisCoralPose.getTranslation().getDistance(base);
+				Pose2d thisFuelPose = currentFuel.get(c).fuelPose;
+				double thisDist = thisFuelPose.getTranslation().getDistance(base);
 				if (closestDistInGroup > thisDist) {
 					closestDistInGroup = thisDist;
-					closestCoralPoseInGroup = thisCoralPose;
+					closestFuelPoseInGroup = thisFuelPose;
 				}
 			}
 			double thisRatio = groups.get(i).size() / closestDistInGroup;
 			if (thisRatio > bestRatio) {
 				bestRatio = thisRatio;
-				bestGroupCoralPose = closestCoralPoseInGroup;
+				bestGroupFuelPose = closestFuelPoseInGroup;
 			}
 		}
 		double timeUsed = Timer.getFPGATimestamp() - now;
 		System.out.println("group function time used: "+timeUsed);
-		closestCoralGroupPose = bestGroupCoralPose;
+		closestFuelGroupPose = bestGroupFuelPose;
 	}
 
 	@Override
 	public synchronized Pose2d getNearestGroupPose() {
-		return closestCoralGroupPose;
+		return closestFuelGroupPose;
 	}
 
 	@Override
@@ -269,17 +269,17 @@ public class DetectionIOLimelight extends DetectionIO {
 	}
 
 	@Override
-	public int coralCount() {
+	public int fuelCount() {
 		return LimelightHelpers.getTargetCount(config.name);
 	}
 
 	@Override
-	public Translation2d calcDistToCoral(double tx, double ty) {
-		final Distance heightFromCoral = config.robotToCameraOffset.getMeasureZ().minus(DetectionConstants.kCoralRadius);
+	public Translation2d calcDistToFuel(double tx, double ty) {
+		final Distance heightFromFuel = config.robotToCameraOffset.getMeasureZ().minus(DetectionConstants.kFuelRadius);
 
 		double totalAngleY = Units.degreesToRadians(ty) //pitch
 				- config.robotToCameraOffset.getRotation().getY();
-		Distance distAwayY = heightFromCoral.times(Math.tan(totalAngleY)); // robot x. forward/backward
+		Distance distAwayY = heightFromFuel.times(Math.tan(totalAngleY)); // robot x. forward/backward
 
 		//if the limelight is facing backwards, you need to flip dist away because this value is calculated relative to the limelight but the actual distance needs to be relative to the robot.
 		if(Math.abs(Math.toDegrees(config.robotToCameraOffset.getRotation().getZ())) > 90.0){
@@ -287,9 +287,9 @@ public class DetectionIOLimelight extends DetectionIO {
 		}
 
 
-		Distance distHypotenuseYToGround = BaseUnits.DistanceUnit.of(Math.hypot( //distance from lens to coral only in the y-axis
+		Distance distHypotenuseYToGround = BaseUnits.DistanceUnit.of(Math.hypot( //distance from lens to fuel only in the y-axis
 				distAwayY.in(BaseUnits.DistanceUnit),
-				heightFromCoral.in(BaseUnits.DistanceUnit)));
+				heightFromFuel.in(BaseUnits.DistanceUnit)));
 
 		double totalAngleX = Units.degreesToRadians(-tx)
 				+ config.robotToCameraOffset.getRotation().getZ();
