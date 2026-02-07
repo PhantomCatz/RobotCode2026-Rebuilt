@@ -8,22 +8,24 @@ import frc.robot.Autonomous.AutoRoutineBase;
 public class DepotClimb extends AutoRoutineBase{
     public DepotClimb(){
         super("DepotClimb");
+
         AutoTrajectory traj1 = getTrajectory("DepotClimb",0);
         AutoTrajectory traj2 = getTrajectory("DepotClimb",1);
         AutoTrajectory traj3 = getTrajectory("DepotClimb",2);
         AutoTrajectory traj4 = getTrajectory("DepotClimb",3);
+
         traj1.atTime("Score1").onTrue(Commands.print("yo gurt"));
         traj1.atTime("Intake2").onTrue(Commands.print("yo gurt"));
         traj3.atTime("Score3").onTrue(Commands.print("yo gurt"));
-        traj4.atTime("Climb5").onTrue(Commands.print("Yo gurt"));
+
         prepRoutine(
             traj1,
             new SequentialCommandGroup(
                 followTrajectoryWithAccuracy(traj1),
                 followTrajectoryWithAccuracy(traj2),
                 followTrajectoryWithAccuracy(traj3),
-                followTrajectoryWithAccuracy(traj4)
-
+                followTrajectoryWithAccuracy(traj4),
+                Commands.print("Yo gurt")
             ),
             Commands.print("done")
         );
