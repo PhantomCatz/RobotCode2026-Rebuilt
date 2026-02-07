@@ -15,7 +15,7 @@ public class R2IAS extends AutoRoutineBase{
         AutoTrajectory traj1 = getTrajectory("R2IASOut");
         AutoTrajectory traj2 = getTrajectory("R2IASIn");
 
-        traj1.atTime(AutonConstants.TURRET_TRACK).onTrue(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint())); 
+        traj1.atTime(AutonConstants.TURRET_TRACK).onTrue(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
 
         prepRoutine(
             traj1,

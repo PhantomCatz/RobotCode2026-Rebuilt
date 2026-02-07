@@ -241,6 +241,14 @@ public class ModuleIORealFoc implements ModuleIO {
   }
 
   @Override
+  public void setTorqueCurrent(double cur){
+    driveTalonConfig.TorqueCurrent.PeakForwardTorqueCurrent = cur;
+    driveTalonConfig.TorqueCurrent.PeakReverseTorqueCurrent = -cur;
+
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
   public void setSteerNeutralModeIO(NeutralModeValue type) {
     steerTalonConfig.MotorOutput.NeutralMode = type;
     steerTalon.getConfigurator().apply(steerTalonConfig);

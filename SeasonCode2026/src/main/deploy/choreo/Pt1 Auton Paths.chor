@@ -32,6 +32,20 @@
      "exp":"0 deg",
      "val":0.0
     }
+   },
+   "TestOut":{
+    "x":{
+     "exp":"RightShoot.x",
+     "val":4.323790550231934
+    },
+    "y":{
+     "exp":"RightShoot.y",
+     "val":0.5927739977836609
+    },
+    "heading":{
+     "exp":"RightShoot.heading",
+     "val":0.0
+    }
    }
   }
  },
@@ -73,12 +87,12 @@
    "val":0.0508
   },
   "vmax":{
-   "exp":"4000 RPM",
-   "val":418.87902047863906
+   "exp":"6000 RPM",
+   "val":628.3185307179587
   },
   "tmax":{
-   "exp":"1.2 N * m",
-   "val":1.2
+   "exp":"0.772 N * m",
+   "val":0.772
   },
   "cof":{
    "exp":"1",

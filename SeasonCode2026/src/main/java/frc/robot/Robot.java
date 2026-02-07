@@ -205,6 +205,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
+    //  CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }

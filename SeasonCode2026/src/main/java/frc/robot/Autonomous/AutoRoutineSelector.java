@@ -12,6 +12,7 @@ public class AutoRoutineSelector {
 
     private AutoRoutineSelector(){
         autoSelector.addRoutine("R2IAS", () -> new R2IAS().getRoutine());
+        autoSelector.addRoutine("Test", () -> new Test().getRoutine());
 
         SmartDashboard.putData(autoSelector);
 

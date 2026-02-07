@@ -19,7 +19,6 @@ public class AimCalculations {
      * while respecting physical limits and minimizing movement
      */
     public static Setpoint calculateHubTrackingSetpoint() {
-        System.out.println("heheheha");
         return calculateTurretTrackingSetpoint(FieldConstants.getHubLocation());
     }
 
