@@ -17,6 +17,7 @@ import frc.robot.Utilities.DoublePressTracker;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
+  private final CatzDrivetrain drivetrain = CatzDrivetrain.getInstance();
 
   private static final CommandXboxController xboxDrv = new CommandXboxController(0);
   private static final CommandXboxController xboxTest = new CommandXboxController(1);
@@ -25,23 +26,23 @@ public class RobotContainer {
     configureBindings();
 
     var turret = CatzTurret.Instance;
-    var tracker = CatzRobotTracker.Instance;
+    var tracker = CatzRobotTracker.getInstance();
     var vision = LimelightSubsystem.Instance;
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
   }
 
   private void configureBindings() {
-    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
-        () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+    CatzDrivetrain.getInstance().setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
+        () -> xboxDrv.getRightX(), CatzDrivetrain.getInstance()));
     // CatzTurret.Instance.setDefaultCommand(
     // superstructure.turretManualTrackCommand()
     DoublePressTracker.createTrigger(xboxDrv.back()).onTrue(new InstantCommand(() -> {
       if (AllianceFlipUtil.shouldFlip()) {
-        CatzRobotTracker.Instance
-            .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), Rotation2d.k180deg));
+        CatzRobotTracker.getInstance()
+            .resetPose(new Pose2d(CatzRobotTracker.getInstance().getEstimatedPose().getTranslation(), Rotation2d.k180deg));
       } else {
-        CatzRobotTracker.Instance
-            .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
+        CatzRobotTracker.getInstance()
+            .resetPose(new Pose2d(CatzRobotTracker.getInstance().getEstimatedPose().getTranslation(), new Rotation2d()));
       }
     }));
     // );

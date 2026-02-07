@@ -215,7 +215,7 @@ public class ModuleIORealFoc implements ModuleIO {
   public void runSteerPositionSetpoint(double currentAngleRads, double targetAngleRads) {
     steerTalon.setControl(
         dutyCycleOutControl.withOutput(
-            steerFeedback.calculate(currentAngleRads, targetAngleRads))
+          -steerFeedback.calculate(currentAngleRads, targetAngleRads))
     );
 
     Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);

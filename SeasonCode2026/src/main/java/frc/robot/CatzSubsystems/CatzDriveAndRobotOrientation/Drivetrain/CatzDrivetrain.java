@@ -30,7 +30,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
 // import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
-import frc.robot.Autonomous.AutonConstants;
 // import frc.robot.Autonomous.AutonConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
@@ -44,15 +43,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
-  public static final CatzDrivetrain Instance = new CatzDrivetrain();
-
-  private double distanceError = 999999.9; //meters
-
-  private Pose2d choreoGoal = new Pose2d();
-  private double choreoDistanceError = 9999999.9; //meters //set this to a high number initially just in case the trajectory thinks it's at goal as soon as it starts
+  private static CatzDrivetrain Instance;
 
   // Gyro input/output interface
   private final GyroIO gyroIO;
@@ -78,6 +73,7 @@ public class CatzDrivetrain extends SubsystemBase {
   private BaseStatusSignal[] allSignals;
 
   private Pose2d pidGoalPose = new Pose2d();
+  public double timeToReachTrench = 0.0;
 
   private CatzDrivetrain() {
 
@@ -121,14 +117,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
-  }
-
-  public double getDistanceError(){
-    return distanceError;
-  }
-
-  public void setDistanceError(double d){
-    this.distanceError = d;
   }
 
   @Override
@@ -175,7 +163,7 @@ public class CatzDrivetrain extends SubsystemBase {
                                                     gyroAngle2d,
                                                     Timer.getFPGATimestamp()
                                           );
-    CatzRobotTracker.Instance.addOdometryObservation(observation);
+    CatzRobotTracker.getInstance().addOdometryObservation(observation);
 
     // Update current velocities use gyro when possible
     Twist2d robotRelativeVelocity = getTwist2dSpeeds();
@@ -183,7 +171,7 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroInputs.gyroConnected
             ? Math.toRadians(gyroInputs.gyroYawVel)
             : robotRelativeVelocity.dtheta;
-    CatzRobotTracker.Instance.addVelocityData(robotRelativeVelocity);
+    CatzRobotTracker.getInstance().addVelocityData(robotRelativeVelocity);
 
   } // end of drivetrain periodic
 
@@ -351,17 +339,12 @@ public class CatzDrivetrain extends SubsystemBase {
       0.0
     );
 
-    Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
+    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
-    choreoDistanceError = curPose.minus(choreoGoal).getTranslation().getNorm();
 
-    //Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
+    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
-  }
-
-  public boolean isRobotAtPoseChoreo(){
-    return choreoDistanceError <= AutonConstants.ACCEPTABLE_DIST_METERS;
   }
 
   // -----------------------------------------------------------------------------------------------------------
@@ -417,12 +400,11 @@ public class CatzDrivetrain extends SubsystemBase {
         .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
         .toArray(Rotation2d[]::new);
   }
-
-  public Pose2d getPIDGoalPose(){
-    return pidGoalPose;
+  public static CatzDrivetrain getInstance() {
+    if (Instance == null) {
+      Instance = new CatzDrivetrain();
+    }
+    return Instance;
   }
 
-  public void setPIDGoalPose(Pose2d p){
-    this.pidGoalPose = p;
-  }
 }

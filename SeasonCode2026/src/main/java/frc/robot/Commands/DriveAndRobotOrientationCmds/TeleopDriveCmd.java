@@ -51,6 +51,8 @@ public class TeleopDriveCmd extends Command {
 
     // subsystem assignment
     this.m_drivetrain = drivetrain;
+    System.out.println("TeleopDriveCmd drivetrain = " + drivetrain);
+
 
     addRequirements(this.m_drivetrain);
   }
@@ -108,7 +110,7 @@ public void initialize() {}
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(m_headingAndVelocity_X,
                                                           m_headingAndVelocity_Y,
                                                           turningVelocity,
-                                                          CatzRobotTracker.Instance.getEstimatedPose().getRotation());
+                                                          CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
     // Send new chassisspeeds object to the drivetrain
     m_drivetrain.drive(chassisSpeeds);

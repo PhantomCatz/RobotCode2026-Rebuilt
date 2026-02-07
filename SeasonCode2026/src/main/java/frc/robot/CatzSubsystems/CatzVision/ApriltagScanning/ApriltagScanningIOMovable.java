@@ -36,7 +36,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     }
 
     private void updateGyroWithTurret() {
-        Rotation2d robotYaw = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
+        Rotation2d robotYaw = CatzRobotTracker.getInstance().getEstimatedPose().getRotation();
         Rotation2d turretYaw = Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
                 .plus(TurretConstants.TURRET_ROTATION_OFFSET);
 
@@ -83,7 +83,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
             latestEstimate = robotPoseFieldSpace;
             latestEstimateTime = Units.Seconds.of(timestamp);
 
-            CatzRobotTracker.Instance.addVisionObservation(
+            CatzRobotTracker.getInstance().addVisionObservation(
                     new VisionObservation(
                             config.name,
                             robotPoseFieldSpace,
