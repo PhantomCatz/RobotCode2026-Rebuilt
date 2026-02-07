@@ -16,7 +16,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class YdexerConstants {
-	private static final Voltage ON_VOLTS = Units.Volts.of(12.0);
+	private static final Voltage ON_VOLTS = Units.Volts.of(8.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
@@ -32,6 +32,11 @@ public class YdexerConstants {
 
     private static final int YDEXER_MOTOR_ID = 50;
 
+	private static final double[][] FLYWHEEL_VS_VOLTS = {
+		//flywheel rps vs vdexer volts
+		{60, }
+	};
+
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
@@ -44,8 +49,8 @@ public class YdexerConstants {
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
