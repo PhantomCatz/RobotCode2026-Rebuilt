@@ -174,6 +174,8 @@ public class Robot extends LoggedRobot {
         allSignals = new BaseStatusSignal[0];
       }
 
+      System.out.println("Chooser: " + AutoRoutineSelector.Instance.getAutoChooser());
+
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);
       // System.out.println("Starting deteciton threaadf==================");
