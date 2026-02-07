@@ -8,8 +8,8 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 
 public class TurretIOTalonFX extends GenericTalonFXIOReal<TurretIO.TurretIOInputs> implements TurretIO{
 
-    public TurretIOTalonFX(MotorIOTalonFXConfig config){
-        super(config);
+    public TurretIOTalonFX(MotorIOTalonFXConfig config, boolean requiresFastUpdate){
+        super(config, requiresFastUpdate);
     }
     double prevAngularVel = 0.0;
     double prevTimestamp = Timer.getFPGATimestamp();

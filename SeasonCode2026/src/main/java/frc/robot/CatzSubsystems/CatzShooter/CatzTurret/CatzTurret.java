@@ -110,7 +110,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Turret Configured for Real");
-                return new TurretIOTalonFX(TurretConstants.getIOConfig());
+                return new TurretIOTalonFX(TurretConstants.getIOConfig(), true);
             case SIM:
                 System.out.println("Turret Configured for Simulation");
                 return new TurretIOSim(TurretConstants.gains);
