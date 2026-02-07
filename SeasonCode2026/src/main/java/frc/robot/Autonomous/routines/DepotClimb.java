@@ -13,7 +13,7 @@ public class DepotClimb extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("DepotClimb",2);
         AutoTrajectory traj4 = getTrajectory("DepotClimb",3);
         traj1.atTime("Score1").onTrue(Commands.print("yo gurt"));
-        traj2.atTime("Intake2").onTrue(Commands.print("yo gurt"));
+        traj1.atTime("Intake2").onTrue(Commands.print("yo gurt"));
         traj3.atTime("Score3").onTrue(Commands.print("yo gurt"));
         traj4.atTime("Climb5").onTrue(Commands.print("Yo gurt"));
         prepRoutine(
