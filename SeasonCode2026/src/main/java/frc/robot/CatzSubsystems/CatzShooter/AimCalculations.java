@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.Setpoint;
@@ -18,6 +19,7 @@ public class AimCalculations {
      * while respecting physical limits and minimizing movement
      */
     public static Setpoint calculateHubTrackingSetpoint() {
+        System.out.println("heheheha");
         return calculateTurretTrackingSetpoint(FieldConstants.getHubLocation());
     }
 
@@ -56,6 +58,6 @@ public class AimCalculations {
     }
 
     public static boolean readyToShoot(){
-        return CatzTurret.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
+        return CatzTurret.Instance.nearPositionSetpoint() && CatzHood.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
     }
 }
