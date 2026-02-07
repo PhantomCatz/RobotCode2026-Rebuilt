@@ -68,7 +68,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
                 Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
-                        .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+                        .plus(CatzRobotTracker.getInstance().getEstimatedPose().getRotation())
                         .plus(TurretConstants.TURRET_ROTATION_OFFSET));
         Logger.recordOutput("Shooter Location", turretPose);
 
@@ -94,7 +94,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     }
 
     public Translation2d getFieldToTurret() {
-        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d fieldToRobot = CatzRobotTracker.getInstance().getEstimatedPose();
         return fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(fieldToRobot.getRotation()));
     }
 

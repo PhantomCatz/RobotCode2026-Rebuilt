@@ -22,7 +22,7 @@ public class AimCalculations {
     }
 
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target){
-        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d fieldToRobot = CatzRobotTracker.getInstance().getEstimatedPose();
 
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
 
@@ -32,8 +32,8 @@ public class AimCalculations {
     }
 
     public static double getFutureDistance() {
-        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        Pose2d robotPose = CatzRobotTracker.getInstance().getEstimatedPose();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.getInstance().getRobotChassisSpeeds();
         double robotAngle = robotPose.getRotation().getRadians();
 
         double cosRobotAngle = Math.cos(robotAngle);
