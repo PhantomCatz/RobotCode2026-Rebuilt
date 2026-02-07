@@ -21,7 +21,11 @@ public class BallCounter extends SubsystemBase {
             } else if (velocity < oldv && ballshot == false) {
                 ++ballsshot;
                 boolean ballshot = true;;
+<<<<<<< Updated upstream
                 System.out.println("Balls shot:" + ballsshot);
+=======
+                System.out.println("Balls shot: " + ballsshot);
+>>>>>>> Stashed changes
             } else {
                 oldv = velocity;
                 ballshot = false;
