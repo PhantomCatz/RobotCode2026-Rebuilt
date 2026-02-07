@@ -20,14 +20,13 @@ import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzClimbTall.CatzClimbTall;
 import frc.robot.CatzSubsystems.CatzClimbTall.ClimbConstantsTall;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.CatzSubsystems.CatzHood.CatzHood;
-import frc.robot.CatzSubsystems.CatzHood.HoodConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
-import frc.robot.CatzSubsystems.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzTurret.TurretConstants;
-import frc.robot.Utilities.InterpolatingDouble;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -173,7 +172,7 @@ public class CatzSuperstructure {
      */
     public Setpoint calculateHubTrackingSetpoint() {
         Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
-        Translation2d hubDirection = FieldConstants.HUB_LOCATION.minus(robotPose.getTranslation());
+        Translation2d hubDirection = FieldConstants.getHubLocation().minus(robotPose.getTranslation());
         double targetRads = hubDirection.getAngle().getRadians()
                 - MathUtil.angleModulus(robotPose.getRotation().getRadians());
 
@@ -183,20 +182,12 @@ public class CatzSuperstructure {
     // interpolates distance to target for shooter setpoint along regression
     private double getShooterSetpointFromRegression(double range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return ShooterRegression.kFlywheelAutoAimPolynomial.predict(range);
+            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
         } else {
-            return ShooterRegression.kFlywheelAutoAimMap.getInterpolated(new InterpolatingDouble(range)).value;
+            return 0.0;
         }
     }
 
-    // interpolates distance to target for hood setpoint along regression
-    private double getHoodSetpointFromRegression(double range) {
-        if (ShooterRegression.kUseHoodAutoAimPolynomial) {
-            return ShooterRegression.kHoodAutoAimPolynomial.predict(range);
-        } else {
-            return ShooterRegression.kHoodAutoAimMap.getInterpolated(new InterpolatingDouble(range)).value;
-        }
-    }
 
     // public Command shootTuning(){
     // return

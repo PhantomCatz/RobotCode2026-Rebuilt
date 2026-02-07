@@ -12,7 +12,7 @@ public class CatzClimbTall extends ServoMotorSubsystem<ClimbIOTall, ClimbIOTall.
     private static ClimbIOTall getIOInstance() {
         if (CatzConstants.ClimbOn == false) {
             System.out.println("Climb Disabled by CatzConstants");
-            return new ClimbIOTallSim();
+            return new ClimbIOTallSim(ClimbConstantsTall.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -20,10 +20,10 @@ public class CatzClimbTall extends ServoMotorSubsystem<ClimbIOTall, ClimbIOTall.
                 return new ClimbIOTalonFXTall(ClimbConstantsTall.getIOConfig());
             case SIM:
                 System.out.println("Climb Configured for Simulation");
-                return new ClimbIOTallSim();
+                return new ClimbIOTallSim(ClimbConstantsTall.gains);
                 default:
                 System.out.println("Climb Unconfigured");
-                return new ClimbIOTallSim();
+                return new ClimbIOTallSim(ClimbConstantsTall.gains);
         }
     }
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -47,9 +48,9 @@ public class RobotContainer {
     // );
 
     // ----------------------Shooting-----------------------
-    xboxDrv.leftBumper().onTrue(superstructure.prepareForShooting());
-    xboxDrv.leftBumper().onFalse(superstructure.setShootingAllowed(true));
-    xboxDrv.x().onTrue(superstructure.stopAllShooting());
+    // xboxDrv.leftBumper().onTrue(superstructure.prepareForShooting());
+    // xboxDrv.leftBumper().onFalse(superstructure.setShootingAllowed(true));
+    // xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
     // xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
     // xboxDrv.y().onTrue(superstructure.flywheelManualCommand());
@@ -70,8 +71,8 @@ public class RobotContainer {
     xboxDrv.rightBumper().onTrue(superstructure.fullClimb());
 
 
-    xboxTest.a().onTrue(superstructure.startIndexers());
-    xboxTest.x().onTrue(superstructure.stopAllShooting());
+    // xboxTest.a().onTrue(superstructure.startIndexers());
+    // xboxTest.x().onTrue(superstructure.stopAllShooting());
   }
 
   public static void rumbleDrv(double val) {
