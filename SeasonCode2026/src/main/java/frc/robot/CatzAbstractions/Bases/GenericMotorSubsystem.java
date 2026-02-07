@@ -3,6 +3,7 @@ package frc.robot.CatzAbstractions.Bases;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.google.common.base.Supplier;
 
 import edu.wpi.first.units.Units;
@@ -51,6 +52,18 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return runOnce(() -> applySetpoint(setpoint));
 	}
 
+	public Command setpointCommand(Supplier<Setpoint> supplier){
+		return runOnce(() -> applySetpoint(supplier.get()));
+	}
+
+	public void setGainsPV(double p, double v){
+		io.setGainsSlot0(p, 0.0, 0.0, 0.0, v, 0.0, 0.0);
+	}
+
+	public BaseStatusSignal[] getSignals(){
+		return io.getSignals();
+	}
+
 	public Setpoint getSetpoint() {
 		return setpoint;
 	}
@@ -59,7 +72,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return Units.RotationsPerSecond.of(inputs.velocityRPS);
 	}
 
-	public double getPosition() {
+	public double getLatencyCompensatedPosition() {
 		return inputs.position;
 	}
 
@@ -67,7 +80,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return inputs.supplyCurrentAmps;
 	}
 
-	public double getAcceleration() { // TODO make this an array as well
+	public double getAcceleration() {
 		return inputs.accelerationRPS;
 	}
 
