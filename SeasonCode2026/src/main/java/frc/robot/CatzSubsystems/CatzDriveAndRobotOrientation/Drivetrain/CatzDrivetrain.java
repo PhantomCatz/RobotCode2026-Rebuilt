@@ -349,7 +349,7 @@ public class CatzDrivetrain extends SubsystemBase {
     Trajectory.State state = new Trajectory.State(
       sample.t,
       Math.hypot(sample.vx,sample.vy),
-      0.0,
+      Math.hypot(sample.ax,sample.ay),
       new Pose2d(new Translation2d(sample.x, sample.y), Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
       0.0
     );

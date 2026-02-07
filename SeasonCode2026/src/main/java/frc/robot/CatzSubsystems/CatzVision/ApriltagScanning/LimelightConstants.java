@@ -48,7 +48,7 @@ public class LimelightConstants {
     public static class LimelightConfig {
         public String name = "no-name-assigned";
         public Pose3d robotToCameraOffset = new Pose3d();
-        public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
+        public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.1, 0.1, 99999.0);
 
         public LimelightConfig(String name, Pose3d robotToCameraOffset){
             this.name = name;
