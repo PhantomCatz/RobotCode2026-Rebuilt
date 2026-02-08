@@ -20,13 +20,11 @@ public class Outpostclimb extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            new SequentialCommandGroup(
-                followTrajectoryWithAccuracy(traj1),
-                followTrajectoryWithAccuracy(traj2),
-                followTrajectoryWithAccuracy(traj3),
-                followTrajectoryWithAccuracy(traj4),
-                Commands.print("Climb5")
-            )
+            followTrajectoryWithAccuracy(traj1),
+            followTrajectoryWithAccuracy(traj2),
+            followTrajectoryWithAccuracy(traj3),
+            followTrajectoryWithAccuracy(traj4),
+            Commands.print("Climb5")
         );
     }
 }

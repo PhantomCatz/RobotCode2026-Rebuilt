@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Autonomous.AutoRoutineBase;
 
 public class DepotClimb extends AutoRoutineBase{
@@ -21,15 +20,12 @@ public class DepotClimb extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            new SequentialCommandGroup(
-                followTrajectoryWithAccuracy(traj1),
-                followTrajectoryWithAccuracy(traj2),
-                followTrajectoryWithAccuracy(traj3),
-                followTrajectoryWithAccuracy(traj4),
-                followTrajectoryWithAccuracy(traj5),
-                Commands.print("Climb")
-            ),
-            Commands.print("done")
+            followTrajectoryWithAccuracy(traj1),
+            followTrajectoryWithAccuracy(traj2),
+            followTrajectoryWithAccuracy(traj3),
+            followTrajectoryWithAccuracy(traj4),
+            followTrajectoryWithAccuracy(traj5),
+            Commands.print("Climb")
         );
     }
 }

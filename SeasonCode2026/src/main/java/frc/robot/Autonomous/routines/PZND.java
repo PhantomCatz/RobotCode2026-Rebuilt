@@ -20,12 +20,10 @@ public class PZND extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            new SequentialCommandGroup(
-                followTrajectoryWithAccuracy(traj1),
-                followTrajectoryWithAccuracy(traj2),
-                followTrajectoryWithAccuracy(traj3),
-                Commands.print("Score5")
-            )
+            followTrajectoryWithAccuracy(traj1),
+            followTrajectoryWithAccuracy(traj2),
+            followTrajectoryWithAccuracy(traj3),
+            Commands.print("Score5")
         );
     }
 }

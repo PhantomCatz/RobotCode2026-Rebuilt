@@ -22,13 +22,11 @@ public class Forefit_Depot extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            new SequentialCommandGroup(
-                followTrajectoryWithAccuracy(traj1),
-                followTrajectoryWithAccuracy(traj2),
-                followTrajectoryWithAccuracy(traj3),
-                followTrajectoryWithAccuracy(traj4),
-                followTrajectoryWithAccuracy(traj5)
-            ),
+            followTrajectoryWithAccuracy(traj1),
+            followTrajectoryWithAccuracy(traj2),
+            followTrajectoryWithAccuracy(traj3),
+            followTrajectoryWithAccuracy(traj4),
+            followTrajectoryWithAccuracy(traj5),
             Commands.print("done")
         );
     }
