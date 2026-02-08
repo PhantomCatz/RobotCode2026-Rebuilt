@@ -18,6 +18,7 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.CatzConstants.RobotHardwareMode;
@@ -43,6 +44,8 @@ public class Robot extends LoggedRobot {
 
   private BaseStatusSignal[] allSignals;
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
+
+  public static double autonStartTime = 0.0;
 
   public Robot() {
   }
@@ -205,6 +208,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    autonStartTime = Timer.getFPGATimestamp();
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
     System.out.println("auton: " + m_autonomousCommand);
     //  CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));

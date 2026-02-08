@@ -1,6 +1,8 @@
 package frc.robot.Autonomous;
 
 
+import java.util.Set;
+
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
@@ -28,50 +30,53 @@ public class AutoRoutineBase {
         );
     }
 
+     protected Command followTrajectory(AutoTrajectory traj){
+        return Commands.defer(() -> {
+                                final Command choreoCommand = traj.cmd();
+                                return new FunctionalCommand
+                                (
+                                    () -> {
+                                        CatzDrivetrain.Instance.followChoreoTrajectoryInit(traj);
+                                        choreoCommand.initialize();
+                                          },
+                                    choreoCommand::execute,
+                                    choreoCommand::end,
+                                    () -> isAtLoosePose(traj)
+                                );
+        }, Set.of(CatzDrivetrain.Instance));
+    }
+
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
         return Commands.sequence(
-            // Step 1: Run the standard Choreo path.
-            // This handles the motion perfectly until the timer runs out.
             traj.cmd(),
 
-            // Step 2: Run a "Hold" command.
-            // This takes over immediately after the timer ends and forces correction.
             new FunctionalCommand(
-                () -> {}, // Init: No setup needed, robot is already moving near target
+                () -> {},
 
-                // Execute: Manually construct a "Stationary" sample at the target pose
                 () -> {
-                    // getFinalPose() automatically handles Alliance Flipping for us!
                     var finalPoseOpt = traj.getFinalPose();
 
                     if (finalPoseOpt.isPresent()) {
                         Pose2d finalPose = finalPoseOpt.get();
 
-                        // Create a synthetic sample representing "Standing Still at Target"
-                        // We use the SwerveSample constructor (or you can modify your execute
-                        // method to take a Pose2d directly for holding).
-                        // Assuming standard Choreo SwerveSample constructor:
                         SwerveSample holdSample = new SwerveSample(
-                            traj.getRawTrajectory().getTotalTime(), // t
-                            finalPose.getX(),                       // x
-                            finalPose.getY(),                       // y
-                            finalPose.getRotation().getRadians(),   // heading
-                            0, 0, 0,                                // vx, vy, omega (STOPPED)
-                            0, 0, 0,                                // ax, ay, alpha (NO ACCEL)
-                            new double[4], new double[4]            // Module forces (optional)
+                            traj.getRawTrajectory().getTotalTime(),
+                            finalPose.getX(),
+                            finalPose.getY(),
+                            finalPose.getRotation().getRadians(),
+                            0, 0, 0,
+                            0, 0, 0,
+                            new double[4], new double[4]
                         );
 
                         CatzDrivetrain.Instance.followChoreoTrajectoryExecute(holdSample);
                     }
                 },
 
-                // End: Stop the robot when we are finally done
                 (interrupted) -> CatzDrivetrain.Instance.stopDriving(),
 
-                // IsFinished: NOW we check your custom accuracy logic
                 () -> isAtPose(traj),
 
-                // Requirements
                 CatzDrivetrain.Instance
             )
         );
@@ -80,6 +85,13 @@ public class AutoRoutineBase {
     private boolean isAtPose(AutoTrajectory trajectory){
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
+
+        return isAtTrans && isAtRot;
+    }
+
+    private boolean isAtLoosePose(AutoTrajectory trajectory) {
+        boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_DIST_METERS);
+        boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_ANGLE_DEG);
 
         return isAtTrans && isAtRot;
     }
