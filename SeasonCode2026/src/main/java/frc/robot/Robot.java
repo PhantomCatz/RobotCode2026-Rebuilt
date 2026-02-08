@@ -211,7 +211,7 @@ public class Robot extends LoggedRobot {
     autonStartTime = Timer.getFPGATimestamp();
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
     System.out.println("auton: " + m_autonomousCommand);
-    //  CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
+     CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }

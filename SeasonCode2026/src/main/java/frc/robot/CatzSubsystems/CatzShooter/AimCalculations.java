@@ -32,6 +32,8 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
+    
+
     public static double getFutureDistance() {
         Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
