@@ -18,10 +18,16 @@ import frc.robot.Utilities.Util;
 public class ClimbConstants {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
+	public static final Distance FULL_EXTENSION = Units.Inches.of(12.0);
+	public static final Setpoint FULL_EXTEND = Setpoint.withMotionMagicSetpoint(converter.toAngle(FULL_EXTENSION));
+	public static final Distance home = Units.Inches.of(0.0);
+	public static final Setpoint HOME = Setpoint.withMotionMagicSetpoint(converter.toAngle(home));
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.18, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN1 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
@@ -31,10 +37,7 @@ public class ClimbConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	public static final Setpoint Stow = Setpoint.withPositionSetpoint(0.0);
-	public static final Setpoint Extend = Setpoint.withPositionSetpoint(50.0);
-
-    private static final int CLIMB_MOTOR_ID = 24;
+    private static final int CLIMB_MOTOR_ID = 60;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
@@ -63,7 +66,7 @@ public class ClimbConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

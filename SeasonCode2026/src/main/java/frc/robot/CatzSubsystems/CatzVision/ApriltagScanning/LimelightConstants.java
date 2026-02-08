@@ -6,42 +6,54 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Distance;
+
+// Static import the specific units we need to keep code clean
+import static edu.wpi.first.units.Units.*;
+
 public class LimelightConstants {
 
-	public static final int kEnabledPipeline = 0;
-	public static final int kDisabledPipeline = 1; //TODO try fiddling with pipelines through website
-	public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
+    public static final int kEnabledPipeline = 0;
+    public static final int kDisabledPipeline = 1;
+    public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
+    private static final double limelightCrosshairCompensationPitch = 0.0;
+    private static final double limelightCrosshairCompensationYaw = 0.0; // -3.0 for sushi
 
-	//offsets are forward/back, left/right, up/down
-	// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
-	public static final ApriltagScanningIOLimelight[] LIMELIGHT_ARRAY = new ApriltagScanningIOLimelight[] {
-		new ApriltagScanningIOLimelight(new LimelightConfig("limelight-b",
-			new Pose3d(new Translation3d(8.23178, -0.2794, 0.23114), new Rotation3d(0.0, 15.0, -18.0))
-		)),
+    public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
+        new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
+            new Pose3d(
+                new Translation3d(
+                    Inches.of(0.25).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
+                    Inches.of(6.5).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
+                    Inches.of(19.75).in(Meters) //This makes it easy to account for latency.
+                ),
+                new Rotation3d(
+                    Degrees.of(182.0).in(Radians),
+                    Degrees.of(18.0 + limelightCrosshairCompensationPitch).in(Radians),
+                    Degrees.of(limelightCrosshairCompensationYaw).in(Radians)
+                )
+            )
+        ))
+    };
 
-		new ApriltagScanningIOLimelight(new LimelightConfig("limelight-soba",
-			new Pose3d(new Translation3d(8.25, 0.281, 0.232), new Rotation3d(0.8, 15.0, 18.0))
-		// new Pose3d(new Translation3d(0.25, 0.281, 0.232), new Rotation3d(0.8, 15.0, 18.0))
-		))
-	};
+    // public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
+    // public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
+    // public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
+    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
+    // public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
+    // public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
+    // public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
+    // public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5); //-13??
 
-	//TODO Use this instead of vision shift for auto aim
-	public static final int agreedTranslationUpdatesThreshold = 100;
-	public static final Distance agreedTranslationUpdateEpsilon = Units.Centimeters.of(10.0);
+    public static class LimelightConfig {
+        public String name = "no-name-assigned";
+        public Pose3d robotToCameraOffset = new Pose3d();
+        public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
-	public static class LimelightConfig {
-		public String name = "no-name-assigned";
-		public Pose3d robotToCameraOffset = new Pose3d();
-		public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
-
-		public LimelightConfig(String name, Pose3d robotToCameraOffset){
-			this.name = name;
-			this.robotToCameraOffset = robotToCameraOffset;
-		}
-
-		public LimelightConfig(){}
-	}
+        public LimelightConfig(String name, Pose3d robotToCameraOffset){
+            this.name = name;
+            this.robotToCameraOffset = robotToCameraOffset;
+        }
+        public LimelightConfig(){}
+    }
 }
