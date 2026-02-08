@@ -19,7 +19,7 @@ public final class CatzConstants {
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN1_OLD;
+  public static final    RobotID robotType = RobotID.SN_MANTA;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
@@ -28,13 +28,13 @@ public final class CatzConstants {
   public static AutoFactory autoFactory;
 
   public static final boolean ClimbOn = false;
-  public static final boolean HoodOn = true;
-  public static final boolean IndexerOn = true;
-  public static final boolean SpindexerOn = true;
-  public static final boolean YdexerOn = true;
+  public static final boolean HoodOn = false;
+  public static final boolean IndexerOn = false;
+  public static final boolean SpindexerOn = false;
+  public static final boolean YdexerOn = false;
   public static final boolean IntakeOn = false;
-  public static final boolean ShooterOn = true;
-  public static final boolean TurretOn = true;
+  public static final boolean ShooterOn = false;
+  public static final boolean TurretOn = false;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers

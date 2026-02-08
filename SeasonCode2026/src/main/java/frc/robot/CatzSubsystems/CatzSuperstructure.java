@@ -25,6 +25,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 
@@ -35,6 +36,8 @@ public class CatzSuperstructure {
     // NOTE use suppliers instead of creating two different objects
 
     private boolean isShootingAllowed = false; //TODO set to always true during auton
+
+    public static boolean isManualCommandOn;
 
     private CatzSuperstructure() {
     }
@@ -123,7 +126,6 @@ public class CatzSuperstructure {
     public Command setShootingAllowed(boolean val) {
         return Commands.runOnce(() -> isShootingAllowed = val);
     }
-
     public Command flywheelManualCommand() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
             double input = (xboxDrv.getLeftY()) * 8;
@@ -139,7 +141,18 @@ public class CatzSuperstructure {
             return Setpoint.withVoltageSetpoint(input);
         });
     }
-
+    public Command turretManualCommand() {
+        return CatzTurret.Instance.followSetpointCommand(() -> {
+            double input = -(xboxTest.getLeftY()) * 1;
+            Logger.recordOutput("Xbox Voltage Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
+    }
+    public Command manualCommandOff() {
+        return Commands.runOnce(() -> 
+            isManualCommandOn = false
+        );
+    }
     public Command applyHoodTuningSetpoint() {
         return Commands.defer(() -> {
             Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());

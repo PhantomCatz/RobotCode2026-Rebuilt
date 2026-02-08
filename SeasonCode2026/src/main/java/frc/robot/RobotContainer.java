@@ -64,6 +64,15 @@ public class RobotContainer {
 
     xboxTest.a().onTrue(superstructure.startIndexers());
     xboxTest.x().onTrue(superstructure.stopAllShooting());
+
+    //-----Manual Override-----//
+    xboxDrv.rightTrigger().onTrue(superstructure.manualCommandOff());
+    if (CatzSuperstructure.isManualCommandOn = true){
+    xboxDrv.a().onTrue(superstructure.hoodManualCommand());
+    xboxDrv.b().onTrue(superstructure.flywheelManualCommand());
+    xboxDrv.y().onTrue(superstructure.turretManualCommand());
+    }
+
   }
 
   public static void rumbleDrv(double val) {
