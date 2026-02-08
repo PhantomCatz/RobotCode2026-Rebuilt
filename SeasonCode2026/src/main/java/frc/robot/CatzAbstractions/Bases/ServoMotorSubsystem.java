@@ -16,7 +16,6 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	protected final String name;
 	protected final Angle epsilonThreshold;
 
-	private Setpoint setpoint = Setpoint.withBrakeSetpoint();
 	private double manualSpeed = 0.0;
 	protected boolean isFullManual = false;
 
@@ -37,7 +36,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 
 	public void runFullManual(double speed) {
 		if (Math.abs(speed) < 0.1) {
-			io.setMotionMagicSetpoint(getPosition());
+			io.setMotionMagicSetpoint(getLatencyCompensatedPosition());
 		} else {
 			io.setDutyCycleSetpoint(speed);
 		}
@@ -54,7 +53,11 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 *         in position control.
 	 */
 	public boolean nearPositionSetpoint() {
-		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Rotations.of(getPosition()));
+		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Radians.of(setpoint.baseUnits));
+	}
+
+	public void setPDSVGGains(double p, double d, double s, double v, double g){
+		io.setGainsSlot0(p, 0.0, d, s, v, 0.0, g);
 	}
 
 	/**
@@ -64,7 +67,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 * @return A new Command to apply setpoint and wait.
 	 */
 	public Command setpointCommandWithWait(Setpoint setpoint) {
-		return waitForPositionCommand(Units.Rotations.of(setpoint.baseUnits))
+		return waitForPositionCommand(Units.Radians.of(setpoint.baseUnits))
 				.deadlineFor(followSetpointCommand(()->setpoint));
 	}
 
@@ -88,7 +91,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 */
 	public boolean nearPosition(Angle mechanismPosition) {
 		return EqualsUtil.epsilonEquals(
-				getPosition(),
+				getLatencyCompensatedPosition(),
 				mechanismPosition.in(Units.Rotations),
 				epsilonThreshold.in(Units.Rotations));
 	}

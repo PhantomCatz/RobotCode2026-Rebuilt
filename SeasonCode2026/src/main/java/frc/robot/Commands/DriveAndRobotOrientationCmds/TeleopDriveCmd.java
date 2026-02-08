@@ -1,11 +1,14 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
+
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -76,10 +79,10 @@ public void initialize() {}
 
     // Flip Directions for left joystick if alliance is red\[]
 
-    // if (AllianceFlipUtil.shouldFlipToRed()) {
-    //   m_headingAndVelocity_X = -m_headingAndVelocity_X;
-    //   m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
-    // }
+    if (DriverStation.getAlliance().get() == Alliance.Red) {
+      m_headingAndVelocity_X = -m_headingAndVelocity_X;
+      m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
+    }
 
     // Apply deadbands to prevent modules from receiving unintentional pwr due to joysticks having offset
     m_headingAndVelocity_X =

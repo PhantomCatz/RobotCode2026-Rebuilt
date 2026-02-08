@@ -29,16 +29,7 @@ public class DriveConstants {
   public static final int INDEX_BL = 2;
   public static final int INDEX_FL = 3;
 
-  public static final int TRAJ_INDEX_FL = 0;
-  public static final int TRAJ_INDEX_FR = 1;
-  public static final int TRAJ_INDEX_BL = 2;
-  public static final int TRAJ_INDEX_BR = 3;
-
   public static final int GYRO_ID = 10;
-
-
-  public static final double PREDICT_DISTANCE_SCORE = 0.1;
-  public static final double PREDICT_DISTANCE_INTAKE = 1.0;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info
@@ -46,7 +37,7 @@ public class DriveConstants {
 
   public static final DriveConfig DRIVE_CONFIG =
     DriveConfig.builder()
-        .wheelRadius(Units.inchesToMeters(1.948))
+        .wheelRadius(Units.inchesToMeters(1.7))
         .robotLengthX(Units.inchesToMeters(24.2))
         .robotWidthY(Units.inchesToMeters(24.2))
         .bumperWidthX(Units.inchesToMeters(32))
@@ -67,7 +58,7 @@ public class DriveConstants {
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
-        case SN1, SN2, BUBBLES, SN1_OLD ->
+        case SN1, SN2, BUBBLES, SN1_MANTA ->
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,
@@ -127,25 +118,25 @@ public class DriveConstants {
   public static final ModuleIDs[] MODULE_CONFIGS = new ModuleIDs[4];
   static{
     switch(CatzConstants.getRobotType()){
-        case SN1:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.162598, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.065, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.883, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.807, false);
+        case SN_MANTA:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.416016, false);
         break;
 
-        case SN1_OLD:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 9, 0.043701, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, -0.368164, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, -0.017822, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.58374, false);
+        case SN1:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.3125, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0896, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.4382 + 0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.1447 + 0.5, false);
         break;
 
         case SN2:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.0, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.0, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.0, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.311035+0.5, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.100342+0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.273926, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.34084, false);
         break;
 
         case SN_TEST:
@@ -190,10 +181,10 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(7.0, 0.0, 0.3),
-      new PIDController(7.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.3),
       new ProfiledPIDController(
-        5.5,
+        9.0,
         0.0,
         0.3,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)

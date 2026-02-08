@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
 
 /**
@@ -22,10 +23,18 @@ public class FieldConstants {
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
-  public static final Translation2d HUB_LOCATION = new Translation2d(); //TODO fill this out
+  private static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
 
+  /**
+   * Returns the position of the hub in the correct alliance.
+   */
+  public static Translation2d getHubLocation(){
+    //This apply method correctly accounts for alliance color
+    return AllianceFlipUtil.apply(HUB_LOCATION);
+  }
   @Getter
   public enum AprilTagLayoutType {
+
     OFFICIAL("2026-official");
 
     AprilTagLayoutType(String name) {
@@ -46,7 +55,7 @@ public class FieldConstants {
       }
     }
 
-    private final AprilTagFieldLayout layout;
+    public final AprilTagFieldLayout layout;
     private final String layoutString;
   }
 }

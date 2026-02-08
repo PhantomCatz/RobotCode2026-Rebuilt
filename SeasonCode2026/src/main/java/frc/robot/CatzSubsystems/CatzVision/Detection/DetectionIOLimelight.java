@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -40,7 +41,10 @@ public class DetectionIOLimelight extends DetectionIO {
 	private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
 	private int maxI = 0;
 	private ArrayList<StructPublisher<Pose2d>> publishers = new ArrayList<StructPublisher<Pose2d>>();
-	private ArrayList<Coral> tracker = new ArrayList<Coral>();
+	private ArrayList<Coral> newDet = new ArrayList<>();
+	private AtomicReference<ArrayList<Coral>> tracker = new AtomicReference<>(newDet);
+	private Pose2d closestCoralGroupPose = null;
+	//private ArrayList<Coral> tracker = new ArrayList<Coral>();
 	private Stopwatch mStopwatch = new Stopwatch();
 	private int pipelineToSet = 0;
 	private Stopwatch mResetStopwatch = new Stopwatch();
@@ -104,7 +108,6 @@ public class DetectionIOLimelight extends DetectionIO {
 				double latencyMs = LimelightHelpers.getLatency_Capture(config.name) + LimelightHelpers.getLatency_Pipeline(config.name);
 				Translation2d bestTranslation = null;
 				Pose2d bestCoralPose = null;
-				Pose2d bestGroupCoralPose = null;
 				double now = Timer.getFPGATimestamp(); // Account for latency in storing timestamp
 				Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
 				POSE_BUFFER.addSample(now, curPose);
@@ -113,11 +116,12 @@ public class DetectionIOLimelight extends DetectionIO {
 					System.out.println("failing detection"+now);
 					return;
 				}
-				tracker.removeIf((coral) -> now - coral.detectionTime > 0.2);
+				newDet = new ArrayList<Coral>();
+				// tracker.removeIf((coral) -> now - coral.detectionTime > 0.2);
 
-				while (tracker.size() > 20) {
-					tracker.remove(0);
-				}
+				// while (tracker.size() > 0) {
+				// 	tracker.remove(0);
+				// }
 
 				for (RawDetection detection : all) {
 					if (detection.classId == 0) continue;
@@ -127,7 +131,7 @@ public class DetectionIOLimelight extends DetectionIO {
 					// Logger.recordOutput("Detection/coralTranslation", coralTranslation);
 							.plus(config.robotToCameraOffset.getTranslation().toTranslation2d());
 					Rotation2d coralRotation = coralTranslation.getAngle().plus(Rotation2d.k180deg);
-					System.out.println(coralRotation);
+					// System.out.println(coralRotation);
 					Pose2d coralPose =
 						poseFromCapture.get().transformBy(new Transform2d(coralTranslation, coralRotation));
 
@@ -137,60 +141,10 @@ public class DetectionIOLimelight extends DetectionIO {
 						// LogUtil.recordPose2d(config.name + "Last Coral Pose Outside Field", coralPose);
 						continue;
 					}
-					tracker.add(new Coral(coralPose, coralTranslation, now - (latencyMs / 1000)));
+					newDet.add(new Coral(coralPose, coralTranslation, now - (latencyMs / 1000)));
 				}
-				ArrayList<Integer>[] adj = new ArrayList[tracker.size()];
-				Boolean[] visited = new Boolean[tracker.size()];
-				for (int i = 0; i < tracker.size(); i++) {
-            		adj[i] = new ArrayList<Integer>();
-					visited[i] = false;
-        		}
-				// make "adjacency list" for each coral
-				for (int i=0; i<tracker.size(); i++) {
-					for (int j=0; j<i; j++) {
-						if ((tracker.get(i).coralTranslation).getDistance(tracker.get(j).coralTranslation) < DetectionConstants.MAX_GROUP_DIST) {
-							adj[i].add(j);
-							adj[j].add(i);
-						}
-					}
-				}
-				// make arraylist of groups, each group hold indices of corals in the group
-				ArrayList<ArrayList<Integer>> groups = new ArrayList<>();
-				for (int i=0; i<tracker.size(); i++) {
-					if (visited[i]) continue;
-					visited[i] = true;
-					Queue<Integer> q = new LinkedList<>();
-					q.add(i);
-					groups.add(new ArrayList<>());
-					while (!q.isEmpty()) {
-						Integer cur = q.poll();
-						groups.get(groups.size()-1).add(cur);
-						for (Integer a : adj[cur]) {
-							if (visited[a]) continue;
-							visited[a] = true;
-							q.add(a);
-						}
-					}
-				}
-				// loop through groups and find which has best ratio
-				double bestRatio = 0.0; // ratio of size of group to distance of closest coral in group
-				for (int i=0; i<groups.size(); i++) {
-					double closestDistInGroup = 1e9;
-					Pose2d closestCoralPoseInGroup = null;
-					for (int c : groups.get(i)) {
-						Pose2d thisCoralPose = tracker.get(groups.get(i).get(c)).coralPose;
-						double thisDist = thisCoralPose.getTranslation().getDistance(base);
-						if (closestDistInGroup > thisDist) {
-							closestDistInGroup = thisDist;
-							closestCoralPoseInGroup = thisCoralPose;
-						}
-					}
-					double thisRatio = groups.get(i).size() / closestDistInGroup;
-					if (thisRatio > bestRatio) {
-						bestGroupCoralPose = closestCoralPoseInGroup;
-					}
-				}
-				for (Coral coral : tracker) {
+
+				for (Coral coral : newDet) {
 					if (bestTranslation == null
 							|| bestCoralPose.getTranslation().getDistance(base)
 									> coral.coralPose.getTranslation().getDistance(base)) {
@@ -217,14 +171,15 @@ public class DetectionIOLimelight extends DetectionIO {
 				mStopwatch.resetAndStart();
 			}
 		}
+		tracker.set(newDet);
 	}
 
 	@Override
 	public Pose2d getCoralPose() {
 		Translation2d bestTranslation = null;
 		Pose2d bestCoralPose = null;
-		Translation2d robotPose = CatzRobotTracker.getInstance().getEstimatedPose().getTranslation();
-		for (Coral coral : tracker) {
+		Translation2d robotPose = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+		for (Coral coral : tracker.get()) {
 			if (bestTranslation == null
 					|| bestCoralPose.getTranslation().getDistance(robotPose)
 							> coral.coralPose.getTranslation().getDistance(robotPose)) {
@@ -233,6 +188,79 @@ public class DetectionIOLimelight extends DetectionIO {
 			}
 		}
 		return bestCoralPose; // will return null if no coral
+	}
+
+	private double getSquaredDistance(Translation2d iTranslation, Translation2d jTranslation) {
+		double xDiff = iTranslation.getX()-jTranslation.getX();
+		double yDiff = iTranslation.getY()-jTranslation.getY();
+		return (xDiff*xDiff + yDiff*yDiff);
+	}
+
+	@Override
+	public synchronized void setNearestGroupPose() {
+		ArrayList<Coral> currentCoral = tracker.get();
+		if (currentCoral.size() == 0) { // if can't see, use old pose
+			return;
+		}
+		double now = Timer.getFPGATimestamp();
+		Pose2d bestGroupCoralPose = null;
+		Boolean[] visited = new Boolean[currentCoral.size()];
+		Translation2d base = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+		for (int i = 0; i < currentCoral.size(); i++) {
+			visited[i] = false;
+		}
+		// make arraylist of groups, each group hold indices of corals in the group
+		ArrayList<ArrayList<Integer>> groups = new ArrayList<>();
+		for (int i=0; i<currentCoral.size(); i++) {
+			if (visited[i]) continue;
+			visited[i] = true;
+			Queue<Integer> q = new LinkedList<>();
+			q.add(i);
+			groups.add(new ArrayList<>());
+			while (!q.isEmpty()) {
+				Integer cur = q.poll();
+				groups.get(groups.size()-1).add(cur);
+				for (int j=0; j<currentCoral.size(); j++) {
+					if (visited[j]) continue;
+					if (getSquaredDistance(currentCoral.get(i).coralTranslation, currentCoral.get(j).coralTranslation) < DetectionConstants.MAX_GROUP_DIST_SQUARED) {
+						visited[j] = true;
+						q.add(j);
+					}
+				}
+			}
+		}
+		// System.out.println("number of corals"+tracker.size());
+		// System.out.println("number of groups"+groups.size());
+		// for (int i=0; i<groups.size(); i++) {
+		// 	System.out.println("group"+i+" size"+groups.get(i).size());
+		// }
+		// loop through groups and find which has best ratio
+		double bestRatio = 0.0; // ratio of size of group to distance of closest coral in group
+		for (int i=0; i<groups.size(); i++) {
+			double closestDistInGroup = 1e9;
+			Pose2d closestCoralPoseInGroup = null;
+			for (int c : groups.get(i)) {
+				Pose2d thisCoralPose = currentCoral.get(c).coralPose;
+				double thisDist = thisCoralPose.getTranslation().getDistance(base);
+				if (closestDistInGroup > thisDist) {
+					closestDistInGroup = thisDist;
+					closestCoralPoseInGroup = thisCoralPose;
+				}
+			}
+			double thisRatio = groups.get(i).size() / closestDistInGroup;
+			if (thisRatio > bestRatio) {
+				bestRatio = thisRatio;
+				bestGroupCoralPose = closestCoralPoseInGroup;
+			}
+		}
+		double timeUsed = Timer.getFPGATimestamp() - now;
+		System.out.println("group function time used: "+timeUsed);
+		closestCoralGroupPose = bestGroupCoralPose;
+	}
+
+	@Override
+	public synchronized Pose2d getNearestGroupPose() {
+		return closestCoralGroupPose;
 	}
 
 	@Override
@@ -247,7 +275,7 @@ public class DetectionIOLimelight extends DetectionIO {
 
 	@Override
 	public Translation2d calcDistToCoral(double tx, double ty) {
-		final Distance heightFromCoral = config.robotToCameraOffset.getMeasureZ().minus(DetectionConstants.FUEL_RADIUS);
+		final Distance heightFromCoral = config.robotToCameraOffset.getMeasureZ().minus(DetectionConstants.kCoralRadius);
 
 		double totalAngleY = Units.degreesToRadians(ty) //pitch
 				- config.robotToCameraOffset.getRotation().getY();

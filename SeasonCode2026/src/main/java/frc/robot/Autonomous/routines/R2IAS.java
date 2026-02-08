@@ -1,32 +1,40 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.FlywheelConstants.IntakeRollerConstants;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmdCoral;
 
-public class R2IAS extends AutoRoutineBase{
+public class R2IAS extends AutoRoutineBase {
     public R2IAS(){
         super("R2IAS");
 
-        AutoTrajectory traj1 = getTrajectory("R2IAS",0);
-        AutoTrajectory traj3 = getTrajectory("R2IAS",1);
-        AutoTrajectory traj4 = getTrajectory("R2IAS",2);
-        AutoTrajectory traj5 = getTrajectory("R2IAS",3);
-        AutoTrajectory traj6 = getTrajectory("R2IAS",4);
+        AutoTrajectory traj1 = getTrajectory("R2IASOut",0);
+        AutoTrajectory traj2 = getTrajectory("R2IASIn",1);
 
+        PIDDriveCmdCoral collectCoral = new PIDDriveCmdCoral(new Pose2d(new Translation2d(8.270783424377441, 4.06059074401855), traj2.getInitialPose().get().getRotation()), AutonConstants.TRAJ_GOAL_VELOCITY);
 
+        PIDDriveCmd returnToTrench = new PIDDriveCmd(
+                                        traj2.getInitialPose().get(),
+                                        AutonConstants.TRAJ_GOAL_VELOCITY,
+                                        1.0,
+                                        0.1,
+                                        5,
+                                        false
+                                    );
         prepRoutine(
             traj1,
-            followTrajectoryWithAccuracy(traj1),
-            // CatzSuperstructure.Instance.IntakeFuel(),
-            followTrajectoryWithAccuracy(traj3),
-            // CatzSuperstructure.Instance.ScoreFuel(),
-            followTrajectoryWithAccuracy(traj4),
-            // CatzSuperstructure.Instance.IntakeFuel(),
-            followTrajectoryWithAccuracy(traj5),
-            // CatzSuperstructure.Instance.ScoreFuel(),
-            followTrajectoryWithAccuracy(traj6)
-            // CatzSuperstructure.Instance.IntakeFuel(),
-            // CatzSuperstructure.Instance.AutonStartHoard(),
+            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.H_SETPOINT),
+            followTrajectory(traj1),
+            collectCoral,
+            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT),
+            returnToTrench,
+            followTrajectoryWithAccuracy(traj2)
         );
     }
 }
