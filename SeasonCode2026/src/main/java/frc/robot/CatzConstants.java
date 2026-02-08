@@ -19,7 +19,7 @@ public final class CatzConstants {
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN1_OLD;
+  private static RobotID robotType = RobotID.SN2;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
@@ -32,7 +32,7 @@ public final class CatzConstants {
   public static final boolean IndexerOn = true;
   public static final boolean SpindexerOn = true;
   public static final boolean YdexerOn = true;
-  public static final boolean IntakeOn = false;
+  public static final boolean IntakeOn = true;
   public static final boolean ShooterOn = true;
   public static final boolean TurretOn = true;
 

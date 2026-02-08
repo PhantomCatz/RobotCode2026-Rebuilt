@@ -35,6 +35,7 @@ import frc.robot.Autonomous.AutonConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
+import frc.robot.Utilities.LoggedTunableNumber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -340,28 +341,42 @@ public class CatzDrivetrain extends SubsystemBase {
     hoController = DriveConstants.getNewHolController();
   }
 
+  LoggedTunableNumber aff = new LoggedTunableNumber("aff", 2.5);
+
   /**
    * This function only runs the "execute" portion of a command. Initialization and ending should be done elsewhere.
    *
    * @param sample
    */
-  public void followChoreoTrajectoryExecute(SwerveSample sample){
+public void followChoreoTrajectoryExecute(SwerveSample sample){
+    // 1. Calculate the denominator (velocity magnitude cubed)
+    double velocitySq = (sample.vx * sample.vx) + (sample.vy * sample.vy);
+    double velocityMag = Math.sqrt(velocitySq);
+
+    double curvature = 0.0;
+
+    // 2. Protect against division by zero if the robot is stopped
+    if (velocityMag > 1e-6) {
+        curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
+    }
+
     Trajectory.State state = new Trajectory.State(
       sample.t,
-      Math.hypot(sample.vx,sample.vy),
-      Math.hypot(sample.ax,sample.ay),
-      new Pose2d(new Translation2d(sample.x, sample.y), Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
-      0.0
+      velocityMag,
+      Math.hypot(sample.ax, sample.ay), // Use raw acceleration here
+      new Pose2d(
+          new Translation2d(sample.x, sample.y),
+          Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))
+      ),
+      curvature // Input the calculated curvature here
     );
+    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
 
     Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
-    choreoDistanceError = curPose.minus(choreoGoal).getTranslation().getNorm();
-
-    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
-  }
+}
 
   public boolean isRobotAtPoseChoreo(){
     return choreoDistanceError <= AutonConstants.ACCEPTABLE_DIST_METERS;

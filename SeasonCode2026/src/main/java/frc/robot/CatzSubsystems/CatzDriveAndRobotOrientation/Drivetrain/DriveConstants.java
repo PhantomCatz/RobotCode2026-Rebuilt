@@ -31,8 +31,6 @@ public class DriveConstants {
 
   public static final int GYRO_ID = 10;
 
-  public static final LoggedTunableNumber TUNABLE_TORQUE_CURRENT = new LoggedTunableNumber("Drive Torque Current", 40.0);
-
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info
   // ---------------------------------------------------------------------------------------------------------------
@@ -142,10 +140,10 @@ public class DriveConstants {
         break;
 
         case SN2:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.405273, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.0225+0.5, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.338, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.0625+0.5, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.311035+0.5, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.100342+0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.273926, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.34084, false);
         break;
 
         case SN_TEST:
@@ -183,10 +181,10 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(14.0, 0.0, 0.3),
-      new PIDController(14.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.3),
       new ProfiledPIDController(
-        5.5,
+        9.0,
         0.0,
         0.3,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)

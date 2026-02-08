@@ -55,8 +55,6 @@ public interface ModuleIO {
 
   public default void setDrivePID(double kP, double kI, double kD) {}
 
-  public default void setTorqueCurrent(double cur) {}
-
   // ---------------------------------------------------------------------------
   //   Steer Access Methods
   // ---------------------------------------------------------------------------

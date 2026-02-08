@@ -111,11 +111,6 @@ public class CatzSwerveModule {
     LoggedTunableNumber.ifChanged(
         hashCode(), () -> io.setSteerPID(steerkP.get(), 0, steerkD.get()), steerkP, steerkD);
 
-
-    if(DriveConstants.TUNABLE_TORQUE_CURRENT.get() != prevCur){
-      prevCur = DriveConstants.TUNABLE_TORQUE_CURRENT.get();
-      io.setTorqueCurrent(prevCur);
-    }
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
