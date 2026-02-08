@@ -8,7 +8,7 @@ import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
-import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmdCoral;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmdFuel;
 
 public class R2IAS extends AutoRoutineBase {
     public R2IAS(){
@@ -17,7 +17,7 @@ public class R2IAS extends AutoRoutineBase {
         AutoTrajectory traj1 = getTrajectory("R2IASOut",0);
         AutoTrajectory traj2 = getTrajectory("R2IASIn",1);
 
-        PIDDriveCmdCoral collectCoral = new PIDDriveCmdCoral(new Pose2d(new Translation2d(8.270783424377441, 4.06059074401855), traj2.getInitialPose().get().getRotation()), AutonConstants.TRAJ_GOAL_VELOCITY);
+        PIDDriveCmdFuel collectCoral = new PIDDriveCmdFuel(new Pose2d(new Translation2d(8.270783424377441, 4.06059074401855), traj2.getInitialPose().get().getRotation()), AutonConstants.TRAJ_GOAL_VELOCITY);
 
         PIDDriveCmd returnToTrench = new PIDDriveCmd(
                                         traj2.getInitialPose().get(),

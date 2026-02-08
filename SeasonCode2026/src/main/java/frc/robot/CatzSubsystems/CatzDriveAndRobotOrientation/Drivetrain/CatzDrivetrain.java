@@ -51,11 +51,6 @@ import org.littletonrobotics.junction.Logger;
 public class CatzDrivetrain extends SubsystemBase {
   public static final CatzDrivetrain Instance = new CatzDrivetrain();
 
-  private double distanceError = 999999.9; //meters
-
-  private Pose2d choreoGoal = new Pose2d();
-  private double choreoDistanceError = 9999999.9; //meters //set this to a high number initially just in case the trajectory thinks it's at goal as soon as it starts
-
   // Gyro input/output interface
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
@@ -78,8 +73,6 @@ public class CatzDrivetrain extends SubsystemBase {
   private final Field2d field;
 
   private BaseStatusSignal[] allSignals;
-
-  private Pose2d pidGoalPose = new Pose2d();
 
   public double timeToReachTrench = 0.0;
 
@@ -125,14 +118,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
-  }
-
-  public double getDistanceError(){
-    return distanceError;
-  }
-
-  public void setDistanceError(double d){
-    this.distanceError = d;
   }
 
   @Override
@@ -378,10 +363,6 @@ public void followChoreoTrajectoryExecute(SwerveSample sample){
     drive(adjustedSpeeds);
 }
 
-  public boolean isRobotAtPoseChoreo(){
-    return choreoDistanceError <= AutonConstants.ACCEPTABLE_DIST_METERS;
-  }
-
   // -----------------------------------------------------------------------------------------------------------
   //
   //      Drivetrain Getters
@@ -434,13 +415,5 @@ public void followChoreoTrajectoryExecute(SwerveSample sample){
     return Arrays.stream(DriveConstants.MODULE_TRANSLATIONS)
         .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
         .toArray(Rotation2d[]::new);
-  }
-
-  public Pose2d getPIDGoalPose(){
-    return pidGoalPose;
-  }
-
-  public void setPIDGoalPose(Pose2d p){
-    this.pidGoalPose = p;
   }
 }
