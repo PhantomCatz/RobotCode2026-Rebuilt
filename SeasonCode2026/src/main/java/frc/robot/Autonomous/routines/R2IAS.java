@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.FlywheelConstants.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmdCoral;
 
@@ -29,7 +29,7 @@ public class R2IAS extends AutoRoutineBase {
                                     );
         prepRoutine(
             traj1,
-            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.H_SETPOINT),
+            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED),
             followTrajectory(traj1),
             collectCoral,
             CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT),

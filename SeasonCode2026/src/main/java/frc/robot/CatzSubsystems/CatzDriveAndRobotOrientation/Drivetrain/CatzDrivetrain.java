@@ -121,14 +121,6 @@ public class CatzDrivetrain extends SubsystemBase {
     SmartDashboard.putData("Field", field);
   }
 
-  public double getDistanceError(){
-    return distanceError;
-  }
-
-  public void setDistanceError(double d){
-    this.distanceError = d;
-  }
-
   @Override
   public void periodic() {
     // ----------------------------------------------------------------------------------------------------

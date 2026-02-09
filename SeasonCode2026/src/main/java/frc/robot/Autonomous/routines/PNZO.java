@@ -2,6 +2,9 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 
 public class PNZO extends AutoRoutineBase{
     public PNZO(){
@@ -10,20 +13,21 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj1 = getTrajectory("PNZO",0);
         AutoTrajectory traj2 = getTrajectory("PNZO",1);
         AutoTrajectory traj3 = getTrajectory("PNZO",2);
-        AutoTrajectory traj4 = getTrajectory("PNZO",3);
-        AutoTrajectory traj5 = getTrajectory("PNZO",4);
+
+        traj1.atTime("Score1").onTrue(CatzSuperstructure.Instance.prepareForShooting());
+        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
+        traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.interpolateFlywheelSpeed()
+                                                    .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
+        traj3.atTime("Score3").onTrue(CatzSuperstructure.Instance.prepareForShooting());
+        traj3.atTime("Intake4").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
 
         prepRoutine(
             traj1,
-            // CatzSuperstructure.Instance.ScoreFuel(),
+            followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
-            // CatzSuperstructure.Instance.IntakeFuel(),
-            followTrajectoryWithAccuracy(traj4),
-            // CatzSuperstructure.Instance.ScoreFuel(),
-            followTrajectoryWithAccuracy(traj5)
-            // CatzSuperstructure.Instance.IntakeFuel(),
-            // CatzSuperstructure.Instance.ScoreFuel(),
+            CatzSuperstructure.Instance.prepareForShooting()
+
         );
     }
 }

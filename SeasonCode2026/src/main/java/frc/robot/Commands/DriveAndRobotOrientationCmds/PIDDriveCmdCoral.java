@@ -37,8 +37,6 @@ public class PIDDriveCmdCoral extends Command{
     public PIDDriveCmdCoral(Pose2d goal, double goalVel){
         addRequirements(CatzDrivetrain.Instance);
 
-        CatzDrivetrain.Instance.setPIDGoalPose(goal);
-
         // Configure the translation controller
         var translationConstraints = new TrapezoidProfile.Constraints(
             4.0,
@@ -58,7 +56,6 @@ public class PIDDriveCmdCoral extends Command{
 
     @Override
     public void initialize(){
-        goalPos = CatzDrivetrain.Instance.getPIDGoalPose();
         Logger.recordOutput("PID Target Pose", goalPos);
     }
 
@@ -87,7 +84,6 @@ public class PIDDriveCmdCoral extends Command{
         ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
         CatzDrivetrain.Instance.drive(goalChassisSpeeds);
 
-        CatzDrivetrain.Instance.setDistanceError(currentDistance);
         if(DriverStation.isAutonomous()){
             double avgVel = (targetVel + GOAL_VELOCITY) / 2.0;
             double timeToReachTrench = currentDistance / avgVel;

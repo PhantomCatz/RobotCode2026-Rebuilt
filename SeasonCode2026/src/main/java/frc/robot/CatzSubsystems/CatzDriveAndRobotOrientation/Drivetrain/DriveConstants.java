@@ -58,7 +58,7 @@ public class DriveConstants {
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
-        case SN1, SN2, BUBBLES, SN1_MANTA ->
+        case SN1, SN2, BUBBLES, SN_MANTA ->
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,

@@ -37,7 +37,6 @@ public class CatzSuperstructure {
     private boolean isShootingAllowed = false; //TODO set to always true during auton
 
     private CatzSuperstructure() {
-        this.visualizer = new SubsystemVisualizer("SuperstructureViz");
     }
 
     public Command turretTrackHubCommand() {
@@ -59,7 +58,7 @@ public class CatzSuperstructure {
             return ShooterRegression.getHoodSetpoint(Units.Meters.of(distFromHub));
         });
     }
-
+    // Ramp up flywheels
     public Command interpolateFlywheelSpeed() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
             Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();

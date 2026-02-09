@@ -231,7 +231,8 @@
  },
  "events":[
    {"name":"Climb5", "from":{"target":5, "targetTimestamp":6.64833, "offset":{"exp":"-0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Climb5"}}},
-   {"name":"Score3", "from":{"target":2, "targetTimestamp":3.92917, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score3"}}},
+   {"name":"RampUp+StopIntake3", "from":{"target":2, "targetTimestamp":3.92917, "offset":{"exp":"-1.1 s", "val":-1.1}}, "event":{"type":"named", "data":{"name":"RampUp3"}}},
    {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.96458, "offset":{"exp":"-1 s", "val":-1.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
-   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}}]
+   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}},
+   {"name":"Score4", "from":{"target":2, "targetTimestamp":3.92917, "offset":{"exp":"-0.4 s", "val":-0.4}}, "event":{"type":"named", "data":{"name":"Score4"}}}]
 }
