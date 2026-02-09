@@ -126,7 +126,7 @@ public class CatzSuperstructure {
 
     public Command flywheelManualCommand() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
-            double input = (xboxDrv.getLeftY()) * 8;
+            double input = (xboxTest.getLeftY()) * 8;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
@@ -151,6 +151,7 @@ public class CatzSuperstructure {
     public Command applyFlywheelTuningSetpoint() {
         return Commands.defer(() -> {
 
+            System.out.println("utnable: " + FlywheelConstants.SHOOTING_RPS_TUNABLE.get());
             return CatzFlywheels.Instance.setpointCommand(
                     Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
         }, Set.of(CatzFlywheels.Instance));

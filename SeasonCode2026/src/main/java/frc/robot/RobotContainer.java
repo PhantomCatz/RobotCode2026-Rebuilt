@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -52,14 +54,18 @@ public class RobotContainer {
     xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
     // ---------------------Testing Controls--------------------
-    // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint())
+    xboxTest.b().onTrue(superstructure.flywheelManualCommand());
+    xboxTest.a().onTrue(superstructure.hoodManualCommand());
+    xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
+    xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
+    xboxTest.leftBumper().onTrue(CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT));
     //     .alongWith(superstructure.turretTrackHubCommand()));
-    xboxTest.b().onTrue(superstructure.interpolateHoodAngle().alongWith(superstructure.interpolateFlywheelSpeed()));
+    // xboxTest.b().onTrue(superstructure.interpolateHoodAngle().alongWith(superstructure.interpolateFlywheelSpeed()));
     // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
-    // .alongWith(superstructure.interpolateShooterSpeed()).alongWith(superstructure.turretTrackCommand()));
+    // .alongWith(superstructure.interpolateShooterSpeed()).alongWPith(superstructure.turretTrackCommand()));
     xboxTest.leftBumper().onTrue(superstructure.turretTrackHubCommand());
 
-    // xboxTest.leftBumper().onTrue(superstructure.turret90Degrees());
+    // xboxTest.leftBumper().onTrue(superstructur][\e.turret90Degrees());
     // xboxTest.rightBumper().onTrue(superstructure.turret90DegreesMinus());
 
     xboxTest.a().onTrue(superstructure.startIndexers());
