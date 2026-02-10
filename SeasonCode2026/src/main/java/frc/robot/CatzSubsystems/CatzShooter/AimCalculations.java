@@ -108,7 +108,15 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(currentRads + angleError));
     }
 
-    public static Translation2d getHubVelocity() {
+    public static Translation2d getPredictedHubLocation() {
+        return null;
+    }
+
+    /**
+     * Calculates the hub's velocity vector relative to the turret pretending as if the robot is stationary and the hub is moving.
+     * @return
+     */
+    private static Translation2d getHubVelocity() {
         Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
         double robotAngle = robotPose.getRotation().getRadians();
@@ -130,24 +138,41 @@ public class AimCalculations {
         return hubVelocity;
     }
 
-    public static double getShootAirtime() {
+
+    /**
+     * Calculates the airtime that the ball will take when shot at the predicted future location of the hub
+     * 
+     * We avoid the problem of needing to iteratively search the potential solution by approximating the inverse airtime 
+     * function as a second degree polynomial.
+     * 
+     * @return The predicted future airtime of the ball. If no solution is found, return 0.
+     */
+    private static double getFutureShootAirtime() {
         Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
         Translation2d hubVelocity = getHubVelocity();
-        double distToHub = fieldToTurret.getDistance(FieldConstants.HUB_LOCATION);
-        Translation2d hubToTurret = fieldToTurret.minus(FieldConstants.HUB_LOCATION);
-        double hubDistance = hubToTurret.getNorm();
+        Translation2d hubToTurret = fieldToTurret.minus(FieldConstants.getHubLocation());
+
+        double distToHub = hubToTurret.getNorm();
+
+        //calculate the angle between the hub velocity and hub displacement vectors
         double turretHubRadians = Math.abs(MathUtil.angleModulus(hubToTurret.getAngle().getRadians() - hubVelocity.getAngle().getRadians()));
-        double regressionATerm=0, regressionBTerm=0, regressionCTerm=0; // ax^2 + bx + c = 0 TODO
+
+        //get the coefficient terms of the inverse airtime polynomial
+        double regressionATerm= ShooterRegression.airtimeRegA;
+        double regressionBTerm= ShooterRegression.airtimeRegB;
+        double regressionCTerm= ShooterRegression.airtimeRegC;
+
         double hubSpeed = hubVelocity.getNorm();
         double a = hubSpeed*hubSpeed - regressionATerm;
-        double b = -2*hubSpeed*hubDistance*Math.cos(turretHubRadians) - regressionBTerm;
-        double c = hubDistance*hubDistance - regressionCTerm;
+        double b = -2*hubSpeed*distToHub*Math.cos(turretHubRadians) - regressionBTerm;
+        double c = distToHub*distToHub - regressionCTerm;
         double discriminant = b*b - 4*a*c;
+        double sqrtDiscriminant = Math.sqrt(discriminant);
         if (discriminant < 0) {
             return 0.0; // no solution
         }
-        double smallRoot = (-b-Math.sqrt(discriminant))/(2*a);
-        double bigRoot = (-b+Math.sqrt(discriminant))/(2*a);
+        double smallRoot = (-b-sqrtDiscriminant)/(2*a);
+        double bigRoot = (-b+sqrtDiscriminant)/(2*a);
         if (smallRoot > 0) {
             return smallRoot;
         }
@@ -156,8 +181,6 @@ public class AimCalculations {
         }
         return 0.0; // both roots negative (if that's even possible)
     }
-
-
 
     public record ShooterSetpoints(Setpoint turretSetpoint, Setpoint hoodSetpoint, Setpoint flywheelSetpoint){}
 }

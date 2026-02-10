@@ -30,6 +30,9 @@ public class ShooterRegression {
     // New variables for Inverse Airtime
     public static InterpolatingDoubleTreeMap airtimeInverseAutoAimMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression airtimeInverseAutoAimPolynomial;
+    public static double airtimeRegA;
+    public static double airtimeRegB;
+    public static double airtimeRegC;
 
     public static double[][] flywheelRegression;
     public static double[][] airtimeRegression;
@@ -69,6 +72,10 @@ public class ShooterRegression {
 
         airtimeAutoAimPolynomial = new PolynomialRegression(airtimeRegression, 2);
         airtimeInverseAutoAimPolynomial = new PolynomialRegression(airtimeInverseRegression, 2);
+        airtimeRegA = airtimeInverseAutoAimPolynomial.beta(0);
+        airtimeRegB = airtimeInverseAutoAimPolynomial.beta(1);
+        airtimeRegC = airtimeInverseAutoAimPolynomial.beta(2);
+
     }
 
     private static final double HOOD_ANGLE_SLOPE = (EpsilonRegression.FARTHEST_HOOD_ANGLE[1]-EpsilonRegression.CLOSEST_HOOD_ANGLE[1]) /
