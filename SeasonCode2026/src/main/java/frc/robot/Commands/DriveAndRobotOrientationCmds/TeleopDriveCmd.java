@@ -82,15 +82,13 @@ public void initialize() {}
       m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
     }
 
-    // Apply deadbands to prevent modules from receiving unintentional pwr due to joysticks having offset
-    m_headingAndVelocity_X =
-        Math.abs(m_headingAndVelocity_X) > XboxInterfaceConstants.kDeadband
-            ? m_headingAndVelocity_X * DriveConstants.DRIVE_CONFIG.maxLinearVelocity()
-            : 0.0;
-    m_headingAndVelocity_Y =
-        Math.abs(m_headingAndVelocity_Y) > XboxInterfaceConstants.kDeadband
-            ? m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity()
-            : 0.0;
+    if(Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y) < XboxInterfaceConstants.kDeadband){
+      m_headingAndVelocity_X = 0.0;
+      m_headingAndVelocity_Y = 0.0;
+    }else{
+      m_headingAndVelocity_X *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      m_headingAndVelocity_Y *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+    }
     turningVelocity =
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
