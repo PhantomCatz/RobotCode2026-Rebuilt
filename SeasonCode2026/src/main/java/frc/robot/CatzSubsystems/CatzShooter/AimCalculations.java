@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
@@ -18,6 +19,8 @@ import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 
 public class AimCalculations {
+
+    private static final double phaseDelay = 0.03;
 
     public static ShooterSetpoints calculateAllShooterSetpoint(){
         Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
@@ -109,7 +112,9 @@ public class AimCalculations {
     }
 
     public static Translation2d getPredictedHubLocation() {
-        return null;
+        Translation2d hubVelocity = getHubVelocity();
+        double futureAirtime = getFutureShootAirtime(hubVelocity);
+        return hubVelocity.times(futureAirtime);
     }
 
     /**
@@ -117,7 +122,7 @@ public class AimCalculations {
      * @return
      */
     private static Translation2d getHubVelocity() {
-        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d robotPose = getPredictedRobotPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
         double robotAngle = robotPose.getRotation().getRadians();
 
@@ -133,9 +138,7 @@ public class AimCalculations {
                         * (TurretConstants.TURRET_OFFSET.getX() * cosRobotAngle
                                 - TurretConstants.TURRET_OFFSET.getY() * sinRobotAngle);
 
-        Translation2d hubVelocity = new Translation2d(-turretVelocityX, -turretVelocityY); // imagine the hub moving
-                                                                                           // instead of the robot
-        return hubVelocity;
+        return new Translation2d(-turretVelocityX, -turretVelocityY);
     }
 
 
@@ -147,9 +150,8 @@ public class AimCalculations {
      * 
      * @return The predicted future airtime of the ball. If no solution is found, return 0.
      */
-    private static double getFutureShootAirtime() {
+    private static double getFutureShootAirtime(Translation2d hubVelocity) {
         Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
-        Translation2d hubVelocity = getHubVelocity();
         Translation2d hubToTurret = fieldToTurret.minus(FieldConstants.getHubLocation());
 
         double distToHub = hubToTurret.getNorm();
@@ -158,9 +160,9 @@ public class AimCalculations {
         double turretHubRadians = Math.abs(MathUtil.angleModulus(hubToTurret.getAngle().getRadians() - hubVelocity.getAngle().getRadians()));
 
         //get the coefficient terms of the inverse airtime polynomial
-        double regressionATerm= ShooterRegression.airtimeRegA;
-        double regressionBTerm= ShooterRegression.airtimeRegB;
-        double regressionCTerm= ShooterRegression.airtimeRegC;
+        double regressionATerm = ShooterRegression.airtimeRegA;
+        double regressionBTerm = ShooterRegression.airtimeRegB;
+        double regressionCTerm = ShooterRegression.airtimeRegC;
 
         double hubSpeed = hubVelocity.getNorm();
         double a = hubSpeed*hubSpeed - regressionATerm;
@@ -180,6 +182,22 @@ public class AimCalculations {
             return bigRoot;
         }
         return 0.0; // both roots negative (if that's even possible)
+    }
+
+    private static Pose2d getPredictedRobotPose() {
+        Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+
+        // Twist2d represents the change in pose (dx, dy, dtheta) over the latency period.
+        // The .exp() method mathematically integrates this twist along an arc.
+        Twist2d twist = new Twist2d(
+            robotVelocity.vxMetersPerSecond * phaseDelay,
+            robotVelocity.vyMetersPerSecond * phaseDelay,
+            robotVelocity.omegaRadiansPerSecond * phaseDelay
+        );
+
+        // Moves the robot along the curve defined by the Twist
+        return currentPose.exp(twist);
     }
 
     public record ShooterSetpoints(Setpoint turretSetpoint, Setpoint hoodSetpoint, Setpoint flywheelSetpoint){}
