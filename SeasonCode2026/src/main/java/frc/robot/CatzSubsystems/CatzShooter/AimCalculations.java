@@ -116,15 +116,12 @@ public class AimCalculations {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
 
-        // Twist2d represents the change in pose (dx, dy, dtheta) over the latency period.
-        // The .exp() method mathematically integrates this twist along an arc.
         Twist2d twist = new Twist2d(
             robotVelocity.vxMetersPerSecond * phaseDelay,
             robotVelocity.vyMetersPerSecond * phaseDelay,
             robotVelocity.omegaRadiansPerSecond * phaseDelay
         );
 
-        // Moves the robot along the curve defined by the Twist
         return currentPose.exp(twist);
     }
     

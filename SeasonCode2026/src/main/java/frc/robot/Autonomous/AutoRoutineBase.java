@@ -48,12 +48,14 @@ public class AutoRoutineBase {
 
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
         return Commands.sequence(
+            //Initial trajectory following
             traj.cmd(),
 
             new FunctionalCommand(
                 () -> {},
 
                 () -> {
+                    //Final pose adjustment
                     var finalPoseOpt = traj.getFinalPose();
 
                     if (finalPoseOpt.isPresent()) {
