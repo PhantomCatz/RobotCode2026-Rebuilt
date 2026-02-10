@@ -1,9 +1,11 @@
 package frc.robot.Autonomous;
 
+
 import java.util.Set;
 
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,22 +30,68 @@ public class AutoRoutineBase {
         );
     }
 
-    protected Command followTrajectoryWithAccuracy(AutoTrajectory traj){
-        return Commands.defer(() ->
-                                new FunctionalCommand
+     protected Command followTrajectory(AutoTrajectory traj){
+        return Commands.defer(() -> {
+                                final Command choreoCommand = traj.cmd();
+                                return new FunctionalCommand
                                 (
-                                    () -> {CatzDrivetrain.Instance.followChoreoTrajectoryInit(traj); traj.cmd().initialize();},
-                                    traj.cmd()::execute,
-                                    traj.cmd()::end,
-                                    () -> isAtPose(traj)
-                                ),
-                                Set.of(CatzDrivetrain.Instance)
-                             );
+                                    () -> {
+                                        CatzDrivetrain.Instance.followChoreoTrajectoryInit(traj);
+                                        choreoCommand.initialize();
+                                          },
+                                    choreoCommand::execute,
+                                    choreoCommand::end,
+                                    () -> isAtLoosePose(traj)
+                                );
+        }, Set.of(CatzDrivetrain.Instance));
+    }
+
+    protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
+        return Commands.sequence(
+            traj.cmd(),
+
+            new FunctionalCommand(
+                () -> {},
+
+                () -> {
+                    var finalPoseOpt = traj.getFinalPose();
+
+                    if (finalPoseOpt.isPresent()) {
+                        Pose2d finalPose = finalPoseOpt.get();
+
+                        SwerveSample holdSample = new SwerveSample(
+                            traj.getRawTrajectory().getTotalTime(),
+                            finalPose.getX(),
+                            finalPose.getY(),
+                            finalPose.getRotation().getRadians(),
+                            0, 0, 0,
+                            0, 0, 0,
+                            new double[4], new double[4]
+                        );
+
+                        CatzDrivetrain.Instance.followChoreoTrajectoryExecute(holdSample);
+                    }
+                },
+
+                (interrupted) -> CatzDrivetrain.Instance.stopDriving(),
+
+                () -> isAtPose(traj),
+
+                CatzDrivetrain.Instance
+            )
+        );
     }
 
     private boolean isAtPose(AutoTrajectory trajectory){
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
+
+        return isAtTrans && isAtRot;
+    }
+
+    private boolean isAtLoosePose(AutoTrajectory trajectory) {
+        boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_DIST_METERS);
+        boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_ANGLE_DEG);
 
         return isAtTrans && isAtRot;
     }

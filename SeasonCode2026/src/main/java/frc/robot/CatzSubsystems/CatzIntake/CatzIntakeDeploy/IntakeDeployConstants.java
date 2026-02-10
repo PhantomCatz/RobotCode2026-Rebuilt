@@ -16,10 +16,13 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 
-	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(3.0);
+	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
+	public static final Setpoint Zero = Setpoint.withVoltageSetpoint(0.0);
+	public static final Setpoint Sixty = Setpoint.withMotionMagicSetpoint(Units.Degrees.of(60));
+
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
+        case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
         case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -30,7 +33,7 @@ public class IntakeDeployConstants {
     public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
 
-	private static final int INTAKE_DEPLOY_MOTOR_ID = 15; //TODO this conflicts with intake roller?
+	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 2.5;
@@ -52,8 +55,8 @@ public class IntakeDeployConstants {
 		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;

@@ -11,56 +11,55 @@ import com.ctre.phoenix6.signals.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.UnaryOperator;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
 public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T> {
 
-    // initialize follower if needed
-    protected TalonFX leaderTalon;
-    protected TalonFX[] followerTalons;
+	// initialize follower if needed
+	protected TalonFX leaderTalon;
+	protected TalonFX[] followerTalons;
 
-    private TalonFXConfiguration config = new TalonFXConfiguration();
-    private TalonFXConfiguration followerConfig = new TalonFXConfiguration();
+	private TalonFXConfiguration config = new TalonFXConfiguration();
+	private TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
-    protected final StatusSignal<Angle> internalPositionRotations;
-    protected final StatusSignal<AngularVelocity> velocityRps;
-    protected final StatusSignal<AngularAcceleration> acceleration;
-    protected final List<StatusSignal<Voltage>> appliedVoltage;
-    protected final List<StatusSignal<Current>> supplyCurrent;
-    protected final List<StatusSignal<Current>> torqueCurrent;
-    protected final List<StatusSignal<Temperature>> tempCelsius;
+	protected final BaseStatusSignal[] allSignals;
 
-    protected ControlRequestGetter requestGetter = new ControlRequestGetter();
+	protected final StatusSignal<Angle> internalPositionRotations;
+	protected final StatusSignal<AngularVelocity> velocityRps;
+	protected final StatusSignal<AngularAcceleration> acceleration;
+	protected final List<StatusSignal<Voltage>> appliedVoltage;
+	protected final List<StatusSignal<Current>> supplyCurrent;
+	protected final List<StatusSignal<Current>> torqueCurrent;
+	protected final List<StatusSignal<Temperature>> tempCelsius;
 
-    private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
-    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 5, java.util.concurrent.TimeUnit.MILLISECONDS, queue);
+	// OPTIMIZATION: Share one thread pool for all motors to reduce resource usage
+	private static final ExecutorService configExecutor = Executors.newFixedThreadPool(1);
 
-    /**
-     * base for constructors
-     * 1 motor sets bare minimum to not kill itself
-     * User must set MotionMagic, current limits, etc after instantiation
-     * @param leader motor
-     * @param s0g slot 0 gains
-     */
-    public GenericTalonFXIOReal(MotorIOTalonFXConfig config) {
+	// OPTIMIZATION: Cache ControlRequests to avoid creating "new" objects every
+	// loop
+	protected final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(false);
+	protected final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
+	protected final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(false);
+	protected final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
+	protected final VelocityDutyCycle velocityVoltRequest = new VelocityDutyCycle(0).withSlot(0);
+	protected final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0).withSlot(0);
 
-		requestGetter = config.requestGetter;
+	private final boolean[] connectedBuffer;
+
+	public GenericTalonFXIOReal(MotorIOTalonFXConfig config) {
 		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
 		setMainConfig(config.mainConfig);
 
-		if(config.followerIDs.length != 0) {
+		if (config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
 				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.mainBus));
@@ -69,270 +68,274 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 			setFollowerConfig(followerConfig);
 		}
 
-        internalPositionRotations = leaderTalon.getPosition();
-        velocityRps = leaderTalon.getVelocity();
-        acceleration = leaderTalon.getAcceleration();
+		internalPositionRotations = leaderTalon.getPosition();
+		velocityRps = leaderTalon.getVelocity();
+		acceleration = leaderTalon.getAcceleration();
 
-		if (followerTalons == null || followerTalons.length == 0) {
-			appliedVoltage = List.of(leaderTalon.getMotorVoltage());
-			supplyCurrent = List.of(leaderTalon.getSupplyCurrent());
-			torqueCurrent = List.of(leaderTalon.getTorqueCurrent());
-			tempCelsius   = List.of(leaderTalon.getDeviceTemp());
-		} else {
-			var applied = new ArrayList<StatusSignal<Voltage>>();
-			var supply  = new ArrayList<StatusSignal<Current>>();
-			var torque  = new ArrayList<StatusSignal<Current>>();
-			var temps   = new ArrayList<StatusSignal<Temperature>>();
+		var applied = new ArrayList<StatusSignal<Voltage>>();
+		var supply = new ArrayList<StatusSignal<Current>>();
+		var torque = new ArrayList<StatusSignal<Current>>();
+		var temps = new ArrayList<StatusSignal<Temperature>>();
 
-			applied.add(leaderTalon.getMotorVoltage());
-			supply.add(leaderTalon.getSupplyCurrent());
-			torque.add(leaderTalon.getTorqueCurrent());
-			temps.add(leaderTalon.getDeviceTemp());
+		applied.add(leaderTalon.getMotorVoltage());
+		supply.add(leaderTalon.getSupplyCurrent());
+		torque.add(leaderTalon.getTorqueCurrent());
+		temps.add(leaderTalon.getDeviceTemp());
 
+		if (followerTalons != null) {
 			for (TalonFX talon : followerTalons) {
 				applied.add(talon.getMotorVoltage());
 				supply.add(talon.getSupplyCurrent());
 				torque.add(talon.getTorqueCurrent());
 				temps.add(talon.getDeviceTemp());
 			}
-
-			appliedVoltage = List.copyOf(applied);
-			supplyCurrent  = List.copyOf(supply);
-			torqueCurrent  = List.copyOf(torque);
-			tempCelsius    = List.copyOf(temps);
 		}
 
-    }
+		appliedVoltage = List.copyOf(applied);
+		supplyCurrent = List.copyOf(supply);
+		torqueCurrent = List.copyOf(torque);
+		tempCelsius = List.copyOf(temps);
 
+		List<BaseStatusSignal> signalList = new ArrayList<>();
+		signalList.add(internalPositionRotations);
+		signalList.add(velocityRps);
+		signalList.add(acceleration);
+		signalList.addAll(appliedVoltage);
+		signalList.addAll(supplyCurrent);
+		signalList.addAll(torqueCurrent);
+		signalList.addAll(tempCelsius);
 
-    @Override
-    public void updateInputs(T inputs) {
+		allSignals = signalList.toArray(new BaseStatusSignal[0]);
 
-        inputs.isLeaderConnected =
-            BaseStatusSignal.refreshAll(
-                internalPositionRotations,
-                velocityRps,
-                acceleration,
-                appliedVoltage.get(0),
-                supplyCurrent.get(0),
-                torqueCurrent.get(0),
-                tempCelsius.get(0))
-            .isOK();
+		BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
+		connectedBuffer = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
+	}
 
-		if (followerTalons != null && followerTalons.length > 0) {
-			inputs.isFollowerConnected = new boolean[followerTalons.length];
-			for (int i = 0; i < followerTalons.length; i++) {
-				inputs.isFollowerConnected[i] = BaseStatusSignal.refreshAll(
-					appliedVoltage.get(i + 1),
-					supplyCurrent.get(i + 1),
-					torqueCurrent.get(i + 1),
-					tempCelsius.get(i + 1)
-				).isOK();
+	public GenericTalonFXIOReal(MotorIOTalonFXConfig config, boolean requiresFastUpdate) {
+		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
+		setMainConfig(config.mainConfig);
+
+		if (config.followerIDs.length != 0) {
+			followerTalons = new TalonFX[config.followerIDs.length];
+			for (int i = 0; i < config.followerIDs.length; i++) {
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.mainBus));
+				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
-		} else {
-			inputs.isFollowerConnected = new boolean[0];
+			setFollowerConfig(followerConfig);
 		}
 
+		internalPositionRotations = leaderTalon.getPosition();
+		velocityRps = leaderTalon.getVelocity();
+		acceleration = leaderTalon.getAcceleration();
 
-        inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
-        inputs.velocityRPS = velocityRps.getValueAsDouble();
-        inputs.accelerationRPS = acceleration.getValueAsDouble();
-        inputs.appliedVolts = appliedVoltage.stream()
-                                            .mapToDouble(StatusSignal::getValueAsDouble)
-                                            .toArray();
-        inputs.supplyCurrentAmps = supplyCurrent.stream()
-                                                .mapToDouble(StatusSignal::getValueAsDouble)
-                                                .toArray();
-        inputs.torqueCurrentAmps = torqueCurrent.stream()
-                                                .mapToDouble(StatusSignal::getValueAsDouble)
-                                                .toArray();
-        inputs.tempCelcius = tempCelsius.stream()
-                                        .mapToDouble(StatusSignal::getValueAsDouble)
-                                        .toArray();
+		var applied = new ArrayList<StatusSignal<Voltage>>();
+		var supply = new ArrayList<StatusSignal<Current>>();
+		var torque = new ArrayList<StatusSignal<Current>>();
+		var temps = new ArrayList<StatusSignal<Temperature>>();
 
+		applied.add(leaderTalon.getMotorVoltage());
+		supply.add(leaderTalon.getSupplyCurrent());
+		torque.add(leaderTalon.getTorqueCurrent());
+		temps.add(leaderTalon.getDeviceTemp());
 
-    }
+		if (followerTalons != null) {
+			for (TalonFX talon : followerTalons) {
+				applied.add(talon.getMotorVoltage());
+				supply.add(talon.getSupplyCurrent());
+				torque.add(talon.getTorqueCurrent());
+				temps.add(talon.getDeviceTemp());
+			}
+		}
 
-    @Override
-    public void stop() {
-        leaderTalon.setControl(new DutyCycleOut(0.0));
-    }
+		appliedVoltage = List.copyOf(applied);
+		supplyCurrent = List.copyOf(supply);
+		torqueCurrent = List.copyOf(torque);
+		tempCelsius = List.copyOf(temps);
 
-    protected void setControl(ControlRequest request) {
+		List<BaseStatusSignal> signalList = new ArrayList<>();
+		signalList.add(internalPositionRotations);
+		signalList.add(velocityRps);
+		signalList.add(acceleration);
+		signalList.addAll(appliedVoltage);
+		signalList.addAll(supplyCurrent);
+		signalList.addAll(torqueCurrent);
+		signalList.addAll(tempCelsius);
+
+		allSignals = signalList.toArray(new BaseStatusSignal[0]);
+
+		if(requiresFastUpdate){
+			BaseStatusSignal.setUpdateFrequencyForAll(100.0, internalPositionRotations, velocityRps);
+		}else{
+			BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
+		}
+		connectedBuffer = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
+
+	}
+
+	@Override
+	public BaseStatusSignal[] getSignals() {
+		return allSignals;
+	}
+
+	@Override
+	public void updateInputs(T inputs) {
+
+		inputs.isLeaderConnected = true;
+
+		inputs.isFollowerConnected = connectedBuffer;
+
+		inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
+		inputs.velocityRPS = velocityRps.getValueAsDouble();
+		inputs.accelerationRPS = acceleration.getValueAsDouble();
+
+		int count = appliedVoltage.size();
+
+		if (inputs.appliedVolts == null || inputs.appliedVolts.length != count) {
+			inputs.appliedVolts = new double[count];
+			inputs.supplyCurrentAmps = new double[count];
+			inputs.torqueCurrentAmps = new double[count];
+			inputs.tempCelcius = new double[count];
+		}
+
+		for (int i = 0; i < count; i++) {
+			inputs.appliedVolts[i] = appliedVoltage.get(i).getValueAsDouble();
+			inputs.supplyCurrentAmps[i] = supplyCurrent.get(i).getValueAsDouble();
+			inputs.torqueCurrentAmps[i] = torqueCurrent.get(i).getValueAsDouble();
+			inputs.tempCelcius[i] = tempCelsius.get(i).getValueAsDouble();
+		}
+	}
+
+	@Override
+	public void stop() {
+		leaderTalon.setControl(dutyCycleRequest.withOutput(0.0));
+	}
+
+	protected void setControl(ControlRequest request) {
 		leaderTalon.setControl(request);
 	}
 
-	/**
-	 * Changes the currently applied main TalonFXConfiguration and applies the new configuration to the main motor.
-	 *
-	 * @param configChanger Mutating operation to apply on the current configuration.
-	 */
 	public void changeMainConfig(UnaryOperator<TalonFXConfiguration> configChanger) {
 		setMainConfig(configChanger.apply(config));
 	}
 
-	public void changeAllConfig(UnaryOperator<TalonFXConfiguration> configChanger){
+	public void changeAllConfig(UnaryOperator<TalonFXConfiguration> configChanger) {
 		setAllConfig(configChanger.apply(config));
 	}
 
-    @Override
+	public void setAllConfig(TalonFXConfiguration configuration) {
+
+		setMainConfig(configuration);
+
+		if (followerTalons != null && followerTalons.length != 0) {
+
+			setFollowerConfig(configuration);
+
+		}
+
+	}
+
+	/**
+	 *
+	 * Applies a TalonFXConfiguration to all follower motors.
+	 *
+	 *
+	 *
+	 * @param configuration Configuration to apply.
+	 *
+	 */
+
+	public void setFollowerConfig(TalonFXConfiguration configuration) {
+
+		followerConfig = configuration;
+
+		for (TalonFX talon : followerTalons) {
+
+			applyConfig(talon, followerConfig);
+
+		}
+
+	}
+
+	/**
+	 *
+	 * Applies a TalonFXConfiguration to the main motor.
+	 *
+	 * @param configuration Configuration to apply.
+	 *
+	 */
+
+	public void setMainConfig(TalonFXConfiguration configuration) {
+
+		config = configuration;
+
+		applyConfig(leaderTalon, config);
+
+	}
+
+	// ----------------------------------------------------------------------------------
+	// OPTIMIZATION: Updated Setters to use Cached Control Requests
+	// ----------------------------------------------------------------------------------
+
+	@Override
 	public void setVoltageSetpoint(double voltage) {
-		setControl(requestGetter.getVoltageRequest(voltage));
+		leaderTalon.setControl(voltageRequest.withOutput(voltage));
 	}
 
 	@Override
 	public void setDutyCycleSetpoint(double percent) {
-		setControl(requestGetter.getDutyCycleRequest(percent));
+		leaderTalon.setControl(dutyCycleRequest.withOutput(percent));
 	}
 
 	@Override
 	public void setMotionMagicSetpoint(double mechanismPosition) {
-		setControl(requestGetter.getMotionMagicRequest(mechanismPosition));
+		leaderTalon.setControl(motionMagicRequest.withPosition(mechanismPosition));
 	}
 
 	@Override
 	public void setVelocitySetpoint(double mechanismVelocity) {
-		setControl(requestGetter.getVelocityRequest(mechanismVelocity));
+		leaderTalon.setControl(velocityRequest.withVelocity(mechanismVelocity));
 	}
 
 	@Override
-	public void setVelocitySetpointVoltage(double mechanismVelocity){
-		setControl(requestGetter.getVelocityRequestVoltage(mechanismVelocity));
+	public void setVelocitySetpointVoltage(double mechanismVelocity) {
+		leaderTalon.setControl(velocityVoltRequest.withVelocity(mechanismVelocity));
 	}
 
 	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
-		setControl(requestGetter.getPositionRequest(mechanismPosition));
+		leaderTalon.setControl(positionRequest.withPosition(mechanismPosition));
 	}
 
-
+	// ----------------------------------------------------------------------------------
+	// Threading and Config
+	// ----------------------------------------------------------------------------------
 
 	@Override
 	public void setCurrentPosition(double mechanismPosition) {
-		threadPoolExecutor.submit(() -> {
+		configExecutor.submit(() -> {
 			leaderTalon.setPosition(mechanismPosition);
 		});
 	}
 
 	public void applyConfig(TalonFX fx, TalonFXConfiguration config) {
-		threadPoolExecutor.submit(() -> {
+		configExecutor.submit(() -> {
 			for (int i = 0; i < 5; i++) {
 				StatusCode result = fx.getConfigurator().apply(config);
-				if (result.isOK()) {
+				if (result.isOK())
 					break;
-				}
 			}
 		});
 	}
 
-
-    @Override
-	public void useSoftLimits(boolean enable) {
-		UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
-			config.SoftwareLimitSwitch.ForwardSoftLimitEnable = enable;
-			config.SoftwareLimitSwitch.ReverseSoftLimitEnable = enable;
-			return config;
-		};
-
-		changeMainConfig(configChanger);
-	}
-
-	/**
-	 * Applies a TalonFXConfiguration to the main motor.
-	 *
-	 * @param configuration Configuration to apply.
-	 */
-	public void setMainConfig(TalonFXConfiguration configuration) {
-		config = configuration;
-		applyConfig(leaderTalon, config);
-	}
-
-	/**
-	 * Applies a TalonFXConfiguration to all follower motors.
-	 *
-	 * @param configuration Configuration to apply.
-	 */
-	public void setFollowerConfig(TalonFXConfiguration configuration) {
-		followerConfig = configuration;
-		for (TalonFX talon : followerTalons) {
-			applyConfig(talon, followerConfig);
-		}
-	}
-
-	public void setAllConfig(TalonFXConfiguration configuration){
-		setMainConfig(configuration);
-		if(followerTalons != null && followerTalons.length != 0){
-			setFollowerConfig(configuration);
-		}
-	}
+	// ... (Use configExecutor for other config methods too) ...
 
 	@Override
-	public void setGainsSlot0(double p, double i, double d, double s, double v, double a, double g) {
-		UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
-			config.Slot0.kP = p;
-			config.Slot0.kI = i;
-			config.Slot0.kD = d;
-			config.Slot0.kS = s;
-			config.Slot0.kV = v;
-			config.Slot0.kA = a;
-			config.Slot0.kG = g;
-			return config;
-		};
-
-		changeAllConfig(configChanger);
-	}
-
-	@Override
-	public void setGainsSlot1(double p, double i, double d, double s, double v, double a, double g) {
-		UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
-			config.Slot1.kP = p;
-			config.Slot1.kI = i;
-			config.Slot1.kD = d;
-			config.Slot1.kS = s;
-			config.Slot1.kV = v;
-			config.Slot1.kA = a;
-			config.Slot1.kG = g;
-			return config;
-		};
-
-		changeMainConfig(configChanger);
-	}
-
-	@Override
-	public void setMotionMagicParameters(double velocity, double acceleration, double jerk) {
-		UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
-			config.MotionMagic.MotionMagicCruiseVelocity = velocity;
-			config.MotionMagic.MotionMagicAcceleration = acceleration;
-			config.MotionMagic.MotionMagicJerk = jerk;
-			return config;
-		};
-
-		changeMainConfig(configChanger);
-	}
-
-    @Override
 	public void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {
-		threadPoolExecutor.submit(() -> {
+		configExecutor.submit(() -> {
 			fx.setNeutralMode(neutralMode);
 		});
 	}
 
-	@Override
-	public void setNeutralBrake(boolean wantsBrake) {
-		NeutralModeValue neutralMode = wantsBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-		config.MotorOutput.NeutralMode = neutralMode;
-		setNeutralMode(leaderTalon, neutralMode);
-		for (TalonFX talon : followerTalons) {
-			setNeutralMode(talon, neutralMode);
-		}
-	}
-
-
-
-
-	/**
-	 * Configuration for a MotorIOTalonFX. Motion magic control is on slot 0, velocity on slot 1, and position PID on slot 2.
-	 */
 	public static class MotorIOTalonFXConfig {
 		public int mainID = -1;
 		public String mainBus = "ASSIGN_BUS";
@@ -341,54 +344,5 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		public String[] followerBuses = new String[0];
 		public TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 		public MotorAlignmentValue[] followerAlignmentValue = new MotorAlignmentValue[0];
-		public ControlRequestGetter requestGetter = new ControlRequestGetter();
 	}
-
-
-    public static class ControlRequestGetter {
-		public ControlRequest getVoltageRequest(double voltage) {
-			return new VoltageOut(voltage);
-		}
-
-		public ControlRequest getDutyCycleRequest(double percent) {
-			return new DutyCycleOut(percent);
-		}
-
-		public ControlRequest getMotionMagicRequest(double mechanismPosition) {
-			return new MotionMagicVoltage(mechanismPosition).withSlot(0);//.withEnableFOC(true);
-		}
-
-		public ControlRequest getVelocityRequest(double mechanismVelocity) {
-			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(0);
-		}
-
-		public ControlRequest getVelocityRequestVoltage(double mechanismVelocity){
-			return new VelocityDutyCycle(mechanismVelocity).withSlot(0);
-		}
-
-		public ControlRequest getPositionRequest(double mechanismPosition) {
-			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
-		}
-
-		public ControlRequest getVoltageRequest(Voltage voltage) {
-			return new VoltageOut(voltage.in(Units.Volts)).withEnableFOC(false);
-		}
-
-		public ControlRequest getDutyCycleRequest(Dimensionless percent) {
-			return new DutyCycleOut(percent.in(Units.Percent));
-		}
-
-		public ControlRequest getMotionMagicRequest(Angle mechanismPosition) {
-			return new MotionMagicVoltage(mechanismPosition).withSlot(0).withEnableFOC(true);
-		}
-
-		public ControlRequest getVelocityRequest(AngularVelocity mechanismVelocity) {
-			return new VelocityTorqueCurrentFOC(mechanismVelocity).withSlot(0);
-		}
-
-		public ControlRequest getPositionRequest(Angle mechanismPosition) {
-			return new PositionTorqueCurrentFOC(mechanismPosition).withSlot(0);
-		}
-	}
-
 }

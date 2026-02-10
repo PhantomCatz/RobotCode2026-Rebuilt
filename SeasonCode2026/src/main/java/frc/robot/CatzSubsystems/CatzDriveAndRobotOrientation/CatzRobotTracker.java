@@ -48,8 +48,6 @@ public class CatzRobotTracker {
     }
   }
 
-  private final Map<Integer, TxTyPoseRecord> txTyPoses = new HashMap<>();
-
   // ------------------------------------------------------------------------------------------------------
   //  Pose estimation Members
   // ------------------------------------------------------------------------------------------------------
@@ -59,9 +57,7 @@ public class CatzRobotTracker {
 
   @Getter
   private Pose2d estimatedPose = new Pose2d(8.0, 4.0, new Rotation2d());
-  @Getter
-  @AutoLogOutput(key = "CatzRobotTracker/TxTyPose")
-  private Pose2d txTyPose = new Pose2d();
+
 
   @Getter @Setter
   @AutoLogOutput(key = "CatzRobotTracker/ReachedGoal")
@@ -92,13 +88,10 @@ public class CatzRobotTracker {
 
   private Rotation2d lastGyroAngle = new Rotation2d();
   private Twist2d robotVelocity = new Twist2d();
-  private Twist2d robotAccelerations = new Twist2d();
   private Twist2d trajectoryVelocity = new Twist2d();
   private ChassisSpeeds m_lastChassisSpeeds = new ChassisSpeeds();
   private Translation2d visionPoseShift = new Translation2d();
 
-  @Getter @Setter @AutoLogOutput(key = "CatzRobotTracker/trajectory completed")
-  private double coralStationTrajectoryRemaining;
 
   // ------------------------------------------------------------------------------------------------------
   //
@@ -141,18 +134,6 @@ public class CatzRobotTracker {
     // Add pose to buffer at timestamp
     POSE_BUFFER.addSample(observation.timestamp(), odometryPose);
     // Calculate diff from last odometry pose and add onto pose estimate
-
-    // Collect Velocity and Accerleration values
-    var chassisSpeeds = KINEMATICS.toChassisSpeeds(observation.moduleStates);
-    robotAccelerations =
-        new Twist2d(
-            (chassisSpeeds.vxMetersPerSecond - m_lastChassisSpeeds.vxMetersPerSecond)
-                / observation.timestamp,
-            (chassisSpeeds.vyMetersPerSecond - m_lastChassisSpeeds.vyMetersPerSecond)
-                / observation.timestamp,
-            (chassisSpeeds.omegaRadiansPerSecond - m_lastChassisSpeeds.omegaRadiansPerSecond)
-                / observation.timestamp);
-    m_lastChassisSpeeds = chassisSpeeds;
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
   } // end of addOdometryObservation
@@ -242,7 +223,7 @@ public class CatzRobotTracker {
   public void resetPose(Pose2d initialPose) {
     // System.out.println(initialPose.getRotation().getDegrees());
     estimatedPose = initialPose;
-  odometryPose = initialPose;
+    odometryPose = initialPose;
     POSE_BUFFER.clear();
   }
 

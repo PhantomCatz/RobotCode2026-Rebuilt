@@ -16,7 +16,7 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Hood Configured for Real");
-                return new HoodIOTalonFX(HoodConstants.getIOConfig());
+                return new HoodIOTalonFX(HoodConstants.getIOConfig(), true);
             case SIM:
                 System.out.println("Hood Configured for Simulation");
                 return new HoodIOSim(HoodConstants.gains);
@@ -30,6 +30,10 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
         super(io, inputs, "CatzHood", HoodConstants.HOOD_THRESHOLD);
 
         setCurrentPosition(HoodConstants.HOOD_ZERO_POS);
+    }
+
+    public boolean isReadyToShoot(){
+        return super.nearPositionSetpoint() && setpoint.baseUnits != HoodConstants.HOOD_STOW_SETPOINT.baseUnits;
     }
 
     double p = 0.0;

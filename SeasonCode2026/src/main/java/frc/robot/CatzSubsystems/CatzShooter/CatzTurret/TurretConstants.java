@@ -39,7 +39,7 @@ public class TurretConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
 
-	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(1.0);
+	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(3.0);
 
 	public static final Angle TURRET_MAX = Units.Degrees.of(180);
 	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
@@ -52,7 +52,6 @@ public class TurretConstants {
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(90.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
-	public static final double CANCODER_OFFSET = 0.021; //in rotations
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 
     public static final TalonFXConfiguration getFXConfig() {
@@ -70,12 +69,12 @@ public class TurretConstants {
 		FXConfig.MotionMagic.MotionMagicJerk = 100.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

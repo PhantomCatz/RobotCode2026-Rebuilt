@@ -7,8 +7,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -18,11 +16,11 @@ import frc.robot.Utilities.Setpoint;
 
 public class FlywheelConstants {
 	public static final Setpoint OFF_SETPOINT = Setpoint.withDutyCycleSetpoint(0.0);
-	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpoint(60.0);
+	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpoint(40.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.07, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
-        case SN2 -> new Gains(0.07, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN1 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN2 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -35,7 +33,7 @@ public class FlywheelConstants {
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRps", 60.0);
 
-	public static final AngularVelocity FLYWHEEL_THRESHOLD = Units.RotationsPerSecond.of(5.0);
+	public static final double FLYWHEEL_THRESHOLD = 0.04;
 
 	public static final Translation2d VDEXER_FEED_COMPENSATION = new Translation2d(2.0, 0.0); //Because of the way we feed the balls into the shooter with the indexer, there is a directional bias in the ball trajectory.
 	public static final double VDEXER_FEED_COMPENSATION_NORM = VDEXER_FEED_COMPENSATION.getNorm();
@@ -62,7 +60,6 @@ public class FlywheelConstants {
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
-
 
 		FXConfig.Feedback.SensorToMechanismRatio = 1.0; //TODO dont use magic number
 

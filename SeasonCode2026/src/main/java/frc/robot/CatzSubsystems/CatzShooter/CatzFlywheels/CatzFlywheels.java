@@ -16,7 +16,7 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Roller Configured for Real");
-                return new FlywheelsIOTalonFX(FlywheelConstants.getIOConfig());
+                return new FlywheelsIOTalonFX(FlywheelConstants.getIOConfig(), true);
             case SIM:
                 System.out.println("Roller Configured for Simulation");
                 return new FlywheelsIOSim(FlywheelConstants.gains);

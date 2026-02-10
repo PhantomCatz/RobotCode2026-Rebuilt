@@ -90,10 +90,6 @@ public class ShooterRegression {
         return Setpoint.withMotionMagicSetpoint(Units.Degrees.of(getHoodAngle(distance)));
     }
 
-    /**
-     * Calculates the hood angle using the live TunableNumbers from the dashboard.
-     * Use this during the match with the real camera distance.
-     */
     public static double getHoodAngleTunable(Distance distance) {
         // 1. Get the live values from the dashboard
         double minAngle = TUNABLE_HOOD_ANGLE_MIN.get();
@@ -118,11 +114,11 @@ public class ShooterRegression {
     }
 
     // interpolates distance to target for shooter setpoint along regression
-    public static double getShooterRPSFromRegression(double range) {
+    public static Setpoint getShooterSetpointFromRegression(Distance range) {
         if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
+            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimPolynomial.predict(range.in(Units.Meters)));
         } else {
-            return ShooterRegression.flywheelAutoAimMap.get(range);
+            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimMap.get(range.in(Units.Meters)));
         }
     }
 }
