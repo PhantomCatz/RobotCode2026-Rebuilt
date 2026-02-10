@@ -13,6 +13,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.FieldConstants;
 import frc.robot.Robot;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -29,7 +30,7 @@ public class PIDDriveCmdFuel extends Command{
     private Pose2d goalPos;
     private boolean outOfTime = false;
 
-
+    private final Translation2d TRENCH_POSE;
 
     /**
      * Only to be used in autonomous. Drives towards an initial target until it sees a fuel, 
@@ -58,6 +59,7 @@ public class PIDDriveCmdFuel extends Command{
         this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
         this.rotationController.enableContinuousInput(-180.0, 180.0);
         this.GOAL_VELOCITY = goalVel;
+        this.TRENCH_POSE = FieldConstants.getTrenchShootingLocation();
     }
 
     @Override
@@ -90,7 +92,7 @@ public class PIDDriveCmdFuel extends Command{
 
         if(DriverStation.isAutonomous()){
             double avgVel = (targetVel + GOAL_VELOCITY) / 2.0;
-            double timeToReachTrench = currentDistance / avgVel;
+            double timeToReachTrench = currentPose.getTranslation().getDistance(TRENCH_POSE) / avgVel;
             if (timeToReachTrench < Robot.autonStartTime + 20.0 - AutonConstants.RETURN_TIME_BUFFER - Timer.getFPGATimestamp()) {
                 outOfTime = true;
             }

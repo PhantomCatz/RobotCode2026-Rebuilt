@@ -24,6 +24,7 @@ public class FieldConstants {
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
   private static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
+  private static final Translation2d TRENCH_SHOOTING_LOCATION = new Translation2d(4.3802995681762695, 0.6432812809944153);
 
   /**
    * Returns the position of the hub in the correct alliance.
@@ -32,6 +33,11 @@ public class FieldConstants {
     //This apply method correctly accounts for alliance color
     return AllianceFlipUtil.apply(HUB_LOCATION);
   }
+
+  public static Translation2d getTrenchShootingLocation(){
+    return AllianceFlipUtil.apply(TRENCH_SHOOTING_LOCATION);
+  }
+
   @Getter
   public enum AprilTagLayoutType {
 

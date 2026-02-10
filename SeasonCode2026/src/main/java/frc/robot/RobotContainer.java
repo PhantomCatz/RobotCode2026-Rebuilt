@@ -52,8 +52,8 @@ public class RobotContainer {
     xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
     // ---------------------Testing Controls--------------------
-    // xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint())
-    //     .alongWith(superstructure.turretTrackHubCommand()));
+    xboxTest.b().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint())
+        .alongWith(superstructure.turretTrackHubCommand()));
     xboxTest.b().onTrue(superstructure.interpolateHoodAngle().alongWith(superstructure.interpolateFlywheelSpeed()));
     // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
     // .alongWith(superstructure.interpolateShooterSpeed()).alongWith(superstructure.turretTrackCommand()));
