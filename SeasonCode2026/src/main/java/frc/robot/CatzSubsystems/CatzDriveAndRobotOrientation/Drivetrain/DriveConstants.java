@@ -38,8 +38,8 @@ public class DriveConstants {
   public static final DriveConfig DRIVE_CONFIG =
     DriveConfig.builder()
         .wheelRadius(Units.inchesToMeters(1.7))
-        .robotLengthX(Units.inchesToMeters(24.2))
-        .robotWidthY(Units.inchesToMeters(24.2))
+        .robotLengthX(Units.inchesToMeters(28))
+        .robotWidthY(Units.inchesToMeters(28))
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
         .maxLinearVelocity(4.3)

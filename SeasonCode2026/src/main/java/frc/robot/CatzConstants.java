@@ -83,9 +83,6 @@ public final class CatzConstants {
     }
   }
 
-  public static final Pose2d defaultPose = new Pose2d();
-  public static final Pose2d startMiddle = new Pose2d(8.0, 4.0, Rotation2d.k180deg);
-
   public static enum RobotID {
     SN1,
     SN_MANTA,
