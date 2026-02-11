@@ -1,15 +1,16 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-// import com.pathplanner.lib.util.PathPlannerLogging;
 
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-// import choreo.auto.AutoTrajectory;
-// import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -28,21 +30,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
-// import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
 import frc.robot.Autonomous.AutonConstants;
-// import frc.robot.Autonomous.AutonConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-// import org.littletonrobotics.junction.AutoLogOutput;
-// import org.littletonrobotics.junction.Logger;
 import java.util.Collections;
 import java.util.List;
 
+import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 // Drive train subsystem for swerve drive implementation
@@ -72,6 +74,8 @@ public class CatzDrivetrain extends SubsystemBase {
   public final CatzSwerveModule LT_FRNT_MODULE;
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
+
+  public static final SwerveDriveSimulation driveSimulationInstance = new SwerveDriveSimulation(getMapleSimConfig(), new Pose2d(3, 3, new Rotation2d()));
 
   private final Field2d field;
 
@@ -425,4 +429,30 @@ public class CatzDrivetrain extends SubsystemBase {
   public void setPIDGoalPose(Pose2d p){
     this.pidGoalPose = p;
   }
+
+  //------------------------------------------------------------------------------------------------------------
+  //      Simulation Helpers
+  //------------------------------------------------------------------------------------------------------------
+  private static DriveTrainSimulationConfig mapleSimConfig = null;
+
+
+  public static DriveTrainSimulationConfig getMapleSimConfig() {
+        if (mapleSimConfig != null) return mapleSimConfig;
+
+        return mapleSimConfig = DriveTrainSimulationConfig.Default()
+                .withRobotMass(Kilograms.of(ROBOT_MASS))
+                .withCustomModuleTranslations(DriveConstants.MODULE_TRANSLATIONS)
+                .withGyro(COTS.ofPigeon2())
+                .withSwerveModule(new SwerveModuleSimulationConfig(
+                        DCMotor.getKrakenX60Foc(1),
+                        DCMotor.getKrakenX44(1),
+                        MODULE_GAINS_AND_RATIOS.driveReduction(),
+                        MODULE_GAINS_AND_RATIOS.steerReduction(),
+                        Volts.of(0.2), // Static friction voltage
+                        Volts.of(0.3),
+                        Inches.of(2),
+                        KilogramSquareMeters.of(ROBOT_MOI),
+                        WHEEL_COF));
+    }
+
 }

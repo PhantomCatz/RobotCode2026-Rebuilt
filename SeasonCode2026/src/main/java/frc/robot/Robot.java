@@ -1,9 +1,11 @@
 package frc.robot;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -16,6 +18,8 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +28,7 @@ import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.SimulationAndVisualization;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -43,10 +48,12 @@ public class Robot extends LoggedRobot {
 
   private BaseStatusSignal[] allSignals;
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
+  private SimulationAndVisualization sim = new SimulationAndVisualization("Cero");
 
   public Robot() {
   }
 
+  @SuppressWarnings("null")
   @Override
   public void robotInit() {
 
@@ -66,6 +73,13 @@ public class Robot extends LoggedRobot {
         // Logger.addDataReceiver(new WPILOGWriter("F:/robotics code
         // projects/loggingfiles/"));
         Logger.addDataReceiver(new NT4Publisher());
+
+        // Simulation setup
+        SimulatedArena newSimulatedArena = SimulatedArena.getInstance();
+        SimulatedArena.overrideInstance(newSimulatedArena);
+        SimulatedArena.getInstance().resetFieldForAuto();
+        // This simulates a 100Hz robot with 300Hz odometry.
+        SimulatedArena.overrideSimulationTimings(Units.Second.of(0.01), 3);
         break;
 
       case REPLAY:
@@ -78,32 +92,6 @@ public class Robot extends LoggedRobot {
     }
 
     Logger.start();
-
-    // Log active commands
-    // Map<String, Integer> commandCounts = new HashMap<>();
-    // BiConsumer<Command, Boolean> logCommandFunction = (Command command, Boolean active) -> {
-    //   String name = command.getName();
-    //   int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
-    //   commandCounts.put(name, count);
-    //   Logger.recordOutput(
-    //       "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
-    //   Logger.recordOutput("CommandsAll/" + name, count > 0);
-    // };
-    // CommandScheduler.getInstance()
-    //     .onCommandInitialize(
-    //         (Command command) -> {
-    //           logCommandFunction.accept(command, true);
-    //         });
-    // CommandScheduler.getInstance()
-    //     .onCommandFinish(
-    //         (Command command) -> {
-    //           logCommandFunction.accept(command, false);
-    //         });
-    // CommandScheduler.getInstance()
-    //     .onCommandInterrupt(
-    //         (Command command) -> {
-    //           logCommandFunction.accept(command, false);
-    //         });
 
     // Set Brownout Voltage to WPILIB recommendations
     RobotController.setBrownoutVoltage(6.3);
@@ -187,6 +175,15 @@ public class Robot extends LoggedRobot {
       BaseStatusSignal.refreshAll(allSignals);
     }
     CommandScheduler.getInstance().run();
+
+
+    sim.update(
+        Rotation2d.fromDegrees(CatzIntakeDeploy.Instance.getSetpoint().baseUnits),
+        Rotation2d.fromDegrees(CatzHood.Instance.getSetpoint().baseUnits),
+        Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition()),
+        CatzFlywheels.Instance.getSetpoint().baseUnits,
+        CatzFlywheels.Instance.getVelocity().baseUnitMagnitude() > 0.0
+      );
   }
 
   @Override

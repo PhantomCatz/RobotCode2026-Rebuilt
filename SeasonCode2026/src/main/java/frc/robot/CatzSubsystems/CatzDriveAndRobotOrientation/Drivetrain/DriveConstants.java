@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -201,6 +202,7 @@ public class DriveConstants {
 
   public static final double ROBOT_MASS = 60.0;
   public static final double ROBOT_MOI = (2.0 / 12.0) * ROBOT_MASS * (Math.pow(DRIVE_CONFIG.bumperWidthX(), 2));
+  public static final double WHEEL_COF = 1.1; // Coefficient of friction for the wheels, used in simulation
 
 
 
@@ -209,6 +211,7 @@ public class DriveConstants {
   //      Simulation helpers
   //
   // -----------------------------------------------------------------------------------------------------------------------------
+
 
   /****************************************************************************************
    *
