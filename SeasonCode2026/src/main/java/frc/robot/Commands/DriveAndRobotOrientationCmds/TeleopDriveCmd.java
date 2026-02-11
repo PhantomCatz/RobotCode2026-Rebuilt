@@ -96,13 +96,6 @@ public void initialize() {}
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
             : 0.0;
 
-    // if(CatzSuperstructure.isClimbEnabled()) {
-    //   m_headingAndVelocity_X *= 0.4;
-    //   m_headingAndVelocity_Y *= 0.4;
-    //   turningVelocity *= 0.4;
-    //   //System.out.println("low speed");
-    // }
-
     // Construct desired chassis speeds
 
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(m_headingAndVelocity_X,

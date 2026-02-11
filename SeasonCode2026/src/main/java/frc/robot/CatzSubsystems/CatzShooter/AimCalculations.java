@@ -3,6 +3,7 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -37,7 +38,67 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
+// public static AimingParameters getAimingParameters(Rotation2d currentTurretAngle) {
+//         // 1. Predict & Calculate Target (Same as before)
+//         Pose2d futureRobotPose = getPredictedRobotPose(kLatencySeconds);
+//         Translation2d relativeHubVelocity = getHubVelocity(futureRobotPose);
+//         double airtime = getFutureShootAirtime(relativeHubVelocity);
+        
+//         Translation2d futureTurretPos = futureRobotPose.getTranslation().plus(
+//             TurretConstants.TURRET_OFFSET.rotateBy(futureRobotPose.getRotation())
+//         );
+//         Translation2d targetVector = FieldConstants.getHubLocation()
+//                 .minus(futureTurretPos)
+//                 .plus(relativeHubVelocity.times(airtime));
 
+//         // 2. Calculate ideal angle in range [-PI, PI]
+//         Rotation2d targetAngle = targetVector.getAngle();
+//         double targetRadians = targetAngle.getRadians();
+
+//         // 3. LOGIC: Handle Hard Stops & Robot Turn Assist
+//         double clampedTurretGoal = targetRadians;
+//         Double robotTurnCmd = null;
+
+//         // Check if we are approaching the positive or negative limit (180 - 5 = 175 degrees)
+//         boolean inPositiveDangerZone = targetRadians > (kMaxTurretAngle - kTurretHardStopBuffer);
+//         boolean inNegativeDangerZone = targetRadians < (-kMaxTurretAngle + kTurretHardStopBuffer);
+
+//         if (inPositiveDangerZone || inNegativeDangerZone) {
+//              // A. CLAMP THE TURRET
+//              // Don't let the turret hit the physical hard stop. Keep it at the edge.
+//              // This keeps the camera looking at the target as long as possible.
+//              clampedTurretGoal = MathUtil.clamp(targetRadians, -kMaxTurretAngle, kMaxTurretAngle);
+
+//              // B. TURN THE ROBOT
+//              // We need to spin the robot to bring the target back to center (0 degrees).
+//              // Determine direction: 
+//              // If target is +179, we want to spin robot LEFT (positive omega) to make target relative angle smaller.
+//              // If target is -179, we want to spin robot RIGHT (negative omega).
+             
+//              // Simple P-Controller for the Drivetrain rotation
+//              // kP should be tuned (start low, e.g., 2.0)
+//              double kP_Chassis = 4.0; 
+//              robotTurnCmd = targetRadians * kP_Chassis; 
+//         }
+
+//         // 4. Calculate Turret Feedforward (Standard)
+//         double r2 = targetVector.getNorm() * targetVector.getNorm();
+//         double crossProduct = targetVector.getX() * relativeHubVelocity.getY() 
+//                             - targetVector.getY() * relativeHubVelocity.getX();
+//         double turretFF = (r2 > 1e-6) ? (crossProduct / r2) : 0.0;
+
+//         // If we are commanding the robot to turn, we must SUBTRACT that velocity from the turret
+//         // so the turret stays "world stabilized" while the chassis spins beneath it.
+//         if (robotTurnCmd != null) {
+//             turretFF -= robotTurnCmd; 
+//         }
+
+//         return new AimingParameters(
+//             new Rotation2d(clampedTurretGoal), 
+//             turretFF, 
+//             robotTurnCmd
+//         );
+//     }
 
     public static Translation2d getPredictedHubLocation() {
         Translation2d hubVelocity = getHubVelocity();
