@@ -35,6 +35,7 @@ public class CatzSuperstructure {
     // NOTE use suppliers instead of creating two different objects
 
     private boolean isShootingAllowed = false; //TODO set to always true during auton
+    public boolean isCloseCornerHoarding = true;
 
     private CatzSuperstructure() {
     }

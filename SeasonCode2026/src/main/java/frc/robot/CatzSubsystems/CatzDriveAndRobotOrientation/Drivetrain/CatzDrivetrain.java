@@ -4,13 +4,8 @@ import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.D
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-// import com.pathplanner.lib.util.PathPlannerLogging;
-import com.google.flatbuffers.Constants;
-
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-// import choreo.auto.AutoTrajectory;
-// import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,7 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,10 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
-// import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
-import frc.robot.Autonomous.AutonConstants;
-// import frc.robot.Autonomous.AutonConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
@@ -235,80 +227,117 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
-  // public void slipControlDrive(ChassisSpeeds desiredSpeeds) {
-  //   // The "floor" acceleration to prevent slip during a J-turn or 180 reversal
-  //   double kAccelSlip = 2.0;
-  //   // The "ceiling" acceleration for straight lines, braking, and launching
-  //   double kAccelTraction = 20.0;
+  /**
+   * Drives the robot with dynamic acceleration limits to prevent wheel slip.
+   * * This method calculates a custom acceleration limit based on:
+   * 1. The severity of the direction change (using Dot Product).
+   * 2. The current speed of the robot (ignoring limits at low speeds).
+   * * @param desiredSpeeds The target chassis speeds from the driver/auto.
+   */
+  public void slipControlDrive(ChassisSpeeds desiredSpeeds) {
+    // The maximum acceleration allowed during a high-speed 
+    // J-turn or 180-degree reversal. If the robot drifts, lower this.
+    double accelSlip = 3.5; 
+    
+    // The maximum acceleration allowed for straight-line 
+    // driving, braking, or launching from a stop.
+    double accelTraction = 22.0; 
 
-  //   // --- 1. GET CURRENT STATUS ---
-  //   // We need the robot's *actual* current velocity vector
-  //   // (Assuming 'currentSetpoint' tracks the last commanded state)
-  //   ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+    // Below this speed (m/s), we ignore the slip limit 
+    // because the tires have plenty of grip.
+    double safeSpeed = 2.0; 
+    
+    // Get the robot's current velocity vector from the setpoint generator
+    ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+    
+    // Calculate the magnitude (total speed) of current and desired vectors
+    double currentSpeedMag = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
+    double targetSpeedMag = Math.hypot(desiredSpeeds.vxMetersPerSecond, desiredSpeeds.vyMetersPerSecond);
+    
+    double directionalAccelLimit;
+    
+    // If the robot is stopped or stopping, direction doesn't matter. 
+    // Allow maximum traction for launching or braking.
+    if (currentSpeedMag < 0.1 || targetSpeedMag < 0.1) {
+       directionalAccelLimit = accelTraction;
+    } else {
+       // Calculate the Dot Product of the velocity vectors:
+       // (vx1*vx2 + vy1*vy2) / (|v1| * |v2|)
+       // Result ranges from:
+       //   1.0 (Aligned)  -> Moving in the same direction
+       //   0.0 (90 deg)   -> Turning sharp corner
+       //  -1.0 (Opposite) -> Reversing direction
+       double dot = (currentSpeeds.vxMetersPerSecond * desiredSpeeds.vxMetersPerSecond
+                   + currentSpeeds.vyMetersPerSecond * desiredSpeeds.vyMetersPerSecond)
+                   / (currentSpeedMag * targetSpeedMag);
+       
+       // Clamp for floating point errors
+       dot = Math.max(-1.0, Math.min(1.0, dot));
+       
+       // Map [-1 to 1] -> [0 to 1]
+       // 0.0 = We are reversing/turning (Needs Caution)
+       // 1.0 = We are driving straight (Needs Speed)
+       double directionFactor = (dot + 1.0) / 2.0;
+       
+       // Linear Interpolate (Lerp) between the Slip Floor and Traction Ceiling
+       directionalAccelLimit = accelSlip + (directionFactor * (accelTraction - accelSlip));
+    }
+    
+    // Calculate how risky our current speed is.
+    // 0.0 = Low Speed (Safe) -> We can ignore the directional limit.
+    // 1.0 = High Speed (Risky) -> We must strictly obey the directional limit.
+    double speedRiskFactor = Math.min(currentSpeedMag / safeSpeed, 1.0);
+    
+    // Blend the limits:
+    // Low Speed  -> Uses kAccelTraction (Max Performance)
+    // High Speed -> Uses directionalAccelLimit (Safety)
+    double finalAccelLimit = accelTraction + (speedRiskFactor * (directionalAccelLimit - accelTraction));
+    
+    // Create the dynamic constraints for this specific loop cycle
+    ModuleLimits dynamicLimits = new ModuleLimits(
+      DriveConstants.DRIVE_CONFIG.maxLinearVelocity(), 
+      finalAccelLimit, // <--- The calculated Anti-Slip Acceleration
+      DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
+    );
 
-  //   // Calculate magnitudes to normalize vectors later
-  //   double currentSpeedMag = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
-  //   double targetSpeedMag = Math.hypot(desiredSpeeds.vxMetersPerSecond, desiredSpeeds.vyMetersPerSecond);
+    // Discretize desired speeds to correct for robot motion during the loop time
+    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
+    
+    currentSetpoint = swerveSetpointGenerator.generateSetpoint(
+        dynamicLimits,
+        currentSetpoint,
+        discreteSpeeds,
+        0.02 
+    );
+    
+    SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
+    
+    // Log the calculated limits to TunableNumbers/Dashboard for debugging
+    Logger.recordOutput("Drive/AccelLimit", finalAccelLimit);
+    Logger.recordOutput("Drive/SpeedRiskFactor", speedRiskFactor);
 
-  //   // --- 2. DETERMINE ACCELERATION LIMIT ---
-  //   double activeAccelLimit;
-
-  //   // CASE A: STOPPING (Driver let go of stick)
-  //   // If target is near zero, allow MAX deceleration to stop quickly.
-  //   if (targetSpeedMag < 0.1) {
-  //     activeAccelLimit = kAccelTraction;
-  //   }
-  //   // CASE B: LAUNCHING (Starting from stopped)
-  //   // If current speed is near zero, direction doesn't matter. Allow MAX accel.
-  //   else if (currentSpeedMag < 0.1) {
-  //     activeAccelLimit = kAccelTraction;
-  //   }
-  //   // CASE C: DRIVING / TURNING (The Dynamic Logic)
-  //   else {
-  //     // Calculate the Dot Product of the directions (Normalize first!)
-  //     // (vx1*vx2 + vy1*vy2) / (mag1 * mag2)
-  //     double dotProduct = (currentSpeeds.vxMetersPerSecond * desiredSpeeds.vxMetersPerSecond
-  //         + currentSpeeds.vyMetersPerSecond * desiredSpeeds.vyMetersPerSecond)
-  //         / (currentSpeedMag * targetSpeedMag);
-
-  //     // Clamp dot product to -1 to 1 just to be safe
-  //     dotProduct = Math.max(-1.0, Math.min(1.0, dotProduct));
-
-  //     // Map the Dot Product to our Acceleration Range
-  //     // Dot = 1.0 (Aligned) -> Use kAccelTraction
-  //     // Dot = -1.0 (Opposed) -> Use kAccelSlip
-
-  //     // Formula: Map [-1, 1] to [0, 1] -> (dot + 1) / 2
-  //     double scalar = (dotProduct + 1.0) / 2.0;
-  //     scalar 
-
-  //     // Linear Interpolate
-  //     activeAccelLimit = kAccelSlip + (scalar * (kAccelTraction - kAccelSlip));
-  //   }
-
-  //   // --- 3. CREATE DYNAMIC LIMITS OBJECT ---
-  //   // Copy your base limits, but override the acceleration
-  //   ModuleLimits dynamicLimits = new ModuleLimits(
-  //     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(), 
-  //     activeAccelLimit, 
-  //     DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
-  //   );
-
-  //   // --- 4. GENERATE SETPOINT ---
-  //   ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, CatzConstants.LOOP_TIME);
-
-  //   currentSetpoint = swerveSetpointGenerator.generateSetpoint(
-  //       dynamicLimits, // Pass the custom object
-  //       currentSetpoint,
-  //       discreteSpeeds,
-  //       CatzConstants.LOOP_TIME);
-
-  //   // ... (Log outputs and run modules) ...
-
-  //   // Optional: Log the dynamic limit to tune it
-  //   Logger.recordOutput("Drive/DynamicAccelLimit", activeAccelLimit);
-
-  // }
+    for (int i = 0; i < 4; i++) {
+        // Use your team's custom optimization logic (keeps wheels from spinning >90 deg)
+        // m_swerveModules[i].optimizeWheelAngles() is assumed to return the optimized state
+        SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+        
+        // Ensure we don't apply full power until the wheel is actually pointing 
+        // in the correct direction. This prevents "skittering" sideways.
+        Rotation2d currentAngle = m_swerveModules[i].getAngle(); 
+        
+        // Dot product of Wheel Heading vs Target Heading
+        double cosineScale = optimizedState.angle.minus(currentAngle).getCos();
+        
+        // Only enforce this if we are moving fast enough to matter (Risk > 10%)
+        if (speedRiskFactor > 0.1) {
+            // If cosine is negative (error > 90 deg), output is 0.
+            optimizedState.speedMetersPerSecond *= Math.max(0.0, cosineScale);
+        }
+        m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
+        
+        optimizedDesiredStates[i] = optimizedState;
+    }
+  }
 
   /** Create a command to stop driving */
   public void stopDriving() {

@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -15,6 +17,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
+import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.Setpoint;
 
 public class AimCalculations {
@@ -29,14 +32,27 @@ public class AimCalculations {
     }
 
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target){
-        Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
-
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
 
-        double targetRads = hubDirection.getAngle().minus(fieldToRobot.getRotation()).minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
+        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation()).minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
+
+    // public static Setpoint calculateCornerHoardingSetpoint(){
+    //     Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
+    //     Translation2d targetPos = FieldConstants.getRightCornerHoardLocation(); //first get the right corner
+
+    //     if(DriverStation.getAlliance().get() == Alliance.Blue){
+    //         if(turretPos.getY() >= FieldConstants.fieldYHalf){
+    //             targetPos = new Translation2d(targetPos.getX(), FieldConstants.fieldWidth - targetPos.getY());
+    //         }
+    //     }else{
+    //         if(turretPos.getY() <= FieldConstants.fieldYHalf){
+    //             targetPos = new Translation2d(targetPos.getX(), FieldConstants.fieldWidth - targetPos.getY());
+    //         }
+    //     }
+    // }
 
 // public static AimingParameters getAimingParameters(Rotation2d currentTurretAngle) {
 //         // 1. Predict & Calculate Target (Same as before)
