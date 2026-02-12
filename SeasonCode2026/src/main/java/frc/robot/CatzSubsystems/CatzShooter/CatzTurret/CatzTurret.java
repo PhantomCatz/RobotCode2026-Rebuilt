@@ -40,9 +40,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     private CatzTurret() {
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
 
-        double CAN_ABS_POS = TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() //offset already applied via Phoenix Tuner
-                * TurretConstants.CANCODER_RATIO;
-        setCurrentPosition(Units.Rotations.of(CAN_ABS_POS));
+        setCurrentPosition(Units.Rotations.of(getCANCoderAbsPos()));
     }
 
     public static final CatzTurret Instance = new CatzTurret();
@@ -75,7 +73,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
         Logger.recordOutput("Distance from Hub", distFromHub);
 
-        Logger.recordOutput("CANCoder Absolute Position", TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO);
+        Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
 
         angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }
@@ -83,7 +81,6 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     /**
      * Calculates the best turret angle setpoint to reach a target rotation
      * while respecting physical limits and minimizing movement
-     * Returns null when no valid setpoint can be found.
      */
     public Setpoint calculateWrappedSetpoint(Angle target) {
         double targetRads = target.in(Units.Radians);
@@ -100,6 +97,17 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     public double getAngleAtTime(double time) {
         return angleHistory.getSample(time).orElse(getLatencyCompensatedPosition() * 2 * Math.PI);
+    }
+
+    /**
+     * 
+     * @return The absolute position of the CANCoder accounting for the gear ratio. 
+     * Note that the CANCoder's range is only [-1,1] rotations, and so the absolute encoder range of the turret is only
+     * applicable for +-1 / gear_ratio rotations. If the turret reads the absolute position outside of this range, then 
+     * it will not be truly "absolute".
+     */
+    public double getCANCoderAbsPos(){
+        return TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO;
     }
 
     private static TurretIO getIOInstance() {

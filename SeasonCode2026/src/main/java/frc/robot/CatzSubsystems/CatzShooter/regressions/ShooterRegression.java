@@ -11,13 +11,12 @@ import frc.robot.Utilities.Setpoint;
 
 public class ShooterRegression {
     //shooter
-    public static double kDefaultShootingRPM = 2950.0;
     public static boolean kUseFlywheelAutoAimPolynomial = true;
-    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MIN = new LoggedTunableNumber("Regression/hood angle min", EpsilonRegression.CLOSEST_HOOD_ANGLE[1]);
-    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MIN = new LoggedTunableNumber("Regression/hood dist min", EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
+    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MIN = new LoggedTunableNumber("Regression/hood angle min", EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[1]);
+    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MIN = new LoggedTunableNumber("Regression/hood dist min", EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[0]);
 
-    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MAX = new LoggedTunableNumber("Regression/hood angle max", EpsilonRegression.FARTHEST_HOOD_ANGLE[1]);
-    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MAX = new LoggedTunableNumber("Regression/hood dist max", EpsilonRegression.FARTHEST_HOOD_ANGLE[0]);
+    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MAX = new LoggedTunableNumber("Regression/hood angle max", EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB[1]);
+    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MAX = new LoggedTunableNumber("Regression/hood dist max", EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB[0]);
 
     public static final LoggedTunableNumber TUNABLE_DIST = new LoggedTunableNumber("Regression/Dist", 0.0);
 
@@ -30,13 +29,16 @@ public class ShooterRegression {
     // New variables for Inverse Airtime
     public static InterpolatingDoubleTreeMap airtimeInverseAutoAimMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression airtimeInverseAutoAimPolynomial;
+    public static double airtimeRegA;
+    public static double airtimeRegB;
+    public static double airtimeRegC;
 
     public static double[][] flywheelRegression;
     public static double[][] airtimeRegression;
     public static double[][] airtimeInverseRegression; // Needed to feed the polynomial constructor
 
     static {
-        flywheelRegression = EpsilonRegression.flywheelManualRPM;
+        flywheelRegression = EpsilonRegression.flywheelHubRPS;
 
         for (double[] pair : flywheelRegression) {
             flywheelAutoAimMap.put(pair[0], pair[1]);
@@ -46,7 +48,7 @@ public class ShooterRegression {
     }
 
     static {
-        airtimeRegression = EpsilonRegression.airtime;
+        airtimeRegression = EpsilonRegression.airtimeHub;
 
         // Initialize the inverse array with the same size
         airtimeInverseRegression = new double[airtimeRegression.length][2];
@@ -69,13 +71,17 @@ public class ShooterRegression {
 
         airtimeAutoAimPolynomial = new PolynomialRegression(airtimeRegression, 2);
         airtimeInverseAutoAimPolynomial = new PolynomialRegression(airtimeInverseRegression, 2);
+        airtimeRegA = airtimeInverseAutoAimPolynomial.beta(0);
+        airtimeRegB = airtimeInverseAutoAimPolynomial.beta(1);
+        airtimeRegC = airtimeInverseAutoAimPolynomial.beta(2);
+
     }
 
-    private static final double HOOD_ANGLE_SLOPE = (EpsilonRegression.FARTHEST_HOOD_ANGLE[1]-EpsilonRegression.CLOSEST_HOOD_ANGLE[1]) /
-                                                   (EpsilonRegression.FARTHEST_HOOD_ANGLE[0]-EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
+    private static final double HOOD_ANGLE_SLOPE = (EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB[1]-EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[1]) /
+                                                   (EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB[0]-EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[0]);
 
     public static double getHoodAngle(Distance distance){
-        double angle = HOOD_ANGLE_SLOPE * (distance.in(Units.Meters) - EpsilonRegression.CLOSEST_HOOD_ANGLE[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE[1];
+        double angle = HOOD_ANGLE_SLOPE * (distance.in(Units.Meters) - EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[1];
         return MathUtil.clamp(angle, HoodConstants.HOOD_ZERO_POS.in(Units.Degrees), HoodConstants.HOOD_MAX_POS.in(Units.Degrees));
     }
 
