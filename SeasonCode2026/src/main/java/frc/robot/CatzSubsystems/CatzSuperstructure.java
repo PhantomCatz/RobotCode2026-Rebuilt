@@ -37,7 +37,7 @@ public class CatzSuperstructure {
 
     private boolean isShootingAllowed = false; //TODO set to always true during auton
 
-    public static boolean isManualCommandOn;
+    public static boolean isManualCommandOn = false;
 
     private CatzSuperstructure() {
     }
@@ -127,7 +127,8 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> isShootingAllowed = val);
     }
     public Command flywheelManualCommand() {
-        return CatzFlywheels.Instance.followSetpointCommand(() -> {
+              System.out.print("flyWHeelmanIl");
+  return CatzFlywheels.Instance.followSetpointCommand(() -> {
             double input = (xboxDrv.getLeftY()) * 8;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
@@ -135,22 +136,34 @@ public class CatzSuperstructure {
     }
 
     public Command hoodManualCommand() {
-        return CatzHood.Instance.followSetpointCommand(() -> {
+             System.out.print("hoodManual");
+  return CatzHood.Instance.followSetpointCommand(() -> {
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
     }
     public Command turretManualCommand() {
+        System.out.print("turretManual");
         return CatzTurret.Instance.followSetpointCommand(() -> {
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
     }
-    public Command manualCommandOff() {
+    public Command manualCommandOn() {
         return Commands.runOnce(() -> 
+            isManualCommandOn = true
+        );
+    }
+        public static Command manualCommandOff() {
+            return Commands.runOnce(() ->
             isManualCommandOn = false
+            );
+    }
+    public Command manualCommandSwitch() {
+        return Commands.runOnce(() ->
+        isManualCommandOn = !isManualCommandOn
         );
     }
     public Command applyHoodTuningSetpoint() {
