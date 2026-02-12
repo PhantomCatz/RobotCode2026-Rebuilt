@@ -330,5 +330,7 @@
    {"name":"Intake4", "from":{"target":3, "targetTimestamp":5.71208, "offset":{"exp":"-1 s", "val":-1.0}}, "event":null},
    {"name":"Score5", "from":{"target":4, "targetTimestamp":7.75217, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score3", "from":{"target":2, "targetTimestamp":3.69494, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Climb7", "from":{"target":6, "targetTimestamp":10.06572, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Climb7", "from":{"target":6, "targetTimestamp":10.06572, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"IntakeStop+RampUp", "from":{"target":1, "targetTimestamp":1.77173, "offset":{"exp":"0.67 s", "val":0.67}}, "event":null},
+   {"name":"IntakeStop+RampUp", "from":{"target":3, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
