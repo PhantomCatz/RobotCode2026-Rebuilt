@@ -261,7 +261,7 @@ public class CatzDrivetrain extends SubsystemBase {
     if (currentSpeedMag < 0.1 || targetSpeedMag < 0.1) {
        directionalAccelLimit = accelTraction;
     } else {
-       // Calculate the Dot Product of the velocity vectors:
+       // Calculate the magnitude of dot product of the velocity vectors:
        // (vx1*vx2 + vy1*vy2) / (|v1| * |v2|)
        // Result ranges from:
        //   1.0 (Aligned)  -> Moving in the same direction
@@ -279,7 +279,7 @@ public class CatzDrivetrain extends SubsystemBase {
        // 1.0 = We are driving straight (Needs Speed)
        double directionFactor = (dot + 1.0) / 2.0;
        
-       // Linear Interpolate (Lerp) between the Slip Floor and Traction Ceiling
+       // linearly interpolate between the Slip Floor and Traction Ceiling
        directionalAccelLimit = accelSlip + (directionFactor * (accelTraction - accelSlip));
     }
     
