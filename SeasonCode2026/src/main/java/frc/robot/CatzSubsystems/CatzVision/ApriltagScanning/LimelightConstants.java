@@ -39,7 +39,7 @@ public class LimelightConstants {
     // public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
     // public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
     // public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
-    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pitch", 18.0);
+    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pPitch", 18.0);
     // public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
     // public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
     // public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);

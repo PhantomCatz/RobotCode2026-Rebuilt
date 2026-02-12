@@ -235,28 +235,28 @@ public class CatzDrivetrain extends SubsystemBase {
    * * @param desiredSpeeds The target chassis speeds from the driver/auto.
    */
   public void slipControlDrive(ChassisSpeeds desiredSpeeds) {
-    // The maximum acceleration allowed during a high-speed 
+    // The maximum acceleration allowed during a high-speed
     // J-turn or 180-degree reversal. If the robot drifts, lower this.
-    double accelSlip = 3.5; 
-    
-    // The maximum acceleration allowed for straight-line 
-    // driving, braking, or launching from a stop.
-    double accelTraction = 22.0; 
+    double accelSlip = 3.5;
 
-    // Below this speed (m/s), we ignore the slip limit 
+    // The maximum acceleration allowed for straight-line
+    // driving, braking, or launching from a stop.
+    double accelTraction = 22.0;
+
+    // Below this speed (m/s), we ignore the slip limit
     // because the tires have plenty of grip.
-    double safeSpeed = 2.0; 
-    
+    double safeSpeed = 2.0;
+
     // Get the robot's current velocity vector from the setpoint generator
     ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotChassisSpeeds();
-    
+
     // Calculate the magnitude (total speed) of current and desired vectors
     double currentSpeedMag = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
     double targetSpeedMag = Math.hypot(desiredSpeeds.vxMetersPerSecond, desiredSpeeds.vyMetersPerSecond);
-    
+
     double directionalAccelLimit;
-    
-    // If the robot is stopped or stopping, direction doesn't matter. 
+
+    // If the robot is stopped or stopping, direction doesn't matter.
     // Allow maximum traction for launching or braking.
     if (currentSpeedMag < 0.1 || targetSpeedMag < 0.1) {
        directionalAccelLimit = accelTraction;
@@ -270,48 +270,48 @@ public class CatzDrivetrain extends SubsystemBase {
        double dot = (currentSpeeds.vxMetersPerSecond * desiredSpeeds.vxMetersPerSecond
                    + currentSpeeds.vyMetersPerSecond * desiredSpeeds.vyMetersPerSecond)
                    / (currentSpeedMag * targetSpeedMag);
-       
+
        // Clamp for floating point errors
        dot = Math.max(-1.0, Math.min(1.0, dot));
-       
+
        // Map [-1 to 1] -> [0 to 1]
        // 0.0 = We are reversing/turning (Needs Caution)
        // 1.0 = We are driving straight (Needs Speed)
        double directionFactor = (dot + 1.0) / 2.0;
-       
+
        // linearly interpolate between the Slip Floor and Traction Ceiling
        directionalAccelLimit = accelSlip + (directionFactor * (accelTraction - accelSlip));
     }
-    
+
     // Calculate how risky our current speed is.
     // 0.0 = Low Speed (Safe) -> We can ignore the directional limit.
     // 1.0 = High Speed (Risky) -> We must strictly obey the directional limit.
     double speedRiskFactor = Math.min(currentSpeedMag / safeSpeed, 1.0);
-    
+
     // Blend the limits:
     // Low Speed  -> Uses kAccelTraction (Max Performance)
     // High Speed -> Uses directionalAccelLimit (Safety)
     double finalAccelLimit = accelTraction + (speedRiskFactor * (directionalAccelLimit - accelTraction));
-    
+
     // Create the dynamic constraints for this specific loop cycle
     ModuleLimits dynamicLimits = new ModuleLimits(
-      DriveConstants.DRIVE_CONFIG.maxLinearVelocity(), 
+      DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
       finalAccelLimit, // <--- The calculated Anti-Slip Acceleration
       DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
     );
 
     // Discretize desired speeds to correct for robot motion during the loop time
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
-    
+
     currentSetpoint = swerveSetpointGenerator.generateSetpoint(
         dynamicLimits,
         currentSetpoint,
         discreteSpeeds,
-        0.02 
+        0.02
     );
-    
+
     SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
-    
+
     // Log the calculated limits to TunableNumbers/Dashboard for debugging
     Logger.recordOutput("Drive/AccelLimit", finalAccelLimit);
     Logger.recordOutput("Drive/SpeedRiskFactor", speedRiskFactor);
@@ -320,21 +320,21 @@ public class CatzDrivetrain extends SubsystemBase {
         // Use your team's custom optimization logic (keeps wheels from spinning >90 deg)
         // m_swerveModules[i].optimizeWheelAngles() is assumed to return the optimized state
         SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
-        
-        // Ensure we don't apply full power until the wheel is actually pointing 
+
+        // Ensure we don't apply full power until the wheel is actually pointing
         // in the correct direction. This prevents "skittering" sideways.
-        Rotation2d currentAngle = m_swerveModules[i].getAngle(); 
-        
+        Rotation2d currentAngle = m_swerveModules[i].getAngle();
+
         // Dot product of Wheel Heading vs Target Heading
         double cosineScale = optimizedState.angle.minus(currentAngle).getCos();
-        
+
         // Only enforce this if we are moving fast enough to matter (Risk > 10%)
         if (speedRiskFactor > 0.1) {
             // If cosine is negative (error > 90 deg), output is 0.
             optimizedState.speedMetersPerSecond *= Math.max(0.0, cosineScale);
         }
         m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
-        
+
         optimizedDesiredStates[i] = optimizedState;
     }
   }

@@ -72,8 +72,8 @@ public class ShooterRegression {
         airtimeAutoAimPolynomial = new PolynomialRegression(airtimeRegression, 2);
         airtimeInverseAutoAimPolynomial = new PolynomialRegression(airtimeInverseRegression, 2);
         airtimeRegA = airtimeInverseAutoAimPolynomial.beta(0);
-        airtimeRegB = airtimeInverseAutoAimPolynomial.beta(1);
-        airtimeRegC = airtimeInverseAutoAimPolynomial.beta(2);
+        // airtimeRegB = airtimeInverseAutoAimPolynomial.beta(1);
+        // airtimeRegC = airtimeInverseAutoAimPolynomial.beta(2);
 
     }
 

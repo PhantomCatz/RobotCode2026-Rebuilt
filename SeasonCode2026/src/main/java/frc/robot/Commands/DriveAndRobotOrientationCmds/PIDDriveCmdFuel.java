@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
-import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
@@ -29,19 +28,22 @@ public class PIDDriveCmdFuel extends Command{
 
     private Pose2d goalPos;
     private boolean outOfTime = false;
+    private Pose2d returnPos;
+    private double timeToSpare;
 
     private final Translation2d TRENCH_POSE;
 
     /**
-     * Only to be used in autonomous. Drives towards an initial target until it sees a fuel, 
-     * then it starts driving towards the largest clump of fuels. 
-     * Constantly calculates the approximate time it will take to go back to the trench. 
+     * Only to be used in autonomous. Drives towards an initial target until it sees a fuel,
+     * then it starts driving towards the largest clump of fuels.
+     * Constantly calculates the approximate time it will take to go back to the trench.
      * This command finishes when it has just enough time to go back to the trench to shoot.
-     * 
+     *
      * @param initialGoal Initial position to drive towards
      * @param goalVel The goal velocity when driving back to the trench
+     * @param returnGoal Position to return to when almost out of time
      */
-    public PIDDriveCmdFuel(Pose2d initialGoal, double goalVel){
+    public PIDDriveCmdFuel(Pose2d initialGoal, double goalVel, Pose2d returnGoal, double timeToSpare){
         addRequirements(CatzDrivetrain.Instance);
 
         // Configure the translation controller
@@ -60,16 +62,24 @@ public class PIDDriveCmdFuel extends Command{
         this.rotationController.enableContinuousInput(-180.0, 180.0);
         this.GOAL_VELOCITY = goalVel;
         this.TRENCH_POSE = FieldConstants.getTrenchShootingLocation();
+        this.returnPos = returnGoal;
+        this.timeToSpare = timeToSpare;
+        this.goalPos = initialGoal;
     }
 
     @Override
     public void initialize(){
         Logger.recordOutput("PID Target Pose", goalPos);
+        System.out.println("starting goal"+goalPos);
     }
 
     @Override
     public void execute(){
-        if (Detection.Instance.getNearestGroupPose() != null) goalPos = Detection.Instance.getNearestGroupPose();
+        if (Detection.Instance.getNearestGroupPose() != null) {
+            System.out.println("see something");
+            goalPos = Detection.Instance.getNearestGroupPose();
+            Logger.recordOutput("PID Target Pose", goalPos);
+        }
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
         Translation2d poseError = goalPos.minus(currentPose).getTranslation();
 
@@ -89,11 +99,12 @@ public class PIDDriveCmdFuel extends Command{
 
         ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
         CatzDrivetrain.Instance.drive(goalChassisSpeeds);
-
+        Logger.recordOutput("target vel", targetVel);
+        Logger.recordOutput("chassis speed", goalChassisSpeeds);
         if(DriverStation.isAutonomous()){
             double avgVel = (targetVel + GOAL_VELOCITY) / 2.0;
-            double timeToReachTrench = currentPose.getTranslation().getDistance(TRENCH_POSE) / avgVel;
-            if (timeToReachTrench < Robot.autonStartTime + 20.0 - AutonConstants.RETURN_TIME_BUFFER - Timer.getFPGATimestamp()) {
+            double timeToReachTrench = currentPose.getTranslation().getDistance(returnPos.getTranslation()) / avgVel;
+            if (timeToReachTrench < Robot.autonStartTime + 20.0 - timeToSpare - Timer.getFPGATimestamp()) {
                 outOfTime = true;
             }
         }

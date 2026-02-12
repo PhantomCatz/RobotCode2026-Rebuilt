@@ -14,6 +14,8 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -95,6 +97,25 @@ public class DetectionIOLimelight extends DetectionIO {
 		this.config = config;
 	}
 
+	private boolean inOpposingArea(Pose2d coralPose) {
+		if (DriverStation.getAlliance().get() == Alliance.Blue) {
+			return coralPose.getX() > 11.928191184997559;
+		}
+		else {
+			return coralPose.getX() < 4.615401268005371;
+		}
+	}
+
+	private boolean testInOpposingArea(Pose2d coralPose) { // for testy path to make sure it doesn't go off the carpet, otherwise pretty useless
+		if (coralPose.getX() > 2.5 || coralPose.getX() < 0.5) {
+			return true;
+		}
+		if (coralPose.getY() > 4.5 || coralPose.getY() < 1.5) {
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void updateInputs(DetectionIOInputs inputs) {
 
@@ -139,6 +160,9 @@ public class DetectionIOLimelight extends DetectionIO {
 					if (FieldLayout.outsideField(coralPose)) {
 						SmartDashboard.putBoolean("Outside Field", FieldLayout.outsideField(coralPose));
 						// LogUtil.recordPose2d(config.name + "Last Coral Pose Outside Field", coralPose);
+						continue;
+					}
+					if (testInOpposingArea(coralPose)) { // TODO this is just for the auton testy change to the non test function
 						continue;
 					}
 					newDet.add(new Coral(coralPose, coralTranslation, now - (latencyMs / 1000)));

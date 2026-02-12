@@ -3,13 +3,10 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -17,7 +14,6 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
-import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.Setpoint;
 
 public class AimCalculations {
@@ -59,7 +55,7 @@ public class AimCalculations {
 //         Pose2d futureRobotPose = getPredictedRobotPose(kLatencySeconds);
 //         Translation2d relativeHubVelocity = getHubVelocity(futureRobotPose);
 //         double airtime = getFutureShootAirtime(relativeHubVelocity);
-        
+
 //         Translation2d futureTurretPos = futureRobotPose.getTranslation().plus(
 //             TurretConstants.TURRET_OFFSET.rotateBy(futureRobotPose.getRotation())
 //         );
@@ -87,31 +83,31 @@ public class AimCalculations {
 
 //              // B. TURN THE ROBOT
 //              // We need to spin the robot to bring the target back to center (0 degrees).
-//              // Determine direction: 
+//              // Determine direction:
 //              // If target is +179, we want to spin robot LEFT (positive omega) to make target relative angle smaller.
 //              // If target is -179, we want to spin robot RIGHT (negative omega).
-             
+
 //              // Simple P-Controller for the Drivetrain rotation
 //              // kP should be tuned (start low, e.g., 2.0)
-//              double kP_Chassis = 4.0; 
-//              robotTurnCmd = targetRadians * kP_Chassis; 
+//              double kP_Chassis = 4.0;
+//              robotTurnCmd = targetRadians * kP_Chassis;
 //         }
 
 //         // 4. Calculate Turret Feedforward (Standard)
 //         double r2 = targetVector.getNorm() * targetVector.getNorm();
-//         double crossProduct = targetVector.getX() * relativeHubVelocity.getY() 
+//         double crossProduct = targetVector.getX() * relativeHubVelocity.getY()
 //                             - targetVector.getY() * relativeHubVelocity.getX();
 //         double turretFF = (r2 > 1e-6) ? (crossProduct / r2) : 0.0;
 
 //         // If we are commanding the robot to turn, we must SUBTRACT that velocity from the turret
 //         // so the turret stays "world stabilized" while the chassis spins beneath it.
 //         if (robotTurnCmd != null) {
-//             turretFF -= robotTurnCmd; 
+//             turretFF -= robotTurnCmd;
 //         }
 
 //         return new AimingParameters(
-//             new Rotation2d(clampedTurretGoal), 
-//             turretFF, 
+//             new Rotation2d(clampedTurretGoal),
+//             turretFF,
 //             robotTurnCmd
 //         );
 //     }
@@ -149,10 +145,10 @@ public class AimCalculations {
 
     /**
      * Calculates the airtime that the ball will take when shot at the predicted future location of the hub
-     * 
-     * We avoid the problem of needing to iteratively search the potential solution by approximating the inverse airtime 
+     *
+     * We avoid the problem of needing to iteratively search the potential solution by approximating the inverse airtime
      * function as a second degree polynomial.
-     * 
+     *
      * @return The predicted future airtime of the ball. If no solution is found, return 0.
      */
     private static double getFutureShootAirtime(Translation2d hubVelocity) {
@@ -201,7 +197,7 @@ public class AimCalculations {
 
         return currentPose.exp(twist);
     }
-    
+
     public static boolean readyToShoot(){
         return CatzTurret.Instance.nearPositionSetpoint() && CatzHood.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
     }

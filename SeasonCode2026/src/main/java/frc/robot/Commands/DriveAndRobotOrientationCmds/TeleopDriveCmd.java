@@ -81,7 +81,7 @@ public void initialize() {}
       m_headingAndVelocity_X = -m_headingAndVelocity_X;
       m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
     }
-    
+
     turningVelocity =
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
