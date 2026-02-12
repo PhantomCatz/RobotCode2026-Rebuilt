@@ -31,7 +31,8 @@ public class DepotClimb extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
-            Commands.print("Climb") //TODO
+            Commands.print("Climb"), //TODO
+            Commands.print("done")
         );
     }
 }

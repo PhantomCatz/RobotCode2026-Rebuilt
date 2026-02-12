@@ -186,11 +186,10 @@
  },
  "events":[
    {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.48938, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake4", "from":{"target":3, "targetTimestamp":3.87028, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Intake+RampUp2", "from":{"target":1, "targetTimestamp":1.48938, "offset":{"exp":"-0.8 s", "val":-0.8}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Intake+RampUp4", "from":{"target":3, "targetTimestamp":3.87028, "offset":{"exp":"-0.8 s", "val":-0.8}}, "event":{"type":"named", "data":{"name":""}}},
    {"name":"Climb5", "from":{"target":4, "targetTimestamp":5.18403, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.48938, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score4", "from":{"target":3, "targetTimestamp":3.87028, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"IntakeStop+RampU[", "from":{"target":1, "targetTimestamp":null, "offset":{"exp":"0.67 s", "val":0.67}}, "event":null},
-   {"name":"IntakeStop+RampUp", "from":{"target":3, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"StopIntake2", "from":{"target":1, "targetTimestamp":1.48938, "offset":{"exp":"0.8 s", "val":0.8}}, "event":null},
+   {"name":"StopIntake+Score4", "from":{"target":3, "targetTimestamp":3.87028, "offset":{"exp":"+0 s", "val":0.0}}, "event":null},
+   {"name":"Score2", "from":{"target":1, "targetTimestamp":1.48938, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

@@ -331,7 +331,7 @@
    {"name":"Score5", "from":{"target":4, "targetTimestamp":7.90329, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score3", "from":{"target":2, "targetTimestamp":3.82464, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Climb", "from":{"target":6, "targetTimestamp":10.33323, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"RampUp3", "from":{"target":2, "targetTimestamp":3.82464, "offset":{"exp":"-1.2 s", "val":-1.2}}, "event":null},
-   {"name":"IntakeStop2", "from":{"target":1, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"IntakeStop+RampUp", "from":{"target":3, "targetTimestamp":null, "offset":{"exp":"0.67 s", "val":0.67}}, "event":null}]
+   {"name":"RampUp3", "from":{"target":1, "targetTimestamp":3.82464, "offset":{"exp":"-1.2 s", "val":-1.2}}, "event":null},
+   {"name":"StopIntake2", "from":{"target":1, "targetTimestamp":1.83297, "offset":{"exp":"0.67 s", "val":0.67}}, "event":null},
+   {"name":"StopIntake+RampUp", "from":{"target":3, "targetTimestamp":5.86039, "offset":{"exp":"1 s", "val":1.0}}, "event":null}]
 }
