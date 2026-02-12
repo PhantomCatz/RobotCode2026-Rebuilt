@@ -104,7 +104,7 @@ public class PIDDriveCmdFuel extends Command{
         if(DriverStation.isAutonomous()){
             double avgVel = (targetVel + GOAL_VELOCITY) / 2.0;
             double timeToReachTrench = currentPose.getTranslation().getDistance(returnPos.getTranslation()) / avgVel;
-            if (timeToReachTrench < Robot.autonStartTime + 20.0 - timeToSpare - Timer.getFPGATimestamp()) {
+            if (timeToReachTrench > Robot.autonStartTime + 20.0 - timeToSpare - Timer.getFPGATimestamp()) {
                 outOfTime = true;
             }
         }
