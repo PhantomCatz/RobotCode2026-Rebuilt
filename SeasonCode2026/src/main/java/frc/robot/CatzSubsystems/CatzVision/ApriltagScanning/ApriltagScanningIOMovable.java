@@ -32,7 +32,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
         updateGyroWithTurret();
 
         PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
-        // setLatestEstimate(estimate, 1);
+        setLatestEstimate(estimate, 1);
     }
 
     private void updateGyroWithTurret() {
@@ -78,7 +78,6 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
                     pastTurretRot);
 
             Pose2d robotPoseFieldSpace = turretPoseFieldSpace.transformBy(robotToTurret.inverse());
-
 
             latestEstimate = robotPoseFieldSpace;
             latestEstimateTime = Units.Seconds.of(timestamp);

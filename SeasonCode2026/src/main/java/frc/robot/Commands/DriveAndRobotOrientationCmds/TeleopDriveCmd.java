@@ -75,7 +75,7 @@ public void initialize() {}
     m_headingAndVelocity_Y = -m_headingPctOutput_X.get();
     turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
 
-    // Flip Directions for left joystick if alliance is red\[]
+    // Flip Directions for left joystick if alliance is red
 
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       m_headingAndVelocity_X = -m_headingAndVelocity_X;
@@ -93,13 +93,6 @@ public void initialize() {}
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
             : 0.0;
-
-    // if(CatzSuperstructure.isClimbEnabled()) {
-    //   m_headingAndVelocity_X *= 0.4;
-    //   m_headingAndVelocity_Y *= 0.4;
-    //   turningVelocity *= 0.4;
-    //   //System.out.println("low speed");
-    // }
 
     // Construct desired chassis speeds
 
