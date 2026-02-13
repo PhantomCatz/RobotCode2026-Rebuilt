@@ -1,7 +1,10 @@
 package frc.robot.CatzSubsystems;
 
+import java.util.Set;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -90,7 +93,7 @@ public class CatzSuperstructure {
     }
 
     // --------------------------------------------------------------------------
-    // 2. Public Command States
+    // Public Command States
     // --------------------------------------------------------------------------
 
     public Command cmdFullStop() {
@@ -144,5 +147,27 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             isCloseCornerHoarding = !isCloseCornerHoarding;
         });
+    }
+
+    /* --- COMMANDS FOR TESTING */
+
+    public Command applyHoodTuningSetpoint() {
+        return Commands.defer(() -> {
+            Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
+
+            return CatzHood.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(angle));
+        }, Set.of(CatzHood.Instance));
+    }
+
+    public Command applyFlywheelTuningSetpoint() {
+        return Commands.defer(() -> {
+
+            return CatzFlywheels.Instance.setpointCommand(
+                    Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
+        }, Set.of(CatzFlywheels.Instance));
+    }
+
+    public Command turretTrackHubCommand() {
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 }
