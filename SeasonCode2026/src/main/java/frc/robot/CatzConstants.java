@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Utilities.Alert;
@@ -19,7 +17,7 @@ public final class CatzConstants {
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN2;
+  private static RobotID robotType = RobotID.SN1;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
@@ -82,9 +80,6 @@ public final class CatzConstants {
       }
     }
   }
-
-  public static final Pose2d defaultPose = new Pose2d();
-  public static final Pose2d startMiddle = new Pose2d(8.0, 4.0, Rotation2d.k180deg);
 
   public static enum RobotID {
     SN1,

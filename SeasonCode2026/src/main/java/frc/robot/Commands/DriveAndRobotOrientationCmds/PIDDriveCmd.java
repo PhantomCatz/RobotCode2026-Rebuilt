@@ -1,6 +1,5 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -82,7 +81,7 @@ public class PIDDriveCmd extends Command {
 
     @Override
     public void initialize(){
-        Logger.recordOutput("PID Target Pose", goalPos);
+        // Logger.recordOutput("PID Target Pose", goalPos);
     }
 
     @Override

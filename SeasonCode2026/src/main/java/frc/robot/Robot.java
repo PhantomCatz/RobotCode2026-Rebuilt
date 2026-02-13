@@ -16,7 +16,9 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,9 +34,11 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
@@ -179,10 +183,10 @@ public class Robot extends LoggedRobot {
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
 
-      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
-      // Notifier.setHALThreadPriority(false, 0);
-      // System.out.println("Starting deteciton threaadf==================");
-      // coralDetectionThread.startPeriodic(0.1);
+      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      Notifier.setHALThreadPriority(false, 0);
+      System.out.println("Starting deteciton threaadf==================");
+      coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override
@@ -210,8 +214,10 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     autonStartTime = Timer.getFPGATimestamp();
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
+    CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
+
     System.out.println("auton: " + m_autonomousCommand);
-    //  CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
+    CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
