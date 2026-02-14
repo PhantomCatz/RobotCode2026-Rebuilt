@@ -34,7 +34,7 @@ public class AutoRoutineBase {
         return Commands.sequence(
             CatzSuperstructure.Instance.cmdHubShoot(),
             new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop()  
+            CatzSuperstructure.Instance.cmdFullStop()
         );
     }
 

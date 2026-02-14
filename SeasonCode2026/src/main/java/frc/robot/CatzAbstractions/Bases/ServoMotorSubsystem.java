@@ -1,7 +1,6 @@
 package frc.robot.CatzAbstractions.Bases;
 
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.EqualsUtil;
 

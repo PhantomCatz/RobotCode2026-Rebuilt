@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -51,7 +50,7 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj7),
 
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            
+
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
             Commands.print("Climb"), //TODO

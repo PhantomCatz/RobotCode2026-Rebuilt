@@ -34,7 +34,6 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;

@@ -40,6 +40,6 @@ public class R2_IAS extends AutoRoutineBase {
             followTrajectoryWithAccuracy(traj6),
             Commands.print("Climb"),
             Commands.print("done")
-        )
+        );
     }
 }

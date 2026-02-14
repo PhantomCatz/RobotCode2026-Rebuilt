@@ -8,7 +8,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -49,7 +49,7 @@ public class CatzSuperstructure {
             Distance dist = Units.Meters.of(targetLoc.getDistance(turretPos));
 
             CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc));
-            
+
             RegressionMode specificMode = mode;
             if (mode != RegressionMode.HUB) {
                 specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
