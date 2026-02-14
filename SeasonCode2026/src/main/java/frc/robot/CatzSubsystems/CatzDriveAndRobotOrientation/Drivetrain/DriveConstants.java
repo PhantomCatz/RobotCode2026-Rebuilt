@@ -18,6 +18,7 @@ public class DriveConstants {
   // Disabled flag for testing
   // ---------------------------------------------------------------------------------------------------------------
   public static final boolean IS_DRIVE_DISABLED = false; //bruh
+  public static final boolean IS_FOC = true;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Module organizations
@@ -28,16 +29,7 @@ public class DriveConstants {
   public static final int INDEX_BL = 2;
   public static final int INDEX_FL = 3;
 
-  public static final int TRAJ_INDEX_FL = 0;
-  public static final int TRAJ_INDEX_FR = 1;
-  public static final int TRAJ_INDEX_BL = 2;
-  public static final int TRAJ_INDEX_BR = 3;
-
   public static final int GYRO_ID = 10;
-
-
-  public static final double PREDICT_DISTANCE_SCORE = 0.1;
-  public static final double PREDICT_DISTANCE_INTAKE = 1.0;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info
@@ -45,7 +37,7 @@ public class DriveConstants {
 
   public static final DriveConfig DRIVE_CONFIG =
     DriveConfig.builder()
-        .wheelRadius(Units.inchesToMeters(1.948))
+        .wheelRadius(Units.inchesToMeters(1.7))
         .robotLengthX(Units.inchesToMeters(24.2))
         .robotWidthY(Units.inchesToMeters(24.2))
         .bumperWidthX(Units.inchesToMeters(32))
@@ -66,7 +58,7 @@ public class DriveConstants {
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
-        case SN1, SN2 ->
+        case SN1, SN2, SN_MANTA ->
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,
@@ -88,6 +80,18 @@ public class DriveConstants {
                 0.0,
                 Mk4iReductions.L2_16t.reduction,
                 Mk4iReductions.steer.reduction);
+
+          default ->
+             new ModuleGainsAndRatios(
+                0.014,
+                0.134,
+                0.0,
+                0.1,
+                0.0,
+                1.0,
+                0.0,
+                Mk4iReductions.L2_16t.reduction,
+                Mk4iReductions.steer.reduction);
       };
   // -------------------------------------------------------------------------------
   // Odometry Constants
@@ -98,6 +102,7 @@ public class DriveConstants {
         case SN_TEST -> 50.0;
         case SN2, SN1 -> 100.0;
         //case SN2 -> 250.0;
+        default -> 100.0;
       };
 
   // ---------------------------------------------------------------------------------------------------------------------
@@ -113,18 +118,32 @@ public class DriveConstants {
   public static final ModuleIDs[] MODULE_CONFIGS = new ModuleIDs[4];
   static{
     switch(CatzConstants.getRobotType()){
-        case SN2:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -3.900146484375, false); //9.115966796875 - 9.0, false);//-0.539306640625, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -3.022705078125, false); //8.167724609375 - 8.0, false);//0.083251953125, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -3.844482421875, false); //9.37939453125 - 9.0, false);//0.85107421875, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -2.89990234375, false); //8.743896484375 - 9.0, false);//-0.05224609375, false);
+        case SN_MANTA:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.416016, false);
         break;
 
         case SN1:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.3125, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0896, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.4382 + 0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.1447 + 0.5, false);
+        break;
+
+        case SN1_OLD:
             MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.15454+0.5, false);
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.138183, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.020507 , false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.020507, false);
             MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.2780761+0.5, false);
+        break;
+
+        case SN2:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.405273, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.0225+0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.338, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.0625+0.5, false);
         break;
 
         case SN_TEST:

@@ -18,10 +18,16 @@ import frc.robot.Utilities.Util;
 public class ClimbConstants {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
+	public static final Distance FULL_EXTENSION = Units.Inches.of(12.0);
+	public static final Setpoint FULL_EXTEND = Setpoint.withMotionMagicSetpoint(converter.toAngle(FULL_EXTENSION));
+	public static final Distance home = Units.Inches.of(0.0);
+	public static final Setpoint HOME = Setpoint.withMotionMagicSetpoint(converter.toAngle(home));
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
     private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
@@ -63,7 +69,7 @@ public class ClimbConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

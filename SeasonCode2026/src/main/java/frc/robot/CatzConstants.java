@@ -19,13 +19,22 @@ public final class CatzConstants {
   // --------------------------------------------------/
   public static final RobotScenario robotScenario = RobotScenario.COMPETITION;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN1;
+  private static RobotID robotType = RobotID.SN_TEST;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 
   public static final double LOOP_TIME = 0.02;
 
   public static AutoFactory autoFactory;
+
+  public static final boolean ClimbOn = true;
+  public static final boolean HoodOn = false;
+  public static final boolean IndexerOn = false;
+  public static final boolean SpindexerOn = false;
+  public static final boolean YdexerOn = false;
+  public static final boolean IntakeOn = false;
+  public static final boolean ShooterOn = false;
+  public static final boolean TurretOn = false;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers
@@ -44,7 +53,7 @@ public final class CatzConstants {
     if (RobotBase.isReal() && robotType == RobotID.SN_TEST) {
       new Alert("Invalid robot selected, using competition robot as default.", AlertType.kError)
           .set(true);
-      robotType = RobotID.SN2;
+      robotType = RobotID.SN_MANTA;
     }
     return robotType;
   }
@@ -79,7 +88,9 @@ public final class CatzConstants {
 
   public static enum RobotID {
     SN1,
+    SN_MANTA,
     SN2,
+    SN1_OLD,
     SN_TEST, // Select alternate test robot parameters
   }
 
