@@ -9,7 +9,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
@@ -107,7 +106,7 @@ public class AimCalculations {
     /**
      * Calculates the hub's velocity vector relative to the turret pretending as if
      * the robot is stationary and the hub is moving.
-     * 
+     *
      * @return
      */
     private static Translation2d getHubVelocity() {

@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -52,7 +50,7 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // Held: Shoot
     xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-    
+
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdHoardStandby());
 
