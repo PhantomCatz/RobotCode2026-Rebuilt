@@ -15,11 +15,15 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
+	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
+	public static final Angle DEPLOY_POSITION = Units.Degrees.of(90.0);
+
+	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
+	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
 
 	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
 	public static final Setpoint Zero = Setpoint.withVoltageSetpoint(0.0);
 	public static final Setpoint Sixty = Setpoint.withMotionMagicSetpoint(Units.Degrees.of(60));
-
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
@@ -39,9 +43,6 @@ public class IntakeDeployConstants {
 	public static final double GRAVITY_FEEDFORWARD = 2.5;
 	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
 
-
-	public static final Angle HOME_POSITION = Units.Degrees.of(-39.9);
-
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
@@ -51,7 +52,7 @@ public class IntakeDeployConstants {
 		FXConfig.Slot0.kG = gains.kG();
 
 		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 1.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 5.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
@@ -60,13 +61,12 @@ public class IntakeDeployConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 60.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-
-		FXConfig.Feedback.SensorToMechanismRatio = 2.0;
+		FXConfig.Feedback.SensorToMechanismRatio = 14.95;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

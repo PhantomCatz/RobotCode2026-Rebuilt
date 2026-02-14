@@ -9,8 +9,8 @@ import frc.robot.Robot;
 public abstract class DetectionIO {
 	@AutoLog
 	public static class DetectionIOInputs {
-		public Pose2d nearestCoral;
-		public Pose2d nearestGroupCoral;
+		public Pose2d nearestFuel;
+		public Pose2d nearestGroupFuel;
 	}
 	protected boolean disabled = Robot.isSimulation();
 
@@ -20,7 +20,7 @@ public abstract class DetectionIO {
 
 	public abstract void updateInputs(DetectionIOInputs inputs);
 
-	public abstract Pose2d getCoralPose();
+	public abstract Pose2d getFuelPose();
 
 	public abstract Pose2d getNearestGroupPose();
 
@@ -32,9 +32,9 @@ public abstract class DetectionIO {
 
 	public abstract boolean txComplete(double tx);
 
-	public abstract int coralCount();
+	public abstract int fuelCount();
 
-	public abstract Translation2d calcDistToCoral(double tx, double ty);
+	public abstract Translation2d calcDistToFuel(double tx, double ty);
 
 	public abstract void setPipeline(int index);
 }

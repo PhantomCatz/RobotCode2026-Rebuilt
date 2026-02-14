@@ -84,7 +84,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalonConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
     driveTalonConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
     driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
-    driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -215,7 +215,7 @@ public class ModuleIORealFoc implements ModuleIO {
   public void runSteerPositionSetpoint(double currentAngleRads, double targetAngleRads) {
     steerTalon.setControl(
         dutyCycleOutControl.withOutput(
-            steerFeedback.calculate(currentAngleRads, targetAngleRads))
+          -steerFeedback.calculate(currentAngleRads, targetAngleRads))
     );
 
     Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);

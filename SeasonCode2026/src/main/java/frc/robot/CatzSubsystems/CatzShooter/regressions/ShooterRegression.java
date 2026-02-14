@@ -3,6 +3,7 @@ package frc.robot.CatzSubsystems.CatzShooter.regressions;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.Utilities.LoggedTunableNumber;
@@ -10,108 +11,228 @@ import frc.robot.Utilities.PolynomialRegression;
 import frc.robot.Utilities.Setpoint;
 
 public class ShooterRegression {
-    //shooter
-    public static double kDefaultShootingRPM = 2950.0;
-    public static boolean kUseFlywheelAutoAimPolynomial = true;
-    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MIN = new LoggedTunableNumber("Regression/hood angle min", EpsilonRegression.CLOSEST_HOOD_ANGLE[1]);
-    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MIN = new LoggedTunableNumber("Regression/hood dist min", EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
 
-    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MAX = new LoggedTunableNumber("Regression/hood angle max", EpsilonRegression.FARTHEST_HOOD_ANGLE[1]);
-    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MAX = new LoggedTunableNumber("Regression/hood dist max", EpsilonRegression.FARTHEST_HOOD_ANGLE[0]);
+    // Enum to select which regression to use
+    public enum RegressionMode {
+        HUB(0.02, Units.Degrees.of(2.0), Units.Degrees.of(2.0)), //percent threshold Hdegrees Vdegrees
+        CLOSE_HOARD(0.2, Units.Degrees.of(3.0), Units.Degrees.of(3.0)),
+        FAR_HOARD(0.3, Units.Degrees.of(4.0), Units.Degrees.of(4.0)),
+        OPP_HOARD(0.4, Units.Degrees.of(5.0), Units.Degrees.of(5.0));
+
+        private double flywheelPercentThreshold;
+                Angle turretDegThreshold, hoodDegThreshold;
+        public double getFlywheelPercentThreshold() {
+            return flywheelPercentThreshold;
+        }
+        public Angle getTurretDegThreshold() {
+            return turretDegThreshold;
+        }
+        public Angle getHoodDegThreshold() {
+            return hoodDegThreshold;
+        }
+        RegressionMode(double flywheelPercentThreshold, Angle turretDegThreshold, Angle hoodDegThreshold) {
+            this.flywheelPercentThreshold = flywheelPercentThreshold;
+            this.turretDegThreshold       = turretDegThreshold;
+            this.hoodDegThreshold         = hoodDegThreshold;
+        }
+    }
+
+    public static boolean kUseFlywheelPolynomial = true;
+
+    // -------------------------------------------------------------------------
+    // Tunable Numbers (For debugging/tuning live)
+    // -------------------------------------------------------------------------
+    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MIN = new LoggedTunableNumber("Regression/hood angle min", EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[1]);
+    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MIN = new LoggedTunableNumber("Regression/hood dist min", EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[0]);
+
+    public static final LoggedTunableNumber TUNABLE_HOOD_ANGLE_MAX = new LoggedTunableNumber("Regression/hood angle max", EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB[1]);
+    public static final LoggedTunableNumber TUNABLE_HOOD_DIST_MAX = new LoggedTunableNumber("Regression/hood dist max", EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB[0]);
 
     public static final LoggedTunableNumber TUNABLE_DIST = new LoggedTunableNumber("Regression/Dist", 0.0);
 
-    public static InterpolatingDoubleTreeMap flywheelAutoAimMap = new InterpolatingDoubleTreeMap();
-    public static PolynomialRegression flywheelAutoAimPolynomial;
+    // -------------------------------------------------------------------------
+    // Maps & Polynomials
+    // -------------------------------------------------------------------------
 
-    public static InterpolatingDoubleTreeMap airtimeAutoAimMap = new InterpolatingDoubleTreeMap();
-    public static PolynomialRegression airtimeAutoAimPolynomial;
+    // --- Hub ---
+    public static InterpolatingDoubleTreeMap hubFlywheelMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression hubFlywheelPolynomial;
 
+    // --- Close Corner Hoard ---
+    public static InterpolatingDoubleTreeMap closeHoardFlywheelMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression closeHoardPolynomial;
+
+    // --- Far Corner Hoard ---
+    public static InterpolatingDoubleTreeMap farHoardFlywheelMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression farHoardPolynomial;
     // New variables for Inverse Airtime
     public static InterpolatingDoubleTreeMap airtimeInverseAutoAimMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression airtimeInverseAutoAimPolynomial;
+    public static double airtimeRegA;
+    public static double airtimeRegB;
+    public static double airtimeRegC;
+    public static double airtimeRegD;
+    public static double airtimeRegE;
 
-    public static double[][] flywheelRegression;
-    public static double[][] airtimeRegression;
-    public static double[][] airtimeInverseRegression; // Needed to feed the polynomial constructor
+    // --- Opposite Alliance Hoard ---
+    public static InterpolatingDoubleTreeMap oppHoardFlywheelMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression oppHoardPolynomial;
 
+    // --- Airtime (Used for lead calculation) ---
+    public static InterpolatingDoubleTreeMap airtimeMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression airtimePolynomial;
+
+    public static InterpolatingDoubleTreeMap airtimeInverseMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression airtimeInversePolynomial;
+
+
+    // -------------------------------------------------------------------------
+    // Pre-calculated Slopes for Linear Hood Interpolation
+    // -------------------------------------------------------------------------
+    private static final double HUB_HOOD_SLOPE;
+    private static final double CLOSE_HOARD_HOOD_SLOPE;
+    private static final double FAR_HOARD_HOOD_SLOPE;
+    private static final double OPP_HOARD_HOOD_SLOPE;
+
+
+    // -------------------------------------------------------------------------
+    // Static Initialization
+    // -------------------------------------------------------------------------
     static {
-        flywheelRegression = EpsilonRegression.flywheelManualRPM;
+        // 1. Initialize Flywheel Regressions
+        hubFlywheelPolynomial  = loadRegression(EpsilonRegression.flywheelHubRPS, hubFlywheelMap);
+        closeHoardPolynomial   = loadRegression(EpsilonRegression.flywheelCloseHoardRPS, closeHoardFlywheelMap);
+        farHoardPolynomial     = loadRegression(EpsilonRegression.flywheelFarHoardRPS, farHoardFlywheelMap);
+        oppHoardPolynomial     = loadRegression(EpsilonRegression.flywheelOppHoardRPS, oppHoardFlywheelMap);
 
-        for (double[] pair : flywheelRegression) {
-            flywheelAutoAimMap.put(pair[0], pair[1]);
-        }
+        // 2. Initialize Airtime Regressions (Standard & Inverse)
+        double[][] airtimeArr = EpsilonRegression.airtimeHub;
+        double[][] airtimeInvArr = new double[airtimeArr.length][2];
 
-        flywheelAutoAimPolynomial = new PolynomialRegression(flywheelRegression, 2);
-    }
+        for (int i = 0; i < airtimeArr.length; i++) {
+            double dist = airtimeArr[i][0];
+            double time = airtimeArr[i][1];
 
-    static {
-        airtimeRegression = EpsilonRegression.airtime;
-
-        // Initialize the inverse array with the same size
-        airtimeInverseRegression = new double[airtimeRegression.length][2];
-
-        for (int i = 0; i < airtimeRegression.length; i++) {
-            double x = airtimeRegression[i][0];
-            double y = airtimeRegression[i][1];
-
-            // Standard: Distance -> Time
-            airtimeAutoAimMap.put(x, y);
+            airtimeMap.put(dist, time);
 
             // Inverse: Time -> Distance
-            // We swap the Key (x) and Value (y)
-            airtimeInverseAutoAimMap.put(y, x);
-
-            // Fill the inverse array for the Polynomial class
-            airtimeInverseRegression[i][0] = y; // New X is old Y
-            airtimeInverseRegression[i][1] = x; // New Y is old X
+            airtimeInverseMap.put(time, dist);
+            airtimeInvArr[i][0] = time;
+            airtimeInvArr[i][1] = dist;
         }
 
-        airtimeAutoAimPolynomial = new PolynomialRegression(airtimeRegression, 2);
-        airtimeInverseAutoAimPolynomial = new PolynomialRegression(airtimeInverseRegression, 2);
+        airtimePolynomial = new PolynomialRegression(airtimeArr, 2);
+        airtimeInversePolynomial = new PolynomialRegression(airtimeInvArr, 2);
+
+        // 3. Pre-calculate Linear Hood Slopes (Rise / Run)
+        HUB_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB, EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB);
+        CLOSE_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_CLOSE_HOARD);
+        FAR_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_FAR_HOARD);
+        OPP_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_OPP_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_OPP_HOARD);
+        double a = airtimeInverseAutoAimPolynomial.beta(0);
+        double b = airtimeInverseAutoAimPolynomial.beta(1);
+        double c = airtimeInverseAutoAimPolynomial.beta(2);
+        airtimeRegA = a*a;
+        airtimeRegB = 2*a*b;
+        airtimeRegC = b*b + 2*a*c;
+        airtimeRegD = 2*b*c;
+        airtimeRegE = c*c;
     }
 
-    private static final double HOOD_ANGLE_SLOPE = (EpsilonRegression.FARTHEST_HOOD_ANGLE[1]-EpsilonRegression.CLOSEST_HOOD_ANGLE[1]) /
-                                                   (EpsilonRegression.FARTHEST_HOOD_ANGLE[0]-EpsilonRegression.CLOSEST_HOOD_ANGLE[0]);
-
-    public static double getHoodAngle(Distance distance){
-        double angle = HOOD_ANGLE_SLOPE * (distance.in(Units.Meters) - EpsilonRegression.CLOSEST_HOOD_ANGLE[0]) + EpsilonRegression.CLOSEST_HOOD_ANGLE[1];
-        return MathUtil.clamp(angle, HoodConstants.HOOD_ZERO_POS.in(Units.Degrees), HoodConstants.HOOD_MAX_POS.in(Units.Degrees));
+    private static PolynomialRegression loadRegression(double[][] data, InterpolatingDoubleTreeMap map) {
+        for (double[] pair : data) {
+            map.put(pair[0], pair[1]);
+        }
+        return new PolynomialRegression(data, 2);
     }
 
-    public static Setpoint getHoodSetpoint(Distance distance){
-        return Setpoint.withMotionMagicSetpoint(Units.Degrees.of(getHoodAngle(distance)));
+    private static double calculateSlope(double[] min, double[] max) {
+        return (max[1] - min[1]) / (max[0] - min[0]);
     }
 
+    // -------------------------------------------------------------------------
+    // Public Accessors
+    // -------------------------------------------------------------------------
+    public static Setpoint getShooterSetpoint(Distance range, RegressionMode mode) {
+        double rps = 0.0;
+        double distMeters = range.in(Units.Meters);
+
+        // Select the correct regression source
+        if (kUseFlywheelPolynomial) {
+            switch (mode) {
+                case HUB:         rps = hubFlywheelPolynomial.predict(distMeters); break;
+                case CLOSE_HOARD: rps = closeHoardPolynomial.predict(distMeters);  break;
+                case FAR_HOARD:   rps = farHoardPolynomial.predict(distMeters);    break;
+                case OPP_HOARD:   rps = oppHoardPolynomial.predict(distMeters);    break;
+            }
+        } else {
+            switch (mode) {
+                case HUB:         rps = hubFlywheelMap.get(distMeters); break;
+                case CLOSE_HOARD: rps = closeHoardFlywheelMap.get(distMeters); break;
+                case FAR_HOARD:   rps = farHoardFlywheelMap.get(distMeters); break;
+                case OPP_HOARD:   rps = oppHoardFlywheelMap.get(distMeters); break;
+            }
+        }
+
+        return Setpoint.withVelocitySetpointVoltage(rps);
+    }
+
+    public static Setpoint getHoodSetpoint(Distance range, RegressionMode mode) {
+        double distMeters = range.in(Units.Meters);
+        double angle = 0.0;
+
+        double slope = 0.0;
+        double yInterceptAngle = 0.0;
+        double xInterceptDist = 0.0;
+
+        switch (mode) {
+            case HUB:
+                slope = HUB_HOOD_SLOPE;
+                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[1];
+                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[0];
+                break;
+            case CLOSE_HOARD:
+                slope = CLOSE_HOARD_HOOD_SLOPE;
+                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD[1];
+                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD[0];
+                break;
+            case FAR_HOARD:
+                slope = FAR_HOARD_HOOD_SLOPE;
+                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD[1];
+                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD[0];
+                break;
+            case OPP_HOARD:
+                slope = OPP_HOARD_HOOD_SLOPE;
+                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_OPP_HOARD[1];
+                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_OPP_HOARD[0];
+                break;
+        }
+
+        // point slope form: y = m(x - x1) + y1
+        angle = slope * (distMeters - xInterceptDist) + yInterceptAngle;
+
+        angle = MathUtil.clamp(angle,
+            HoodConstants.HOOD_ZERO_POS.in(Units.Degrees),
+            HoodConstants.HOOD_MAX_POS.in(Units.Degrees)
+        );
+
+        return Setpoint.withMotionMagicSetpoint(Units.Degrees.of(angle));
+    }
+
+    // -------------------------------------------------------------------------
+    // Tunable / Debug
+    // -------------------------------------------------------------------------
     public static double getHoodAngleTunable(Distance distance) {
-        // 1. Get the live values from the dashboard
         double minAngle = TUNABLE_HOOD_ANGLE_MIN.get();
         double minDist = TUNABLE_HOOD_DIST_MIN.get();
-
         double maxAngle = TUNABLE_HOOD_ANGLE_MAX.get();
         double maxDist = TUNABLE_HOOD_DIST_MAX.get();
 
-        // 2. Calculate Slope dynamically (Rise / Run)
         double slope = (maxAngle - minAngle) / (maxDist - minDist);
-
-        // 3. Point-Slope Form: y = m(x - x1) + y1
         return slope * (distance.in(Units.Meters) - minDist) + minAngle;
     }
 
-    /**
-     * Debug wrapper: Calculates the angle based on the "Regression/Dist"
-     * slider on the dashboard. Useful for checking the curve without moving the robot.
-     */
     public static double getHoodAngleTunable() {
         return getHoodAngleTunable(Units.Meters.of(TUNABLE_DIST.get()));
-    }
-
-    // interpolates distance to target for shooter setpoint along regression
-    public static Setpoint getShooterSetpointFromRegression(Distance range) {
-        if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimPolynomial.predict(range.in(Units.Meters)));
-        } else {
-            return Setpoint.withVelocitySetpointVoltage(ShooterRegression.flywheelAutoAimMap.get(range.in(Units.Meters)));
-        }
     }
 }

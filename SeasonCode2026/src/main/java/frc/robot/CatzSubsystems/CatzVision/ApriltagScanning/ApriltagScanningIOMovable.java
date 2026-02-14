@@ -31,6 +31,15 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     public void update() {
         updateGyroWithTurret();
 
+        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond);
+
+        double turretOmegaDegPerSec = CatzTurret.Instance.getVelocity().in(Units.DegreesPerSecond);
+
+        double cameraFieldOmega = robotOmegaDegPerSec + turretOmegaDegPerSec;
+
+        if (Math.abs(cameraFieldOmega) > 300.0) {
+            return;
+        }
         PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
         setLatestEstimate(estimate, 1);
     }
@@ -78,7 +87,6 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
                     pastTurretRot);
 
             Pose2d robotPoseFieldSpace = turretPoseFieldSpace.transformBy(robotToTurret.inverse());
-
 
             latestEstimate = robotPoseFieldSpace;
             latestEstimateTime = Units.Seconds.of(timestamp);

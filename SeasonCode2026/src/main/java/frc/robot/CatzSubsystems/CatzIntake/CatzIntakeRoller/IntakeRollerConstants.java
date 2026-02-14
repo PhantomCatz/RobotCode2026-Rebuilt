@@ -9,16 +9,15 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
 public class IntakeRollerConstants {
 
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(10.0);
 	//public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(5.0);
 	public static final Setpoint S_SETPOINT = Setpoint.withDutyCycleSetpoint(0.7);
-	public static final Setpoint H_SETPOINT = Setpoint.withDutyCycleSetpoint(1.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
@@ -26,13 +25,6 @@ public class IntakeRollerConstants {
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
-
-    private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-    private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-    private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-    private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
 	private static final int INTAKE_MOTOR_ID = 15;
 
@@ -54,7 +46,7 @@ public class IntakeRollerConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 60.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

@@ -21,7 +21,9 @@ import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.CatzConstants.RobotHardwareMode;
@@ -39,6 +41,7 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
@@ -48,7 +51,9 @@ public class Robot extends LoggedRobot {
 
   private BaseStatusSignal[] allSignals;
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
-  private SimulationAndVisualization sim = new SimulationAndVisualization("Cero");
+  private SimulationAndVisualization sim = new SimulationAndVisualization("Sim Robot");
+
+  public static double autonStartTime = 0.0;
 
   public Robot() {
   }
@@ -127,6 +132,11 @@ public class Robot extends LoggedRobot {
         }
       }
     }
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // it is apparently a good idea to initialize these variables not statically because there can be race conditions
+    //------------------------------------------------------------------------------------------------------------------
     allSubsystems[0] = CatzClimb.Instance;
     allSubsystems[1] = CatzSpindexer.Instance;
     allSubsystems[2] = CatzYdexer.Instance;
@@ -139,12 +149,13 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
 
     CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.Instance::getEstimatedPose,
-                                                  CatzRobotTracker.Instance::resetPose,
-                                                  CatzDrivetrain.Instance::followChoreoTrajectoryExecute,
+                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
+                                                  CatzRobotTracker.getInstance()::resetPose,
+                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
                                                   true,
-                                                  CatzDrivetrain.Instance
-                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+                                                  CatzDrivetrain.getInstance()
+                                                ); 
+    System.out.println(AutoRoutineSelector.Instance);
 
       DriverStation.silenceJoystickConnectionWarning(true);
 
@@ -162,10 +173,12 @@ public class Robot extends LoggedRobot {
         allSignals = new BaseStatusSignal[0];
       }
 
-      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
-      // Notifier.setHALThreadPriority(false, 0);
-      // System.out.println("Starting deteciton threaadf==================");
-      // coralDetectionThread.startPeriodic(0.1);
+      System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+
+      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      Notifier.setHALThreadPriority(false, 0);
+      System.out.println("Starting deteciton threaadf==================");
+      coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override
@@ -200,8 +213,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    autonStartTime = Timer.getFPGATimestamp();
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
+    CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
 
+    System.out.println("auton: " + m_autonomousCommand);
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }

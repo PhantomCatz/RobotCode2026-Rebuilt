@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,13 +17,16 @@ import lombok.Getter;
 public class FieldConstants {
   public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
   public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
+  public static final double fieldYHalf = fieldWidth / 2.0;
 
   public static final int aprilTagCount = AprilTagLayoutType.OFFICIAL.getLayout().getTags().size();
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
   public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
   private static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
+  private static final Translation2d TRENCH_SHOOTING_LOCATION = new Translation2d(4.3802995681762695, 0.6432812809944153);
 
+  private static final Translation2d RIGHT_CORNER_HOARD = new Translation2d(0.8200110197067261, 0.698647677898407);
   /**
    * Returns the position of the hub in the correct alliance.
    */
@@ -32,6 +34,15 @@ public class FieldConstants {
     //This apply method correctly accounts for alliance color
     return AllianceFlipUtil.apply(HUB_LOCATION);
   }
+
+  public static Translation2d getTrenchShootingLocation(){
+    return AllianceFlipUtil.apply(TRENCH_SHOOTING_LOCATION);
+  }
+
+  public static Translation2d getRightCornerHoardLocation(){
+    return AllianceFlipUtil.apply(RIGHT_CORNER_HOARD);
+  }
+
   @Getter
   public enum AprilTagLayoutType {
 
