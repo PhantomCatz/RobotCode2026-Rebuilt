@@ -75,25 +75,25 @@ public void initialize() {}
     m_headingAndVelocity_Y = -m_headingPctOutput_X.get();
     turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
 
-    // Flip Directions for left joystick if alliance is red\[]
+    // Flip Directions for left joystick if alliance is red
 
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       m_headingAndVelocity_X = -m_headingAndVelocity_X;
       m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
     }
 
+    if(Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y) < XboxInterfaceConstants.kDeadband){
+      m_headingAndVelocity_X = 0.0;
+      m_headingAndVelocity_Y = 0.0;
+    }else{
+      m_headingAndVelocity_X *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      m_headingAndVelocity_Y *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+    }
     turningVelocity =
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
             : 0.0;
 
-    if(Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y) >= XboxInterfaceConstants.kDeadband){
-      m_headingAndVelocity_X *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-      m_headingAndVelocity_Y *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-    }else{
-      m_headingAndVelocity_X = 0.0;
-      m_headingAndVelocity_Y = 0.0;
-    }
     // Construct desired chassis speeds
 
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(m_headingAndVelocity_X,

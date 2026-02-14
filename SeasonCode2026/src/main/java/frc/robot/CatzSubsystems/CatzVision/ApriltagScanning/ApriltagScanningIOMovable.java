@@ -88,7 +88,6 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
 
             Pose2d robotPoseFieldSpace = turretPoseFieldSpace.transformBy(robotToTurret.inverse());
 
-
             latestEstimate = robotPoseFieldSpace;
             latestEstimateTime = Units.Seconds.of(timestamp);
 
