@@ -3,6 +3,7 @@ package frc.robot.CatzSubsystems.CatzShooter.regressions;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.Utilities.LoggedTunableNumber;
@@ -10,13 +11,30 @@ import frc.robot.Utilities.PolynomialRegression;
 import frc.robot.Utilities.Setpoint;
 
 public class ShooterRegression {
-    
+
     // Enum to select which regression to use
     public enum RegressionMode {
-        HUB,
-        CLOSE_HOARD,
-        FAR_HOARD,
-        OPP_HOARD
+        HUB(0.02, Units.Degrees.of(2.0), Units.Degrees.of(2.0)), //percent threshold Hdegrees Vdegrees
+        CLOSE_HOARD(0.2, Units.Degrees.of(3.0), Units.Degrees.of(3.0)),
+        FAR_HOARD(0.3, Units.Degrees.of(4.0), Units.Degrees.of(4.0)),
+        OPP_HOARD(0.4, Units.Degrees.of(5.0), Units.Degrees.of(5.0));
+
+        private double flywheelPercentThreshold;
+                Angle turretDegThreshold, hoodDegThreshold;
+        public double getFlywheelPercentThreshold() {
+            return flywheelPercentThreshold;
+        }
+        public Angle getTurretDegThreshold() {
+            return turretDegThreshold;
+        }
+        public Angle getHoodDegThreshold() {
+            return hoodDegThreshold;
+        }
+        RegressionMode(double flywheelPercentThreshold, Angle turretDegThreshold, Angle hoodDegThreshold) {
+            this.flywheelPercentThreshold = flywheelPercentThreshold;
+            this.turretDegThreshold       = turretDegThreshold;
+            this.hoodDegThreshold         = hoodDegThreshold;
+        }
     }
 
     public static boolean kUseFlywheelPolynomial = true;
@@ -35,7 +53,7 @@ public class ShooterRegression {
     // -------------------------------------------------------------------------
     // Maps & Polynomials
     // -------------------------------------------------------------------------
-    
+
     // --- Hub ---
     public static InterpolatingDoubleTreeMap hubFlywheelMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression hubFlywheelPolynomial;
@@ -88,7 +106,7 @@ public class ShooterRegression {
             double time = airtimeArr[i][1];
 
             airtimeMap.put(dist, time);
-            
+
             // Inverse: Time -> Distance
             airtimeInverseMap.put(time, dist);
             airtimeInvArr[i][0] = time;
@@ -140,14 +158,14 @@ public class ShooterRegression {
                 case OPP_HOARD:   rps = oppHoardFlywheelMap.get(distMeters); break;
             }
         }
-        
+
         return Setpoint.withVelocitySetpointVoltage(rps);
     }
 
     public static Setpoint getHoodSetpoint(Distance range, RegressionMode mode) {
         double distMeters = range.in(Units.Meters);
         double angle = 0.0;
-        
+
         double slope = 0.0;
         double yInterceptAngle = 0.0;
         double xInterceptDist = 0.0;
@@ -178,8 +196,8 @@ public class ShooterRegression {
         // point slope form: y = m(x - x1) + y1
         angle = slope * (distMeters - xInterceptDist) + yInterceptAngle;
 
-        angle = MathUtil.clamp(angle, 
-            HoodConstants.HOOD_ZERO_POS.in(Units.Degrees), 
+        angle = MathUtil.clamp(angle,
+            HoodConstants.HOOD_ZERO_POS.in(Units.Degrees),
             HoodConstants.HOOD_MAX_POS.in(Units.Degrees)
         );
 
@@ -189,7 +207,7 @@ public class ShooterRegression {
     // -------------------------------------------------------------------------
     // Tunable / Debug
     // -------------------------------------------------------------------------
-    
+
     public static double getHoodAngleTunable(Distance distance) {
         double minAngle = TUNABLE_HOOD_ANGLE_MIN.get();
         double minDist = TUNABLE_HOOD_DIST_MIN.get();

@@ -9,13 +9,11 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 
 public class AimCalculations {
@@ -143,7 +141,7 @@ public class AimCalculations {
     /**
      * Calculates the hub's velocity vector relative to the turret pretending as if
      * the robot is stationary and the hub is moving.
-     * 
+     *
      * @return
      */
     private static Translation2d getHubVelocity() {
@@ -188,9 +186,9 @@ public class AimCalculations {
                 .abs(MathUtil.angleModulus(hubToTurret.getAngle().getRadians() - hubVelocity.getAngle().getRadians()));
 
         // get the coefficient terms of the inverse airtime polynomial
-        double regressionATerm = 0.0; //TODO 
-        double regressionBTerm = 0.0; //TODO 
-        double regressionCTerm = 0.0; //TODO 
+        double regressionATerm = 0.0; //TODO
+        double regressionBTerm = 0.0; //TODO
+        double regressionCTerm = 0.0; //TODO
 
         double hubSpeed = hubVelocity.getNorm();
         double a = hubSpeed * hubSpeed - regressionATerm;

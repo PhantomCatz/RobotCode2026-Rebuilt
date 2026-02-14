@@ -34,7 +34,7 @@ public class CatzSuperstructure {
     private Command trackTargetAndRampUp(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc;
-            
+
             if (mode == RegressionMode.HUB) {
                 targetLoc = AimCalculations.getPredictedHubLocation();
             } else {
@@ -51,7 +51,7 @@ public class CatzSuperstructure {
             if (mode != RegressionMode.HUB) {
                 specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
             }
-            
+
             CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, specificMode));
 
         }, CatzFlywheels.Instance, CatzTurret.Instance);
@@ -62,12 +62,12 @@ public class CatzSuperstructure {
      */
     private Command aimHood(RegressionMode mode) {
         return Commands.run(() -> {
-            Translation2d targetLoc = (mode == RegressionMode.HUB) ? 
-                AimCalculations.getPredictedHubLocation() : 
+            Translation2d targetLoc = (mode == RegressionMode.HUB) ?
+                AimCalculations.getPredictedHubLocation() :
                 AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
-            
+
             Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
-            
+
             RegressionMode specificMode = mode;
             if (mode != RegressionMode.HUB) {
                 specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
@@ -106,7 +106,7 @@ public class CatzSuperstructure {
     }
 
     /* --- HOARDING --- */
-    
+
     public Command cmdHoardShoot() {
         return Commands.parallel(
             trackTargetAndRampUp(RegressionMode.CLOSE_HOARD), // Mode argument is placeholder, logic handles Close/Opp
@@ -117,8 +117,8 @@ public class CatzSuperstructure {
 
     public Command cmdHoardStandby() {
         return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.CLOSE_HOARD), 
-            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT), 
+            trackTargetAndRampUp(RegressionMode.CLOSE_HOARD),
+            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
             CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
         );
@@ -136,8 +136,8 @@ public class CatzSuperstructure {
 
     public Command cmdHubStandby() {
         return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.HUB), 
-            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT), 
+            trackTargetAndRampUp(RegressionMode.HUB),
+            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
             CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
         );

@@ -3,12 +3,12 @@ package frc.robot.CatzAbstractions.Bases;
 import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Util;
 
 public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends GenericMotorSubsystem<S, I> {
 
 	protected double epsilonPercentThreshold;
-
 	public FlywheelMotorSubsystem(S io, I inputs, String name, double epsilonPercentThreshold) {
 		super(io, inputs, name);
 		this.epsilonPercentThreshold = epsilonPercentThreshold;
@@ -32,5 +32,9 @@ public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I exte
 	public boolean spunUp() {
 		return nearVelocity(BaseUnits.AngleUnit.per(BaseUnits.TimeUnit).of(getSetpoint().baseUnits))
 				&& getSetpoint().mode.isVelocityControl();
+	}
+
+	public void setFlywheelPercentThreshold(ShooterRegression.RegressionMode RegressionMode) {
+		this.epsilonPercentThreshold = RegressionMode.getFlywheelPercentThreshold();
 	}
 }
