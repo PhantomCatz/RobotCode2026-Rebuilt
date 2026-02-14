@@ -9,9 +9,9 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
-public class R2IAS extends AutoRoutineBase {
-    public R2IAS(){
-        super("R2IAS");
+public class R2_IAS extends AutoRoutineBase {
+    public R2_IAS(){
+        super("R2_IAS");
 
         AutoTrajectory traj1 = getTrajectory("R2IAS",0);
         AutoTrajectory traj2 = getTrajectory("R2IAS",1);

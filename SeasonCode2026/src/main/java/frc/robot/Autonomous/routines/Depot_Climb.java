@@ -10,15 +10,15 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
-public class DepotClimb extends AutoRoutineBase{
-    public DepotClimb(){
-        super("DepotClimb");
+public class Depot_Climb extends AutoRoutineBase{
+    public Depot_Climb(){
+        super("Depot_Climb");
 
-        AutoTrajectory traj1 = getTrajectory("DepotClimb",0);
-        AutoTrajectory traj2 = getTrajectory("DepotClimb",1);
-        AutoTrajectory traj3 = getTrajectory("DepotClimb",2);
-        AutoTrajectory traj4 = getTrajectory("DepotClimb",3);
-        AutoTrajectory traj5 = getTrajectory("DepotClimb",4);
+        AutoTrajectory traj1 = getTrajectory("Depot_Climb",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_Climb",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_Climb",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
+        AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED)
                                          .alongWith(Commands.print("intake deploy!"))); //TODO Intake deploy code not here yet

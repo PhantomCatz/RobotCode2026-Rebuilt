@@ -17,6 +17,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("Forefit_Outpost",2);
         AutoTrajectory traj4 = getTrajectory("Forefit_Outpost",3);
         AutoTrajectory traj5 = getTrajectory("Forefit_Outpost",4);
+        AutoTrajectory traj6 = getTrajectory("Forefit_Outpost",5);
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
 
@@ -29,6 +30,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
+            followTrajectoryWithAccuracy(traj6),
             CatzSuperstructure.Instance.cmdFullStop(),
             Commands.print("done")
         );

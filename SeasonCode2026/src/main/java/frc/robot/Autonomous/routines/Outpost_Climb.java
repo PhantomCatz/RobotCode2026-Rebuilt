@@ -9,14 +9,14 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
-public class Outpostclimb extends AutoRoutineBase{
-    public Outpostclimb(){
-        super("Outpostclimb");
+public class Outpost_Climb extends AutoRoutineBase{
+    public Outpost_Climb(){
+        super("Outpost_Climb");
 //Warning if this crashes its jadens fault
-        AutoTrajectory traj1 = getTrajectory("Outpostclimb",0);
-        AutoTrajectory traj2 = getTrajectory("Outpostclimb",1);
-        AutoTrajectory traj3 = getTrajectory("Outpostclimb",2);
-        AutoTrajectory traj4 = getTrajectory("Outpostclimb",3);
+        AutoTrajectory traj1 = getTrajectory("Outpost_Climb",0);
+        AutoTrajectory traj2 = getTrajectory("Outpost_Climb",1);
+        AutoTrajectory traj3 = getTrajectory("Outpost_Climb",2);
+        AutoTrajectory traj4 = getTrajectory("Outpost_Climb",3);
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
         traj2.atTime("RampUp+IntakeStop2").onTrue(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)

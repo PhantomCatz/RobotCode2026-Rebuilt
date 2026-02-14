@@ -9,16 +9,16 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
-public class R1IAS extends AutoRoutineBase{
-    public R1IAS(){
-        super("R1IAS");
+public class R1_IAS extends AutoRoutineBase{
+    public R1_IAS(){
+        super("R1_IAS");
 
-        AutoTrajectory traj1 = getTrajectory("R1IAS",0);
-        AutoTrajectory traj2 = getTrajectory("R1IAS",1);
-        AutoTrajectory traj3 = getTrajectory("R1IAS",2);
-        AutoTrajectory traj4 = getTrajectory("R1IAS",3);
-        AutoTrajectory traj5 = getTrajectory("R1IAS",4);
-        AutoTrajectory traj6 = getTrajectory("R1IAS",5);
+        AutoTrajectory traj1 = getTrajectory("R1_IAS",0);
+        AutoTrajectory traj2 = getTrajectory("R1_IAS",1);
+        AutoTrajectory traj3 = getTrajectory("R1_IAS",2);
+        AutoTrajectory traj4 = getTrajectory("R1_IAS",3);
+        AutoTrajectory traj5 = getTrajectory("R1_IAS",4);
+        AutoTrajectory traj6 = getTrajectory("R1_IAS",5);
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
         traj1.atTime("StopIntake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT));
