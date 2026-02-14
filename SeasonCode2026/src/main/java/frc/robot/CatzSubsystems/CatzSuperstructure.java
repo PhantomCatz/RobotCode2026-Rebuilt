@@ -39,7 +39,7 @@ public class CatzSuperstructure {
             Translation2d targetLoc;
 
             if (mode == RegressionMode.HUB) {
-                targetLoc = AimCalculations.getPredictedHubLocation();
+                targetLoc = FieldConstants.getHubLocation();// AimCalculations.getPredictedHubLocation();
             } else {
                 //The only other states are hoarding states
                 targetLoc = AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
@@ -66,7 +66,7 @@ public class CatzSuperstructure {
     private Command aimHood(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc = (mode == RegressionMode.HUB) ?
-                AimCalculations.getPredictedHubLocation() :
+                FieldConstants.getHubLocation() : //AimCalculations.getPredictedHubLocation() :
                 AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
 
             Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
