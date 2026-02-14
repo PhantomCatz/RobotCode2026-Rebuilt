@@ -19,6 +19,7 @@ import frc.robot.Utilities.DoublePressTracker;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
+  private final CatzDrivetrain drivetrain = CatzDrivetrain.getInstance();
 
   private static final CommandXboxController xboxDrv = new CommandXboxController(0);
   private static final CommandXboxController xboxTest = new CommandXboxController(1);

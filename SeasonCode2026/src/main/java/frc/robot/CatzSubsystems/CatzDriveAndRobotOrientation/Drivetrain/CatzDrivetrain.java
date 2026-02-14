@@ -45,7 +45,7 @@ import org.littletonrobotics.junction.Logger;
 
 // Drive train subsystem for swerve drive implementation
 public class CatzDrivetrain extends SubsystemBase {
-  public static final CatzDrivetrain Instance = new CatzDrivetrain();
+  private static CatzDrivetrain Instance;
 
   // Gyro input/output interface
   private final GyroIO gyroIO;
@@ -259,28 +259,28 @@ public class CatzDrivetrain extends SubsystemBase {
     // If the robot is stopped or stopping, direction doesn't matter.
     // Allow maximum traction for launching or braking.
     if (currentSpeedMag < 0.1 || targetSpeedMag < 0.1) {
-       directionalAccelLimit = accelTraction;
+      directionalAccelLimit = accelTraction;
     } else {
-       // Calculate the magnitude of dot product of the velocity vectors:
-       // (vx1*vx2 + vy1*vy2) / (|v1| * |v2|)
-       // Result ranges from:
-       //   1.0 (Aligned)  -> Moving in the same direction
-       //   0.0 (90 deg)   -> Turning sharp corner
-       //  -1.0 (Opposite) -> Reversing direction
-       double dot = (currentSpeeds.vxMetersPerSecond * desiredSpeeds.vxMetersPerSecond
-                   + currentSpeeds.vyMetersPerSecond * desiredSpeeds.vyMetersPerSecond)
-                   / (currentSpeedMag * targetSpeedMag);
+      // Calculate the magnitude of dot product of the velocity vectors:
+      // (vx1*vx2 + vy1*vy2) / (|v1| * |v2|)
+      // Result ranges from:
+      // 1.0 (Aligned) -> Moving in the same direction
+      // 0.0 (90 deg) -> Turning sharp corner
+      // -1.0 (Opposite) -> Reversing direction
+      double dot = (currentSpeeds.vxMetersPerSecond * desiredSpeeds.vxMetersPerSecond
+          + currentSpeeds.vyMetersPerSecond * desiredSpeeds.vyMetersPerSecond)
+          / (currentSpeedMag * targetSpeedMag);
 
-       // Clamp for floating point errors
-       dot = Math.max(-1.0, Math.min(1.0, dot));
+      // Clamp for floating point errors
+      dot = Math.max(-1.0, Math.min(1.0, dot));
 
-       // Map [-1 to 1] -> [0 to 1]
-       // 0.0 = We are reversing/turning (Needs Caution)
-       // 1.0 = We are driving straight (Needs Speed)
-       double directionFactor = (dot + 1.0) / 2.0;
+      // Map [-1 to 1] -> [0 to 1]
+      // 0.0 = We are reversing/turning (Needs Caution)
+      // 1.0 = We are driving straight (Needs Speed)
+      double directionFactor = (dot + 1.0) / 2.0;
 
-       // linearly interpolate between the Slip Floor and Traction Ceiling
-       directionalAccelLimit = accelSlip + (directionFactor * (accelTraction - accelSlip));
+      // linearly interpolate between the Slip Floor and Traction Ceiling
+      directionalAccelLimit = accelSlip + (directionFactor * (accelTraction - accelSlip));
     }
 
     // Calculate how risky our current speed is.
@@ -289,16 +289,15 @@ public class CatzDrivetrain extends SubsystemBase {
     double speedRiskFactor = Math.min(currentSpeedMag / safeSpeed, 1.0);
 
     // Blend the limits:
-    // Low Speed  -> Uses kAccelTraction (Max Performance)
+    // Low Speed -> Uses kAccelTraction (Max Performance)
     // High Speed -> Uses directionalAccelLimit (Safety)
     double finalAccelLimit = accelTraction + (speedRiskFactor * (directionalAccelLimit - accelTraction));
 
     // Create the dynamic constraints for this specific loop cycle
     ModuleLimits dynamicLimits = new ModuleLimits(
-      DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-      finalAccelLimit, // <--- The calculated Anti-Slip Acceleration
-      DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
-    );
+        DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+        finalAccelLimit, // <--- The calculated Anti-Slip Acceleration
+        DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
     // Discretize desired speeds to correct for robot motion during the loop time
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
@@ -307,8 +306,7 @@ public class CatzDrivetrain extends SubsystemBase {
         dynamicLimits,
         currentSetpoint,
         discreteSpeeds,
-        0.02
-    );
+        0.02);
 
     SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
 
@@ -317,25 +315,27 @@ public class CatzDrivetrain extends SubsystemBase {
     Logger.recordOutput("Drive/SpeedRiskFactor", speedRiskFactor);
 
     for (int i = 0; i < 4; i++) {
-        // Use your team's custom optimization logic (keeps wheels from spinning >90 deg)
-        // m_swerveModules[i].optimizeWheelAngles() is assumed to return the optimized state
-        SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+      // Use your team's custom optimization logic (keeps wheels from spinning >90
+      // deg)
+      // m_swerveModules[i].optimizeWheelAngles() is assumed to return the optimized
+      // state
+      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
 
-        // Ensure we don't apply full power until the wheel is actually pointing
-        // in the correct direction. This prevents "skittering" sideways.
-        Rotation2d currentAngle = m_swerveModules[i].getAngle();
+      // Ensure we don't apply full power until the wheel is actually pointing
+      // in the correct direction. This prevents "skittering" sideways.
+      Rotation2d currentAngle = m_swerveModules[i].getAngle();
 
-        // Dot product of Wheel Heading vs Target Heading
-        double cosineScale = optimizedState.angle.minus(currentAngle).getCos();
+      // Dot product of Wheel Heading vs Target Heading
+      double cosineScale = optimizedState.angle.minus(currentAngle).getCos();
 
-        // Only enforce this if we are moving fast enough to matter (Risk > 10%)
-        if (speedRiskFactor > 0.1) {
-            // If cosine is negative (error > 90 deg), output is 0.
-            optimizedState.speedMetersPerSecond *= Math.max(0.0, cosineScale);
-        }
-        m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
+      // Only enforce this if we are moving fast enough to matter (Risk > 10%)
+      if (speedRiskFactor > 0.1) {
+        // If cosine is negative (error > 90 deg), output is 0.
+        optimizedState.speedMetersPerSecond *= Math.max(0.0, cosineScale);
+      }
+      m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
 
-        optimizedDesiredStates[i] = optimizedState;
+      optimizedDesiredStates[i] = optimizedState;
     }
   }
 
@@ -478,9 +478,10 @@ public class CatzDrivetrain extends SubsystemBase {
     );
     Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
 
-    Pose2d curPose = CatzRobotTracker.Instance.getEstimatedPose();
+    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
+    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
   }
 
@@ -540,4 +541,12 @@ public class CatzDrivetrain extends SubsystemBase {
         .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
         .toArray(Rotation2d[]::new);
   }
+
+  public static CatzDrivetrain getInstance() {
+    if (Instance == null) {
+      Instance = new CatzDrivetrain();
+    }
+    return Instance;
+  }
+
 }

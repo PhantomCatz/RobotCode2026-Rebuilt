@@ -25,7 +25,7 @@ public class AutoRoutineBase {
 
     protected void prepRoutine(AutoTrajectory startTraj, Command... sequence){
         routine.active().onTrue(
-            new InstantCommand(() -> CatzRobotTracker.Instance.resetPose(startTraj.getInitialPose().get()))
+            new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get()))
             .andThen(Commands.sequence(sequence))
         );
     }
@@ -84,10 +84,14 @@ public class AutoRoutineBase {
         );
     }
 
+    // protected Command trajectoryToObjectDetection() {
+
+    // }
+
     private boolean isAtPose(AutoTrajectory trajectory){
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
-
+        // System.out.println((isAtTrans && isAtRot));
         return isAtTrans && isAtRot;
     }
 
@@ -99,16 +103,15 @@ public class AutoRoutineBase {
     }
 
     private boolean rotationIsFinished(AutoTrajectory trajectory, double epsilonAngleDeg){
-        Rotation2d curRot = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
+        Rotation2d curRot = CatzRobotTracker.getInstance().getEstimatedPose().getRotation();
         Rotation2d goalRot = trajectory.getFinalPose().get().getRotation();
-
         return Math.abs(goalRot.minus(curRot).getDegrees()) % 360 < epsilonAngleDeg;
     }
 
     private boolean translationIsFinished(AutoTrajectory trajectory, double epsilonDist) {
-		Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
+		Pose2d currentPose = CatzRobotTracker.getInstance().getEstimatedPose();
 		Pose2d finalPose = trajectory.getFinalPose().get();
-
+        // System.out.println((currentPose.getTranslation().getDistance(finalPose.getTranslation())));
 
 		return currentPose.getTranslation().getDistance(finalPose.getTranslation()) < epsilonDist;
 	}

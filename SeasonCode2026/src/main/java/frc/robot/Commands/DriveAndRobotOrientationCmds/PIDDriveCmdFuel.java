@@ -44,7 +44,7 @@ public class PIDDriveCmdFuel extends Command{
      * @param returnGoal Position to return to when almost out of time
      */
     public PIDDriveCmdFuel(Pose2d initialGoal, double goalVel, Pose2d returnGoal, double timeToSpare){
-        addRequirements(CatzDrivetrain.Instance);
+        addRequirements(CatzDrivetrain.getInstance());
 
         // Configure the translation controller
         var translationConstraints = new TrapezoidProfile.Constraints(
@@ -98,7 +98,7 @@ public class PIDDriveCmdFuel extends Command{
         double targetOmega = -Math.toRadians(rotationController.calculate(angleError, 0.0));
 
         ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
-        CatzDrivetrain.Instance.drive(goalChassisSpeeds);
+        CatzDrivetrain.getInstance().drive(goalChassisSpeeds);
         Logger.recordOutput("target vel", targetVel);
         Logger.recordOutput("chassis speed", goalChassisSpeeds);
         if(DriverStation.isAutonomous()){

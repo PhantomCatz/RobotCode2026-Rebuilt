@@ -26,7 +26,7 @@ public class R2IAS extends AutoRoutineBase {
                                     );
         prepRoutine(
             traj1,
-            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.H_SETPOINT),
+            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED),
             followTrajectory(traj1),
             // collectCoral,
             CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT),

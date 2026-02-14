@@ -32,7 +32,7 @@ public class CatzRobotTracker {
   private static final Matrix<N3, N1> ODOMETRY_STD_DEVS =
       new Matrix<>(VecBuilder.fill(0.003, 0.003, 0.002));
 
-  public static final CatzRobotTracker Instance = new CatzRobotTracker();
+  public static CatzRobotTracker Instance;
 
   private static final Map<Integer, Pose2d> tagPoses2d = new HashMap<>();
 
@@ -292,4 +292,11 @@ public class CatzRobotTracker {
       int tagId, int camera, double tx, double ty, double distance, double timestamp) {}
 
   public record TxTyPoseRecord(Pose2d pose, double distance, double timestamp) {}
+
+  public static CatzRobotTracker getInstance() {
+    if (Instance == null) {
+      Instance = new CatzRobotTracker();
+    }
+    return Instance;
+  }
 }

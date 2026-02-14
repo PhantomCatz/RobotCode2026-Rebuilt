@@ -14,8 +14,8 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"RightShoot.x", "val":4.3802995681762695}, "y":{"exp":"RightShoot.y", "val":0.6432812809944153}, "heading":{"exp":"RightShoot.heading", "val":0.0}, "intervals":30, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"RightIntake.x", "val":6.976243495941162}, "y":{"exp":"RightIntake.y", "val":1.204566478729248}, "heading":{"exp":"RightIntake.heading", "val":0.7392773652100368}, "intervals":30, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":{"exp":"RightShoot.x", "val":4.323790550231934}, "y":{"exp":"RightShoot.y", "val":0.5927739977836609}, "heading":{"exp":"RightShoot.heading", "val":0.0}, "intervals":30, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"RightIntake.x", "val":6.746779441833496}, "y":{"exp":"RightIntake.y", "val":1.2103148698806765}, "heading":{"exp":"RightIntake.heading", "val":0.7621467255501121}, "intervals":30, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"16.541 m", "val":16.541}, "h":{"exp":"8.0692 m", "val":8.0692}}}, "enabled":true},

@@ -158,12 +158,13 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
 
     CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.Instance::getEstimatedPose,
-                                                  CatzRobotTracker.Instance::resetPose,
-                                                  CatzDrivetrain.Instance::followChoreoTrajectoryExecute,
+                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
+                                                  CatzRobotTracker.getInstance()::resetPose,
+                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
                                                   true,
-                                                  CatzDrivetrain.Instance
+                                                  CatzDrivetrain.getInstance()
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+    System.out.println(AutoRoutineSelector.Instance);
 
       DriverStation.silenceJoystickConnectionWarning(true);
 

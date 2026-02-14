@@ -25,13 +25,12 @@ import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
-    private final CommandXboxController xboxDrv = new CommandXboxController(0);
 
     private boolean isCloseCornerHoarding = true;
 
     private CatzSuperstructure() {}
 
-    private Command trackTargetAndRampUp(RegressionMode mode) {
+    public Command trackTargetAndRampUp(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc;
             
@@ -96,6 +95,7 @@ public class CatzSuperstructure {
     // Public Command States
     // --------------------------------------------------------------------------
 
+    //Stops everything but the turret
     public Command cmdFullStop() {
         return Commands.parallel(
             CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),

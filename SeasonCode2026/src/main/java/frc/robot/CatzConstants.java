@@ -87,6 +87,7 @@ public final class CatzConstants {
     SN2,
     SN1_OLD,
     SN_TEST, // Select alternate test robot parameters
+    BUBBLES
   }
 
   public static enum AllianceColor {
