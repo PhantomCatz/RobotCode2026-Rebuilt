@@ -8,6 +8,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
@@ -21,6 +22,9 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
+import frc.robot.CatzSubsystems.CatzLEDs.CatzLED.BackLEDStates;
+import frc.robot.CatzSubsystems.CatzLEDs.CatzLED.FrontLEDStates;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -111,8 +115,9 @@ public class CatzSuperstructure {
         return Commands.parallel(
             trackTargetAndRampUp(RegressionMode.CLOSE_HOARD), // Mode argument is placeholder, logic handles Close/Opp
             aimHood(RegressionMode.CLOSE_HOARD),
-            runFeeder()
-        );
+            runFeeder(),
+            Commands.runOnce(() -> CatzLED.Instance.setBackStates(BackLEDStates.HOARDING))
+        );  
     }
 
     public Command cmdHoardStandby() {
@@ -123,14 +128,16 @@ public class CatzSuperstructure {
             CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
         );
     }
-
     /* --- HUB SCORING --- */
 
     public Command cmdHubShoot() {
         return Commands.parallel(
             trackTargetAndRampUp(RegressionMode.HUB),
             aimHood(RegressionMode.HUB),
-            runFeeder()
+            runFeeder(),
+            Commands.runOnce(() -> {
+                CatzLED.Instance.setBackStates(BackLEDStates.SHOOTING);
+            })
         );
     }
 
@@ -146,7 +153,22 @@ public class CatzSuperstructure {
     public Command toggleHoardLocation() {
         return Commands.runOnce(() -> {
             isCloseCornerHoarding = !isCloseCornerHoarding;
+            if (isCloseCornerHoarding == true) {
+                CatzLED.Instance.setBackStates(BackLEDStates.CLOSE_CORNER);
+            }  else if (isCloseCornerHoarding == false) {
+                CatzLED.Instance.setBackStates(BackLEDStates.FAR_CORNER);
+            } else {
+                CatzLED.Instance.setBackStates(BackLEDStates.NULL);
+            }
         });
+    }
+
+    public Command climbOn(){
+        return new InstantCommand(()-> {
+            CatzLED.Instance.setBackStates(BackLEDStates.CLIMB);
+            CatzLED.Instance.setFrontStates(FrontLEDStates.CLIMB);
+        }
+        );
     }
 
     /* --- COMMANDS FOR TESTING */
