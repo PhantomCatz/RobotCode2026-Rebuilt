@@ -7,15 +7,10 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 
-<<<<<<<< Updated upstream:SeasonCode2026/src/main/java/frc/robot/Autonomous/routines/R2IASObjDet.java
-public class R2IASObjDet extends AutoRoutineBase {
-    public R2IASObjDet(){
-        super("R2IAS");
-========
 public class R2_IAS extends AutoRoutineBase {
     public R2_IAS(){
         super("R2_IAS");
->>>>>>>> Stashed changes:SeasonCode2026/src/main/java/frc/robot/Autonomous/routines/R2_IAS.java
+
 
         AutoTrajectory traj1 = getTrajectory("R2IASOut",0);
         AutoTrajectory traj2 = getTrajectory("R2IASIn",1);
