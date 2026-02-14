@@ -17,9 +17,13 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
+import org.apache.commons.math3.complex.Complex;
 
 public class AimCalculations {
     private static final double phaseDelay = 0.03;
+    private static LaguerreSolver solver = new LaguerreSolver();
 
     /**
      * Calculates the best turret angle setpoint to point to the hub
@@ -61,78 +65,38 @@ public class AimCalculations {
         if (shouldMirror) {
             targetPos = new Translation2d(targetPos.getX(), FieldConstants.fieldWidth - targetPos.getY());
         }
-
         return targetPos;
     }
+//              // B. TURN THE ROBOT
+//              // We need to spin the robot to bring the target back to center (0 degrees).
+//              // Determine direction:
+//              // If target is +179, we want to spin robot LEFT (positive omega) to make target relative angle smaller.
+//              // If target is -179, we want to spin robot RIGHT (negative omega).
 
-    // public static AimingParameters getAimingParameters(Rotation2d
-    // currentTurretAngle) {
-    // // 1. Predict & Calculate Target (Same as before)
-    // Pose2d futureRobotPose = getPredictedRobotPose(kLatencySeconds);
-    // Translation2d relativeHubVelocity = getHubVelocity(futureRobotPose);
-    // double airtime = getFutureShootAirtime(relativeHubVelocity);
+//              // Simple P-Controller for the Drivetrain rotation
+//              // kP should be tuned (start low, e.g., 2.0)
+//              double kP_Chassis = 4.0;
+//              robotTurnCmd = targetRadians * kP_Chassis;
+//         }
 
-    // Translation2d futureTurretPos = futureRobotPose.getTranslation().plus(
-    // TurretConstants.TURRET_OFFSET.rotateBy(futureRobotPose.getRotation())
-    // );
-    // Translation2d targetVector = FieldConstants.getHubLocation()
-    // .minus(futureTurretPos)
-    // .plus(relativeHubVelocity.times(airtime));
+//         // 4. Calculate Turret Feedforward (Standard)
+//         double r2 = targetVector.getNorm() * targetVector.getNorm();
+//         double crossProduct = targetVector.getX() * relativeHubVelocity.getY()
+//                             - targetVector.getY() * relativeHubVelocity.getX();
+//         double turretFF = (r2 > 1e-6) ? (crossProduct / r2) : 0.0;
 
-    // // 2. Calculate ideal angle in range [-PI, PI]
-    // Rotation2d targetAngle = targetVector.getAngle();
-    // double targetRadians = targetAngle.getRadians();
+//         // If we are commanding the robot to turn, we must SUBTRACT that velocity from the turret
+//         // so the turret stays "world stabilized" while the chassis spins beneath it.
+//         if (robotTurnCmd != null) {
+//             turretFF -= robotTurnCmd;
+//         }
 
-    // // 3. LOGIC: Handle Hard Stops & Robot Turn Assist
-    // double clampedTurretGoal = targetRadians;
-    // Double robotTurnCmd = null;
-
-    // // Check if we are approaching the positive or negative limit (180 - 5 = 175
-    // degrees)
-    // boolean inPositiveDangerZone = targetRadians > (kMaxTurretAngle -
-    // kTurretHardStopBuffer);
-    // boolean inNegativeDangerZone = targetRadians < (-kMaxTurretAngle +
-    // kTurretHardStopBuffer);
-
-    // if (inPositiveDangerZone || inNegativeDangerZone) {
-    // // A. CLAMP THE TURRET
-    // // Don't let the turret hit the physical hard stop. Keep it at the edge.
-    // // This keeps the camera looking at the target as long as possible.
-    // clampedTurretGoal = MathUtil.clamp(targetRadians, -kMaxTurretAngle,
-    // kMaxTurretAngle);
-
-    // // B. TURN THE ROBOT
-    // // We need to spin the robot to bring the target back to center (0 degrees).
-    // // Determine direction:
-    // // If target is +179, we want to spin robot LEFT (positive omega) to make
-    // target relative angle smaller.
-    // // If target is -179, we want to spin robot RIGHT (negative omega).
-
-    // // Simple P-Controller for the Drivetrain rotation
-    // // kP should be tuned (start low, e.g., 2.0)
-    // double kP_Chassis = 4.0;
-    // robotTurnCmd = targetRadians * kP_Chassis;
-    // }
-
-    // // 4. Calculate Turret Feedforward (Standard)
-    // double r2 = targetVector.getNorm() * targetVector.getNorm();
-    // double crossProduct = targetVector.getX() * relativeHubVelocity.getY()
-    // - targetVector.getY() * relativeHubVelocity.getX();
-    // double turretFF = (r2 > 1e-6) ? (crossProduct / r2) : 0.0;
-
-    // // If we are commanding the robot to turn, we must SUBTRACT that velocity
-    // from the turret
-    // // so the turret stays "world stabilized" while the chassis spins beneath it.
-    // if (robotTurnCmd != null) {
-    // turretFF -= robotTurnCmd;
-    // }
-
-    // return new AimingParameters(
-    // new Rotation2d(clampedTurretGoal),
-    // turretFF,
-    // robotTurnCmd
-    // );
-    // }
+//         return new AimingParameters(
+//             new Rotation2d(clampedTurretGoal),
+//             turretFF,
+//             robotTurnCmd
+//         );
+//     }
 
     public static Translation2d getPredictedHubLocation() {
         Translation2d hubVelocity = getHubVelocity();
@@ -167,15 +131,12 @@ public class AimCalculations {
     }
 
     /**
-     * Calculates the airtime that the ball will take when shot at the predicted
-     * future location of the hub
+     * Calculates the airtime that the ball will take when shot at the predicted future location of the hub
      *
-     * We avoid the problem of needing to iteratively search the potential solution
-     * by approximating the inverse airtime
+     * We avoid the problem of needing to iteratively search the potential solution by approximating the inverse airtime
      * function as a second degree polynomial.
      *
-     * @return The predicted future airtime of the ball. If no solution is found,
-     *         return 0.
+     * @return The predicted future airtime of the ball. If no solution is found, return 0.
      */
     private static double getFutureShootAirtime(Translation2d hubVelocity) {
         Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
@@ -187,28 +148,37 @@ public class AimCalculations {
         double turretHubRadians = Math
                 .abs(MathUtil.angleModulus(hubToTurret.getAngle().getRadians() - hubVelocity.getAngle().getRadians()));
 
-        // get the coefficient terms of the inverse airtime polynomial
-        double regressionATerm = 0.0; //TODO 
-        double regressionBTerm = 0.0; //TODO 
-        double regressionCTerm = 0.0; //TODO 
+        //get the coefficient terms of the inverse airtime polynomial
+        double regressionATerm = ShooterRegression.airtimeRegA;
+        double regressionBTerm = ShooterRegression.airtimeRegB;
+        double regressionCTerm = ShooterRegression.airtimeRegC;
+        double regressionDTerm = ShooterRegression.airtimeRegD;
+        double regressionETerm = ShooterRegression.airtimeRegE;
 
         double hubSpeed = hubVelocity.getNorm();
-        double a = hubSpeed * hubSpeed - regressionATerm;
-        double b = -2 * hubSpeed * distToHub * Math.cos(turretHubRadians) - regressionBTerm;
-        double c = distToHub * distToHub - regressionCTerm;
-        double discriminant = b * b - 4 * a * c;
-        double sqrtDiscriminant = Math.sqrt(discriminant);
-        if (discriminant < 0) {
-            return 0.0; // no solution
+        double a = regressionATerm;
+        double b = regressionBTerm;
+        double c = regressionCTerm - hubSpeed*hubSpeed;
+        double d = 2*hubSpeed*distToHub*Math.cos(turretHubRadians) + regressionDTerm;
+        double e = regressionETerm - distToHub*distToHub;
+
+        double[] coeffs = {e, d, c, b, a};
+        PolynomialFunction poly = new PolynomialFunction(coeffs);
+
+        Complex[] roots = solver.solveAllComplex(coeffs, 0);
+
+        double minNonnegativeRealRoot = 9999999.9;
+
+        for (Complex r : roots) {
+            if (Math.abs(r.getImaginary()) < 1e-6 && r.getReal() > 0.0) {
+                minNonnegativeRealRoot = Math.min(minNonnegativeRealRoot, r.getReal());
+            }
         }
-        double smallRoot = (-b - sqrtDiscriminant) / (2 * a);
-        double bigRoot = (-b + sqrtDiscriminant) / (2 * a);
-        if (smallRoot > 0) {
-            return smallRoot;
+
+        if (minNonnegativeRealRoot != 9999999.9) {
+            return minNonnegativeRealRoot;
         }
-        if (bigRoot > 0) {
-            return bigRoot;
-        }
+
         return 0.0; // both roots negative (if that's even possible)
     }
 

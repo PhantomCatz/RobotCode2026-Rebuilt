@@ -47,6 +47,14 @@ public class ShooterRegression {
     // --- Far Corner Hoard ---
     public static InterpolatingDoubleTreeMap farHoardFlywheelMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression farHoardPolynomial;
+    // New variables for Inverse Airtime
+    public static InterpolatingDoubleTreeMap airtimeInverseAutoAimMap = new InterpolatingDoubleTreeMap();
+    public static PolynomialRegression airtimeInverseAutoAimPolynomial;
+    public static double airtimeRegA;
+    public static double airtimeRegB;
+    public static double airtimeRegC;
+    public static double airtimeRegD;
+    public static double airtimeRegE;
 
     // --- Opposite Alliance Hoard ---
     public static InterpolatingDoubleTreeMap oppHoardFlywheelMap = new InterpolatingDoubleTreeMap();
@@ -103,6 +111,14 @@ public class ShooterRegression {
         CLOSE_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_CLOSE_HOARD);
         FAR_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_FAR_HOARD);
         OPP_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_OPP_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_OPP_HOARD);
+        double a = airtimeInverseAutoAimPolynomial.beta(0);
+        double b = airtimeInverseAutoAimPolynomial.beta(1);
+        double c = airtimeInverseAutoAimPolynomial.beta(2);
+        airtimeRegA = a*a;
+        airtimeRegB = 2*a*b;
+        airtimeRegC = b*b + 2*a*c;
+        airtimeRegD = 2*b*c;
+        airtimeRegE = c*c;
     }
 
     private static PolynomialRegression loadRegression(double[][] data, InterpolatingDoubleTreeMap map) {
