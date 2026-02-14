@@ -24,6 +24,7 @@ public class Forefit_Depot extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
+            CatzSuperstructure.Instance.toggleIntakeDeploy(),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
             CatzSuperstructure.Instance.cmdHoardShoot(),

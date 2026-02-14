@@ -379,6 +379,6 @@
    {"name":"RampUp+IntakeStop6", "from":{"target":5, "targetTimestamp":6.76712, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score7", "from":{"target":6, "targetTimestamp":8.09886, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Intake8", "from":{"target":7, "targetTimestamp":9.64157, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null},
-   {"name":"IntakeStop+RampUp9", "from":{"target":8, "targetTimestamp":11.18583, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null},
+   {"name":"RampUp+IntakeStop9", "from":{"target":8, "targetTimestamp":11.18583, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null},
    {"name":"Score9", "from":{"target":8, "targetTimestamp":11.18583, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
