@@ -30,6 +30,7 @@ public class Depot_Climb extends AutoRoutineBase{
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
 
             followTrajectoryWithAccuracy(traj1),
+            
             followTrajectoryWithAccuracy(traj2),
 
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
