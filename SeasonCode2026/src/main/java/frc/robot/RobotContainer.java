@@ -73,6 +73,12 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop());
 
+    // -------------------------------------------------------------------------
+    // INTAKE
+    // -------------------------------------------------------------------------
+    xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());

@@ -13,6 +13,10 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
@@ -35,7 +39,7 @@ public class CatzSuperstructure {
             Translation2d targetLoc;
 
             if (mode == RegressionMode.HUB) {
-                targetLoc = AimCalculations.getPredictedHubLocation();
+                targetLoc = FieldConstants.getHubLocation();// AimCalculations.getPredictedHubLocation();
             } else {
                 //The only other states are hoarding states
                 targetLoc = AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
@@ -62,7 +66,7 @@ public class CatzSuperstructure {
     private Command aimHood(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc = (mode == RegressionMode.HUB) ?
-                AimCalculations.getPredictedHubLocation() :
+                FieldConstants.getHubLocation() : //AimCalculations.getPredictedHubLocation() :
                 AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
 
             Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
@@ -149,7 +153,31 @@ public class CatzSuperstructure {
         });
     }
 
-    /* --- COMMANDS FOR TESTING */
+    /* --- INTAKE --- */
+    private boolean isIntakeDeployed = false;
+    private boolean isIntakeOn = false;
+
+    public Command toggleIntakeDeploy() {
+        return Commands.runOnce(() -> {
+            if(isIntakeDeployed){
+                CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.STOW);
+            }else{
+                CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.DEPLOY);
+            }
+        }, CatzIntakeDeploy.Instance);
+    }
+
+    public Command toggleIntakeRollers() {
+        return Commands.runOnce(() -> {
+            if(isIntakeOn){
+                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
+            }else{
+                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
+            }
+        }, CatzIntakeRoller.Instance);
+    }
+
+    /* --- COMMANDS FOR TESTING --- */
 
     public Command applyHoodTuningSetpoint() {
         return Commands.defer(() -> {
