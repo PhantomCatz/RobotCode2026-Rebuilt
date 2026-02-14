@@ -139,7 +139,7 @@ public class CatzSuperstructure {
 
         public Command manualExtendClimbTall() {
         return CatzClimbTall.Instance.followSetpointCommand(() -> {
-            double input = (RobotContainer.xboxDrv.getRightY()) * 1;
+            double input = (RobotContainer.xboxDrv.getRightY()) * 4;
             Logger.recordOutput("Climb Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });

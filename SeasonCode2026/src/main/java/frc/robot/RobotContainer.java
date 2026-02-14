@@ -12,7 +12,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
-import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.DoublePressTracker;
 
@@ -32,8 +31,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
-        () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+    // CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
+    //     () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
     // CatzTurret.Instance.setDefaultCommand(
     // superstructure.turretManualTrackCommand()
     DoublePressTracker.createTrigger(xboxDrv.back()).onTrue(new InstantCommand(() -> {
@@ -52,6 +51,7 @@ public class RobotContainer {
     // xboxDrv.leftBumper().onFalse(superstructure.setShootingAllowed(true));
     // xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
+
     // xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
     // xboxDrv.y().onTrue(superstructure.flywheelManualCommand());
     // xboxDrv.a().onTrue(superstructure.)
@@ -63,16 +63,17 @@ public class RobotContainer {
     // xboxDrv.leftBumper().onTrue(superstructure.hoodTestCommand());
     // xboxDrv.rightBumper().onTrue(superstructure.applyShooterSetpoint());
 
-    xboxDrv.a().onTrue(superstructure.extendClimbTallCommand());
-    xboxDrv.b().onTrue(superstructure.extendClimbCommand());
-    xboxDrv.y().onTrue(superstructure.returnOriginalClimbTallCommand());
-    xboxDrv.x().onTrue(superstructure.returnOriginalClimbTallCommand());
+    xboxDrv.a().onTrue(superstructure.manualExtendCLimb());
+    xboxDrv.b().onTrue(superstructure.manualExtendClimbTall());
+    // xboxDrv.y().onTrue(superstructure.returnOriginalClimbTallCommand());
+    // xboxDrv.x().onTrue(superstructure.returnOriginalClimbTallCommand());
 
     xboxDrv.rightBumper().onTrue(superstructure.fullClimb());
 
 
-    // xboxTest.a().onTrue(superstructure.startIndexers());
+      // xboxTest.a().onTrue(superstructure.startIndexers());
     // xboxTest.x().onTrue(superstructure.stopAllShooting());
+
   }
 
   public static void rumbleDrv(double val) {
