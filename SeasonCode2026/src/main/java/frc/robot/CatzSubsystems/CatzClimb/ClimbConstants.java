@@ -40,7 +40,7 @@ public class ClimbConstants {
 	public static final Setpoint Stow = Setpoint.withMotionMagicSetpoint(0.0);
 	public static final Setpoint Extend = Setpoint.withMotionMagicSetpoint(50.0);
 
-    private static final int CLIMB_MOTOR_ID = 24;
+    private static final int CLIMB_MOTOR_ID = 60;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 

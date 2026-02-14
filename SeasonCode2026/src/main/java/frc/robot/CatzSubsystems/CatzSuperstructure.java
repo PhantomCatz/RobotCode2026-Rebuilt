@@ -131,7 +131,7 @@ public class CatzSuperstructure {
     }
     public Command manualExtendCLimb() {
         return CatzClimb.Instance.followSetpointCommand(() -> {
-            double input = (RobotContainer.xboxDrv.getLeftY()) * 1;
+            double input = (RobotContainer.xboxDrv.getLeftY()) * 2;
             Logger.recordOutput("Climb Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
@@ -139,7 +139,7 @@ public class CatzSuperstructure {
 
         public Command manualExtendClimbTall() {
         return CatzClimbTall.Instance.followSetpointCommand(() -> {
-            double input = (RobotContainer.xboxDrv.getRightY()) * 4;
+            double input = (RobotContainer.xboxDrv.getRightY()) * -4;
             Logger.recordOutput("Climb Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });

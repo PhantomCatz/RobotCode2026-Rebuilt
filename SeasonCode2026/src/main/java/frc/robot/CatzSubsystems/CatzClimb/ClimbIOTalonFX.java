@@ -6,5 +6,5 @@ public class ClimbIOTalonFX extends GenericTalonFXIOReal<ClimbIO.ClimbIOInputs> 
     public ClimbIOTalonFX(MotorIOTalonFXConfig config){
         super(config);
         System.out.println(leaderTalon.getDeviceID());
-    }y
+    }
 }
