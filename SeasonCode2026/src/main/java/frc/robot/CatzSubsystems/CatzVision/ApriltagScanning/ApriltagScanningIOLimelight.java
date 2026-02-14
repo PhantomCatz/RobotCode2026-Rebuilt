@@ -53,6 +53,11 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	@Override
 	public void update() {
 		updateGyro();
+
+		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond); 
+		if (Math.abs(robotOmegaDegPerSec) > 300.0) {
+            return; // Reject vision update if spinning too fast
+        }
 		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 1);
 	}
 
