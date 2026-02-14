@@ -35,9 +35,19 @@ public class CatzSuperstructure {
     private final CommandXboxController xboxDrv = new CommandXboxController(0);
     // NOTE use suppliers instead of creating two different objects
 
-    private boolean isShootingAllowed = false; //TODO set to always true during auton
+    private boolean isShootingAllowed = false; // TODO set to always true during auton
 
     public static boolean isManualCommandOn = false;
+    public static boolean isHoodManualCommandOn = false;
+
+    private enum ManualState{
+        HOOD,
+        TURRET,
+        FLYWHEEL,
+        NONE
+    }
+
+    private ManualState manualState = ManualState.NONE;
 
     private CatzSuperstructure() {
     }
@@ -80,19 +90,18 @@ public class CatzSuperstructure {
         }, CatzFlywheels.Instance, CatzHood.Instance);
     }
 
-    public Command prepareForShooting(){
+    public Command prepareForShooting() {
         return Commands.parallel(
-            interpolateShootingValues(),
-            turretTrackHubCommand(),
-            shootIfReady(),
-            setShootingAllowed(false)
-        );
+                interpolateShootingValues(),
+                turretTrackHubCommand(),
+                shootIfReady(),
+                setShootingAllowed(false));
     }
 
     public Command shootIfReady() {
         return Commands.run(() -> {
             boolean readyToShoot = AimCalculations.readyToShoot();
-            if(readyToShoot && !isShootingAllowed){
+            if (readyToShoot && !isShootingAllowed) {
                 RobotContainer.rumbleDrv(1.0);
             }
 
@@ -119,6 +128,7 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF));
     }
 
+
     public Command stopAllShooting() {
         return hoodFlywheelStowCommand().alongWith(stopIndexers()).alongWith(setShootingAllowed(false));
     }
@@ -126,23 +136,25 @@ public class CatzSuperstructure {
     public Command setShootingAllowed(boolean val) {
         return Commands.runOnce(() -> isShootingAllowed = val);
     }
+
     public Command flywheelManualCommand() {
-              System.out.print("flyWHeelmanIl");
-  return CatzFlywheels.Instance.followSetpointCommand(() -> {
-            double input = (xboxDrv.getLeftY()) * 8;
+        System.out.print("flyWHeelmanIl");
+        return CatzFlywheels.Instance.followSetpointCommand(() -> {
+            double input = (xboxDrv.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
     }
 
     public Command hoodManualCommand() {
-             System.out.print("hoodManual");
-  return CatzHood.Instance.followSetpointCommand(() -> {
+        System.out.print("hoodManual");
+        return CatzHood.Instance.followSetpointCommand(() -> {
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
     }
+
     public Command turretManualCommand() {
         System.out.print("turretManual");
         return CatzTurret.Instance.followSetpointCommand(() -> {
@@ -151,21 +163,66 @@ public class CatzSuperstructure {
             return Setpoint.withVoltageSetpoint(input);
         });
     }
+
+    public Command stopTurretManualCommand(){
+        Command cmd = Commands.runOnce(()->{});
+        cmd.addRequirements(CatzTurret.Instance);
+
+        return cmd;
+    }
+
+    public Command stopHoodManualCommand(){
+        Command cmd = Commands.runOnce(()->{});
+        cmd.addRequirements(CatzHood.Instance);
+
+        return cmd;
+    }
+
+    public Command stopFlywheelManualCommand(){
+        Command cmd = Commands.runOnce(()->{});
+        cmd.addRequirements(CatzFlywheels.Instance);
+
+        return cmd;
+    }
+
     public Command manualCommandOn() {
-        return Commands.runOnce(() -> 
-            isManualCommandOn = true
-        );
+        return Commands.runOnce(() -> isManualCommandOn = true);
     }
-        public static Command manualCommandOff() {
-            return Commands.runOnce(() ->
-            isManualCommandOn = false
-            );
+
+    public static Command manualCommandOff() {
+        return Commands.runOnce(() -> isManualCommandOn = false);
     }
+
     public Command manualCommandSwitch() {
-        return Commands.runOnce(() ->
-        isManualCommandOn = !isManualCommandOn
-        );
+        return Commands.runOnce(() -> isManualCommandOn = !isManualCommandOn);
     }
+
+    public Command runManualOverride() {
+        return Commands.run(
+                () -> {
+                    if (manualState == ManualState.HOOD) {
+                        CatzHood.Instance.followSetpointCommand(() -> {
+                            double input = -(xboxTest.getLeftY()) * 1;
+                           Logger.recordOutput("Xbox Voltage Input", input);
+                            return Setpoint.withVoltageSetpoint(input);
+                        });
+                    } else if (manualState == ManualState.FLYWHEEL) {
+                        CatzFlywheels.Instance.followSetpointCommand(() -> {
+                            double input = -(xboxTest.getLeftY()) * 1;
+                            Logger.recordOutput("Xbox Voltage Input", input);
+                            return Setpoint.withVoltageSetpoint(input);
+                        });
+                    } else if (manualState == ManualState.TURRET) {
+                        CatzTurret.Instance.followSetpointCommand(() -> {
+                            double input = -(xboxTest.getLeftY()) * 1;
+                            Logger.recordOutput("Xbox Voltage Input", input);
+                            return Setpoint.withVoltageSetpoint(input);
+                        });
+                    }
+                }, 
+                CatzHood.Instance, CatzTurret.Instance, CatzFlywheels.Instance);
+    }
+
     public Command applyHoodTuningSetpoint() {
         return Commands.defer(() -> {
             Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
