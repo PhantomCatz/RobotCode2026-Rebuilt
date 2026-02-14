@@ -5,7 +5,6 @@ import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.D
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 // import com.pathplanner.lib.util.PathPlannerLogging;
-import com.google.flatbuffers.Constants;
 
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
@@ -31,13 +30,11 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
 // import frc.robot.Commands.DriveAndRobotOrientationCmds.HolonomicDriveController;
 import frc.robot.Robot;
-import frc.robot.Autonomous.AutonConstants;
 // import frc.robot.Autonomous.AutonConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.LoggedTunableNumber;
-import frc.robot.Utilities.ModuleLimits;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
 
@@ -280,7 +277,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   //     // Formula: Map [-1, 1] to [0, 1] -> (dot + 1) / 2
   //     double scalar = (dotProduct + 1.0) / 2.0;
-  //     scalar 
+  //     scalar
 
   //     // Linear Interpolate
   //     activeAccelLimit = kAccelSlip + (scalar * (kAccelTraction - kAccelSlip));
@@ -289,8 +286,8 @@ public class CatzDrivetrain extends SubsystemBase {
   //   // --- 3. CREATE DYNAMIC LIMITS OBJECT ---
   //   // Copy your base limits, but override the acceleration
   //   ModuleLimits dynamicLimits = new ModuleLimits(
-  //     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(), 
-  //     activeAccelLimit, 
+  //     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+  //     activeAccelLimit,
   //     DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
   //   );
 

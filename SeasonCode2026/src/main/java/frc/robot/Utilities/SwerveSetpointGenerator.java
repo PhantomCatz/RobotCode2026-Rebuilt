@@ -25,28 +25,28 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 
 /**
- * 
+ *
  * "Inspired" by FRC team 254. See the license file in the root directory of
  * this project.
  *
- * 
- * 
+ *
+ *
  * <p>
  * Takes a prior setpoint (ChassisSpeeds), a desired setpoint (from a driver, or
  * from a path
- * 
+ *
  * follower), and outputs a new setpoint that respects all of the kinematic
  * constraints on module
- * 
+ *
  * rotation speed and wheel velocity/acceleration. By generating a new setpoint
  * every iteration, the
- * 
+ *
  * robot will converge to the desired setpoint quickly while avoiding any
  * intermediate state that is
- * 
+ *
  * kinematically infeasible (and can result in wheel slip or robot heading drift
  * as a result).
- * 
+ *
  */
 
 @Builder
@@ -62,24 +62,24 @@ public class SwerveSetpointGenerator {
     private final Translation2d[] moduleLocations;
 
     /**
-     * 
+     *
      * Check if it would be faster to go to the opposite of the goal heading (and
      * reverse drive
-     * 
+     *
      * direction).
      *
-     * 
-     * 
+     *
+     *
      * @param prevToGoal The rotation from the previous state to the goal state
      *                   (i.e.
-     * 
+     *
      *                   prev.inverse().rotateBy(goal)).
-     * 
+     *
      * @return True if the shortest path to achieve this rotation involves flipping
      *         the drive
-     * 
+     *
      *         direction.
-     * 
+     *
      */
 
     private boolean flipHeading(Rotation2d prevToGoal) {
@@ -117,44 +117,44 @@ public class SwerveSetpointGenerator {
     }
 
     /**
-     * 
+     *
      * Find the root of the generic 2D parametric function 'func' using the regula
      * falsi technique.
-     * 
+     *
      * This is a pretty naive way to do root finding, but it's usually faster than
      * simple bisection
-     * 
+     *
      * while being robust in ways that e.g. the Newton-Raphson method isn't.
      *
-     * 
-     * 
+     *
+     *
      * @param func            The Function2d to take the root of.
-     * 
+     *
      * @param x_0             x value of the lower bracket.
-     * 
+     *
      * @param y_0             y value of the lower bracket.
-     * 
+     *
      * @param f_0             value of 'func' at x_0, y_0 (passed in by caller to
      *                        save a call to 'func' during
-     * 
+     *
      *                        recursion)
-     * 
+     *
      * @param x_1             x value of the upper bracket.
-     * 
+     *
      * @param y_1             y value of the upper bracket.
-     * 
+     *
      * @param f_1             value of 'func' at x_1, y_1 (passed in by caller to
      *                        save a call to 'func' during
-     * 
+     *
      *                        recursion)
-     * 
+     *
      * @param iterations_left Number of iterations of root finding left.
-     * 
+     *
      * @return The parameter value 's' that interpolating between 0 and 1 that
      *         corresponds to the
-     * 
+     *
      *         (approximate) root.
-     * 
+     *
      */
 
     private double findRoot(
@@ -343,31 +343,31 @@ public class SwerveSetpointGenerator {
     // }
 
     /**
-     * 
+     *
      * Generate a new setpoint.
      *
-     * 
-     * 
+     *
+     *
      * @param limits       The kinematic limits to respect for this setpoint.
-     * 
+     *
      * @param prevSetpoint The previous setpoint motion. Normally, you'd pass in the
      *                     previous
-     * 
+     *
      *                     iteration setpoint instead of the actual
      *                     measured/estimated kinematic state.
-     * 
+     *
      * @param desiredState The desired state of motion, such as from the driver
      *                     sticks or a path
-     * 
+     *
      *                     following algorithm.
-     * 
+     *
      * @param dt           The loop time.
-     * 
+     *
      * @return A Setpoint object that satisfies all of the KinematicLimits while
      *         converging to
-     * 
+     *
      *         desiredState quickly.
-     * 
+     *
      */
 
     public SwerveSetpoint generateSetpoint(

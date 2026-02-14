@@ -100,10 +100,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     }
 
     /**
-     * 
-     * @return The absolute position of the CANCoder accounting for the gear ratio. 
+     *
+     * @return The absolute position of the CANCoder accounting for the gear ratio.
      * Note that the CANCoder's range is only [-1,1] rotations, and so the absolute encoder range of the turret is only
-     * applicable for +-1 / gear_ratio rotations. If the turret reads the absolute position outside of this range, then 
+     * applicable for +-1 / gear_ratio rotations. If the turret reads the absolute position outside of this range, then
      * it will not be truly "absolute".
      */
     public double getCANCoderAbsPos(){

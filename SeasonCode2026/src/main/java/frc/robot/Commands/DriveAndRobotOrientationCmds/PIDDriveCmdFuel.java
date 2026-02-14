@@ -33,11 +33,11 @@ public class PIDDriveCmdFuel extends Command{
     private final Translation2d TRENCH_POSE;
 
     /**
-     * Only to be used in autonomous. Drives towards an initial target until it sees a fuel, 
-     * then it starts driving towards the largest clump of fuels. 
-     * Constantly calculates the approximate time it will take to go back to the trench. 
+     * Only to be used in autonomous. Drives towards an initial target until it sees a fuel,
+     * then it starts driving towards the largest clump of fuels.
+     * Constantly calculates the approximate time it will take to go back to the trench.
      * This command finishes when it has just enough time to go back to the trench to shoot.
-     * 
+     *
      * @param initialGoal Initial position to drive towards
      * @param goalVel The goal velocity when driving back to the trench
      */
