@@ -28,7 +28,7 @@ public class PIDDriveCmd extends Command {
     private Pose2d goalPos;
 
     public PIDDriveCmd(Pose2d goal, double goalVel, double velTolerance, double posTolerance, double angleTolerance, boolean requiresAccuracy) {
-        addRequirements(CatzDrivetrain.Instance);
+        addRequirements(CatzDrivetrain.getInstance());
         this.goalPos = goal;
 
         this.POSITION_TOLERANCE_METERS = posTolerance;
@@ -54,7 +54,7 @@ public class PIDDriveCmd extends Command {
     }
 
     public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy) {
-        addRequirements(CatzDrivetrain.Instance);
+        addRequirements(CatzDrivetrain.getInstance());
         this.goalPos = goal;
 
         this.REQUIRES_ACCURACY = requiresAccuracy;
@@ -86,7 +86,7 @@ public class PIDDriveCmd extends Command {
 
     @Override
     public void execute(){
-        Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
+        Pose2d currentPose = CatzRobotTracker.getInstance().getEstimatedPose();
 
         Translation2d poseError = goalPos.minus(currentPose).getTranslation();
         double currentDistance = poseError.getNorm();
@@ -99,7 +99,7 @@ public class PIDDriveCmd extends Command {
         double targetOmega = -Math.toRadians(rotationController.calculate(angleError, 0.0));
         ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
 
-        CatzDrivetrain.Instance.drive(goalChassisSpeeds);
+        CatzDrivetrain.getInstance().drive(goalChassisSpeeds);
 
     }
 

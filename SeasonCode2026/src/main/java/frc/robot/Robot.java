@@ -218,7 +218,6 @@ public class Robot extends LoggedRobot {
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
 
     System.out.println("auton: " + m_autonomousCommand);
-    CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()));
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }

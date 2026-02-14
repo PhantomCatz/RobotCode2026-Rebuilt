@@ -3,7 +3,9 @@ package frc.robot.Autonomous.routines;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 
@@ -17,18 +19,19 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Forefit_Depot",3);
         AutoTrajectory traj5 = getTrajectory("Forefit_Depot",4);
 
-        traj1.atTime("Score1").onTrue(CatzSuperstructure.Instance.prepareForShooting()); //Commands.print("Shoot"));
-        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED)); //Commands.print("Intake"));
-        traj2.atTime("Hoard3").onTrue(Commands.print("Hoard"));
+        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
 
 
         prepRoutine(
             traj1,
+            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
+            CatzSuperstructure.Instance.cmdHoardShoot(),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
+            CatzSuperstructure.Instance.cmdFullStop(),
             Commands.print("done")
         );
     }

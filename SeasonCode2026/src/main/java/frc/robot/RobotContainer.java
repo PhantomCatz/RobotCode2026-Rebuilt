@@ -34,8 +34,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    CatzDrivetrain.Instance.setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
-        () -> xboxDrv.getRightX(), CatzDrivetrain.Instance));
+    CatzDrivetrain.getInstance().setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
+        () -> xboxDrv.getRightX(), CatzDrivetrain.getInstance()));
     DoublePressTracker.createTrigger(xboxDrv.back()).onTrue(new InstantCommand(() -> {
       if (AllianceFlipUtil.shouldFlip()) {
         CatzRobotTracker.Instance

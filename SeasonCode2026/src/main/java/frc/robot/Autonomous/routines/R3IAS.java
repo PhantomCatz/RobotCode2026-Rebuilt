@@ -6,6 +6,7 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class R3IAS extends AutoRoutineBase{
     public R3IAS(){
@@ -16,15 +17,15 @@ public class R3IAS extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("R3IAS",2);
         AutoTrajectory traj4 = getTrajectory("R3IAS",3);
 
-        traj1.atTime("Score1").onTrue(CatzSuperstructure.Instance.prepareForShooting());
+        traj1.atTime("Score1").onTrue(CatzSuperstructure.Instance.cmdHubShoot());
         traj1.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED)
-                                                .alongWith(CatzSuperstructure.Instance.interpolateFlywheelSpeed()));
-        traj2.atTime("Score2").onTrue(CatzSuperstructure.Instance.prepareForShooting());
+                                                .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
+        traj2.atTime("Score2").onTrue(CatzSuperstructure.Instance.cmdHubShoot());
         traj2.atTime("StopIntake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT));
         traj3.atTime("Intake+RampUp4").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED)
-                                                .alongWith(CatzSuperstructure.Instance.interpolateFlywheelSpeed()));
+                                                .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
         traj4.atTime("StopIntake+Score4").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                   .alongWith(CatzSuperstructure.Instance.prepareForShooting()));
+                                                   .alongWith(CatzSuperstructure.Instance.cmdHubShoot()));
 
         prepRoutine(
             traj1,

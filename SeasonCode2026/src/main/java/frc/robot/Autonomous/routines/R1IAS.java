@@ -3,9 +3,11 @@ package frc.robot.Autonomous.routines;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class R1IAS extends AutoRoutineBase{
     public R1IAS(){
@@ -20,18 +22,19 @@ public class R1IAS extends AutoRoutineBase{
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
         traj1.atTime("StopIntake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT));
-        traj2.atTime("RampUp3").onTrue(CatzSuperstructure.Instance.interpolateFlywheelSpeed());
-        traj2.atTime("Score3").onTrue(CatzSuperstructure.Instance.prepareForShooting());
+        traj2.atTime("RampUp3").onTrue(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB));
         traj3.atTime("Intake4").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
-        traj3.atTime("StopIntake+RampUp").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT));
-        traj4.atTime("Score5").onTrue(CatzSuperstructure.Instance.prepareForShooting());
+        traj3.atTime("StopIntake+RampUp").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                                   .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
 
         prepRoutine(
             traj1,
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
             Commands.print("Climb"),
