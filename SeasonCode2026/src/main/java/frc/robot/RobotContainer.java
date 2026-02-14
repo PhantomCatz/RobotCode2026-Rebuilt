@@ -73,6 +73,13 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop());
 
+    // -------------------------------------------------------------------------
+    // CLIMB (D pad Left and Right)
+    // -------------------------------------------------------------------------
+
+    xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
+    xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
+
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());

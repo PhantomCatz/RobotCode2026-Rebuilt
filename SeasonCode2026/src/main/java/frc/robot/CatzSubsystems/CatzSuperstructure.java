@@ -9,6 +9,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -21,6 +22,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -169,5 +171,23 @@ public class CatzSuperstructure {
 
     public Command turretTrackHubCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
+    }
+
+    public Command alignToBackUpClimb(boolean isRight) {
+        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), false);
+    }
+
+    public Command alignToCloseClimb(boolean isRight) {
+        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true);
+    }
+
+    public Command alignToClimb(boolean isRight) {
+        return Commands.deadline(
+            Commands.sequence(
+                alignToBackUpClimb(isRight),
+                alignToCloseClimb(isRight)
+            ),
+            CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbTurretTrackingLocation()))
+        );
     }
 }
