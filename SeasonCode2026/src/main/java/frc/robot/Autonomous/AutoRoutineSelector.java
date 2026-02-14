@@ -23,7 +23,7 @@ public class AutoRoutineSelector {
     private AutoRoutineSelector(){
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
         autoSelector.addRoutine("TestPath", () -> new TestPath().getRoutine());
-<<<<<<< Updated upstream
+
         autoSelector.addRoutine("R3_IAS", () -> new R3_IAS().getRoutine());
         autoSelector.addRoutine("R2_IAS", () -> new R2_IAS().getRoutine());
         autoSelector.addRoutine("R1_IAS", () -> new R1_IAS().getRoutine());
@@ -33,17 +33,6 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
         autoSelector.addRoutine("Depot_Climb", () -> new Depot_Climb().getRoutine());
-=======
-        autoSelector.addRoutine("R3IAS", () -> new R3_IAS().getRoutine());
-        autoSelector.addRoutine("R2IAS", () -> new R2_IAS().getRoutine());
-        autoSelector.addRoutine("R1IAS", () -> new R1_IAS().getRoutine());
-        autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
-        autoSelector.addRoutine("PNZD", () -> new PZND().getRoutine());
-        autoSelector.addRoutine("Outpostclimb", () -> new Outpost_Climb().getRoutine());
-        autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
-        autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
-        autoSelector.addRoutine("DepotClimb", () -> new Depot_Climb().getRoutine());
->>>>>>> Stashed changes
 
         SmartDashboard.putData("Auto Path Selection", autoSelector);
     }

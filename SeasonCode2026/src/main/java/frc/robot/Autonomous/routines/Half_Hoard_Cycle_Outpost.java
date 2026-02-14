@@ -24,11 +24,11 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Cycle_Outpost",7);
 
 
-        traj1.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED)
+        traj1.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.CLOSE_HOARD)));
         traj1.atTime("Hoard").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj4.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdFullStop());
-        traj5.atTime("RampUp+Intake6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED)
+        traj5.atTime("RampUp+Intake6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
         prepRoutine(
             traj1,
