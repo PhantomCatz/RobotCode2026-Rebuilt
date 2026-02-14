@@ -19,7 +19,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("Forefit_Outpost",4);
         AutoTrajectory traj6 = getTrajectory("Forefit_Outpost",5);
 
-        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.MAX_SPEED));
+        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
 
         prepRoutine(
             traj1,
