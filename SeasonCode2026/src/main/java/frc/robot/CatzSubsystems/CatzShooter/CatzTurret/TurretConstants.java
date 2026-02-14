@@ -41,8 +41,8 @@ public class TurretConstants {
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(3.0);
 
-	public static final Angle TURRET_MAX = Units.Degrees.of(180);
-	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
+	public static final Angle TURRET_MAX = Units.Degrees.of(120); // TODO change to 180 after turret is fixed
+	public static final Angle TURRET_MIN = Units.Degrees.of(-120); // TODO change to 180 after turret is fixed
 
 	public static final LoggedTunableNumber omegaFF = new LoggedTunableNumber("Turret/omegaFF", 5.0);
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.3;//25;
