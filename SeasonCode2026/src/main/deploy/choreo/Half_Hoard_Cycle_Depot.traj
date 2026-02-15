@@ -404,5 +404,5 @@
    {"name":"Intake9", "from":{"target":8, "targetTimestamp":null, "offset":{"exp":"-0.8 s", "val":-0.8}}, "event":null},
    {"name":"RampUp+IntakeStop10", "from":{"target":9, "targetTimestamp":null, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null},
    {"name":"Score10", "from":{"target":9, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"IntakeStop+RampUp", "from":{"target":7, "targetTimestamp":null, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null}]
+   {"name":"IntakeStop+RampUp8", "from":{"target":7, "targetTimestamp":null, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null}]
 }

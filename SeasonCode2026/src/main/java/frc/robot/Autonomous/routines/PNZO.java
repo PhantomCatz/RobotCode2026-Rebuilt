@@ -25,6 +25,7 @@ public class PNZO extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
+            CatzSuperstructure.Instance.toggleIntakeDeploy(),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),

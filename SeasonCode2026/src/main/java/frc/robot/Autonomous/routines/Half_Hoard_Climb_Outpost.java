@@ -31,7 +31,7 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
                                          .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
         prepRoutine(
             traj1,
-
+            CatzSuperstructure.Instance.toggleIntakeDeploy(),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
 
             followTrajectoryWithAccuracy(traj1),

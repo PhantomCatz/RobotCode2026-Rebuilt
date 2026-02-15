@@ -25,13 +25,16 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
 
         traj1.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.CLOSE_HOARD)));
-        traj1.atTime("Hoard").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj1.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj4.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdFullStop());
-        traj5.atTime("RampUp+Intake6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        traj5.atTime("RampUp+IntakeStop6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
+        traj7.atTime("Intake8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj8.atTime("RampUp+IntakeStop6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
         prepRoutine(
             traj1,
-
+            CatzSuperstructure.Instance.toggleIntakeDeploy(),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
 
             followTrajectoryWithAccuracy(traj1),
@@ -48,10 +51,10 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj6),
 
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            followTrajectoryWithAccuracy(traj7),
 
+            followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
-            Commands.print("Climb"), //TODO
+            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("done")
         );
     }

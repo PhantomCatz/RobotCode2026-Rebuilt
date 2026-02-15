@@ -9,26 +9,28 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
-public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
-    public Half_Hoard_Climb_Depot(){
-        super("Half_Hoard_Climb_Depot");
+public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
+    public Half_Hoard_Cycle_Depot(){
+        super("Half_Hoard_Cycle_Depot");
 
-        AutoTrajectory traj1 = getTrajectory("Half_Hoard_Climb_Depot",0);
-        AutoTrajectory traj2 = getTrajectory("Half_Hoard_Climb_Depot",1);
-        AutoTrajectory traj3 = getTrajectory("Half_Hoard_Climb_Depot",2);
-        AutoTrajectory traj4 = getTrajectory("Half_Hoard_Climb_Depot",3);
-        AutoTrajectory traj5 = getTrajectory("Half_Hoard_Climb_Depot",4);
-        AutoTrajectory traj6 = getTrajectory("Half_Hoard_Climb_Depot",5);
-        AutoTrajectory traj7 = getTrajectory("Half_Hoard_Climb_Depot",6);
-        AutoTrajectory traj8 = getTrajectory("Half_Hoard_Climb_Depot",7);
-        AutoTrajectory traj9 = getTrajectory("Half_Hoard_Climb_Depot",8);
+        AutoTrajectory traj1 = getTrajectory("Half_Hoard_Cycle_Depot",0);
+        AutoTrajectory traj2 = getTrajectory("Half_Hoard_Cycle_Depot",1);
+        AutoTrajectory traj3 = getTrajectory("Half_Hoard_Cycle_Depot",2);
+        AutoTrajectory traj4 = getTrajectory("Half_Hoard_Cycle_Depot",3);
+        AutoTrajectory traj5 = getTrajectory("Half_Hoard_Cycle_Depot",4);
+        AutoTrajectory traj6 = getTrajectory("Half_Hoard_Cycle_Depot",5);
+        AutoTrajectory traj7 = getTrajectory("Half_Hoard_Cycle_Depot",6);
+        AutoTrajectory traj8 = getTrajectory("Half_Hoard_Cycle_Depot",7);
+        AutoTrajectory traj9 = getTrajectory("Half_Hoard_Cycle_Depot",8);
 
         traj1.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.CLOSE_HOARD)));
         traj5.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdFullStop());
         traj7.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                                     .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
-
+        traj8.atTime("Intake9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj9.atTime("RampUp+IntakeStop10").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                                    .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),
@@ -52,7 +54,7 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
 
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
-            Commands.print("Climb"), //TODO
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
         );
     }
