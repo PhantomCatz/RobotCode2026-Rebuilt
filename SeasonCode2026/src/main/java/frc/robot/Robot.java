@@ -154,7 +154,7 @@ public class Robot extends LoggedRobot {
                                                   CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
                                                   true,
                                                   CatzDrivetrain.getInstance()
-                                                ); 
+                                                );
     System.out.println(AutoRoutineSelector.Instance);
 
       DriverStation.silenceJoystickConnectionWarning(true);

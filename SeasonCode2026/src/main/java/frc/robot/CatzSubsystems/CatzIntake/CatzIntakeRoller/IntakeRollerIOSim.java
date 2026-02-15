@@ -25,7 +25,7 @@ public class IntakeRollerIOSim extends GenericIOSim<IntakeRollerIO.IntakeRollerI
             // The extension length of the intake beyond the robot's frame (when activated)
             Meters.of(0.2),
             // The intake is mounted on the back side of the chassis
-            IntakeSimulation.IntakeSide.RIGHT,
+            IntakeSimulation.IntakeSide.FRONT,
             // The intake can hold up to 20 fuel
             20);
     }

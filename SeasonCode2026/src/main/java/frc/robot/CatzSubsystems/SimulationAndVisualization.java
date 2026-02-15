@@ -47,6 +47,9 @@ public class SimulationAndVisualization {
 
     private final String name;
 
+    private double lastShotTime = 0.0;
+    private final double TIME_BETWEEN_SHOTS = 0.2; // 5 balls per second
+
     // Index 0: Turret, 1: Hood, 2: Intake
     private Pose3d[] componentPoses = { new Pose3d(), new Pose3d(), new Pose3d() };
 
@@ -84,12 +87,15 @@ public class SimulationAndVisualization {
      * @param turretAngle Current angle of the turret (controls horizontal launch direction)
      * @param shooterRPM  Current RPM of the shooter flywheel (determines launch speed)
      * @param isShooting  True if the robot is currently shooting a projectile
+     * @param isIntaking  True if the robot is currently intaking a projectile
      */
-    public void update(Rotation2d intakeAngle, Rotation2d hoodAngle, Rotation2d turretAngle, double shooterRPM, boolean isShooting) {
+    public void update(Rotation2d intakeAngle, Rotation2d hoodAngle, Rotation2d turretAngle, double shooterRPM, boolean isShooting, boolean isIntaking) {
+        double currentTime = Logger.getTimestamp();
+        
         if (Robot.isSimulation()) {
 
             // Handle Projectile Shooting
-            if (isShooting) {
+            if (isShooting && (currentTime - lastShotTime > TIME_BETWEEN_SHOTS)) {
                 // Fetch current robot state from Drivetrain Simulation
                 // Note: Ensure CatzDrivetrain exposes these methods or equivalent access to sim state
                 Pose2d robotPose = CatzDrivetrain.driveSimulationInstance.getSimulatedDriveTrainPose();
@@ -128,6 +134,8 @@ public class SimulationAndVisualization {
 
                 // Register the projectile to the simulation arena
                 SimulatedArena.getInstance().addGamePieceProjectile(fuelOnFly);
+
+                lastShotTime = currentTime; // Reset timer
             }
 
             updateSimulation();
