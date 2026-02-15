@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -16,7 +17,7 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle DEPLOY_POSITION = Units.Degrees.of(90.0);
+	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.34);
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
 	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
@@ -27,7 +28,7 @@ public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        case SN2 -> new Gains(1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -40,7 +41,7 @@ public class IntakeDeployConstants {
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 2.5;
+	public static final double GRAVITY_FEEDFORWARD = 0.5;
 	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {
@@ -69,6 +70,8 @@ public class IntakeDeployConstants {
 		FXConfig.Feedback.SensorToMechanismRatio = 14.95;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
 
 		return FXConfig;
 	}

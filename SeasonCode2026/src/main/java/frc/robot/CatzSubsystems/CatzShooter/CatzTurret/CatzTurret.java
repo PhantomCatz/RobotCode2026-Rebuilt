@@ -41,6 +41,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
 
         setCurrentPosition(Units.Rotations.of(getCANCoderAbsPos()));
+        // setCurrentPosition(Units.Rotations.of(0.0));
+
     }
 
     public static final CatzTurret Instance = new CatzTurret();
@@ -111,7 +113,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
      * it will not be truly "absolute".
      */
     public double getCANCoderAbsPos(){
-        return TurretConstants.TURRET_CANCODER.getAbsolutePosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO;
+        return TurretConstants.TURRET_CANCODER.getPosition().getValueAsDouble() * TurretConstants.CANCODER_RATIO;
     }
 
     private static TurretIO getIOInstance() {

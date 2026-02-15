@@ -14,7 +14,7 @@ public class ShooterRegression {
 
     // Enum to select which regression to use
     public enum RegressionMode {
-        HUB(0.02, Units.Degrees.of(2.0), Units.Degrees.of(2.0)), //percent threshold Hdegrees Vdegrees
+        HUB(0.067, Units.Degrees.of(2.0), Units.Degrees.of(2.0)), //percent threshold Hdegrees Vdegrees
         CLOSE_HOARD(0.2, Units.Degrees.of(3.0), Units.Degrees.of(3.0)),
         FAR_HOARD(0.3, Units.Degrees.of(4.0), Units.Degrees.of(4.0)),
         OPP_HOARD(0.4, Units.Degrees.of(5.0), Units.Degrees.of(5.0));
@@ -82,9 +82,6 @@ public class ShooterRegression {
     public static InterpolatingDoubleTreeMap airtimeMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression airtimePolynomial;
 
-    public static InterpolatingDoubleTreeMap airtimeInverseMap = new InterpolatingDoubleTreeMap();
-    public static PolynomialRegression airtimeInversePolynomial;
-
 
     // -------------------------------------------------------------------------
     // Pre-calculated Slopes for Linear Hood Interpolation
@@ -116,13 +113,13 @@ public class ShooterRegression {
             airtimeMap.put(dist, time);
 
             // Inverse: Time -> Distance
-            airtimeInverseMap.put(time, dist);
+            airtimeInverseAutoAimMap.put(time, dist);
             airtimeInvArr[i][0] = time;
             airtimeInvArr[i][1] = dist;
         }
 
         airtimePolynomial = new PolynomialRegression(airtimeArr, 2);
-        airtimeInversePolynomial = new PolynomialRegression(airtimeInvArr, 2);
+        airtimeInverseAutoAimPolynomial = new PolynomialRegression(airtimeInvArr, 2);
 
         // 3. Pre-calculate Linear Hood Slopes (Rise / Run)
         HUB_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB, EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB);

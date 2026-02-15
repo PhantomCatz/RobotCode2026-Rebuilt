@@ -73,7 +73,7 @@ public class FlywheelConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = 30; //TODO magic numbers!!
+		IOConfig.mainID = 20; //TODO magic numbers!!
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
@@ -82,7 +82,7 @@ public class FlywheelConstants {
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 
 		IOConfig.followerBuses = new String[] {""};
-		IOConfig.followerIDs = new int[] {31}; //TODO magic numbers!!
+		IOConfig.followerIDs = new int[] {21}; //TODO magic numbers!!
 		return IOConfig;
 	}
 }
