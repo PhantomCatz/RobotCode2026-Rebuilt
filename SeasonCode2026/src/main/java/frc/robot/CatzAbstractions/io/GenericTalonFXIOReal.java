@@ -205,23 +205,46 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 	}
 
+	/**
+	 * Sets the talon to a duty cycle out of 0.
+	 */
 	@Override
 	public void stop() {
 		leaderTalon.setControl(dutyCycleRequest.withOutput(0.0));
 	}
 
+	/**
+	 * Takes a control request and applies to the talon.
+	 * 
+	 * @param request Control request tht is applied to talon 
+	 */
 	protected void setControl(ControlRequest request) {
 		leaderTalon.setControl(request);
 	}
 
+	/**
+	 * Changes the config of just the main talon with a TalonFXConfiguration
+	 * 
+	 * @param configChanger Config to be used
+	 */
 	public void changeMainConfig(UnaryOperator<TalonFXConfiguration> configChanger) {
 		setMainConfig(configChanger.apply(config));
 	}
 
+	/**
+	 * Changes the config of all of the talons with a TalonFXConfiguration
+	 * 
+	 * @param configChanger Config to be used
+	 */
 	public void changeAllConfig(UnaryOperator<TalonFXConfiguration> configChanger) {
 		setAllConfig(configChanger.apply(config));
 	}
-
+	
+	/**
+	 * Sets the config for all of the talons with a TalonFXConfiguration
+	 * 
+	 * @param configChanger Config to be used
+	 */
 	public void setAllConfig(TalonFXConfiguration configuration) {
 
 		setMainConfig(configuration);
@@ -235,13 +258,9 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
-	 *
 	 * Applies a TalonFXConfiguration to all follower motors.
 	 *
-	 *
-	 *
 	 * @param configuration Configuration to apply.
-	 *
 	 */
 
 	public void setFollowerConfig(TalonFXConfiguration configuration) {
@@ -257,11 +276,9 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
-	 *
 	 * Applies a TalonFXConfiguration to the main motor.
 	 *
 	 * @param configuration Configuration to apply.
-	 *
 	 */
 
 	public void setMainConfig(TalonFXConfiguration configuration) {
@@ -276,31 +293,61 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	// OPTIMIZATION: Updated Setters to use Cached Control Requests
 	// ----------------------------------------------------------------------------------
 
+	/**
+	 * Applies a voltage setpoint to the leader and follower talons.
+	 *
+	 * @param voltage double of voltage to apply
+	 */
 	@Override
 	public void setVoltageSetpoint(double voltage) {
 		leaderTalon.setControl(voltageRequest.withOutput(voltage));
 	}
 
+	/**
+	 * Applies a DutyCycle setpoint to the leader and follower talons.
+	 *
+	 * @param percent double of percent power to apply 0 to 1
+	 */
 	@Override
 	public void setDutyCycleSetpoint(double percent) {
 		leaderTalon.setControl(dutyCycleRequest.withOutput(percent));
 	}
 
+	/**
+	 * Applies a Motion Magic setpoint to the leader and follower talons.
+	 *
+	 * @param mechanismPosition double of position to apply
+	 */
 	@Override
 	public void setMotionMagicSetpoint(double mechanismPosition) {
 		leaderTalon.setControl(motionMagicRequest.withPosition(mechanismPosition));
 	}
 
+	/**
+	 * Applies a voltage setpoint to the leader and follower talons.
+	 *
+	 * @param percent double of percent power to apply 0 to 1
+	 */
 	@Override
 	public void setVelocitySetpoint(double mechanismVelocity) {
 		leaderTalon.setControl(velocityRequest.withVelocity(mechanismVelocity));
 	}
 
+	/**
+	 * Applies a velocity setpoint to the leader and follower talons.
+	 *
+	 * @param mechainismVelocity double of velocity to apply 
+	 */
 	@Override
 	public void setVelocitySetpointVoltage(double mechanismVelocity) {
 		leaderTalon.setControl(velocityVoltRequest.withVelocity(mechanismVelocity));
 	}
 
+	/**
+	 * Applies a position setpoint to the leader and follower talons.
+	 *
+	 * @param mechanismPosition double of position to apply
+	 */
 	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
 		leaderTalon.setControl(positionRequest.withPosition(mechanismPosition));
@@ -310,6 +357,11 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	// Threading and Config
 	// ----------------------------------------------------------------------------------
 
+	/**
+	 * Sets the motor encoder to the desired value.
+	 *
+	 * @param mechanismPosition double of position to apply to the encoder
+	 */
 	@Override
 	public void setCurrentPosition(double mechanismPosition) {
 		configExecutor.submit(() -> {
@@ -317,6 +369,12 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		});
 	}
 
+	/**
+	 * Applies a configuration to a specified talon.
+	 * 
+	 * @param fx talon to have its configuration changed
+	 * @param config configuration to be applied
+	 */
 	public void applyConfig(TalonFX fx, TalonFXConfiguration config) {
 		configExecutor.submit(() -> {
 			for (int i = 0; i < 5; i++) {
@@ -329,6 +387,12 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	// ... (Use configExecutor for other config methods too) ...
 
+	/**
+	 * Sets the nuetral mode for a specified talon.
+	 * 
+	 * @param fx talon to have its nuertal mode changed
+	 * @param config nuetral mode to be applied
+	 */
 	@Override
 	public void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {
 		configExecutor.submit(() -> {
