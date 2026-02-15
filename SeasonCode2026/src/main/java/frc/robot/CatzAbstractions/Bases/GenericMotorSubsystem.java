@@ -124,20 +124,35 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	/**
 	 * Returns the current and past supply current of the subsytem as an array of doubles.
 	 * 
-	 * @return
+	 * @return the current and past supply current of the subsytem as an array of doubles
 	 */
 	public double[] getSupplyCurrent() {
 		return inputs.supplyCurrentAmps;
 	}
 
+	/**
+	 * Returns the current aceleration of the subsytem as a double.
+	 * 
+	 * @return the current acceleration of the subsytem as a double
+	 */
 	public double getAcceleration() {
 		return inputs.accelerationRPS;
 	}
 
+	/**
+	 * Returns the current and past temperature of the subsytem as an array of doubles.
+	 * 
+	 * @return the current and past temperature of the subsytem as an array of doubles
+	 */
 	public double[] getTemp() {
 		return inputs.tempCelcius;
 	}
 
+	/**
+	 * Returns the current and past applied voltage of the subsytem as an array of doubles.
+	 * 
+	 * @return the current and past applied voltage of the subsytem as an array of doubles
+	 */
 	public double[] getAppliedVoltage() {
 		return inputs.appliedVolts;
 	}
