@@ -154,11 +154,19 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
     }
 
+	/**
+	 * Sets the talon to a duty cycle out of 0.
+	 */
     @Override
     public void stop() {
         leaderTalon.setControl(new DutyCycleOut(0.0));
     }
 
+		/**
+	 * Takes a control request and applies to the talon.
+	 * 
+	 * @param request Control request tht is applied to talon 
+	 */
     private void setControl(ControlRequest request) {
 		leaderTalon.setControl(request);
 	}
@@ -172,31 +180,61 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		setMainConfig(configChanger.apply(config));
 	}
 
+	/**
+	 * Applies a voltage setpoint to the leader and follower talons.
+	 *
+	 * @param voltage double of voltage to apply
+	 */
     @Override
 	public void setVoltageSetpoint(double voltage) {
 		setControl(requestGetter.getVoltageRequest(voltage));
 	}
 
+	/**
+	 * Applies a DutyCycle setpoint to the leader and follower talons.
+	 *
+	 * @param percent double of percent power to apply 0 to 1
+	 */
 	@Override
 	public void setDutyCycleSetpoint(double percent) {
 		setControl(requestGetter.getDutyCycleRequest(percent));
 	}
 
+	/**
+	 * Applies a Motion Magic setpoint to the leader and follower talons.
+	 *
+	 * @param mechanismPosition double of position to apply
+	 */
 	@Override
 	public void setMotionMagicSetpoint(double mechanismPosition) {
 		setControl(requestGetter.getMotionMagicRequest(mechanismPosition));
 	}
 
+	/**
+	 * Applies a voltage setpoint to the leader and follower talons.
+	 *
+	 * @param percent double of velocity to apply
+	 */
 	@Override
 	public void setVelocitySetpoint(double mechanismVelocity) {
 		setControl(requestGetter.getVelocityRequest(mechanismVelocity));
 	}
 
+	/**
+	 * Applies a position setpoint to the leader and follower talons.
+	 *
+	 * @param mechanismPosition double of position to apply
+	 */
 	@Override
 	public void setPositionSetpoint(double mechanismPosition) {
 		setControl(requestGetter.getPositionRequest(mechanismPosition));
 	}
 
+	/**
+	 * Sets the motor encoder to the desired value.
+	 *
+	 * @param mechanismPosition double of position to apply to the encoder
+	 */
 	@Override
 	public void setCurrentPosition(double mechanismPosition) {
 		threadPoolExecutor.submit(() -> {
@@ -204,6 +242,12 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		});
 	}
 
+	/**
+	 * Applies a configuration to a specified talon.
+	 * 
+	 * @param fx talon to have its configuration changed
+	 * @param config configuration to be applied
+	 */
 	public void applyConfig(TalonFXS fx, TalonFXSConfiguration config) {
 		threadPoolExecutor.submit(() -> {
 			for (int i = 0; i < 5; i++) {
@@ -215,7 +259,11 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		});
 	}
 
-
+	/**
+	 * Changes whether soft limits are being used or not.
+	 * 
+	 * @param enable whether to use soft limits or not
+	 */
     @Override
 	public void useSoftLimits(boolean enable) {
 		UnaryOperator<TalonFXSConfiguration> configChanger = (config) -> {
@@ -249,6 +297,17 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		}
 	}
 
+	/**
+     * Configures the gains for Slot 0, used for closed-loop control.
+     *
+     * @param p proportional gain kP. Corrects error by a factor of the current offset
+     * @param i integral gain kI. Corrects accumulated error over time
+     * @param d derivative gain kD. Corrects based on the rate of change of the error
+     * @param s static friction feedforward kS. Voltage to overcome friction
+     * @param v velocity feedforward kV. Voltage to maintain a target velocity
+     * @param a acceleration feedforward kA. Voltage to achieve target acceleration
+     * @param g gravity feedforward kG. Voltage to counteract gravity based on position
+     */
 	@Override
 	public void setGainsSlot0(double p, double i, double d, double s, double v, double a, double g) {
 		UnaryOperator<TalonFXSConfiguration> configChanger = (config) -> {
@@ -265,6 +324,17 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		changeMainConfig(configChanger);
 	}
 
+	/**
+     * Configures the gains for Slot 1, used for closed-loop control.
+     *
+     * @param p proportional gain kP. Corrects error by a factor of the current offset
+     * @param i integral gain kI. Corrects accumulated error over time
+     * @param d derivative gain kD. Corrects based on the rate of change of the error
+     * @param s static friction feedforward kS. Voltage to overcome friction
+     * @param v velocity feedforward kV. Voltage to maintain a target velocity
+     * @param a acceleration feedforward kA. Voltage to achieve target acceleration
+     * @param g gravity feedforward kG. Voltage to counteract gravity based on position
+     */
 	@Override
 	public void setGainsSlot1(double p, double i, double d, double s, double v, double a, double g) {
 		UnaryOperator<TalonFXSConfiguration> configChanger = (config) -> {
@@ -293,6 +363,12 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		changeMainConfig(configChanger);
 	}
 
+	/**
+	 * Sets the nuetral mode for a specified talon.
+	 * 
+	 * @param fx talon to have its nuertal mode changed
+	 * @param config nuetral mode to be applied
+	 */
     @Override
 	public void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {
 		threadPoolExecutor.submit(() -> {
@@ -300,21 +376,8 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 		});
 	}
 
-	@Override
-	public void setNeutralBrake(boolean wantsBrake) {
-		NeutralModeValue neutralMode = wantsBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-		config.MotorOutput.NeutralMode = neutralMode;
-		setNeutralMode(leaderTalon, neutralMode);
-		for (TalonFXS talon : followerTalons) {
-			setNeutralMode(talon, neutralMode);
-		}
-	}
-
-
-
-
 	/**
-	 * Configuration for a MotorIOTalonFX. Motion magic control is on slot 0, velocity on slot 1, and position PID on slot 2.
+	 * Configuration for a MotorIOTalonFXS. Motion magic control is on slot 0, velocity on slot 1, and position PID on slot 2.
 	 */
 	public static class MotorIOTalonFXSConfig {
 		public int mainID = -1;

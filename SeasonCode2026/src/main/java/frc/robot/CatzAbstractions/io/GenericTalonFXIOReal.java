@@ -223,9 +223,9 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
-	 * Changes the config of just the main talon with a TalonFXConfiguration
+	 * Changes the currently applied main TalonFXConfiguration and applies the new configuration to the main motor.
 	 * 
-	 * @param configChanger Config to be used
+	 * @param configChanger Mutating operation to apply on the current configuration
 	 */
 	public void changeMainConfig(UnaryOperator<TalonFXConfiguration> configChanger) {
 		setMainConfig(configChanger.apply(config));
@@ -326,7 +326,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	/**
 	 * Applies a voltage setpoint to the leader and follower talons.
 	 *
-	 * @param percent double of percent power to apply 0 to 1
+	 * @param percent double of velocity to apply
 	 */
 	@Override
 	public void setVelocitySetpoint(double mechanismVelocity) {
@@ -334,9 +334,9 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
-	 * Applies a velocity setpoint to the leader and follower talons.
+	 * Applies a velocity voltage setpoint to the leader and follower talons.
 	 *
-	 * @param mechainismVelocity double of velocity to apply 
+	 * @param mechainismVelocity double of velocity voltage to apply 
 	 */
 	@Override
 	public void setVelocitySetpointVoltage(double mechanismVelocity) {
@@ -400,6 +400,9 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		});
 	}
 
+	/**
+	 * Configuration for a MotorIOTalonFX. Motion magic control is on slot 0, velocity on slot 1, and position PID on slot 2.
+	 */
 	public static class MotorIOTalonFXConfig {
 		public int mainID = -1;
 		public String mainBus = "ASSIGN_BUS";
