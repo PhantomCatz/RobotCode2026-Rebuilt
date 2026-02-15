@@ -32,6 +32,11 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		Logger.processInputs(name, (LoggableInputs) inputs);
 	}
 
+	/**
+	 * Applies a setpoint to the subsytem.
+	 * 
+	 * @param setpoint Setpoint to apply
+	 */
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
 		setpoint.apply(io);
@@ -48,34 +53,79 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return run(() -> applySetpoint(supplier.get()));
 	}
 
+	/**
+	 * Applies a setpoint as a command.
+	 * 
+	 * @param setpoint setpoint to be applied
+	 * @return command for the setpoint to be applied
+	 */
 	public Command setpointCommand(Setpoint setpoint){
 		return runOnce(() -> applySetpoint(setpoint));
 	}
 
+	/**
+	 * Applies a supplier of a setpoint as a command.
+	 * 
+	 * @param setpoint setpoint to be applied
+	 * @return command for the setpoint to be applied
+	 */
 	public Command setpointCommand(Supplier<Setpoint> supplier){
 		return runOnce(() -> applySetpoint(supplier.get()));
 	}
 
+	/**
+	 * Sets gains P and V
+	 * 
+	 * @param p proportional gain kP. Corrects error by a factor of the current offset
+	 * @param v velocity feedforward kV. Voltage to maintain a target velocity
+	 */
 	public void setGainsPV(double p, double v){
 		io.setGainsSlot0(p, 0.0, 0.0, 0.0, v, 0.0, 0.0);
 	}
 
+	/**
+	 * Returns the base status signals of the IO.
+	 * 
+	 * @return the base status signals of the IO
+	 */
 	public BaseStatusSignal[] getSignals(){
 		return io.getSignals();
 	}
 
+	/**
+	 * Returns the subsytems current target setpoint.
+	 * 
+	 * @return the subsytems current target setpoint
+	 */
 	public Setpoint getSetpoint() {
 		return setpoint;
 	}
 
+	/**
+	 * Returns the subsytems angular velocity as an AngularVelocity object.
+	 * 
+	 * @return the subsytems angular velocity as an AngularVelocity object
+	 */
 	public AngularVelocity getVelocity() {
 		return Units.RotationsPerSecond.of(inputs.velocityRPS);
 	}
 
+
+	/**
+	 * Returns the subsytems position, compensated with latency.
+	 * 
+	 * @return the subsytems position, compensated with latency
+	 */
 	public double getLatencyCompensatedPosition() {
 		return inputs.position;
 	}
 
+
+	/**
+	 * Returns the current and past supply current of the subsytem as an array of doubles.
+	 * 
+	 * @return
+	 */
 	public double[] getSupplyCurrent() {
 		return inputs.supplyCurrentAmps;
 	}
