@@ -90,6 +90,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         targetRads = MathUtil.angleModulus(targetRads);
 
+        // TODO remove after the turret is fixed
+        targetRads = Math.min(targetRads, TurretConstants.TURRET_MAX.in(Units.Radian));
+        targetRads = Math.max(targetRads, TurretConstants.TURRET_MIN.in(Units.Radian));
+
         return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }
 

@@ -23,6 +23,7 @@ public class AutoRoutineSelector {
     private AutoRoutineSelector(){
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
         autoSelector.addRoutine("TestPath", () -> new TestPath().getRoutine());
+
         autoSelector.addRoutine("R3_IAS", () -> new R3_IAS().getRoutine());
         autoSelector.addRoutine("R2_IAS", () -> new R2_IAS().getRoutine());
         autoSelector.addRoutine("R1_IAS", () -> new R1_IAS().getRoutine());

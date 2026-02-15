@@ -195,8 +195,10 @@ public class Robot extends LoggedRobot {
         Rotation2d.fromDegrees(CatzHood.Instance.getSetpoint().baseUnits),
         Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition()),
         CatzFlywheels.Instance.getSetpoint().baseUnits,
-        CatzFlywheels.Instance.getVelocity().baseUnitMagnitude() > 0.0
+        CatzFlywheels.Instance.getVelocity().baseUnitMagnitude() > 0.0,
+        CatzIntakeRoller.Instance.state == CatzIntakeRoller.IntakeState.ON
       );
+
   }
 
   @Override

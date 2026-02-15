@@ -91,7 +91,7 @@ public class SimulationAndVisualization {
      */
     public void update(Rotation2d intakeAngle, Rotation2d hoodAngle, Rotation2d turretAngle, double shooterRPM, boolean isShooting, boolean isIntaking) {
         double currentTime = Logger.getTimestamp();
-        
+
         if (Robot.isSimulation()) {
 
             // Handle Projectile Shooting

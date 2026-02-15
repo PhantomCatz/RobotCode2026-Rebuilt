@@ -29,6 +29,7 @@ public class R1_IAS extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
+            CatzSuperstructure.Instance.toggleIntakeDeploy(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
