@@ -39,10 +39,20 @@ public class CatzSuperstructure {
     private CatzSuperstructure() {
     }
 
+    /**
+     * Makes the turret track the hub.
+     * 
+     * @return A command to turn the turret to the hub
+     */
     public Command turretTrackHubCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
+    /**
+     * Turns off the flywheels and and stows the hood.
+     * 
+     * @return A command to turn off the flywheels and stow the hood
+     */
     public Command hoodFlywheelStowCommand() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
@@ -50,6 +60,11 @@ public class CatzSuperstructure {
                 setShootingAllowed(false));
     }
 
+    /**
+     * Moves the hood to the desired position to be able to shoot the fuel into the hub.
+     * 
+     * @return A command to move the hood to target the hub
+     */
     public Command interpolateHoodAngle() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), new Rotation2d());
@@ -59,6 +74,11 @@ public class CatzSuperstructure {
         });
     }
 
+    /**
+     * Spins up the flywheels in order to shoot the fuel into the hub.
+     * 
+     * @return A command to spin up the flywheels to a speed to target the hub
+     */
     public Command interpolateFlywheelSpeed() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
             Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
@@ -68,6 +88,11 @@ public class CatzSuperstructure {
         });
     }
 
+    /**
+     * Targets hub with hood and flywheels.
+     * 
+     * @return A command to target the hub with the hood and flywheels
+     */
     public Command interpolateShootingValues() {
         return Commands.run(() -> {
             Translation2d turretPose = CatzTurret.Instance.getFieldToTurret();
@@ -77,6 +102,11 @@ public class CatzSuperstructure {
         }, CatzFlywheels.Instance, CatzHood.Instance);
     }
 
+    /**
+     * Targets the hub with the turret and hood, and revs up flywheels. Starts shooting if ready.
+     * 
+     * @return A command to shoot at the hub
+     */
     public Command prepareForShooting(){
         return Commands.parallel(
             interpolateShootingValues(),
@@ -86,6 +116,11 @@ public class CatzSuperstructure {
         );
     }
 
+    /**
+     * Shoots if ready, rumbles the controller if shooting is not allowed. 
+     * 
+     * @return A command to shoot into the hub if ready.
+     */
     public Command shootIfReady() {
         return Commands.run(() -> {
             boolean readyToShoot = AimCalculations.readyToShoot();
@@ -104,34 +139,65 @@ public class CatzSuperstructure {
         }, CatzSpindexer.Instance, CatzYdexer.Instance).finallyDo(() -> RobotContainer.rumbleDrv(0.0));
     }
 
+    /**
+     * Starts the Spindexer and Ydexer.
+     * 
+     * @return A command to turn on the Spin and Y dexers
+     */
     public Command startIndexers() {
         return Commands.parallel(
-                // CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
+                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
                 CatzYdexer.Instance.setpointCommand(() -> Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get())));
     }
 
+    /**
+     * Stops the Spindexer and Ydexer.
+     * 
+     * @return A command to turn off the Spin and Y dexers
+     */
     public Command stopIndexers() {
         return Commands.parallel(
                 CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF));
     }
 
+    /**
+     * Stops the Flywheels, Spindexer, and Ydexer, also returns the hood to it's home position.
+     * 
+     * @return A command to stop shooting
+     */
     public Command stopAllShooting() {
         return hoodFlywheelStowCommand().alongWith(stopIndexers()).alongWith(setShootingAllowed(false));
     }
 
+    /**
+     * Sets if shooting fuel is allowed.
+     * 
+     * @param val if shooting is allowed
+     * @return A command to set if shooting is allowed
+     */
     public Command setShootingAllowed(boolean val) {
         return Commands.runOnce(() -> isShootingAllowed = val);
     }
 
+    /**
+     * Sets the flywheels to be controlled manually by the left joystick.
+     * 
+     * @return A command to enable manual control for the flywheels
+     */
     public Command flywheelManualCommand() {
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
-            double input = (xboxDrv.getLeftY()) * 8;
+            double input = (xboxTest.getLeftY()) * 8;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
     }
 
+    /**
+     * Sets the hood to be controlled manually by the left joystick.
+     * 
+     * @return A command to enable manual control for the hood
+     */
     public Command hoodManualCommand() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             double input = -(xboxTest.getLeftY()) * 1;
@@ -140,6 +206,11 @@ public class CatzSuperstructure {
         });
     }
 
+    /**
+     * Applys the tuning setpoint to the hood.
+     * 
+     * @return A command to apply the tuning setpoint to the hood
+     */
     public Command applyHoodTuningSetpoint() {
         return Commands.defer(() -> {
             Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
@@ -148,6 +219,11 @@ public class CatzSuperstructure {
         }, Set.of(CatzHood.Instance));
     }
 
+    /**
+     * Applys the tuning setpoint to the Flywheel.
+     * 
+     * @return A command to apply the tuning setpoint to the Flywheel
+     */
     public Command applyFlywheelTuningSetpoint() {
         return Commands.defer(() -> {
 
