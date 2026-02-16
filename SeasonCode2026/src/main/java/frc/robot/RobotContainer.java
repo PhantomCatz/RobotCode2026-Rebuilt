@@ -21,6 +21,7 @@ public class RobotContainer {
 
   private static final CommandXboxController xboxDrv = new CommandXboxController(0);
   private static final CommandXboxController xboxTest = new CommandXboxController(1);
+  private static final CommandXboxController xboxFunctional = new CommandXboxController(4);
 
   public RobotContainer() {
     configureBindings();
@@ -96,6 +97,19 @@ public class RobotContainer {
 
     // xboxTest.a().onTrue(superstructure.startIndexers());
     // xboxTest.x().onTrue(superstructure.stopAllShooting());
+
+    // -------------------------------------------------------------------------
+    // FUNCTIONAL CONTROLS
+    // -------------------------------------------------------------------------
+
+    xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    xboxFunctional.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxFunctional.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    xboxFunctional.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    xboxFunctional.a().onTrue(CatzSuperstructure.Instance.toggleFlywheel());
+    xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+
   }
 
   public static void rumbleDrv(double val) {

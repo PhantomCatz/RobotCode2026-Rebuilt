@@ -177,6 +177,72 @@ public class CatzSuperstructure {
         }, CatzIntakeRoller.Instance);
     }
 
+    /* FUNCTIONAL COMMANDS */
+    private boolean isSpindexerSpinning = false;
+    public Command toggleSpindexer() {
+        return Commands.runOnce(() -> {
+            if(isSpindexerSpinning){
+                isSpindexerSpinning = false;
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
+            }else{
+                isSpindexerSpinning = true;
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+            }
+        }, CatzSpindexer.Instance);
+    }
+
+    private boolean isYdexerSpinning = false;
+    public Command toggleYdexer() {
+        return Commands.runOnce(() -> {
+            if(isYdexerSpinning){
+                isYdexerSpinning = false;
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
+            }else{
+                isYdexerSpinning = true;
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+            }
+        }, CatzYdexer.Instance);
+    }
+
+    private boolean isFlywheelSpinning = false;
+    public Command toggleFlywheel() {
+        return Commands.runOnce(() -> {
+            if(isFlywheelSpinning){
+                isFlywheelSpinning = false;
+                CatzFlywheels.Instance.applySetpoint(FlywheelConstants.OFF_SETPOINT);
+            }else{
+                isFlywheelSpinning = true;
+                CatzFlywheels.Instance.applySetpoint(FlywheelConstants.TEST_SETPOINT);
+            }
+        }, CatzFlywheels.Instance);
+    }
+
+    private boolean isTurretAtZero = true;
+    public Command toggleTurret() {
+        return Commands.runOnce(() -> {
+            if(isTurretAtZero){
+                isTurretAtZero = false;
+                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(90)));
+            }else{
+                isTurretAtZero = true;
+                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(0)));
+            }
+        }, CatzTurret.Instance);
+    }
+
+    private boolean isHoodAtHome = true;
+    public Command toggleHood() {
+        return Commands.runOnce(() -> {
+            if(isHoodAtHome){
+                isHoodAtHome = false;
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
+            }else{
+                isHoodAtHome = true;
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_TEST_SETPOINT);
+            }
+        }, CatzHood.Instance);
+    }
+
     /* --- COMMANDS FOR TESTING --- */
 
     public Command applyHoodTuningSetpoint() {
