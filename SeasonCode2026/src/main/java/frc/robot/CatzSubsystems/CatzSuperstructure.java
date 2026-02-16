@@ -60,11 +60,54 @@ public class CatzSuperstructure {
         }, CatzFlywheels.Instance, CatzTurret.Instance);
     }
 
+    public Command trackTargetAndRampUpAuto(RegressionMode mode) {
+        return Commands.runOnce(() -> {
+            Translation2d targetLoc;
+
+            if (mode == RegressionMode.HUB) {
+                targetLoc = FieldConstants.getHubLocation();// AimCalculations.getPredictedHubLocation();
+            } else {
+                //The only other states are hoarding states
+                targetLoc = AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
+            }
+
+            Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
+            Distance dist = Units.Meters.of(targetLoc.getDistance(turretPos));
+
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc));
+
+            RegressionMode specificMode = mode;
+            if (mode != RegressionMode.HUB) {
+                specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
+            }
+
+            CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, specificMode));
+
+        }, CatzFlywheels.Instance, CatzTurret.Instance);
+    }
+
     /**
      * Updates Hood Angle based on the target mode.
      */
     private Command aimHood(RegressionMode mode) {
         return Commands.run(() -> {
+            Translation2d targetLoc = (mode == RegressionMode.HUB) ?
+                FieldConstants.getHubLocation() : //AimCalculations.getPredictedHubLocation() :
+                AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
+
+            Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
+
+            RegressionMode specificMode = mode;
+            if (mode != RegressionMode.HUB) {
+                specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
+            }
+
+            CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, specificMode));
+        }, CatzHood.Instance);
+    }
+
+    private Command aimHoodAuto(RegressionMode mode) {
+        return Commands.runOnce(() -> {
             Translation2d targetLoc = (mode == RegressionMode.HUB) ?
                 FieldConstants.getHubLocation() : //AimCalculations.getPredictedHubLocation() :
                 AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
@@ -95,6 +138,17 @@ public class CatzSuperstructure {
         }, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
 
+    private Command runFeederAuto() {
+        return Commands.runOnce(() -> {
+            if (AimCalculations.readyToShoot()) {
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+                CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
+            } else {
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
+            }
+        }, CatzSpindexer.Instance, CatzYdexer.Instance);
+    }
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
@@ -132,9 +186,9 @@ public class CatzSuperstructure {
 
     public Command cmdHubShoot() {
         return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.HUB),
-            aimHood(RegressionMode.HUB),
-            runFeeder()
+            trackTargetAndRampUpAuto(RegressionMode.HUB),
+            aimHoodAuto(RegressionMode.HUB),
+            runFeederAuto()
         );
     }
 
@@ -176,7 +230,8 @@ public class CatzSuperstructure {
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
             }else{
                 isIntakeOn = true;
-                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
+                CatzIntakeRoller.Instance.applySetpoint(Setpoint.withDutyCycleSetpoint(IntakeRollerConstants.TUNABLE_PERCENT.get()));
+// CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
     }
