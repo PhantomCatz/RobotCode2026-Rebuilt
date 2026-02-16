@@ -37,7 +37,6 @@ public class CatzSuperstructure {
     public Command trackTargetAndRampUp(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc;
-
             if (mode == RegressionMode.HUB) {
                 targetLoc = FieldConstants.getHubLocation();// AimCalculations.getPredictedHubLocation();
             } else {
@@ -135,7 +134,7 @@ public class CatzSuperstructure {
             trackTargetAndRampUp(RegressionMode.HUB),
             aimHood(RegressionMode.HUB),
             runFeeder()
-        );
+        ).withDeadline(Commands.waitSeconds(2.4)); //~around the amount of time it takes to dispense all balls
     }
 
     public Command cmdHubStandby() {
@@ -160,8 +159,10 @@ public class CatzSuperstructure {
     public Command toggleIntakeDeploy() {
         return Commands.runOnce(() -> {
             if(isIntakeDeployed){
+                isIntakeDeployed = false;
                 CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.STOW);
             }else{
+                isIntakeDeployed = true;
                 CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.DEPLOY);
             }
         }, CatzIntakeDeploy.Instance);
@@ -170,9 +171,12 @@ public class CatzSuperstructure {
     public Command toggleIntakeRollers() {
         return Commands.runOnce(() -> {
             if(isIntakeOn){
+                isIntakeOn = false;
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
             }else{
-                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
+                isIntakeOn = true;
+                CatzIntakeRoller.Instance.applySetpoint(Setpoint.withDutyCycleSetpoint(IntakeRollerConstants.TUNABLE_PERCENT.get()));
+// CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
     }
@@ -255,10 +259,22 @@ public class CatzSuperstructure {
 
     public Command applyFlywheelTuningSetpoint() {
         return Commands.defer(() -> {
-
             return CatzFlywheels.Instance.setpointCommand(
                     Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
         }, Set.of(CatzFlywheels.Instance));
+    }
+
+    // public Command turretManualCommand() {
+    //     return CatzTurret.Instance.followSetpointCommand(() -> {
+
+    //     });
+    // }
+
+    public Command turret30Deg() {
+        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(30.0)));
+    }
+    public Command turretMinus30Deg() {
+        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(-30.0)));
     }
 
     public Command turretTrackHubCommand() {

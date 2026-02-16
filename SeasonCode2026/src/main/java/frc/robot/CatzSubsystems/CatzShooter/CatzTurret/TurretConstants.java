@@ -49,7 +49,7 @@ public class TurretConstants {
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
 	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-5).in(Units.Meters),  Units.Inches.of(5).in(Units.Meters));
-	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(90.0);
+	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
 public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;

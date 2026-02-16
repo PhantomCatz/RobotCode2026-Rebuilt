@@ -20,7 +20,9 @@ public class EpsilonRegression {
         /* TEMPLATE REGRESSION */
         // @x --> distance from target (in meters)
         // @y --> airtime of the ball (in seconds)
-        { 5.350, 1.20 }
+        { 5.350, 1.20 },
+        {6.7, 6.7},
+        {6.9, 6.9}
 
     };
 

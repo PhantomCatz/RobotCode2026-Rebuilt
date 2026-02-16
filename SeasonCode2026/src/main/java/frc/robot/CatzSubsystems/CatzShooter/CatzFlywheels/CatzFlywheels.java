@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.FlywheelMotorSubsystem;
 
@@ -33,6 +35,8 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
     @Override
     public void periodic(){
         super.periodic();
+
+        Logger.recordOutput("CatzFlywheel/Target Vel", setpoint.baseUnits / (2*Math.PI));
 
         double newP = FlywheelConstants.kP.get();
         double newV = FlywheelConstants.kV.get();
