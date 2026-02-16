@@ -32,10 +32,9 @@ public class AutoRoutineBase {
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
+            Commands.print("shootAllBalls command"),
             CatzSuperstructure.Instance.cmdHubShoot(),
-            Commands.print("I need to wait hold up gng"),
             new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            Commands.print("Waited \n\nWaitedWaitedWaited"),
             CatzSuperstructure.Instance.cmdFullStop()
         );
     }

@@ -19,8 +19,8 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
         AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
 
-        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)
+        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT).alongWith(Commands.print("Intake")));
+        traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB).alongWith(Commands.print("RampUp+StopIntake3"))
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
 
         prepRoutine(
