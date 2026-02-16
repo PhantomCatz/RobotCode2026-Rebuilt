@@ -16,7 +16,7 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
 public class HoodConstants {
-	public static final Angle HOOD_ZERO_POS = Units.Degrees.of(16.0);
+	public static final Angle HOOD_ZERO_POS = Units.Degrees.of(17.0);
 	public static final Angle HOOD_MAX_POS = Units.Degrees.of(45.0);
 	public static final Angle HOOD_TEST_POS = Units.Degrees.of(35.0);
 	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS);

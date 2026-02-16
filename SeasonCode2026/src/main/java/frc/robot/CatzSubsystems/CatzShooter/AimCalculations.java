@@ -32,6 +32,10 @@ public class AimCalculations {
         return calculateTurretTrackingSetpoint(FieldConstants.getHubLocation());
     }
 
+    public static Setpoint calculateCornerTrackingSetpoint(){
+        return calculateTurretTrackingSetpoint(getCornerHoardingTarget(true));
+    }
+
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target) {
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
 
@@ -57,7 +61,7 @@ public class AimCalculations {
             }
         }
 
-        if (isCloseCornerHoarding) {
+        if (!isCloseCornerHoarding) {
             shouldMirror = !shouldMirror;
         }
 

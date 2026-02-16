@@ -28,17 +28,16 @@ public class EpsilonRegression {
 
 
     //-------Closest Corner Hoarding----------
-    public static final double[] CLOSEST_HOOD_ANGLE_CLOSE_HOARD = {1.294, 16.0}; //distance from target (meters), hood angle (degrees)
-    public static final double[] FARTHEST_HOOD_ANGLE_CLOSE_HOARD = {5.350, 42.0};
+    public static final double[] CLOSEST_HOOD_ANGLE_CLOSE_HOARD = {5.029, 35.0}; //distance from target (meters), hood angle (degrees)
+    public static final double[] FARTHEST_HOOD_ANGLE_CLOSE_HOARD = {9.314, 40.0};
 
     public static double[][] flywheelCloseHoardRPS = {
         /* TEMPLATE REGRESSION */
         // @x --> distance from target (in meters)
         // @y --> shooter velocity (in rps)
-        {1.294, 30.0},
-        {2.71, 34.0},
-        {4.18, 38.0},
-        {5.350, 42.0}
+        {5.029, 35.0},
+        {7.000, 42.0},
+        {9.314, 50.0}
     };
 
 

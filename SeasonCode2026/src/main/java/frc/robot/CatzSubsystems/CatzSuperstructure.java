@@ -186,9 +186,9 @@ public class CatzSuperstructure {
 
     public Command cmdHubShoot() {
         return Commands.parallel(
-            trackTargetAndRampUpAuto(RegressionMode.HUB),
-            aimHoodAuto(RegressionMode.HUB),
-            runFeederAuto()
+            trackTargetAndRampUp(RegressionMode.HUB),
+            aimHood(RegressionMode.HUB),
+            runFeeder()
         );
     }
 
@@ -268,5 +268,9 @@ public class CatzSuperstructure {
 
     public Command turretTrackHubCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
+    }
+
+    public Command turretTrackCornerCommand(){
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateCornerTrackingSetpoint());
     }
 }
