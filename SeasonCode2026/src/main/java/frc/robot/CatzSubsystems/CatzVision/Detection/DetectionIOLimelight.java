@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
-import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.FieldLayout;
 import frc.robot.Utilities.LimelightHelpers;
@@ -357,7 +356,7 @@ public class DetectionIOLimelight extends DetectionIO {
 			latestEstimateTime = edu.wpi.first.units.Units.Seconds.of(poseEstimate.timestampSeconds);
 			aprilTagPose.set(poseEstimate.pose);
 			CatzRobotTracker.getInstance().addVisionObservation(
-                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
+                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}
 	}

@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -17,6 +18,7 @@ import frc.robot.Utilities.Setpoint;
 
 public class SpindexerConstants {
 	private static final Voltage ON_VOLTS = Units.Volts.of(12.0);
+	private static final AngularVelocity ON_SPEED = Units.RotationsPerSecond.of(12.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
@@ -46,8 +48,8 @@ public class SpindexerConstants {
 		FXConfig.Slot0.kS = gains.kS();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 50.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 12.5;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
@@ -56,13 +58,13 @@ public class SpindexerConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 8.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

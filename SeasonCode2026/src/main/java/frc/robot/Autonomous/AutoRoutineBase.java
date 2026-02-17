@@ -27,14 +27,15 @@ public class AutoRoutineBase {
     protected void prepRoutine(AutoTrajectory startTraj, Command... sequence) {
         routine.active().onTrue(
                 new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get()))
-                        .andThen(Commands.sequence(sequence)));
+                        .andThen(Commands.sequence(sequence).alongWith(CatzSuperstructure.Instance.turretTrackHubCommand())));
     }
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
-            CatzSuperstructure.Instance.cmdHubShoot(),
+            Commands.print("shootAllBalls command"),
+            CatzSuperstructure.Instance.cmdHubShoot().withDeadline(Commands.waitSeconds(2.4)), //~around the amount of time it takes to dispense all balls
             new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop()  
+            CatzSuperstructure.Instance.cmdFullStop()
         );
     }
 
@@ -87,10 +88,6 @@ public class AutoRoutineBase {
 
                         CatzDrivetrain.getInstance()));
     }
-
-    // protected Command trajectoryToObjectDetection() {
-
-    // }
 
     private boolean isAtPose(AutoTrajectory trajectory) {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);

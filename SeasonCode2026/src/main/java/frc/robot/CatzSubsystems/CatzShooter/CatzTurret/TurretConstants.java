@@ -41,15 +41,15 @@ public class TurretConstants {
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(3.0);
 
-	public static final Angle TURRET_MAX = Units.Degrees.of(180);
-	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
+	public static final Angle TURRET_MAX = Units.Degrees.of(120); // TODO change to 180 after turret is fixed
+	public static final Angle TURRET_MIN = Units.Degrees.of(-120); // TODO change to 180 after turret is fixed
 
 	public static final LoggedTunableNumber omegaFF = new LoggedTunableNumber("Turret/omegaFF", 5.0);
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.3;//25;
 	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
 
 	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-5).in(Units.Meters),  Units.Inches.of(5).in(Units.Meters));
-	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(90.0);
+	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
 public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
@@ -74,7 +74,7 @@ public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 50.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

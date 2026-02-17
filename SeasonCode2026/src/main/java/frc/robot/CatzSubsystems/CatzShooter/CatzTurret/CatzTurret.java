@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -41,6 +42,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
 
         setCurrentPosition(Units.Rotations.of(getCANCoderAbsPos()));
+        // setCurrentPosition(Units.Rotations.of(0.0));
+
     }
 
     public static final CatzTurret Instance = new CatzTurret();
@@ -72,6 +75,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
         Logger.recordOutput("Distance from Hub", distFromHub);
+        Logger.recordOutput("Distance from Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
 
         Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
 
@@ -86,6 +90,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         double targetRads = target.in(Units.Radians);
 
         targetRads = MathUtil.angleModulus(targetRads);
+
+        // TODO remove after the turret is fixed
+        targetRads = Math.min(targetRads, TurretConstants.TURRET_MAX.in(Units.Radian));
+        targetRads = Math.max(targetRads, TurretConstants.TURRET_MIN.in(Units.Radian));
 
         return Setpoint.withMotionMagicSetpoint(Units.Radians.of(targetRads));
     }

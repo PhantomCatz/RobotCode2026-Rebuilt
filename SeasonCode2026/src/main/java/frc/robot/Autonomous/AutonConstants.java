@@ -9,6 +9,6 @@ public class AutonConstants {
     public static final double RETURN_TIME_BUFFER = 5.0;
     public static final double TRAJ_GOAL_VELOCITY = 2.0;
 
-    public static final double PRELOAD_SHOOTING_WAIT = 2.0;
-    public static final double RETURN_FROM_COLLECTING_SHOOTING_WAIT = 4.0;
+    public static final double PRELOAD_SHOOTING_WAIT = 0.8;
+    public static final double RETURN_FROM_COLLECTING_SHOOTING_WAIT = 1.4;
 }

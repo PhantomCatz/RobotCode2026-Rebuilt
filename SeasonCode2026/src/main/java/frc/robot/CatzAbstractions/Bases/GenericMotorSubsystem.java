@@ -49,7 +49,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	}
 
 	public Command setpointCommand(Setpoint setpoint){
-		System.out.println("settt:: " + setpoint.mode);
+		// System.out.println("settt:: " + setpoint.mode);
 		return runOnce(() -> applySetpoint(setpoint));
 	}
 

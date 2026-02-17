@@ -1,11 +1,12 @@
 package frc.robot.CatzAbstractions.Bases;
 
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -30,6 +31,8 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	@Override
 	public void periodic() {
 		super.periodic();
+
+		Logger.recordOutput(name+"/Target Setpoint Rot", setpoint.baseUnits / (2*Math.PI));
 
 		if (isFullManual) {
 			runFullManual(manualSpeed);

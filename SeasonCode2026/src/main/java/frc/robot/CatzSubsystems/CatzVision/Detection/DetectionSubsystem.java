@@ -40,10 +40,12 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 	@Override
 	public void periodic() {
-		io.updateInputs(inputs);
-		Logger.processInputs("RealInputs/Detection", inputs);
-		outputTelemetry();
-		Logger.recordOutput("Detection/nearestFuel", inputs.nearestFuel);
+		if(Robot.isReal()) {
+			io.updateInputs(inputs);
+			Logger.processInputs("RealInputs/Detection", inputs);
+			outputTelemetry();
+			Logger.recordOutput("Detection/nearestFuel", inputs.nearestFuel);
+		}
 	}
 
 	public boolean getDisabled() {
