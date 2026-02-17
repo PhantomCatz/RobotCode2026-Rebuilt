@@ -43,7 +43,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SelfControlledSwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -73,7 +75,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
 
-  public static final SwerveDriveSimulation driveSimulationInstance = new SwerveDriveSimulation(getMapleSimConfig(), new Pose2d(3, 3, new Rotation2d()));
+  public static final SelfControlledSwerveDriveSimulation driveSimulationInstance = new SelfControlledSwerveDriveSimulation(new SwerveDriveSimulation(getMapleSimConfig(), CatzRobotTracker.getInstance().getEstimatedPose()));
 
   private final Field2d field;
 
@@ -136,6 +138,8 @@ public class CatzDrivetrain extends SubsystemBase {
     SmartDashboard.putData("Field", field);
 
     swerveSetpointGenerator = new SwerveSetpointGenerator(SWERVE_KINEMATICS, MODULE_TRANSLATIONS);
+    SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulationInstance.getDriveTrainSimulation());
+
   }
 
   @Override
@@ -170,9 +174,8 @@ public class CatzDrivetrain extends SubsystemBase {
     // ----------------------------------------------------------------------------------------------------
     SwerveModulePosition[] wheelPositions = getModulePositions();
     // Grab latest gyro measurments
-    Rotation2d gyroAngle2d = (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM)
-        ? null
-        : getRotation2d();
+    // Modified to allow fetching rotation in SIM mode
+    Rotation2d gyroAngle2d = getRotation2d();
 
     // Add observations to robot tracker
     OdometryObservation observation = new OdometryObservation(
@@ -184,9 +187,14 @@ public class CatzDrivetrain extends SubsystemBase {
 
     // Update current velocities use gyro when possible
     Twist2d robotRelativeVelocity = getTwist2dSpeeds();
-    robotRelativeVelocity.dtheta = gyroInputs.gyroConnected
-        ? Math.toRadians(gyroInputs.gyroYawVel)
-        : robotRelativeVelocity.dtheta;
+
+    // Only use gyro yaw velocity if connected and NOT in SIM (Sim uses the perfect twist from getTwist2dSpeeds)
+    if (CatzConstants.hardwareMode != CatzConstants.RobotHardwareMode.SIM) {
+        robotRelativeVelocity.dtheta = gyroInputs.gyroConnected
+            ? Math.toRadians(gyroInputs.gyroYawVel)
+            : robotRelativeVelocity.dtheta;
+    }
+
     CatzRobotTracker.Instance.addVelocityData(robotRelativeVelocity);
 
   } // end of drivetrain periodic
@@ -221,6 +229,13 @@ public class CatzDrivetrain extends SubsystemBase {
       // Set module states to each of the swerve modules
       m_swerveModules[i].setModuleAngleAndVelocity(optimizedDesiredStates[i]);
     }
+
+
+      if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
+          driveSimulationInstance.runChassisSpeeds(descreteSpeeds, new Translation2d(), true, true);
+          driveSimulationInstance.getDriveTrainSimulation().setRobotSpeeds(descreteSpeeds);
+          driveSimulationInstance.runSwerveStates(optimizedDesiredStates);
+      }
   }
 
   public void simpleDrive(ChassisSpeeds speeds) {
@@ -506,6 +521,9 @@ public class CatzDrivetrain extends SubsystemBase {
    * @return The Heading of the robot dependant on where it's been instantiated
    */
   public double getGyroHeading() {
+    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
+        return driveSimulationInstance.getOdometryEstimatedPose().getRotation().getDegrees();
+    }
     return gyroInputs.gyroAngle; // Negative on Forte due to instalation, gyro's left is not robot left
   }
 
@@ -520,6 +538,9 @@ public class CatzDrivetrain extends SubsystemBase {
 
   /** Get an array of swerve module states */
   public SwerveModuleState[] getModuleStates() {
+    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
+        return driveSimulationInstance.getMeasuredStates();
+    }
     SwerveModuleState[] moduleStates = new SwerveModuleState[4];
     for (int i = 0; i < m_swerveModules.length; i++) {
       moduleStates[i] = m_swerveModules[i].getModuleState();
@@ -532,11 +553,18 @@ public class CatzDrivetrain extends SubsystemBase {
    */
   @AutoLogOutput(key = "Drive/MeasuredSpeeds")
   private Twist2d getTwist2dSpeeds() {
+    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
+        ChassisSpeeds simSpeeds = driveSimulationInstance.getActualSpeedsRobotRelative();
+        return new Twist2d(simSpeeds.vxMetersPerSecond, simSpeeds.vyMetersPerSecond, simSpeeds.omegaRadiansPerSecond);
+    }
     return DriveConstants.SWERVE_KINEMATICS.toTwist2d(getModulePositions());
   }
 
   /** Get an array of swerve module positions */
   private SwerveModulePosition[] getModulePositions() {
+    if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
+        return driveSimulationInstance.getLatestModulePositions();
+    }
     SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     for (int i = 0; i < m_swerveModules.length; i++) {
       modulePositions[i] = m_swerveModules[i].getModulePosition();
@@ -578,7 +606,7 @@ public class CatzDrivetrain extends SubsystemBase {
                         Volts.of(0.2), // Static friction voltage
                         Volts.of(0.3),
                         Inches.of(2),
-                        KilogramSquareMeters.of(ROBOT_MOI),
+                        KilogramSquareMeters.of(0.03),
                         WHEEL_COF));
     }
 

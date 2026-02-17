@@ -3,7 +3,6 @@ package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller;
 import static edu.wpi.first.units.Units.Meters;
 
 import org.ironmaple.simulation.IntakeSimulation;
-import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
 
 import frc.robot.CatzAbstractions.io.GenericIOSim;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -13,13 +12,13 @@ public class IntakeRollerIOSim extends GenericIOSim<IntakeRollerIO.IntakeRollerI
 
     private final IntakeSimulation intakeSimulation;
 
-    public IntakeRollerIOSim(Gains gains, AbstractDriveTrainSimulation driveTrain) {
+    public IntakeRollerIOSim(Gains gains) {
         super(gains);
         this.intakeSimulation =  IntakeSimulation.OverTheBumperIntake(
             // Specify the type of game pieces that the intake can collect
             "Fuel",
             // Specify the drivetrain to which this intake is attached
-            CatzDrivetrain.driveSimulationInstance,
+            CatzDrivetrain.driveSimulationInstance.getDriveTrainSimulation(),
             // Width of the intake
             Meters.of(0.7),
             // The extension length of the intake beyond the robot's frame (when activated)
@@ -27,14 +26,15 @@ public class IntakeRollerIOSim extends GenericIOSim<IntakeRollerIO.IntakeRollerI
             // The intake is mounted on the back side of the chassis
             IntakeSimulation.IntakeSide.FRONT,
             // The intake can hold up to 20 fuel
-            20);
+            40);
     }
 
 
     @Override
-    public void setVoltageSetpoint(double voltage) {
+    public void setDutyCycleSetpoint(double voltage) {
         if(voltage != 0.0) {
             intakeSimulation.startIntake();
+            System.out.println("start");
         } else {
             intakeSimulation.stopIntake();
         }

@@ -3,7 +3,6 @@ package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, IntakeRollerIO.IntakeRollerIOInputs>{
@@ -28,7 +27,7 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
     private static IntakeRollerIO getIOInstance() {
         if (CatzConstants.IntakeOn == false) {
             System.out.println("Intake Disabled by CatzConstants");
-            return new IntakeRollerIOSim(IntakeRollerConstants.gains, CatzDrivetrain.driveSimulationInstance);
+            return new IntakeRollerIOSim(IntakeRollerConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
@@ -36,10 +35,10 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
                 return new IntakeRollerIOTalonFX(IntakeRollerConstants.getIOConfig());
             case SIM:
                 System.out.println("Intake Configured for Simulation");
-                return new IntakeRollerIOSim(IntakeRollerConstants.gains, CatzDrivetrain.driveSimulationInstance);
+                return new IntakeRollerIOSim(IntakeRollerConstants.gains);
                 default:
                 System.out.println("Intake Unconfigured");
-                return new IntakeRollerIOSim(IntakeRollerConstants.gains, CatzDrivetrain.driveSimulationInstance);
+                return new IntakeRollerIOSim(IntakeRollerConstants.gains);
         }
     }
 

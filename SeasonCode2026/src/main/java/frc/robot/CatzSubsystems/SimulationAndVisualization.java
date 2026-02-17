@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
@@ -23,6 +22,7 @@ import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 
 public class SimulationAndVisualization {
 
@@ -89,41 +89,38 @@ public class SimulationAndVisualization {
      * @param isShooting  True if the robot is currently shooting a projectile
      * @param isIntaking  True if the robot is currently intaking a projectile
      */
-    public void update(Rotation2d intakeAngle, Rotation2d hoodAngle, Rotation2d turretAngle, double shooterRPM, boolean isShooting, boolean isIntaking) {
+    public void update(Rotation2d intakeAngle, Rotation2d hoodAngle, Rotation2d turretAngle, double shooterRPM, boolean isShooting) {
         double currentTime = Logger.getTimestamp();
 
         if (Robot.isSimulation()) {
+        //    isShooting = DriverStation.isEnabled();
 
             // Handle Projectile Shooting
             if (isShooting && (currentTime - lastShotTime > TIME_BETWEEN_SHOTS)) {
                 // Fetch current robot state from Drivetrain Simulation
                 // Note: Ensure CatzDrivetrain exposes these methods or equivalent access to sim state
-                Pose2d robotPose = CatzDrivetrain.driveSimulationInstance.getSimulatedDriveTrainPose();
-
-                // We assume there is a method to get field relative speeds for accurate physics
-                // If this specific method doesn't exist, use driveSimulationInstance.getChassisSpeeds()
-                // and rotate by robot heading if necessary.
-                ChassisSpeeds chassisSpeeds = CatzDrivetrain.driveSimulationInstance.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+                Pose2d robotPose = CatzDrivetrain.driveSimulationInstance.getActualPoseInSimulationWorld();
+                ChassisSpeeds chassisSpeeds = CatzDrivetrain.driveSimulationInstance.getActualSpeedsFieldRelative();
 
                 if (chassisSpeeds == null) {
                     chassisSpeeds = new ChassisSpeeds(); // Fallback to zero if not available
                 }
 
                 RebuiltFuelOnFly fuelOnFly = new RebuiltFuelOnFly(
-                    // Specify the position of the chassis when the note is launched
+                    // Specify the position of the chassis when the gp is launched
                     robotPose.getTranslation(),
                     // Specify the translation of the shooter from the robot center (in the shooter’s reference frame)
-                    new Translation2d(0.2, 0),
+                    TurretConstants.TURRET_OFFSET,
                     // Specify the field-relative speed of the chassis
                     chassisSpeeds,
                     // The shooter facing direction (Robot Rotation + Turret Rotation)
                     turretAngle,
-                    // Initial height of the flying note
+                    // Initial height of the flying GP
                     Units.Meter.of(0.45),
                     // The launch speed (proportional to RPM, approx 16 m/s at 6000 RPM)
-                    Units.MetersPerSecond.of((shooterRPM / 6000.0) * 20.0),
+                    Units.MetersPerSecond.of(8.0),
                     // The angle at which the note is launched (Hood Angle)
-                    Units.Radians.of(hoodAngle.getRadians())
+                    Units.Radians.of(3.14/4)
                 );
 
                 // Configure Visualization Callbacks (Optional but recommended by docs)
@@ -200,8 +197,10 @@ public class SimulationAndVisualization {
         if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL) return;
 
         SimulatedArena.getInstance().simulationPeriodic();
+        CatzDrivetrain.driveSimulationInstance.periodic();
+
         // Publish to telemetry using AdvantageKit
         Logger.recordOutput("FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
-        Logger.recordOutput("FieldSimulation/RobotPosition", CatzDrivetrain.driveSimulationInstance.getSimulatedDriveTrainPose());
+        Logger.recordOutput("FieldSimulation/RobotPosition", CatzDrivetrain.driveSimulationInstance.getActualPoseInSimulationWorld());
     }
 }

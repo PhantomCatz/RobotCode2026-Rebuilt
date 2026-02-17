@@ -30,4 +30,8 @@ public class CatzYdexer extends GenericMotorSubsystem<YdexerIO, YdexerIO.YdexerI
     }
 
     public static final CatzYdexer Instance = new CatzYdexer();
+
+    public boolean isYdexerOn() {
+        return setpoint.baseUnits > 0.0;
+    }
 }
