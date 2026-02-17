@@ -32,6 +32,7 @@ public class AutoRoutineBase {
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
+            Commands.print("shootAllBalls command"),
             CatzSuperstructure.Instance.cmdHubShoot(),
             new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
             CatzSuperstructure.Instance.cmdFullStop()

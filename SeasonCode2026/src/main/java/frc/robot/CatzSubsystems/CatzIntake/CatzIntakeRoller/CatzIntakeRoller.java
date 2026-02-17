@@ -46,7 +46,7 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
     public Setpoint toggleIntake(){
         if(state == IntakeState.OFF){
             state = IntakeState.ON;
-            return IntakeRollerConstants.ON_SETPOINT;
+            return IntakeRollerConstants.S_SETPOINT;
         }else{
             state = IntakeState.OFF;
             return IntakeRollerConstants.OFF_SETPOINT;
