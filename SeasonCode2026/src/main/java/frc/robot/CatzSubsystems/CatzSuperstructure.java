@@ -134,7 +134,7 @@ public class CatzSuperstructure {
             trackTargetAndRampUp(RegressionMode.HUB),
             aimHood(RegressionMode.HUB),
             runFeeder()
-        ).withDeadline(Commands.waitSeconds(2.4)); //~around the amount of time it takes to dispense all balls
+        );
     }
 
     public Command cmdHubStandby() {

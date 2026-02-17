@@ -33,7 +33,7 @@ public class AutoRoutineBase {
     protected Command shootAllBalls(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot(),
+            CatzSuperstructure.Instance.cmdHubShoot().withDeadline(Commands.waitSeconds(2.4)), //~around the amount of time it takes to dispense all balls
             new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
             CatzSuperstructure.Instance.cmdFullStop()
         );
