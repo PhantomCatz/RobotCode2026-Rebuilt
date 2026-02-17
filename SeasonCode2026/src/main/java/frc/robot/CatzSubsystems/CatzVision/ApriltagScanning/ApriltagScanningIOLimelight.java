@@ -33,7 +33,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 			latestEstimate = poseEstimate.pose;
 			latestEstimateTime = Units.Seconds.of(poseEstimate.timestampSeconds);
 			CatzRobotTracker.getInstance().addVisionObservation(
-                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
+                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}
 	}

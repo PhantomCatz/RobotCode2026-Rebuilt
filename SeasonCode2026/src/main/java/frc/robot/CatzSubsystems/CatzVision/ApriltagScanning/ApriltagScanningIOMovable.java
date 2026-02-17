@@ -97,7 +97,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
                             config.name,
                             robotPoseFieldSpace,
                             timestamp,
-                            LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist)));
+                            config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist)));
         }
     }
 
