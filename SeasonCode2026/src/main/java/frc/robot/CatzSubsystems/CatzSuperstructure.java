@@ -174,7 +174,7 @@ public class CatzSuperstructure {
     }
 
     public Command alignToBackUpClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), false);
+        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true);
     }
 
     public Command alignToCloseClimb(boolean isRight) {
