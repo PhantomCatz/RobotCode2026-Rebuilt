@@ -266,6 +266,16 @@ public class CatzSuperstructure {
         }, CatzHood.Instance);
     }
 
+    /* --- REVERSIONARY MODES --- */
+
+    public Command setHoodHomePosition() {
+        return Commands.parallel(
+            CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_HOME_SETPOINT),
+            Commands.waitSeconds(1.0).andThen(() -> CatzHood.Instance.setCurrentPosition(Units.Degree.of(0)))
+            .andThen(() -> CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_STOP))
+        );
+    }
+
     /* --- COMMANDS FOR TESTING --- */
 
     public Command applyHoodTuningSetpoint() {

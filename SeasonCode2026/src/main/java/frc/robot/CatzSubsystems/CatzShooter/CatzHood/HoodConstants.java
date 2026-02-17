@@ -21,6 +21,10 @@ public class HoodConstants {
 	public static final Angle HOOD_TEST_POS = Units.Degrees.of(35.0);
 	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS);
 	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_TEST_POS);
+	public static final Setpoint HOOD_STOP = Setpoint.withVelocitySetpoint(0.0);
+
+	// Set home position constants
+	public static final Setpoint HOOD_HOME_SETPOINT = Setpoint.withVelocitySetpoint(-0.3);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(35.0, 0.0, 3.0, 0.25, 1.4,0.0, 0.2);
