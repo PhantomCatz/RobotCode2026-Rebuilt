@@ -14,7 +14,6 @@ public class LimelightConstants {
 
     public static final int kEnabledPipeline = 0;
     public static final int kDisabledPipeline = 1;
-    public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
     private static final double limelightCrosshairCompensationPitch = 0.0;
     private static final double limelightCrosshairCompensationYaw = -2.0; // -2.0 for sushi
