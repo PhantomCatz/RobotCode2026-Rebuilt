@@ -27,7 +27,7 @@ public class AutoRoutineBase {
     protected void prepRoutine(AutoTrajectory startTraj, Command... sequence) {
         routine.active().onTrue(
                 new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get()))
-                        .andThen(Commands.sequence(sequence)));
+                        .andThen(Commands.sequence(sequence).alongWith(CatzSuperstructure.Instance.turretTrackHubCommand())));
     }
 
     protected Command shootAllBalls(double time){

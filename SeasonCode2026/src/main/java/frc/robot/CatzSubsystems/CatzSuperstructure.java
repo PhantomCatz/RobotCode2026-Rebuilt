@@ -34,6 +34,10 @@ public class CatzSuperstructure {
 
     private CatzSuperstructure() {}
 
+    // public Command trackTarget(RegressionMode mode) {
+
+    // }
+
     public Command trackTargetAndRampUp(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc;
