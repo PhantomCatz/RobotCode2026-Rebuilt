@@ -87,7 +87,7 @@ public class AimCalculations {
      * @return
      */
     private static Translation2d getHubVelocity(Pose2d robotPose) {
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
         // double robotAngle = robotPose.getRotation().getRadians();
 
         // double cosRobotAngle = Math.cos(robotAngle);
@@ -158,7 +158,7 @@ public class AimCalculations {
 
     private static Pose2d getPredictedRobotPose() {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         Twist2d twist = new Twist2d(
                 robotVelocity.vxMetersPerSecond * phaseDelay,

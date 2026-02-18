@@ -115,7 +115,7 @@ public class PIDDriveCmd extends Command {
 
     private boolean isAtTargetState(){
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisSpeeds currentSpeed = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        ChassisSpeeds currentSpeed = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         double distanceError = currentPose.getTranslation().getDistance(goalPos.getTranslation());
         double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);

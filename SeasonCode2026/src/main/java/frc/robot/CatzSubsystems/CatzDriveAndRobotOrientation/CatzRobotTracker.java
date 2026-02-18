@@ -272,8 +272,12 @@ public class CatzRobotTracker {
   }
 
   @AutoLogOutput(key = "CatzRobotTracker/RecordedChassisSpeeds")
-  public ChassisSpeeds getRobotChassisSpeeds() {
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
     return m_lastChassisSpeeds;
+  }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(m_lastChassisSpeeds, estimatedPose.getRotation());
   }
 
   /********************************************************************************************************************************

@@ -248,7 +248,7 @@ public class CatzDrivetrain extends SubsystemBase {
     double safeSpeed = 2.0;
 
     // Get the robot's current velocity vector from the setpoint generator
-    ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+    ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
     // Calculate the magnitude (total speed) of current and desired vectors
     double currentSpeedMag = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
