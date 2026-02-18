@@ -39,7 +39,16 @@ public class CatzSuperstructure {
 
     private Translation2d getTargetLocation(RegressionMode mode) {
         if (mode == RegressionMode.HUB) {
-            return FieldConstants.getHubLocation(); // AimCalculations.getPredictedHubLocation();
+            return AimCalculations.getPredictedHubLocation();
+        } else {
+            return AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
+        }
+    }
+
+    //TODO this is a bad way to do it find a better way lol
+    private Translation2d getTargetLocationFlywheel(RegressionMode mode) {
+        if (mode == RegressionMode.HUB) {
+            return AimCalculations.calculateAndGetPredictedHubLocation();
         } else {
             return AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
         }
@@ -67,7 +76,7 @@ public class CatzSuperstructure {
      */
     public Command rampUpFlywheels(RegressionMode mode) {
         return Commands.run(() -> {
-            Translation2d targetLoc = getTargetLocation(mode);
+            Translation2d targetLoc = getTargetLocationFlywheel(mode);
             Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
             Distance dist = Units.Meters.of(targetLoc.getDistance(turretPos));
 
@@ -82,9 +91,7 @@ public class CatzSuperstructure {
      */
     private Command aimHood(RegressionMode mode) {
         return Commands.run(() -> {
-            Translation2d targetLoc = (mode == RegressionMode.HUB) ?
-                FieldConstants.getHubLocation() : //AimCalculations.getPredictedHubLocation() :
-                AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
+            Translation2d targetLoc = getTargetLocation(mode);
 
             Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
 
@@ -109,7 +116,7 @@ public class CatzSuperstructure {
                 initialShootReady = true;
             }
 
-            if (initialShootReady) {
+            if (initialShootReady) { //TODO At least check if turret angle is correct because it can wrap.
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
                 CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
             }
@@ -158,8 +165,8 @@ public class CatzSuperstructure {
 
     public Command cmdHubShoot() {
         return Commands.parallel(
-            trackTarget(RegressionMode.HUB),
             rampUpFlywheels(RegressionMode.HUB),
+            trackTarget(RegressionMode.HUB),
             aimHood(RegressionMode.HUB),
             runFeeder()
         );
@@ -167,8 +174,8 @@ public class CatzSuperstructure {
 
     public Command cmdHubStandby() {
         return Commands.parallel(
-            trackTarget(RegressionMode.HUB),
             rampUpFlywheels(RegressionMode.HUB),
+            trackTarget(RegressionMode.HUB),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
             CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),

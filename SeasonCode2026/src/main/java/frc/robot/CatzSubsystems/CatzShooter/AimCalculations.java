@@ -25,6 +25,7 @@ import org.apache.commons.math3.complex.Complex;
 public class AimCalculations {
     private static final double phaseDelay = 0.03;
     private static LaguerreSolver solver = new LaguerreSolver();
+    private static Translation2d predictedHubLocation = new Translation2d();
 
     /**
      * Calculates the best turret angle setpoint to point to the hub
@@ -73,11 +74,16 @@ public class AimCalculations {
         return targetPos;
     }
 
-    public static Translation2d getPredictedHubLocation() {
+    public static Translation2d getPredictedHubLocation(){
+        return predictedHubLocation;
+    }
+
+    public static Translation2d calculateAndGetPredictedHubLocation() {
         Pose2d robotPose = getPredictedRobotPose();
         Translation2d hubVelocity = getHubVelocity(robotPose);
         double futureAirtime = getFutureShootAirtime(robotPose, hubVelocity);
-        return FieldConstants.getHubLocation().plus(hubVelocity.times(futureAirtime));
+        predictedHubLocation = FieldConstants.getHubLocation().plus(hubVelocity.times(futureAirtime));
+        return predictedHubLocation;
     }
 
     /**
