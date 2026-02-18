@@ -2,6 +2,8 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -98,14 +100,18 @@ public class CatzSuperstructure {
     /**
      * Feeds balls to shooter when ready.
      */
+    private boolean initialShootReady = false;
     private Command runFeeder() {
         return Commands.run(() -> {
-            if (AimCalculations.readyToShoot()) {
+            Logger.recordOutput("Is Ready To Shoot", AimCalculations.readyToShoot());
+
+            if(!initialShootReady && AimCalculations.readyToShoot()) {
+                initialShootReady = true;
+            }
+
+            if (initialShootReady) {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
                 CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
-            } else {
-                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
-                CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
         }, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
@@ -120,7 +126,9 @@ public class CatzSuperstructure {
             CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            Commands.runOnce(() -> initialShootReady = false)
+
         );
     }
 
@@ -141,7 +149,8 @@ public class CatzSuperstructure {
             rampUpFlywheels(RegressionMode.CLOSE_HOARD),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            Commands.runOnce(() -> initialShootReady = false)
         );
     }
 
@@ -162,7 +171,8 @@ public class CatzSuperstructure {
             rampUpFlywheels(RegressionMode.HUB),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            Commands.runOnce(() -> initialShootReady = false)
         );
     }
 

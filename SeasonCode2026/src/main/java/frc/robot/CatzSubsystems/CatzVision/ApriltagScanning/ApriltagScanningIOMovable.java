@@ -38,7 +38,6 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
         double cameraFieldOmega = robotOmegaDegPerSec + turretOmegaDegPerSec;
 
         if (Math.abs(cameraFieldOmega) > 300.0) {
-            System.out.println("Limelight turning too fast!!!!!");
             return;
         }
         PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);

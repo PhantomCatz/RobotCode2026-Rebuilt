@@ -27,7 +27,7 @@ public class FieldConstants {
   private static final Translation2d TRENCH_SHOOTING_LOCATION = new Translation2d(4.3802995681762695, 0.6432812809944153);
 
   private static final Translation2d RIGHT_CORNER_HOARD = new Translation2d(0.8200110197067261, 0.698647677898407);
-  
+
   private static final Pose2d CLIMB_BACK_AWAY_LEFT = new Pose2d(1.1506646871566772, 1.8027223348617554, Rotation2d.k180deg);
   private static final Pose2d CLIMB_CLOSE_LEFT = new Pose2d(1.1707948446273804, 2.8092310428619385, Rotation2d.k180deg);
 
