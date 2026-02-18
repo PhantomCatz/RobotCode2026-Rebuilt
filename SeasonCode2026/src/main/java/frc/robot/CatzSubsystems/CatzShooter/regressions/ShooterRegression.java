@@ -121,7 +121,7 @@ public class ShooterRegression {
         airtimePolynomial = new PolynomialRegression(airtimeArr, 2);
         airtimeInverseAutoAimPolynomial = new PolynomialRegression(airtimeInvArr, 2);
 
-        // 3. Pre-calculate Linear Hood Slopes (Rise / Run)
+        // 3. Pre-calculate Linear Hood Slopes
         HUB_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB, EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB);
         CLOSE_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_CLOSE_HOARD);
         FAR_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_FAR_HOARD);

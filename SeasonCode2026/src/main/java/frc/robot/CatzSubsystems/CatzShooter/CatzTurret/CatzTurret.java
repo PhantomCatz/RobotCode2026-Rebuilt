@@ -103,6 +103,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         return fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(fieldToRobot.getRotation()));
     }
 
+    public Translation2d getFieldToTurret(Pose2d predictedRobotPose){
+        return predictedRobotPose.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(predictedRobotPose.getRotation()));
+    }
+
     public double getAngleAtTime(double time) {
         return angleHistory.getSample(time).orElse(getLatencyCompensatedPosition() * 2 * Math.PI);
     }

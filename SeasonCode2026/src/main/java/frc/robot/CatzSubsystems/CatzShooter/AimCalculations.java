@@ -16,6 +16,8 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
+import io.grpc.InternalChannelz.RootChannelList;
+
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
@@ -70,40 +72,11 @@ public class AimCalculations {
         }
         return targetPos;
     }
-//              // B. TURN THE ROBOT
-//              // We need to spin the robot to bring the target back to center (0 degrees).
-//              // Determine direction:
-//              // If target is +179, we want to spin robot LEFT (positive omega) to make target relative angle smaller.
-//              // If target is -179, we want to spin robot RIGHT (negative omega).
-
-//              // Simple P-Controller for the Drivetrain rotation
-//              // kP should be tuned (start low, e.g., 2.0)
-//              double kP_Chassis = 4.0;
-//              robotTurnCmd = targetRadians * kP_Chassis;
-//         }
-
-//         // 4. Calculate Turret Feedforward (Standard)
-//         double r2 = targetVector.getNorm() * targetVector.getNorm();
-//         double crossProduct = targetVector.getX() * relativeHubVelocity.getY()
-//                             - targetVector.getY() * relativeHubVelocity.getX();
-//         double turretFF = (r2 > 1e-6) ? (crossProduct / r2) : 0.0;
-
-//         // If we are commanding the robot to turn, we must SUBTRACT that velocity from the turret
-//         // so the turret stays "world stabilized" while the chassis spins beneath it.
-//         if (robotTurnCmd != null) {
-//             turretFF -= robotTurnCmd;
-//         }
-
-//         return new AimingParameters(
-//             new Rotation2d(clampedTurretGoal),
-//             turretFF,
-//             robotTurnCmd
-//         );
-//     }
 
     public static Translation2d getPredictedHubLocation() {
-        Translation2d hubVelocity = getHubVelocity();
-        double futureAirtime = getFutureShootAirtime(hubVelocity);
+        Pose2d robotPose = getPredictedRobotPose();
+        Translation2d hubVelocity = getHubVelocity(robotPose);
+        double futureAirtime = getFutureShootAirtime(robotPose, hubVelocity);
         return hubVelocity.times(futureAirtime);
     }
 
@@ -113,8 +86,7 @@ public class AimCalculations {
      *
      * @return
      */
-    private static Translation2d getHubVelocity() {
-        Pose2d robotPose = getPredictedRobotPose();
+    private static Translation2d getHubVelocity(Pose2d robotPose) {
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
         double robotAngle = robotPose.getRotation().getRadians();
 
@@ -141,8 +113,8 @@ public class AimCalculations {
      *
      * @return The predicted future airtime of the ball. If no solution is found, return 0.
      */
-    private static double getFutureShootAirtime(Translation2d hubVelocity) {
-        Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
+    private static double getFutureShootAirtime(Pose2d robotPose, Translation2d hubVelocity) {
+        Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret(robotPose);
         Translation2d hubToTurret = fieldToTurret.minus(FieldConstants.getHubLocation());
 
         double distToHub = hubToTurret.getNorm();
