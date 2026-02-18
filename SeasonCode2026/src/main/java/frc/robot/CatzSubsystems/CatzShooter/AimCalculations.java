@@ -77,7 +77,7 @@ public class AimCalculations {
         Pose2d robotPose = getPredictedRobotPose();
         Translation2d hubVelocity = getHubVelocity(robotPose);
         double futureAirtime = getFutureShootAirtime(robotPose, hubVelocity);
-        return hubVelocity.times(futureAirtime);
+        return FieldConstants.getHubLocation().plus(hubVelocity.times(futureAirtime));
     }
 
     /**
