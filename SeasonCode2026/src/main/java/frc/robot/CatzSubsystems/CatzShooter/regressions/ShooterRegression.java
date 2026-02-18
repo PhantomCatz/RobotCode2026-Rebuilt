@@ -126,9 +126,9 @@ public class ShooterRegression {
         CLOSE_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_CLOSE_HOARD);
         FAR_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_FAR_HOARD);
         OPP_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_OPP_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_OPP_HOARD);
-        double a = airtimeInverseAutoAimPolynomial.beta(0);
+        double a = airtimeInverseAutoAimPolynomial.beta(2);
         double b = airtimeInverseAutoAimPolynomial.beta(1);
-        double c = airtimeInverseAutoAimPolynomial.beta(2);
+        double c = airtimeInverseAutoAimPolynomial.beta(0);
         airtimeRegA = a*a;
         airtimeRegB = 2*a*b;
         airtimeRegC = b*b + 2*a*c;

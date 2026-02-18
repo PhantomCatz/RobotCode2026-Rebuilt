@@ -107,7 +107,6 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	@Override
 	public void run() {
 		while (true) {
-			System.out.println("thread running");
 			setNearestGroupPose();
 		}
 	}

@@ -133,6 +133,8 @@ public class CatzRobotTracker {
     }
     // Add pose to buffer at timestamp
     POSE_BUFFER.addSample(observation.timestamp(), odometryPose);
+
+    m_lastChassisSpeeds = KINEMATICS.toChassisSpeeds(observation.moduleStates);
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
@@ -198,7 +200,6 @@ public class CatzRobotTracker {
     // then replaying odometry data
     scaledTransform = new Transform2d(scaledTransform.getTranslation(), new Rotation2d()); //remove rotation input
 
-    Logger.recordOutput("CamTransform"+observation.name, transform);
     //TODO hopefully the latency does not matter here?
     visionPoseShift = scaledTransform.getTranslation();
 

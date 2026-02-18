@@ -6,6 +6,7 @@ import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
+import org.checkerframework.checker.units.qual.t;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.Units;
@@ -32,11 +33,14 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	public void periodic() {
 		super.periodic();
 
-		Logger.recordOutput(name+"/Target Setpoint Rot", setpoint.baseUnits / (2*Math.PI));
-
 		if (isFullManual) {
 			runFullManual(manualSpeed);
 		}
+	}
+
+	@Override
+	public void applySetpoint(Setpoint setpoint){
+		super.applySetpoint(setpoint);
 	}
 
 	public void runFullManual(double speed) {

@@ -45,6 +45,5 @@ public class GyroIOPigeon implements GyroIO {
     //   inputs.gyroAngle = yaw.getValueAsDouble();
     // }
     inputs.gyroAngle = yaw.getValueAsDouble();
-    Logger.recordOutput("Gyro/NegativeYawAngleRotations", inputs.gyroAngle / -360.0);
   }
 }

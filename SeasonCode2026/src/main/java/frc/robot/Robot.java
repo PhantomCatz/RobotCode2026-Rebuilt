@@ -183,10 +183,10 @@ public class Robot extends LoggedRobot {
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
 
-      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
-      Notifier.setHALThreadPriority(false, 0);
-      System.out.println("Starting deteciton threaadf==================");
-      coralDetectionThread.startPeriodic(0.1);
+      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      // Notifier.setHALThreadPriority(false, 0);
+      // System.out.println("Starting deteciton threaadf==================");
+      // coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override

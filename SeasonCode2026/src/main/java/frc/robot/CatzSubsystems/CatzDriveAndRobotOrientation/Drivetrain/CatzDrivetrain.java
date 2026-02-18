@@ -476,7 +476,6 @@ public class CatzDrivetrain extends SubsystemBase {
             Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
         curvature // Input the calculated curvature here
     );
-    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
 
     Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));

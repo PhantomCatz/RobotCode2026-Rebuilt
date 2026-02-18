@@ -88,21 +88,21 @@ public class AimCalculations {
      */
     private static Translation2d getHubVelocity(Pose2d robotPose) {
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
-        double robotAngle = robotPose.getRotation().getRadians();
+        // double robotAngle = robotPose.getRotation().getRadians();
 
-        double cosRobotAngle = Math.cos(robotAngle);
-        double sinRobotAngle = Math.sin(robotAngle);
+        // double cosRobotAngle = Math.cos(robotAngle);
+        // double sinRobotAngle = Math.sin(robotAngle);
 
-        double turretVelocityX = robotVelocity.vxMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                        * (TurretConstants.TURRET_OFFSET.getY() * cosRobotAngle
-                                - TurretConstants.TURRET_OFFSET.getX() * sinRobotAngle);
-        double turretVelocityY = robotVelocity.vyMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                        * (TurretConstants.TURRET_OFFSET.getX() * cosRobotAngle
-                                - TurretConstants.TURRET_OFFSET.getY() * sinRobotAngle);
+        // double turretVelocityX = robotVelocity.vxMetersPerSecond
+        //         + robotVelocity.omegaRadiansPerSecond
+        //                 * (TurretConstants.TURRET_OFFSET.getY() * cosRobotAngle
+        //                         - TurretConstants.TURRET_OFFSET.getX() * sinRobotAngle);
+        // double turretVelocityY = robotVelocity.vyMetersPerSecond
+        //         + robotVelocity.omegaRadiansPerSecond
+        //                 * (TurretConstants.TURRET_OFFSET.getX() * cosRobotAngle
+        //                         - TurretConstants.TURRET_OFFSET.getY() * sinRobotAngle);
 
-        return new Translation2d(-turretVelocityX, -turretVelocityY);
+        return new Translation2d(-robotVelocity.vxMetersPerSecond, -robotVelocity.vyMetersPerSecond);
     }
 
     /**
@@ -138,7 +138,6 @@ public class AimCalculations {
         double e = regressionETerm - distToHub*distToHub;
 
         double[] coeffs = {e, d, c, b, a};
-        PolynomialFunction poly = new PolynomialFunction(coeffs);
 
         Complex[] roots = solver.solveAllComplex(coeffs, 0);
 

@@ -79,7 +79,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
             double timestamp = poseEstimate.timestampSeconds;
 
             Pose2d turretPoseFieldSpace = poseEstimate.pose;
-            Logger.recordOutput("Turret Pose Field Space", turretPoseFieldSpace);
+            Logger.recordOutput("Limelight Turret Pose Field Space", turretPoseFieldSpace);
 
             Rotation2d pastTurretRot = new Rotation2d(CatzTurret.Instance.getAngleAtTime(timestamp)).plus(TurretConstants.TURRET_ROTATION_OFFSET);
 
