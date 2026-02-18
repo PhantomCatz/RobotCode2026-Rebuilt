@@ -25,6 +25,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -310,7 +311,21 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
-    public Command turretTrackCornerCommand(){
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateCornerTrackingSetpoint());
+    public Command alignToBackUpClimb(boolean isRight) {
+        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true);
+    }
+
+    public Command alignToCloseClimb(boolean isRight) {
+        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true);
+    }
+
+    public Command alignToClimb(boolean isRight) {
+        return Commands.deadline(
+            Commands.sequence(
+                alignToBackUpClimb(isRight),
+                alignToCloseClimb(isRight)
+            ),
+            CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbTurretTrackingLocation()))
+        );
     }
 }

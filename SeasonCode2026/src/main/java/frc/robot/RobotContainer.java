@@ -14,6 +14,7 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
@@ -79,6 +80,11 @@ public class RobotContainer {
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop());
 
     // -------------------------------------------------------------------------
+    // CLIMB (D pad Left and Right)
+    // -------------------------------------------------------------------------
+
+    xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
+    xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE
     // -------------------------------------------------------------------------
     xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
@@ -89,7 +95,7 @@ public class RobotContainer {
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
-    xboxTest.leftBumper().onTrue(superstructure.turretTrackCornerCommand());
+    xboxTest.leftBumper().onTrue(superstructure.trackTarget(RegressionMode.HUB));
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 
