@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
+
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.BaseStatusSignal; // Import added
 
@@ -98,6 +99,7 @@ public class CatzSwerveModule {
       return io.getSignals();
   }
 
+  double prevCur = 0.0;
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
@@ -112,6 +114,8 @@ public class CatzSwerveModule {
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
+
+
 
   }
 

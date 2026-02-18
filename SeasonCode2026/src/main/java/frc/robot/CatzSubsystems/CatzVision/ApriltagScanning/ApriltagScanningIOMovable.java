@@ -31,6 +31,16 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     public void update() {
         updateGyroWithTurret();
 
+        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond);
+
+        double turretOmegaDegPerSec = CatzTurret.Instance.getVelocity().in(Units.DegreesPerSecond);
+
+        double cameraFieldOmega = robotOmegaDegPerSec + turretOmegaDegPerSec;
+
+        if (Math.abs(cameraFieldOmega) > 300.0) {
+            System.out.println("Limelight turning too fast!!!!!");
+            return;
+        }
         PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name);
         setLatestEstimate(estimate, 1);
     }
@@ -79,7 +89,6 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
 
             Pose2d robotPoseFieldSpace = turretPoseFieldSpace.transformBy(robotToTurret.inverse());
 
-
             latestEstimate = robotPoseFieldSpace;
             latestEstimateTime = Units.Seconds.of(timestamp);
 
@@ -88,7 +97,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
                             config.name,
                             robotPoseFieldSpace,
                             timestamp,
-                            LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist)));
+                            config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist)));
         }
     }
 

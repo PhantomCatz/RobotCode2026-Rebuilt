@@ -40,10 +40,12 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 	@Override
 	public void periodic() {
-		io.updateInputs(inputs);
-		Logger.processInputs("RealInputs/Detection", inputs);
-		outputTelemetry();
-		Logger.recordOutput("Detection/nearestCoral", inputs.nearestCoral);
+		if(Robot.isReal()) {
+			io.updateInputs(inputs);
+			Logger.processInputs("RealInputs/Detection", inputs);
+			outputTelemetry();
+			Logger.recordOutput("Detection/nearestFuel", inputs.nearestFuel);
+		}
 	}
 
 	public boolean getDisabled() {
@@ -51,10 +53,10 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	}
 
 	/**
-	 * @return The closest coral pose.
+	 * @return The closest Fuel pose.
 	 */
-	public Pose2d getCoralPose() {
-		return io.getCoralPose();
+	public Pose2d getFuelPose() {
+		return io.getFuelPose();
 	}
 
 	public Pose2d getNearestGroupPose() {
@@ -66,27 +68,27 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	}
 
 	/**
-	 * @param base The translation to evaluate the closest coral relative to
+	 * @param base The translation to evaluate the closest Fuel relative to
 	 *
-	 * @return A pose with a rotation component equal to the angle to face the coral and the translation component of the closest coral.
+	 * @return A pose with a rotation component equal to the angle to face the Fuel and the translation component of the closest Fuel.
 	 */
-	public Pose2d getCoralTranslationAndPoint() {
-		Translation2d t = getCoralPose().getTranslation();
+	public Pose2d getFuelTranslationAndPoint() {
+		Translation2d t = getFuelPose().getTranslation();
 		Rotation2d r = t.minus(CatzRobotTracker.Instance.getEstimatedPose().getTranslation()).getAngle();
-		// LogUtil.recordPose2d("Detection PID/Coral Translation And Point", new Pose2d(t, r));
+		// LogUtil.recordPose2d("Detection PID/Fuel Translation And Point", new Pose2d(t, r));
 		return new Pose2d(t, r);
 	}
 
-	public int coralCount() {
-		return io.coralCount();
+	public int fuelCount() {
+		return io.fuelCount();
 	}
 
 	public void setPipeline(int index) {
 		io.setPipeline(index);
 	}
 
-	public boolean hasCoral() {
-		return getCoralPose() != null;
+	public boolean hasFuel() {
+		return getFuelPose() != null;
 	}
 
 	public void outputTelemetry() {
@@ -95,7 +97,7 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 	@Override
 	public void initSendable(SendableBuilder builder) {
-		builder.addBooleanProperty(config.name + "/Has Coral", () -> hasCoral(), null);
+		builder.addBooleanProperty(config.name + "/Has Fuel", () -> hasFuel(), null);
 		builder.addDoubleProperty(
 				config.name + "/Latest Pipeline Index",
 				() -> LimelightHelpers.getCurrentPipelineIndex(config.name),

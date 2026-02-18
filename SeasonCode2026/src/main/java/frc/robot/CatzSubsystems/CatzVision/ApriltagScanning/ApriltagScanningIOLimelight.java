@@ -32,8 +32,8 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 		if (poseEstimate.tagCount >= minTagNum) {
 			latestEstimate = poseEstimate.pose;
 			latestEstimateTime = Units.Seconds.of(poseEstimate.timestampSeconds);
-			CatzRobotTracker.Instance.addVisionObservation(
-                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
+			CatzRobotTracker.getInstance().addVisionObservation(
+                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}
 	}
@@ -53,6 +53,11 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	@Override
 	public void update() {
 		updateGyro();
+
+		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond);
+		if (Math.abs(robotOmegaDegPerSec) > 300.0) {
+            return; // Reject vision update if spinning too fast
+        }
 		setLatestEstimate(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(config.name), 1);
 	}
 
@@ -68,7 +73,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	}
 
 	private void updateGyro() {
-		Rotation2d theta = CatzRobotTracker.Instance.getEstimatedPose().getRotation();
+		Rotation2d theta = CatzRobotTracker.getInstance().getEstimatedPose().getRotation();
 		LimelightHelpers.SetRobotOrientation(config.name, theta.getDegrees(), 0, 0, 0, 0, 0);
 	}
 

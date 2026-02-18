@@ -51,6 +51,8 @@ public class TeleopDriveCmd extends Command {
 
     // subsystem assignment
     this.m_drivetrain = drivetrain;
+    System.out.println("TeleopDriveCmd drivetrain = " + drivetrain);
+
 
     addRequirements(this.m_drivetrain);
   }
@@ -75,40 +77,31 @@ public void initialize() {}
     m_headingAndVelocity_Y = -m_headingPctOutput_X.get();
     turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
 
-    // Flip Directions for left joystick if alliance is red\[]
+    // Flip Directions for left joystick if alliance is red
 
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       m_headingAndVelocity_X = -m_headingAndVelocity_X;
       m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
     }
 
-    // Apply deadbands to prevent modules from receiving unintentional pwr due to joysticks having offset
-    m_headingAndVelocity_X =
-        Math.abs(m_headingAndVelocity_X) > XboxInterfaceConstants.kDeadband
-            ? m_headingAndVelocity_X * DriveConstants.DRIVE_CONFIG.maxLinearVelocity()
-            : 0.0;
-    m_headingAndVelocity_Y =
-        Math.abs(m_headingAndVelocity_Y) > XboxInterfaceConstants.kDeadband
-            ? m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity()
-            : 0.0;
+    if(Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y) < XboxInterfaceConstants.kDeadband){
+      m_headingAndVelocity_X = 0.0;
+      m_headingAndVelocity_Y = 0.0;
+    }else{
+      m_headingAndVelocity_X *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      m_headingAndVelocity_Y *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+    }
     turningVelocity =
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
             : 0.0;
-
-    // if(CatzSuperstructure.isClimbEnabled()) {
-    //   m_headingAndVelocity_X *= 0.4;
-    //   m_headingAndVelocity_Y *= 0.4;
-    //   turningVelocity *= 0.4;
-    //   //System.out.println("low speed");
-    // }
 
     // Construct desired chassis speeds
 
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(m_headingAndVelocity_X,
                                                           m_headingAndVelocity_Y,
                                                           turningVelocity,
-                                                          CatzRobotTracker.Instance.getEstimatedPose().getRotation());
+                                                          CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
     // Send new chassisspeeds object to the drivetrain
     m_drivetrain.drive(chassisSpeeds);

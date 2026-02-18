@@ -210,6 +210,21 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		leaderTalon.setControl(dutyCycleRequest.withOutput(0.0));
 	}
 
+	@Override
+  	public void setGainsSlot0(double p, double i, double d, double s, double v, double a, double g) {
+		UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
+			config.Slot0.kP = p;
+			config.Slot0.kI = i;
+			config.Slot0.kD = d;
+			config.Slot0.kV = v;
+			config.Slot0.kA = a;
+			config.Slot0.kG = g;
+			return config;
+		};
+
+		changeAllConfig(configChanger);
+	}
+
 	protected void setControl(ControlRequest request) {
 		leaderTalon.setControl(request);
 	}
