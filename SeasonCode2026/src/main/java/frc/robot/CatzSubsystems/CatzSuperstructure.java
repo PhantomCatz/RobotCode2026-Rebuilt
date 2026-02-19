@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
-import frc.robot.CatzSubsystems.CatzClimbTall.CatzClimbTall;
-import frc.robot.CatzSubsystems.CatzClimbTall.ClimbConstantsTall;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort.CatzClimbShort;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort.ClimbConstantsShort;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall.CatzClimbTall;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall.ClimbConstantsTall;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
@@ -86,7 +86,7 @@ public class CatzSuperstructure {
     }
 
     public Command extendClimbCommand(){
-        return CatzClimb.Instance.setpointCommand(ClimbConstants.FULL_EXTEND);
+        return CatzClimbShort.Instance.setpointCommand(ClimbConstantsShort.FULL_EXTEND);
     }
 
     public Command extendClimbTallCommand(){
@@ -94,7 +94,7 @@ public class CatzSuperstructure {
     }
 
     public Command returnOriginalClimbCommand(){
-        return CatzClimb.Instance.setpointCommand(ClimbConstants.HOME);
+        return CatzClimbShort.Instance.setpointCommand(ClimbConstantsShort.HOME);
     }
 
     public Command returnOriginalClimbTallCommand(){
@@ -130,7 +130,7 @@ public class CatzSuperstructure {
         );
     }
     public Command manualExtendCLimb() {
-        return CatzClimb.Instance.followSetpointCommand(() -> {
+        return CatzClimbShort.Instance.followSetpointCommand(() -> {
             double input = (RobotContainer.xboxDrv.getLeftY()) * 2;
             Logger.recordOutput("Climb Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);

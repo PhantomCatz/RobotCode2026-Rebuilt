@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimb;
+package frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,7 +15,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
-public class ClimbConstants {
+public class ClimbConstantsTall {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
 	public static final Distance FULL_EXTENSION = Units.Inches.of(12.0);
@@ -24,8 +24,8 @@ public class ClimbConstants {
 	public static final Setpoint HOME = Setpoint.withMotionMagicSetpoint(converter.toAngle(home));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN1 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -37,10 +37,7 @@ public class ClimbConstants {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-	public static final Setpoint Stow = Setpoint.withMotionMagicSetpoint(0.0);
-	public static final Setpoint Extend = Setpoint.withMotionMagicSetpoint(50.0);
-
-    private static final int CLIMB_MOTOR_ID = 60;
+    private static final int CLIMB_MOTOR_ID = 61;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 

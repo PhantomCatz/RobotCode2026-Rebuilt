@@ -1,27 +1,23 @@
-package frc.robot.CatzSubsystems.CatzClimbTall;
+package frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw;
 
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
-import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
+import frc.robot.CatzAbstractions.io.GenericSparkmaxIOReal.MotorIOSparkMaxConfig;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
-public class ClimbConstantsTall {
+public class ClimbConstantsClaw {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
-	public static final Distance FULL_EXTENSION = Units.Inches.of(12.0);
-	public static final Setpoint FULL_EXTEND = Setpoint.withMotionMagicSetpoint(converter.toAngle(FULL_EXTENSION));
-	public static final Distance home = Units.Inches.of(0.0);
-	public static final Setpoint HOME = Setpoint.withMotionMagicSetpoint(converter.toAngle(home));
+	public static final Setpoint FULL_EXTEND = Setpoint.withVoltageSetpoint(5);
+	public static final Setpoint HOME = Setpoint.withVoltageSetpoint(5);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -37,7 +33,7 @@ public class ClimbConstantsTall {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    private static final int CLIMB_MOTOR_ID = 61;
+    private static final int CLIMB_MOTOR_ID = 5;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
@@ -73,18 +69,21 @@ public class ClimbConstantsTall {
 		return FXConfig;
 	}
 
-	public static MotorIOTalonFXConfig getIOConfig() {
-		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
-		IOConfig.mainConfig = getFXConfig();
+	public static  MotorIOSparkMaxConfig getIOConfig() {
+		MotorIOSparkMaxConfig IOConfig = new  MotorIOSparkMaxConfig();
+
 		IOConfig.mainID = CLIMB_MOTOR_ID; //TODO magic numbers!!
-		IOConfig.mainBus = "";
-		IOConfig.followerConfig = getFXConfig()
-				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
-						.withForwardSoftLimitEnable(false)
-						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
+
 		return IOConfig;
 	}
+
+	// public static class MotorIOSparkMaxConfig {
+    //     public int mainID = -1;
+    //     public int[] followerIDs = new int[0];
+    //     public boolean[] followerOpposeMain = new boolean[0];
+
+    //     public boolean invertMotor = false;
+    //     public int currentLimitAmps = 40;
+    //     public double gearRatio = 1.0;
+    // }
 }

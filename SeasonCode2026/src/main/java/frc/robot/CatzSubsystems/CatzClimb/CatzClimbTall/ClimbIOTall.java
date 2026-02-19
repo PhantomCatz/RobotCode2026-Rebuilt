@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimbTall;
+package frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall;
 
 
 import org.littletonrobotics.junction.AutoLog;

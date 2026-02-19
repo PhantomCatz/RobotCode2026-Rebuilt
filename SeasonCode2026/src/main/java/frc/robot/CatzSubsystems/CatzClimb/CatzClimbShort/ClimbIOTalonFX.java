@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimb;
+package frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort;
 
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal;
 

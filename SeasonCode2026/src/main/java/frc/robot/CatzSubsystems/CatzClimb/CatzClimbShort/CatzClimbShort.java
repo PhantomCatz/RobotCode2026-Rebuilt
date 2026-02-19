@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimb;
+package frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort;
 
 
 import org.littletonrobotics.junction.Logger;
@@ -6,7 +6,7 @@ import org.littletonrobotics.junction.Logger;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
-public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInputs> {
+public class CatzClimbShort extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInputs> {
 
     private static final ClimbIO io = getIOInstance();
     private static final ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
@@ -14,25 +14,25 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
     private static ClimbIO getIOInstance() {
         if (CatzConstants.ClimbOn == false) {
             System.out.println("Climb Disabled by CatzConstants");
-            return new ClimbIOSim(ClimbConstants.gains);
+            return new ClimbIOSim(ClimbConstantsShort.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Climb Configured for Real");
-                return new ClimbIOTalonFX(ClimbConstants.getIOConfig());
+                return new ClimbIOTalonFX(ClimbConstantsShort.getIOConfig());
             case SIM:
                 System.out.println("Climb Configured for Simulation");
-                return new ClimbIOSim(ClimbConstants.gains);
+                return new ClimbIOSim(ClimbConstantsShort.gains);
                 default:
                 System.out.println("Climb Unconfigured");
-                return new ClimbIOSim(ClimbConstants.gains);
+                return new ClimbIOSim(ClimbConstantsShort.gains);
         }
     }
 
-    public static final CatzClimb Instance = new CatzClimb();
+    public static final CatzClimbShort Instance = new CatzClimbShort();
 
-    private CatzClimb() {
-        super(io, inputs, "CatzClimb", ClimbConstants.converter.toAngle(ClimbConstants.CLIMB_THRESHOLD));
+    private CatzClimbShort() {
+        super(io, inputs, "CatzClimb", ClimbConstantsShort.converter.toAngle(ClimbConstantsShort.CLIMB_THRESHOLD));
     }
 
     @Override
