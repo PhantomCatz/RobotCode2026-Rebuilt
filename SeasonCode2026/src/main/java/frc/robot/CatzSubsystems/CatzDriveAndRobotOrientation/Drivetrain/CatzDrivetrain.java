@@ -173,14 +173,6 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroAngle2d,
         Timer.getFPGATimestamp());
     CatzRobotTracker.Instance.addOdometryObservation(observation);
-
-    // Update current velocities use gyro when possible
-    Twist2d robotRelativeVelocity = getTwist2dSpeeds();
-    robotRelativeVelocity.dtheta = gyroInputs.gyroConnected
-        ? Math.toRadians(gyroInputs.gyroYawVel)
-        : robotRelativeVelocity.dtheta;
-    CatzRobotTracker.Instance.addVelocityData(robotRelativeVelocity);
-
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------
