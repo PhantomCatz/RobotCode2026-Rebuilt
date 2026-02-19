@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -77,12 +78,13 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // GLOBAL STOP (X Button)
     // -------------------------------------------------------------------------
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackTarget(RegressionMode.HUB)));
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackStatucHub()));
 
     // -------------------------------------------------------------------------
     // CLIMB (D pad Left and Right)
     // -------------------------------------------------------------------------
 
+    DoublePressTracker.createTrigger(xboxDrv.start()).onTrue(Commands.runOnce(() -> superstructure.isClimbMode = !superstructure.isClimbMode));
     xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
     xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE

@@ -32,6 +32,8 @@ import frc.robot.Utilities.Setpoint;
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
+    public boolean isClimbMode = false;
+
     private boolean isCloseCornerHoarding = true;
     private boolean isScoring = false;
 
@@ -56,7 +58,7 @@ public class CatzSuperstructure {
 
     private RegressionMode getSpecificMode(RegressionMode mode) {
         if (mode != RegressionMode.HUB) {
-            return isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
+            return isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.FAR_HOARD;
         }
         return mode;
     }
@@ -69,6 +71,10 @@ public class CatzSuperstructure {
             Translation2d targetLoc = getTargetLocation(mode);
             CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc));
         }, CatzTurret.Instance);
+    }
+
+    public Command trackStatucHub(){
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
     /**
@@ -95,10 +101,7 @@ public class CatzSuperstructure {
 
             Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
 
-            RegressionMode specificMode = mode;
-            if (mode != RegressionMode.HUB) {
-                specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
-            }
+            RegressionMode specificMode = getSpecificMode(mode);
 
             CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, specificMode));
         }, CatzHood.Instance);
@@ -333,11 +336,11 @@ public class CatzSuperstructure {
     }
 
     public Command alignToBackUpClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true);
+        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true).onlyIf(()->isClimbMode);
     }
 
     public Command alignToCloseClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true);
+        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true).onlyIf(()->isClimbMode);
     }
 
     public Command alignToClimb(boolean isRight) {
