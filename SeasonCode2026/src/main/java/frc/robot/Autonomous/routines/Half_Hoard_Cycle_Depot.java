@@ -25,7 +25,7 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
 
         traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.CLOSE_HOARD)));
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructre.Instance.cmdHoardShoot());
+        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdFullStop());
         traj8.atTime("IntakeStop+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                                     .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));

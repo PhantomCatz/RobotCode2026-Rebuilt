@@ -21,7 +21,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
         AutoTrajectory traj7 = getTrajectory("Forefit_Outpost",6);
 
         traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot())
+        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),
