@@ -92,7 +92,7 @@ public class CatzRobotTracker {
   private Twist2d trajectoryVelocity = new Twist2d();
   private ChassisSpeeds m_lastChassisSpeeds = new ChassisSpeeds();
   private Translation2d visionPoseShift = new Translation2d();
-
+  private double lastTimestamp = 0.0;
 
   // ------------------------------------------------------------------------------------------------------
   //
@@ -137,12 +137,13 @@ public class CatzRobotTracker {
     ChassisSpeeds chassisSpeeds = KINEMATICS.toChassisSpeeds(observation.moduleStates);
     robotAccelerations =
       new Twist2d(
-        (chassisSpeeds.vxMetersPerSecond - m_lastChassisSpeeds.vxMetersPerSecond) / observation.timestamp,
-        (chassisSpeeds.vyMetersPerSecond - m_lastChassisSpeeds.vyMetersPerSecond) / observation.timestamp,
-        (chassisSpeeds.omegaRadiansPerSecond - m_lastChassisSpeeds.omegaRadiansPerSecond) / observation.timestamp
+        (chassisSpeeds.vxMetersPerSecond - m_lastChassisSpeeds.vxMetersPerSecond) / (observation.timestamp - lastTimestamp),
+        (chassisSpeeds.vyMetersPerSecond - m_lastChassisSpeeds.vyMetersPerSecond) / (observation.timestamp - lastTimestamp),
+        (chassisSpeeds.omegaRadiansPerSecond - m_lastChassisSpeeds.omegaRadiansPerSecond) / (observation.timestamp - lastTimestamp)
       );
 
     m_lastChassisSpeeds = chassisSpeeds;
+    lastTimestamp = observation.timestamp;
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);

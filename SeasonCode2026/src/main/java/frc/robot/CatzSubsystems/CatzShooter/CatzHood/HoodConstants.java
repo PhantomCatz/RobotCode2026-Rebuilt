@@ -45,7 +45,7 @@ public class HoodConstants {
 
     private static final int HOOD_MOTOR_ID = 22;
 
-	public static final Angle HOOD_THRESHOLD = Units.Degrees.of(1.0);
+	public static final Angle HOOD_THRESHOLD = Units.Degrees.of(3.0);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
