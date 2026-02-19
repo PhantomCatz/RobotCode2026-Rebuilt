@@ -25,7 +25,7 @@ public final class CatzConstants {
 
   public static AutoFactory autoFactory;
 
-  public static final boolean ClimbOn = false;
+  public static final boolean ClimbOn = true;
   public static final boolean HoodOn = true;
   public static final boolean IndexerOn = true;
   public static final boolean SpindexerOn = true;

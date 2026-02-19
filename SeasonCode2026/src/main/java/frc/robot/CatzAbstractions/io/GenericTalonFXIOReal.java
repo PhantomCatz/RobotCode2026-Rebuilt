@@ -180,8 +180,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	@Override
 	public void updateInputs(T inputs) {
 
-		inputs.isLeaderConnected = true;
+		inputs.isLeaderConnected = internalPositionRotations.getStatus().isOK();
 
+		if(followerTalons != null && followerTalons.length > 0) {
+			for(int i = 0; i < followerTalons.length; i++) {
+				connectedBuffer[i] = appliedVoltage.get(i+1).getStatus().isOK();
+			}
+		}
 		inputs.isFollowerConnected = connectedBuffer;
 
 		inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);

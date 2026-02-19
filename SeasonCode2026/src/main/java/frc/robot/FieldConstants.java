@@ -51,7 +51,7 @@ public class FieldConstants {
   public static Pose2d getClimbBackAwayPosition(boolean isRight) {
     Pose2d pose = CLIMB_BACK_AWAY_LEFT;
     if (!isRight) {
-      pose = new Pose2d(pose.getX(), fieldWidth - pose.getY(), Rotation2d.kZero);
+      pose = new Pose2d(pose.getX(), fieldWidth - pose.getY(), Rotation2d.kZero); //TODO the climb tower is not the middle of the field
     }
     return AllianceFlipUtil.apply(pose);
   }
