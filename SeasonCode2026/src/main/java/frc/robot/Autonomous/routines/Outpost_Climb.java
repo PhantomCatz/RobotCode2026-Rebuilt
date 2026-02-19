@@ -18,17 +18,16 @@ public class Outpost_Climb extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("Outpost_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Outpost_Climb",3);
 
-        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj2.atTime("RampUp+IntakeStop2").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
-
+        traj3.atTime("Score3").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             Commands.print("Climb5"), //TODO

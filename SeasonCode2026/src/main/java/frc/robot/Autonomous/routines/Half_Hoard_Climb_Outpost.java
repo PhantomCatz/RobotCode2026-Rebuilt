@@ -21,35 +21,26 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Half_Hoard_Climb_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Half_Hoard_Climb_Outpost",6);
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Climb_Outpost",7);
+        AutoTrajectory traj9 = getTrajectory("Half_Hoard_Climb_Outpost",7);
 
 
-        traj1.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.CLOSE_HOARD)));
-        traj1.atTime("Hoard").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-        traj4.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdFullStop());
-        traj5.atTime("RampUp+Intake6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdFullStop());
+        traj7.atTime("RampUp+Intake7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
+        traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj1),
-
-            CatzSuperstructure.Instance.cmdHoardShoot(),
-
             followTrajectoryWithAccuracy(traj2),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj7),
-
             followTrajectoryWithAccuracy(traj8),
             Commands.print("Climb"), //TODO
             Commands.print("done")

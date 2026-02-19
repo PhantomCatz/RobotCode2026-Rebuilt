@@ -17,17 +17,16 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("Forefit_Depot",2);
         AutoTrajectory traj4 = getTrajectory("Forefit_Depot",3);
         AutoTrajectory traj5 = getTrajectory("Forefit_Depot",4);
-        AutoTrajectory traj6 = getTrajectory("Forefit_Depot", 5);
+        AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
 
-        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-
+        traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT),
+                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy()),
+                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy()));
+        traj2.atTime("Hoard2").cmdHoardShoot();
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
-            CatzSuperstructure.Instance.cmdHoardShoot(),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),

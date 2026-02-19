@@ -19,7 +19,11 @@ public class R1_IAS extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("R1_IAS",3);
         AutoTrajectory traj5 = getTrajectory("R1_IAS",4);
         AutoTrajectory traj6 = getTrajectory("R1_IAS",5);
-
+        AutoTrajectory traj7 = getTrajectory("R1_IAS",6);
+        AutoTrajectory traj8 = getTrajectory("R1_IAS",7);
+        AutoTrajectory traj9 = getTrajectory("R1_IAS",8);
+        AutoTrajectory traj10 = getTrajectory("R1_IAS",9);
+//Meeting ended here, WIP \/
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj1.atTime("StopIntake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT));
         traj2.atTime("RampUp3").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB));

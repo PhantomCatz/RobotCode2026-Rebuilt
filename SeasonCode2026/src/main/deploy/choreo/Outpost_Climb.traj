@@ -297,6 +297,5 @@
    {"name":"Intake1", "from":{"target":1, "targetTimestamp":3.61295, "offset":{"exp":"-1 s", "val":-1.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
    {"name":"Score3", "from":{"target":2, "targetTimestamp":6.10048, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score3"}}},
    {"name":"Climb5", "from":{"target":4, "targetTimestamp":8.86075, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Climb5"}}},
-   {"name":"RampUp+IntakeStop2", "from":{"target":1, "targetTimestamp":3.61295, "offset":{"exp":"0.9 s", "val":0.9}}, "event":null},
-   {"name":"IntakeStop+RampUp2", "from":{"target":2, "targetTimestamp":6.10048, "offset":{"exp":"-1.3 s", "val":-1.3}}, "event":null}]
+   {"name":"IntakeStop+RampUp2", "from":{"target":1, "targetTimestamp":3.61295, "offset":{"exp":"+1.2 s", "val":1.2}}, "event":null}]
 }

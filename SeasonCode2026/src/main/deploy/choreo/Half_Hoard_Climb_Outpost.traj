@@ -29,7 +29,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"4.4 m", "val":4.4}, "y":{"exp":"0.6 m", "val":0.6}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":26, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"5.437366962432861 m", "val":5.437366962432861}, "y":{"exp":"0.6528339385986328 m", "val":0.6528339385986328}, "heading":{"exp":"0.1343214460026795 rad", "val":0.1343214460026795}, "intervals":89, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"5.437366962432861 m", "val":5.437366962432861}, "y":{"exp":"0.6528339385986328 m", "val":0.6528339385986328}, "heading":{"exp":"0.1343214460026795 rad", "val":0.1343214460026795}, "intervals":89, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.554336547851562 m", "val":8.554336547851562}, "y":{"exp":"1.7894648313522339 m", "val":1.789464831352234}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":62, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":{"exp":"8.596911430358887 m", "val":8.596911430358887}, "y":{"exp":"4.031761169433594 m", "val":4.031761169433594}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":48, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":{"exp":"7.757638931274414 m", "val":7.757638931274414}, "y":{"exp":"4.0717082023620605 m", "val":4.0717082023620605}, "heading":{"exp":"-90 deg", "val":-1.5707963267948966}, "intervals":50, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
@@ -511,7 +511,7 @@
    {"name":"Intake+RampUp2", "from":{"target":2, "targetTimestamp":2.65213, "offset":{"exp":"-0.75 s", "val":-0.75}}, "event":null},
    {"name":"Hoard3", "from":{"target":3, "targetTimestamp":5.52836, "offset":{"exp":"-1.3 s", "val":-1.3}}, "event":null},
    {"name":"HoardStop6", "from":{"target":5, "targetTimestamp":8.88225, "offset":{"exp":"-0 s", "val":0.0}}, "event":null},
-   {"name":"RampUp+IntakeStop6", "from":{"target":6, "targetTimestamp":10.32386, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"RampUp+IntakeStop7", "from":{"target":6, "targetTimestamp":10.32386, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score8", "from":{"target":7, "targetTimestamp":12.2043, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Climb10", "from":{"target":9, "targetTimestamp":14.69359, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
