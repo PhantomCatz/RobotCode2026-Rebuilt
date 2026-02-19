@@ -16,14 +16,13 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
-import io.grpc.InternalChannelz.RootChannelList;
 
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
+import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
-    private static final double phaseDelay = 0.03;
+    private static final double phaseDelay = 0.05;
     private static LaguerreSolver solver = new LaguerreSolver();
     private static Translation2d predictedHubLocation = new Translation2d();
 
@@ -165,17 +164,21 @@ public class AimCalculations {
     private static Pose2d getPredictedRobotPose() {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
+        Twist2d robotAcceleration = CatzRobotTracker.Instance.getRobotAccelerations();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * phaseDelay,
-                robotVelocity.vyMetersPerSecond * phaseDelay,
-                robotVelocity.omegaRadiansPerSecond * phaseDelay);
+                robotVelocity.vxMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dx * phaseDelay*phaseDelay,
+                robotVelocity.vyMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dy * phaseDelay*phaseDelay,
+                robotVelocity.omegaRadiansPerSecond * phaseDelay + 0.5 * robotAcceleration.dtheta * phaseDelay*phaseDelay);
 
         return currentPose.exp(twist);
     }
 
     public static boolean readyToShoot() {
-        return CatzTurret.Instance.nearPositionSetpoint() && CatzHood.Instance.nearPositionSetpoint()
+        Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
+        Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
+        Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
+        return CatzTurret.Instance.nearPositionSetpoint()
                 && CatzFlywheels.Instance.spunUp();
     }
 }

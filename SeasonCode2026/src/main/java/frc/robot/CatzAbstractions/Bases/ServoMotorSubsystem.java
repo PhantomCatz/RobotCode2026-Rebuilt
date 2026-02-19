@@ -6,8 +6,6 @@ import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
-import org.checkerframework.checker.units.qual.t;
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;

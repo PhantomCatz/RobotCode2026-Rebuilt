@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
 import frc.robot.Robot;
@@ -333,6 +334,34 @@ public class CatzDrivetrain extends SubsystemBase {
         // If cosine is negative (error > 90 deg), output is 0.
         optimizedState.speedMetersPerSecond *= Math.max(0.0, cosineScale);
       }
+      m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
+
+      optimizedDesiredStates[i] = optimizedState;
+    }
+  }
+
+
+  public void moveWhileShootAccControl(ChassisSpeeds desiredSpeeds) {
+
+    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
+    ModuleLimits limits;
+
+    if(CatzSuperstructure.Instance.getIsScoring()){
+      limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
+    }else{
+      limits = DriveConstants.DRIVE_LIMITS;
+    }
+    currentSetpoint = swerveSetpointGenerator.generateSetpoint(
+        limits,
+        currentSetpoint,
+        discreteSpeeds,
+        0.02);
+
+    SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
+
+    for (int i = 0; i < 4; i++) {
+      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+
       m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
 
       optimizedDesiredStates[i] = optimizedState;

@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
@@ -34,6 +33,7 @@ public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
     private boolean isCloseCornerHoarding = true;
+    private boolean isScoring = false;
 
     private CatzSuperstructure() {}
 
@@ -110,8 +110,6 @@ public class CatzSuperstructure {
     private boolean initialShootReady = false;
     private Command runFeeder() {
         return Commands.run(() -> {
-            Logger.recordOutput("Is Ready To Shoot", AimCalculations.readyToShoot());
-
             if(!initialShootReady && AimCalculations.readyToShoot()) {
                 initialShootReady = true;
             }
@@ -134,8 +132,8 @@ public class CatzSuperstructure {
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
             CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
-            Commands.runOnce(() -> initialShootReady = false)
-
+            Commands.runOnce(() -> initialShootReady = false),
+            Commands.runOnce(() -> isScoring = false)
         );
     }
 
@@ -168,7 +166,8 @@ public class CatzSuperstructure {
             rampUpFlywheels(RegressionMode.HUB),
             trackTarget(RegressionMode.HUB),
             aimHood(RegressionMode.HUB),
-            runFeeder()
+            runFeeder(),
+            Commands.runOnce(() -> isScoring = true)
         );
     }
 
@@ -179,6 +178,7 @@ public class CatzSuperstructure {
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
             CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            Commands.runOnce(() -> isScoring = false),
             Commands.runOnce(() -> initialShootReady = false)
         );
     }
@@ -216,6 +216,10 @@ public class CatzSuperstructure {
 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
+    }
+
+    public boolean getIsScoring(){
+        return isScoring;
     }
 
     /* FUNCTIONAL COMMANDS */

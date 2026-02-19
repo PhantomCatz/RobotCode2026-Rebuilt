@@ -104,7 +104,7 @@ public void initialize() {}
                                                           CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
     // Send new chassisspeeds object to the drivetrain
-    m_drivetrain.drive(chassisSpeeds);
+    m_drivetrain.moveWhileShootAccControl(chassisSpeeds);
     debugLogsDrive();
   } // end of execute()
 

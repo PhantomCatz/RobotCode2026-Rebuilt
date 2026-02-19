@@ -1,6 +1,5 @@
 package frc.robot.Utilities;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;

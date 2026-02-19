@@ -75,7 +75,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
         Logger.recordOutput("Distance from Hub", distFromHub);
-        Logger.recordOutput("Distance from Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
+        Logger.recordOutput("Distance from Close Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
+        Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 
         Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
 

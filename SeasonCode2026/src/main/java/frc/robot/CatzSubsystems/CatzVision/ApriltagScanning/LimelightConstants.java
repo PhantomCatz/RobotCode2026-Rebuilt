@@ -16,7 +16,7 @@ public class LimelightConstants {
     public static final int kDisabledPipeline = 1;
 
     private static final double limelightCrosshairCompensationPitch = 0.0;
-    private static final double limelightCrosshairCompensationYaw = -2.0; // -2.0 for sushi
+    private static final double limelightCrosshairCompensationYaw = 0.0; // -2.0 for sushi
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",

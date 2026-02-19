@@ -18,7 +18,6 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,7 +36,6 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {

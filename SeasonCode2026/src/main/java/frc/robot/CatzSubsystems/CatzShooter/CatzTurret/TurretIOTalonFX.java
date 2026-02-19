@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 
