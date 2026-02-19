@@ -23,7 +23,6 @@ public class EpsilonRegression {
         {4.638, 1.18},
         {3.154, 1.20},
         {2.134, 1.12}
-
     };
 
 

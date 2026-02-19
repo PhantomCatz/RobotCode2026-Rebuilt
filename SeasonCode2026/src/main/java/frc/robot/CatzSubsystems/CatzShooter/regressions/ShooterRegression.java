@@ -14,9 +14,9 @@ public class ShooterRegression {
 
     // Enum to select which regression to use
     public enum RegressionMode {
-        HUB(0.067, Units.Degrees.of(2.0), Units.Degrees.of(2.0)), //percent threshold Hdegrees Vdegrees
-        CLOSE_HOARD(0.2, Units.Degrees.of(3.0), Units.Degrees.of(3.0)),
-        FAR_HOARD(0.3, Units.Degrees.of(4.0), Units.Degrees.of(4.0)),
+        HUB(0.067, Units.Degrees.of(4.0), Units.Degrees.of(4.0)), //percent threshold Hdegrees Vdegrees
+        CLOSE_HOARD(0.2, Units.Degrees.of(5.0), Units.Degrees.of(5.0)),
+        FAR_HOARD(0.3, Units.Degrees.of(5.0), Units.Degrees.of(5.0)),
         OPP_HOARD(0.4, Units.Degrees.of(5.0), Units.Degrees.of(5.0));
 
         private double flywheelPercentThreshold;
