@@ -63,8 +63,7 @@ public class SpindexerConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-
-		FXConfig.Feedback.SensorToMechanismRatio = 8.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 8.0; 
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
