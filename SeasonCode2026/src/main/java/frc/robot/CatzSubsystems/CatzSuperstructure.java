@@ -73,7 +73,7 @@ public class CatzSuperstructure {
         }, CatzTurret.Instance);
     }
 
-    public Command trackStatucHub(){
+    public Command trackStaticHub(){
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
