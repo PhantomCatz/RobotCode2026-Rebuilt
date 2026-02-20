@@ -78,7 +78,7 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // GLOBAL STOP (X Button)
     // -------------------------------------------------------------------------
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackStatucHub()));
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackStaticHub()));
 
     // -------------------------------------------------------------------------
     // CLIMB (D pad Left and Right)

@@ -32,6 +32,7 @@ public class FieldConstants {
   private static final Pose2d CLIMB_CLOSE_LEFT = new Pose2d(1.1707948446273804, 2.8092310428619385, Rotation2d.k180deg);
 
   private static final Translation2d CLIMB_TURRET_TRACKING_LOCATION = new Translation2d(0, fieldYHalf);
+  private static final Translation2d RIGHT_CORNER = new Translation2d(0.5798526406288147, 0.503104567527771);
   /**
    * Returns the position of the hub in the correct alliance.
    */
@@ -62,6 +63,15 @@ public class FieldConstants {
       pose = new Pose2d(pose.getX(), fieldWidth - pose.getY(), Rotation2d.kZero);
     }
     return AllianceFlipUtil.apply(pose);
+  }
+
+  public static Translation2d getCorner(boolean isRight){
+    Translation2d allianceFlipped = AllianceFlipUtil.apply(RIGHT_CORNER);
+    if(isRight){
+      return allianceFlipped;
+    }else{
+      return new Translation2d(allianceFlipped.getX(), fieldWidth - allianceFlipped.getY());
+    }
   }
 
   public static Translation2d getClimbTurretTrackingLocation() {
