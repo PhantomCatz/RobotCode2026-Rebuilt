@@ -27,7 +27,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
-import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
@@ -400,38 +399,6 @@ public class CatzDrivetrain extends SubsystemBase {
       driveVelocityAverage += module.getCharacterizationVelocityRadPerSec();
     }
     return driveVelocityAverage / 4.0;
-  }
-
-  /**
-   * Returns command that orients all modules to {@code orientation}, ending when
-   * the modules have
-   * rotated.
-   */
-  public Command orientModules(Rotation2d orientation) {
-    return orientModules(new Rotation2d[] { orientation, orientation, orientation, orientation });
-  }
-
-  /**
-   * Returns command that orients all modules to {@code orientations[]}, ending
-   * when the modules
-   * have rotated.
-   */
-  public Command orientModules(Rotation2d[] orientations) {
-    return run(() -> {
-      for (int i = 0; i < orientations.length; i++) {
-        m_swerveModules[i].setModuleAngleAndVelocity(
-            new SwerveModuleState(0.0, orientations[i]));
-        // new SwerveModuleState(0.0, new Rotation2d()));
-      }
-    })
-        .until(
-            () -> Arrays.stream(m_swerveModules)
-                .allMatch(
-                    module -> EqualsUtil.epsilonEquals(
-                        module.getAngle().getDegrees(),
-                        module.getModuleState().angle.getDegrees(),
-                        2.0)))
-        .withName("Orient Modules");
   }
 
   /** Set Neutral mode for all swerve modules */

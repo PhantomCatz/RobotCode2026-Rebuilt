@@ -57,28 +57,28 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     public void periodic() {
         super.periodic();
 
-        if (TurretConstants.kP.get() != p || TurretConstants.kD.get() != d || TurretConstants.kS.get() != s
-                || TurretConstants.kV.get() != v) {
-            setPDSVGGains(TurretConstants.kP.get(), TurretConstants.kD.get(), TurretConstants.kS.get(),
-                    TurretConstants.kV.get(), 0.0);
-            p = TurretConstants.kP.get();
-            d = TurretConstants.kD.get();
-            s = TurretConstants.kS.get();
-            v = TurretConstants.kV.get();
-        }
+        // if (TurretConstants.kP.get() != p || TurretConstants.kD.get() != d || TurretConstants.kS.get() != s
+        //         || TurretConstants.kV.get() != v) {
+        //     setPDSVGGains(TurretConstants.kP.get(), TurretConstants.kD.get(), TurretConstants.kS.get(),
+        //             TurretConstants.kV.get(), 0.0);
+        //     p = TurretConstants.kP.get();
+        //     d = TurretConstants.kD.get();
+        //     s = TurretConstants.kS.get();
+        //     v = TurretConstants.kV.get();
+        // }
 
-        Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
-                Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
-                        .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
-                        .plus(TurretConstants.TURRET_ROTATION_OFFSET));
-        Logger.recordOutput("Shooter Location", turretPose);
+        // Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
+        //         Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
+        //                 .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+        //                 .plus(TurretConstants.TURRET_ROTATION_OFFSET));
+        // Logger.recordOutput("Shooter Location", turretPose);
 
-        double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
-        Logger.recordOutput("Distance from Hub", distFromHub);
-        Logger.recordOutput("Distance from Close Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
-        Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
+        // double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
+        // Logger.recordOutput("Distance from Hub", distFromHub);
+        // Logger.recordOutput("Distance from Close Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
+        // Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 
-        Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
+        // Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
 
         angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }
