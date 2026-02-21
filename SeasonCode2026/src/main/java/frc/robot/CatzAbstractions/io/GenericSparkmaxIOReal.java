@@ -18,6 +18,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.RelativeEncoder;
+import frc.robot.Utilities.MotorUtil.Gains;
 
 public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T> {
 
@@ -36,7 +37,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     private final BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
     private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 5, TimeUnit.MILLISECONDS, queue);
 
-    public GenericSparkmaxIOReal(MotorIOSparkMaxConfig config) {
+    public GenericSparkmaxIOReal(MotorIOSparkMaxConfig config, Gains gains) {
         this.gearRatio = config.gearRatio;
 
         // 1. Initialize Leader
@@ -73,6 +74,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         // 4. Apply Initial Config to Leader
         // We use ResetSafeParameters to clear old state, and NoPersist to avoid wearing out flash during dev
+        setGainsSlot0(gains.kP(), gains.kI(), gains.kD(), gains.kS(), gains.kV(), gains.kA(), gains.kG());
         leaderMotor.configure(sparkConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
 
     }
@@ -126,9 +128,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
     public void setMotionMagicSetpoint(double mechanismPosition) {
         // Map MotionMagic to REV SmartMotion (Slot 0)
-        System.out.println("rahhhhh it motion magicked");
         double targetRotations = mechanismPosition / gearRatio;
-        System.out.println(targetRotations);
         closedLoopController.setSetpoint(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 

@@ -1,7 +1,6 @@
 package frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw;
 
 
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
@@ -68,7 +67,6 @@ public class ClimbConstantsClaw {
 		IOConfig.mainID = CLIMB_MOTOR_ID; //TODO magic numbers!!
 
 		IOConfig.gearRatio = 1;
-		SparkMaxConfig config = new SparkMaxConfig();
 
 		return IOConfig;
 	}
