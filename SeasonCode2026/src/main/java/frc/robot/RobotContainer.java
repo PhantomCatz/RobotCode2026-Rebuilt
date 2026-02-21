@@ -78,7 +78,7 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // GLOBAL STOP (X Button)
     // -------------------------------------------------------------------------
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackStatucHub()));
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackStaticHub()));
 
     // -------------------------------------------------------------------------
     // CLIMB (D pad Left and Right)
@@ -132,6 +132,7 @@ public class RobotContainer {
     xboxFunctional.a().onTrue(CatzSuperstructure.Instance.toggleFlywheel());
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdFullStop());
 
   }
 

@@ -146,19 +146,19 @@ public class AimCalculations {
 
         Complex[] roots = solver.solveAllComplex(coeffs, 0);
 
-        double minNonnegativeRealRoot = 9999999.9;
+        double minPositiveRealRoot = 9999999.9;
 
         for (Complex r : roots) {
             if (Math.abs(r.getImaginary()) < 1e-6 && r.getReal() > 0.0) {
-                minNonnegativeRealRoot = Math.min(minNonnegativeRealRoot, r.getReal());
+                minPositiveRealRoot = Math.min(minPositiveRealRoot, r.getReal());
             }
         }
 
-        if (minNonnegativeRealRoot != 9999999.9) {
-            return minNonnegativeRealRoot;
+        if (minPositiveRealRoot != 9999999.9) {
+            return minPositiveRealRoot;
         }
 
-        return 0.0; // both roots negative (if that's even possible)
+        return 0.0; // no positive roots (if that's even possible)
     }
 
     private static Pose2d getPredictedRobotPose() {
