@@ -169,14 +169,14 @@ public class AimCalculations {
         double[] coeffs = {e, d, c, b, a};
         Complex[] roots = solver.solveAllComplex(coeffs, 0);
 
-        double minNonnegativeRealRoot = Double.MAX_VALUE;
+        double minPositiveRealRoot = Double.MAX_VALUE;
         for (Complex r : roots) {
             if (Math.abs(r.getImaginary()) < 1e-6 && r.getReal() > 0.0) {
-                minNonnegativeRealRoot = Math.min(minNonnegativeRealRoot, r.getReal());
+                minPositiveRealRoot = Math.min(minPositiveRealRoot, r.getReal());
             }
         }
 
-        return minNonnegativeRealRoot != Double.MAX_VALUE ? minNonnegativeRealRoot : 0.0;
+        return minPositiveRealRoot != Double.MAX_VALUE ? minPositiveRealRoot : 0.0;
     }
 
     private static Pose2d getPredictedRobotPose() {

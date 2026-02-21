@@ -131,6 +131,7 @@ public class RobotContainer {
     xboxFunctional.a().onTrue(CatzSuperstructure.Instance.toggleFlywheel());
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdFullStop());
 
   }
 
