@@ -68,6 +68,12 @@ public class ClimbConstantsClaw {
 
 		IOConfig.gearRatio = 1;
 
+		IOConfig.gains = gains;
+
+		IOConfig.maxVelocity = 1000.0;
+		IOConfig.maxAcceleration = 500.0;
+		IOConfig.allowedError = 0.1;
+
 		return IOConfig;
 	}
 

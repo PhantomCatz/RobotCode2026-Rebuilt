@@ -37,7 +37,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     private final BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
     private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 5, TimeUnit.MILLISECONDS, queue);
 
-    public GenericSparkmaxIOReal(MotorIOSparkMaxConfig config, Gains gains) {
+    public GenericSparkmaxIOReal(MotorIOSparkMaxConfig config) {
         this.gearRatio = config.gearRatio;
 
         // 1. Initialize Leader
@@ -74,8 +74,8 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         // 4. Apply Initial Config to Leader
         // We use ResetSafeParameters to clear old state, and NoPersist to avoid wearing out flash during dev
-        setMaxMotion(1000.0, 500.0, 0.1); //TODO make it a param in the cunstructor
-        setGainsSlot0(gains.kP(), gains.kI(), gains.kD(), gains.kS(), gains.kV(), gains.kA(), gains.kG());
+        setMaxMotion(config.maxVelocity, config.maxAcceleration, config.allowedError); //TODO make it a param in the cunstructor
+        setGainsSlot0(config.gains.kP(), config.gains.kI(), config.gains.kD(), config.gains.kS(), config.gains.kV(), config.gains.kA(), config.gains.kG());
         leaderMotor.configure(sparkConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
 
 
@@ -268,5 +268,10 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         public boolean invertMotor = false;
         public int currentLimitAmps = 40;
         public double gearRatio = 1.0;
+        public Gains gains = new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        public double maxVelocity = 1000.0;
+        public double maxAcceleration = 500.0;
+        public double allowedError = 0.1;
+
     }
 }
