@@ -17,24 +17,27 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("Depot_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
         AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
+        AutoTrajectory traj6 = getTrajectory("Depot_Climb",5);
+        AutoTrajectory traj7 = getTrajectory("Depot_Climb",6);
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT).alongWith(Commands.print("Intake")));
         traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.cmdHubStandby().alongWith(Commands.print("RampUp+StopIntake3"))
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
+        traj4.atTime("Score4").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
 
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.deployIntake(),
 
             followTrajectoryWithAccuracy(traj1),
-
             followTrajectoryWithAccuracy(traj2),
 
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdShooterStop(),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
+            followTrajectoryWithAccuracy(traj6),
+            followTrajectoryWithAccuracy(traj7),
             Commands.print("Climb"), //TODO
             Commands.print("done")
         );

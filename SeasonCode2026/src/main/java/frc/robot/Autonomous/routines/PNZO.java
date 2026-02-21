@@ -16,22 +16,26 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj1 = getTrajectory("PNZO",0);
         AutoTrajectory traj2 = getTrajectory("PNZO",1);
         AutoTrajectory traj3 = getTrajectory("PNZO",2);
-
-        traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
+        AutoTrajectory traj4 = getTrajectory("PNZO",3);
+        AutoTrajectory traj5 = getTrajectory("PNZO",4);
+        AutoTrajectory traj6 = getTrajectory("PNZO",5);
+        traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj4.atTime("RampUp+StopIntake4").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
-        traj3.atTime("RampUp+Intake").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
+        traj5.atTime("Score5").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        traj5.atTime("RampUp+Intake5").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
                                                .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)));
 
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj3),
-            CatzSuperstructure.Instance.cmdHubShoot(),
+            followTrajectoryWithAccuracy(traj4),
+            followTrajectoryWithAccuracy(traj5),
+            followTrajectoryWithAccuracy(traj6),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
 
         );

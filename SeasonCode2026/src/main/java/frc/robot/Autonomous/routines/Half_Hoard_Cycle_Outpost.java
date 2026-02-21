@@ -21,37 +21,31 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Half_Hoard_Cycle_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Half_Hoard_Cycle_Outpost",6);
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Cycle_Outpost",7);
+        AutoTrajectory traj9 = getTrajectory("Half_Hoard_Cycle_Outpost",8);
+        AutoTrajectory traj10 = getTrajectory("Half_Hoard_Cycle_Outpost",9);
+        AutoTrajectory traj11 = getTrajectory("Half_Hoard_Cycle_Outpost",10);
+        AutoTrajectory traj12 = getTrajectory("Half_Hoard_Cycle_Outpost",11);
 
 
-        traj1.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.OVER_TRENCH_HOARD)));
-        traj1.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-        traj4.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj5.atTime("RampUp+IntakeStop6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
-        traj7.atTime("Intake8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj8.atTime("RampUp+IntakeStop6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
+        traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj5.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        traj7.atTime("RampUp+IntakeStop7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
+        traj9.atTime("Score9").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        traj10.atTime("Intake10").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj12.atTime("RampUp+IntakeStop12").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj1),
-
-            CatzSuperstructure.Instance.cmdHoardShoot(),
-
             followTrajectoryWithAccuracy(traj2),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
