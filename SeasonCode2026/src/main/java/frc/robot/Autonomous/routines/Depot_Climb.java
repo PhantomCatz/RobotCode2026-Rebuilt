@@ -24,9 +24,7 @@ public class Depot_Climb extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            // shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop(),
+            CatzSuperstructure.Instance.deployIntake(),
 
             followTrajectoryWithAccuracy(traj1),
 

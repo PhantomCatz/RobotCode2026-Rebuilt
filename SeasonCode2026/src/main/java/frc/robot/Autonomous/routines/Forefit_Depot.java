@@ -21,6 +21,10 @@ public class Forefit_Depot extends AutoRoutineBase{
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
 
+        traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy())
+                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy()));
+        traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,

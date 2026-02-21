@@ -208,6 +208,14 @@ public class CatzSuperstructure {
         }, CatzIntakeDeploy.Instance);
     }
 
+    public Command deployIntake(){
+        return CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.DEPLOY);
+    }
+
+    public Command stowIntake(){
+        return CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW);
+    }
+
     public Command toggleIntakeRollers() {
         return Commands.runOnce(() -> {
             if(isIntakeOn){
