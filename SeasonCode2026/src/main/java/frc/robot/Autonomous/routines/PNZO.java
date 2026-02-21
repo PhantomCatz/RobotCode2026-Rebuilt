@@ -7,7 +7,6 @@ import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class PNZO extends AutoRoutineBase{
     public PNZO(){
@@ -20,15 +19,15 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("PNZO",4);
         AutoTrajectory traj6 = getTrajectory("PNZO",5);
         traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj4.atTime("RampUp+StopIntake4").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
+        traj4.atTime("RampUp+StopIntake4").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
         traj5.atTime("Score5").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-        traj5.atTime("RampUp+Intake5").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)
+        traj5.atTime("RampUp+Intake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)));
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
+            CatzSuperstructure.Instance.deployIntake(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),

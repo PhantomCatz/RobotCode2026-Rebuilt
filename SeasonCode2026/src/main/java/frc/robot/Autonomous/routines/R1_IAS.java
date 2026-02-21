@@ -26,14 +26,14 @@ public class R1_IAS extends AutoRoutineBase{
 //Meeting ended here, WIP \/
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj3.atTime("StopIntake+RampUp3").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                    .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
+                                                    .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         traj6.atTime("Intake6").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj7.atTime("StopIntake+RampUp7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                   .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
+                                                   .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
+            CatzSuperstructure.Instance.deployIntake(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
