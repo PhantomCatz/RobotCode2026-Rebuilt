@@ -109,14 +109,46 @@ public class AimCalculations {
 
     public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode) {
         Pose2d robotPose = getPredictedRobotPose();
-        Translation2d targetVelocity = getTargetVelocityRelativeToRobot();
+        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(robotPose);
         double futureAirtime = getFutureShootAirtime(robotPose, targetVelocity, baseTarget, mode);
         return baseTarget.plus(targetVelocity.times(futureAirtime));
     }
 
-    private static Translation2d getTargetVelocityRelativeToRobot() {
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
-        return new Translation2d(-robotVelocity.vxMetersPerSecond, -robotVelocity.vyMetersPerSecond);
+    private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
+        ChassisSpeeds currentVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
+        Twist2d currentAcceleration = CatzRobotTracker.Instance.getRobotAccelerations();
+
+        double vx = currentVelocity.vxMetersPerSecond;
+        double vy = currentVelocity.vyMetersPerSecond;
+        double omega = currentVelocity.omegaRadiansPerSecond;
+
+        double ax = currentAcceleration.dx;
+        double ay = currentAcceleration.dy;
+        double alpha = currentAcceleration.dtheta;
+
+        double rx = TurretConstants.TURRET_OFFSET.getX();
+        double ry = TurretConstants.TURRET_OFFSET.getY();
+
+        // current velocity of the turret in the robot frame (v + w * r)
+        double currentTurretVx = vx - (omega * ry);
+        double currentTurretVy = vy + (omega * rx);
+
+        // acceleration of the turret in the robot frame (a + alpha × r - w*w * r)
+        // convert angular acceleration to linear acceleration alpha * r
+        // centripetal component: -w*w * r
+        double turretAx = ax - (alpha * ry) - (omega * omega * rx);
+        double turretAy = ay + (alpha * rx) - (omega * omega * ry);
+
+        // get predicted turret velocity in the robot frame
+        double predictedTurretVx = currentTurretVx + (turretAx * phaseDelay);
+        double predictedTurretVy = currentTurretVy + (turretAy * phaseDelay);
+
+        // rotate the predicted velocity into the field frame using the predicted robot rotation
+        Translation2d predictedTurretVelocityFieldFrame = new Translation2d(predictedTurretVx, predictedTurretVy)
+                .rotateBy(predictedRobotPose.getRotation());
+
+        // 5. Target apparent velocity is the inverse of the turret's field-relative velocity
+        return predictedTurretVelocityFieldFrame.unaryMinus();
     }
 
     private static double getFutureShootAirtime(Pose2d robotPose, Translation2d targetVelocity, Translation2d targetPos, RegressionMode mode) {
