@@ -43,6 +43,7 @@ public class ModuleIORealFoc implements ModuleIO {
   private final StatusSignal<Voltage> steerAppliedVolts;
   private final StatusSignal<Current> steerSupplyCurrent;
   private final StatusSignal<Current> steerTorqueCurrent;
+  private final StatusSignal<Angle> absPosition;
 
   // Motor Configs
   private final TalonFXConfiguration driveTalonConfig = new TalonFXConfiguration();
@@ -74,6 +75,10 @@ public class ModuleIORealFoc implements ModuleIO {
 
     encoder = new CANcoder(config.absoluteEncoderChannel(), driveTalonCANBus);
     m_config = config;
+
+    absPosition = encoder.getAbsolutePosition();
+    BaseStatusSignal.setUpdateFrequencyForAll(100.0, absPosition);
+    encoder.optimizeBusUtilization(); 
     // Init drive controllers from config constants
     driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
 
@@ -154,7 +159,8 @@ public class ModuleIORealFoc implements ModuleIO {
         System.out.println("Failed to Configure CAN ID" + config.steerID());
     }
 
-    steerTalon.setPosition((encoder.getPosition().getValueAsDouble() - absoluteEncoderOffset.getRotations()) / MODULE_GAINS_AND_RATIOS.steerReduction());
+    //steerTalon.setPosition((encoder.getPosition().getValueAsDouble() - absoluteEncoderOffset.getRotations()) / MODULE_GAINS_AND_RATIOS.steerReduction());
+    resetToAbsolute();
   }
 
   @Override
@@ -163,6 +169,31 @@ public class ModuleIORealFoc implements ModuleIO {
           drivePosition, driveVelocity, driveAppliedVolts, driveSupplyCurrent, driveTorqueCurrent,
           steerPosition, steerVelocity, steerAppliedVolts, steerSupplyCurrent, steerTorqueCurrent
       };
+  }
+
+  public void resetToAbsolute() {
+  // Ask for fresh data
+    for (int i = 0; i < 10; i++) {
+      absPosition.refresh();
+      if (absPosition.getStatus().isOK() && encoder.isConnected()) {
+        break;
+      }
+    }
+
+    if (!absPosition.getStatus().isOK() || !encoder.isConnected()) {
+      System.out.println("[Swerve] " + MODULE_NAME + " abs encoder not ready, skipping resetToAbsolute()");
+      return;
+    }
+
+    double absRot = absPosition.getValueAsDouble();
+
+    double correctedModuleRot =
+        absRot - absoluteEncoderOffset.getRotations();
+
+    double motorRot =
+        correctedModuleRot / MODULE_GAINS_AND_RATIOS.steerReduction();
+
+    steerTalon.setPosition(motorRot);
   }
 
   @Override
@@ -177,7 +208,7 @@ public class ModuleIORealFoc implements ModuleIO {
     inputs.driveTorqueCurrentAmps = driveTorqueCurrent.getValueAsDouble();
 
     // Refresh steer Motor Values
-    inputs.rawAbsEncValueRotation = encoder.getPosition().getValueAsDouble();
+    inputs.rawAbsEncValueRotation = absPosition.getValueAsDouble();
     inputs.steerAbsPosition       = Rotation2d.fromRotations(inputs.rawAbsEncValueRotation - absoluteEncoderOffset.getRotations());
 
     inputs.steerVelocityRadsPerSec = Units.rotationsToRadians(steerVelocity.getValueAsDouble());
