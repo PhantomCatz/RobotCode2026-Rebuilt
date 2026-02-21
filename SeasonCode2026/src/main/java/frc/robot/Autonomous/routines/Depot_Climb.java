@@ -3,10 +3,10 @@ package frc.robot.Autonomous.routines;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class Depot_Climb extends AutoRoutineBase{
     public Depot_Climb(){
@@ -19,7 +19,7 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
 
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT).alongWith(Commands.print("Intake")));
-        traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB).alongWith(Commands.print("RampUp+StopIntake3"))
+        traj3.atTime("RampUp+StopIntake3").onTrue(CatzSuperstructure.Instance.cmdHubStandby().alongWith(Commands.print("RampUp+StopIntake3"))
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
 
         prepRoutine(
@@ -30,8 +30,8 @@ public class Depot_Climb extends AutoRoutineBase{
 
             followTrajectoryWithAccuracy(traj2),
 
-            // shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop(),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            CatzSuperstructure.Instance.cmdShooterStop(),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),

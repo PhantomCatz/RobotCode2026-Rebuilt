@@ -22,13 +22,12 @@ public class Forefit_Depot extends AutoRoutineBase{
         traj1.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
 
         traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy())
-                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy()));
+                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
+            CatzSuperstructure.Instance.deployIntake(),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
             CatzSuperstructure.Instance.cmdHoardShoot(),
@@ -37,7 +36,8 @@ public class Forefit_Depot extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
-            CatzSuperstructure.Instance.cmdFullStop(),
+            CatzSuperstructure.Instance.cmdShooterStop(),
+            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT),
             Commands.print("done")
         );
     }

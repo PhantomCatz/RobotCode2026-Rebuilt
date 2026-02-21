@@ -78,7 +78,7 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // GLOBAL STOP (X Button)
     // -------------------------------------------------------------------------
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdFullStop().alongWith(superstructure.trackStaticHub()));
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
 
     // -------------------------------------------------------------------------
     // CLIMB (D pad Left and Right)
@@ -97,8 +97,7 @@ public class RobotContainer {
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
-    xboxTest.leftBumper().onTrue(superstructure.trackTarget(RegressionMode.CLOSE_HOARD));
-    xboxTest.rightBumper().onTrue(superstructure.trackTarget(RegressionMode.FAR_HOARD));
+
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 

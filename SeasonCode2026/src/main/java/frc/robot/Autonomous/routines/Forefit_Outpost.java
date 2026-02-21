@@ -23,16 +23,22 @@ public class Forefit_Outpost extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
+            CatzSuperstructure.Instance.deployIntake(),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj1),
-            CatzSuperstructure.Instance.cmdHoardShoot(),
-            followTrajectoryWithAccuracy(traj2),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
-            CatzSuperstructure.Instance.cmdFullStop(),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj2),
+                    followTrajectoryWithAccuracy(traj3),
+                    followTrajectoryWithAccuracy(traj4),
+                    followTrajectoryWithAccuracy(traj5),
+                    followTrajectoryWithAccuracy(traj6)
+                ),
+                CatzSuperstructure.Instance.cmdHoardShoot()
+            ),
+            
+            CatzSuperstructure.Instance.cmdShooterStop(),
+            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT),
             Commands.print("done")
         );
     }

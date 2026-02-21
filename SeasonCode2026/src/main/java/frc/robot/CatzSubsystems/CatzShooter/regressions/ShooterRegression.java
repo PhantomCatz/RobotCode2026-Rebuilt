@@ -15,8 +15,8 @@ public class ShooterRegression {
     // Enum to select which regression to use
     public enum RegressionMode {
         HUB(0.067, Units.Degrees.of(4.0), Units.Degrees.of(4.0)), //percent threshold Hdegrees Vdegrees
-        CLOSE_HOARD(0.2, Units.Degrees.of(5.0), Units.Degrees.of(5.0)),
-        FAR_HOARD(0.3, Units.Degrees.of(5.0), Units.Degrees.of(5.0)),
+        OVER_TRENCH_HOARD(0.2, Units.Degrees.of(5.0), Units.Degrees.of(5.0)),
+        OVER_NET_HOARD(0.3, Units.Degrees.of(5.0), Units.Degrees.of(5.0)),
         OPP_HOARD(0.4, Units.Degrees.of(5.0), Units.Degrees.of(5.0));
 
         private double flywheelPercentThreshold;
@@ -59,48 +59,48 @@ public class ShooterRegression {
     public static PolynomialRegression hubFlywheelPolynomial;
 
     public static InterpolatingDoubleTreeMap closeHoardFlywheelMap = new InterpolatingDoubleTreeMap();
-    public static PolynomialRegression closeHoardPolynomial;
+    public static PolynomialRegression overTrenchHoardPolynomial;
 
     public static InterpolatingDoubleTreeMap farHoardFlywheelMap = new InterpolatingDoubleTreeMap();
-    public static PolynomialRegression farHoardPolynomial;
+    public static PolynomialRegression overNetHoardPolynomial;
 
     public static InterpolatingDoubleTreeMap oppHoardFlywheelMap = new InterpolatingDoubleTreeMap();
     public static PolynomialRegression oppHoardPolynomial;
 
     public static PolynomialRegression airtimeHubInversePoly;
-    public static PolynomialRegression airtimeCloseHoardInversePoly;
-    public static PolynomialRegression airtimeFarHoardInversePoly;
+    public static PolynomialRegression airtimeOverTrenchHoardInversePoly;
+    public static PolynomialRegression airtimeOverNetHoardInversePoly;
     public static PolynomialRegression airtimeOppHoardInversePoly;
 
     public static final double[] airtimeHubCoeffs = new double[5];
-    public static final double[] airtimeCloseHoardCoeffs = new double[5];
-    public static final double[] airtimeFarHoardCoeffs = new double[5];
+    public static final double[] airtimeOverTrenchHoardCoeffs = new double[5];
+    public static final double[] airtimeOverNetHoardCoeffs = new double[5];
     public static final double[] airtimeOppHoardCoeffs = new double[5];
 
     private static final double HUB_HOOD_SLOPE;
-    private static final double CLOSE_HOARD_HOOD_SLOPE;
-    private static final double FAR_HOARD_HOOD_SLOPE;
+    private static final double OVER_TRENCH_HOARD_HOOD_SLOPE;
+    private static final double OVER_NET_HOARD_HOOD_SLOPE;
     private static final double OPP_HOARD_HOOD_SLOPE;
 
     static {
         hubFlywheelPolynomial  = loadRegression(EpsilonRegression.flywheelHubRPS, hubFlywheelMap);
-        closeHoardPolynomial   = loadRegression(EpsilonRegression.flywheelCloseHoardRPS, closeHoardFlywheelMap);
-        farHoardPolynomial     = loadRegression(EpsilonRegression.flywheelFarHoardRPS, farHoardFlywheelMap);
+        overTrenchHoardPolynomial   = loadRegression(EpsilonRegression.flywheelOverTrenchHoardRPS, closeHoardFlywheelMap);
+        overNetHoardPolynomial     = loadRegression(EpsilonRegression.flywheelOverNetHoardRPS, farHoardFlywheelMap);
         oppHoardPolynomial     = loadRegression(EpsilonRegression.flywheelOppHoardRPS, oppHoardFlywheelMap);
 
         airtimeHubInversePoly = createInverseAirtimePoly(EpsilonRegression.airtimeHub);
-        airtimeCloseHoardInversePoly = createInverseAirtimePoly(EpsilonRegression.airtimeCloseHoard);
-        airtimeFarHoardInversePoly = createInverseAirtimePoly(EpsilonRegression.airtimeFarHoard);
+        airtimeOverTrenchHoardInversePoly = createInverseAirtimePoly(EpsilonRegression.airtimeOverTrenchHoard);
+        airtimeOverNetHoardInversePoly = createInverseAirtimePoly(EpsilonRegression.airtimeOverNetHoard);
         airtimeOppHoardInversePoly = createInverseAirtimePoly(EpsilonRegression.airtimeOppHoard);
 
         populateCoeffs(airtimeHubInversePoly, airtimeHubCoeffs);
-        populateCoeffs(airtimeCloseHoardInversePoly, airtimeCloseHoardCoeffs);
-        populateCoeffs(airtimeFarHoardInversePoly, airtimeFarHoardCoeffs);
+        populateCoeffs(airtimeOverTrenchHoardInversePoly, airtimeOverTrenchHoardCoeffs);
+        populateCoeffs(airtimeOverNetHoardInversePoly, airtimeOverNetHoardCoeffs);
         populateCoeffs(airtimeOppHoardInversePoly, airtimeOppHoardCoeffs);
 
         HUB_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB, EpsilonRegression.FARTHEST_HOOD_ANGLE_HUB);
-        CLOSE_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_CLOSE_HOARD);
-        FAR_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_FAR_HOARD);
+        OVER_TRENCH_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD);
+        OVER_NET_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_OVER_NET_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_OVER_NET_HOARD);
         OPP_HOARD_HOOD_SLOPE = calculateSlope(EpsilonRegression.CLOSEST_HOOD_ANGLE_OPP_HOARD, EpsilonRegression.FARTHEST_HOOD_ANGLE_OPP_HOARD);
     }
 
@@ -140,8 +140,8 @@ public class ShooterRegression {
 
     public static double[] getAirtimeCoeffs(RegressionMode mode) {
         switch (mode) {
-            case CLOSE_HOARD: return airtimeCloseHoardCoeffs;
-            case FAR_HOARD:   return airtimeFarHoardCoeffs;
+            case OVER_TRENCH_HOARD: return airtimeOverTrenchHoardCoeffs;
+            case OVER_NET_HOARD:   return airtimeOverNetHoardCoeffs;
             case OPP_HOARD:   return airtimeOppHoardCoeffs;
             case HUB:
             default:          return airtimeHubCoeffs;
@@ -155,15 +155,15 @@ public class ShooterRegression {
         if (kUseFlywheelPolynomial) {
             switch (mode) {
                 case HUB:         rps = hubFlywheelPolynomial.predict(distMeters); break;
-                case CLOSE_HOARD: rps = closeHoardPolynomial.predict(distMeters);  break;
-                case FAR_HOARD:   rps = farHoardPolynomial.predict(distMeters);    break;
+                case OVER_TRENCH_HOARD: rps = overTrenchHoardPolynomial.predict(distMeters);  break;
+                case OVER_NET_HOARD:   rps = overNetHoardPolynomial.predict(distMeters);    break;
                 case OPP_HOARD:   rps = oppHoardPolynomial.predict(distMeters);    break;
             }
         } else {
             switch (mode) {
                 case HUB:         rps = hubFlywheelMap.get(distMeters); break;
-                case CLOSE_HOARD: rps = closeHoardFlywheelMap.get(distMeters); break;
-                case FAR_HOARD:   rps = farHoardFlywheelMap.get(distMeters); break;
+                case OVER_TRENCH_HOARD: rps = closeHoardFlywheelMap.get(distMeters); break;
+                case OVER_NET_HOARD:   rps = farHoardFlywheelMap.get(distMeters); break;
                 case OPP_HOARD:   rps = oppHoardFlywheelMap.get(distMeters); break;
             }
         }
@@ -185,15 +185,15 @@ public class ShooterRegression {
                 yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[1];
                 xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_HUB[0];
                 break;
-            case CLOSE_HOARD:
-                slope = CLOSE_HOARD_HOOD_SLOPE;
-                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD[1];
-                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_CLOSE_HOARD[0];
+            case OVER_TRENCH_HOARD:
+                slope = OVER_TRENCH_HOARD_HOOD_SLOPE;
+                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD[1];
+                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD[0];
                 break;
-            case FAR_HOARD:
-                slope = FAR_HOARD_HOOD_SLOPE;
-                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD[1];
-                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_FAR_HOARD[0];
+            case OVER_NET_HOARD:
+                slope = OVER_NET_HOARD_HOOD_SLOPE;
+                yInterceptAngle = EpsilonRegression.CLOSEST_HOOD_ANGLE_OVER_NET_HOARD[1];
+                xInterceptDist  = EpsilonRegression.CLOSEST_HOOD_ANGLE_OVER_NET_HOARD[0];
                 break;
             case OPP_HOARD:
                 slope = OPP_HOARD_HOOD_SLOPE;

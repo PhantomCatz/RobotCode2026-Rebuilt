@@ -21,16 +21,16 @@ public class EpsilonRegression {
 
 
     // Closest Corner Hoarding
-    public static final double[] CLOSEST_HOOD_ANGLE_CLOSE_HOARD = {5.029, 45.0}; 
-    public static final double[] FARTHEST_HOOD_ANGLE_CLOSE_HOARD = {9.314, 45.0};
+    public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {5.029, 45.0}; 
+    public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {9.314, 45.0};
 
-    public static double[][] flywheelCloseHoardRPS = {
+    public static double[][] flywheelOverTrenchHoardRPS = {
         {5.768, 30.0},
         {7.528, 40.0},
         {9.314, 50.0}
     };
 
-    public static double[][] airtimeCloseHoard = {
+    public static double[][] airtimeOverTrenchHoard = {
         {9.314, 1.50},
         {7.528, 1.30},
         {5.768, 1.10}
@@ -38,16 +38,16 @@ public class EpsilonRegression {
 
 
     // Far Corner Hoarding
-    public static final double[] CLOSEST_HOOD_ANGLE_FAR_HOARD = {6.959, 17.0}; 
-    public static final double[] FARTHEST_HOOD_ANGLE_FAR_HOARD = {10.457, 30.0};
+    public static final double[] CLOSEST_HOOD_ANGLE_OVER_NET_HOARD = {6.959, 17.0}; 
+    public static final double[] FARTHEST_HOOD_ANGLE_OVER_NET_HOARD = {10.457, 30.0};
 
-    public static double[][] flywheelFarHoardRPS = {
+    public static double[][] flywheelOverNetHoardRPS = {
         {6.959, 60.0},
         {8.5, 62.5},
         {10.457, 65.0}
     };
 
-    public static double[][] airtimeFarHoard = {
+    public static double[][] airtimeOverNetHoard = {
         {10.457, 1.60},
         {8.500, 1.40},
         {6.959, 1.20}
