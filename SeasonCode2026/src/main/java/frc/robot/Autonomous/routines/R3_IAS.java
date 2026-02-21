@@ -6,20 +6,19 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class R3_IAS extends AutoRoutineBase{
     public R3_IAS(){
         super("R3_IAS");
 
 /*
- * 
- * 
- * 
+ *
+ *
+ *
  * Out of service - we gave up on depot stuff cuz drivetrain too low
- * 
- * 
- * 
+ *
+ *
+ *
  */
 
         AutoTrajectory traj1 = getTrajectory("R3_IAS",0);

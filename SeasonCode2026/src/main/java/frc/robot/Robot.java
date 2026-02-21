@@ -26,6 +26,7 @@ import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -180,6 +181,8 @@ public class Robot extends LoggedRobot {
       }
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+      CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
+
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);

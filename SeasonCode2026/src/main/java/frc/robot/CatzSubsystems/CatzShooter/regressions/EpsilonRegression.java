@@ -3,25 +3,24 @@ package frc.robot.CatzSubsystems.CatzShooter.regressions;
 public class EpsilonRegression {
 
     // Hub Scoring
-    public static final double[] CLOSEST_HOOD_ANGLE_HUB = {1.294, 16.0}; 
-    public static final double[] FARTHEST_HOOD_ANGLE_HUB = {5.350, 42.0};
+    public static final double[] CLOSEST_HOOD_ANGLE_HUB = {1.557, 25.0};
+    public static final double[] FARTHEST_HOOD_ANGLE_HUB = {5.549, 42.0};
 
     public static double[][] flywheelHubRPS = {
-        {1.294, 32.0},
-        {2.71, 36.0},
-        {4.18, 40.0},
-        {5.350, 44.0}
+        {1.557, 28.0},
+        {3.827, 36.0},
+        {5.549, 40.0}
     };
 
     public static double[][] airtimeHub = {
-        {4.638, 1.18},
-        {3.154, 1.20},
-        {2.134, 1.12}
+        {5.549, 1.08},
+        {2.0202,0.89},
+        {3.827, 1.03}
     };
 
 
     // Closest Corner Hoarding
-    public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {5.029, 45.0}; 
+    public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {5.029, 45.0};
     public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {9.314, 45.0};
 
     public static double[][] flywheelOverTrenchHoardRPS = {
@@ -38,7 +37,7 @@ public class EpsilonRegression {
 
 
     // Far Corner Hoarding
-    public static final double[] CLOSEST_HOOD_ANGLE_OVER_NET_HOARD = {6.959, 17.0}; 
+    public static final double[] CLOSEST_HOOD_ANGLE_OVER_NET_HOARD = {6.959, 17.0};
     public static final double[] FARTHEST_HOOD_ANGLE_OVER_NET_HOARD = {10.457, 30.0};
 
     public static double[][] flywheelOverNetHoardRPS = {
@@ -55,7 +54,7 @@ public class EpsilonRegression {
 
     // Opposite Alliance Hoarding
 
-    public static final double[] CLOSEST_HOOD_ANGLE_OPP_HOARD = {1.294, 16.0}; 
+    public static final double[] CLOSEST_HOOD_ANGLE_OPP_HOARD = {1.294, 16.0};
     public static final double[] FARTHEST_HOOD_ANGLE_OPP_HOARD = {5.350, 42.0};
 
     public static double[][] flywheelOppHoardRPS = {

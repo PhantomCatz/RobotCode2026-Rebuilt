@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 
 public class AutoRoutineBase {
     private AutoRoutine routine;
@@ -29,15 +27,14 @@ public class AutoRoutineBase {
         routine.active().onTrue(
                 new InstantCommand(() -> {
                     CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get());
-                    CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
                 })
-                        .andThen(Commands.sequence(sequence).alongWith(CatzSuperstructure.Instance.turretTrackHubCommand())));
+                        .andThen(Commands.sequence(sequence)));
     }
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time), 
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
             CatzSuperstructure.Instance.cmdShooterStop()
         );
     }

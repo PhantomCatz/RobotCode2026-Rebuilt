@@ -15,7 +15,6 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
@@ -62,7 +61,10 @@ public class RobotContainer {
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdHoardStandby());
 
     // Toggle Location
-    xboxDrv.rightTrigger().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
+    xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
+
+    xboxDrv.rightTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(true), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
+    xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
 
     // -------------------------------------------------------------------------
@@ -96,7 +98,9 @@ public class RobotContainer {
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
-    xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
+    // xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
+    xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
+
 
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
@@ -131,7 +135,7 @@ public class RobotContainer {
     xboxFunctional.a().onTrue(CatzSuperstructure.Instance.toggleFlywheel());
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdFullStop());
+    xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
 
   }
 

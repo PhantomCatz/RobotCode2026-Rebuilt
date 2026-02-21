@@ -28,7 +28,7 @@ public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
+        case SN2 -> new Gains(3.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -41,7 +41,7 @@ public class IntakeDeployConstants {
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.5;
+	public static final double GRAVITY_FEEDFORWARD = 0.83;
 	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {

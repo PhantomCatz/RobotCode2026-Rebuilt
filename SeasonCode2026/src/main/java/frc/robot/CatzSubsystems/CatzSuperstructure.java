@@ -76,7 +76,7 @@ public class CatzSuperstructure {
                 initialShootReady = true;
             }
 
-            if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { //check for turret because turret can wrap. 
+            if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { //check for turret because turret can wrap.
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
                 CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
             } else {
@@ -87,7 +87,7 @@ public class CatzSuperstructure {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
             CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
-            initialShootReady = false; 
+            initialShootReady = false;
         }
     }
 
@@ -279,6 +279,13 @@ public class CatzSuperstructure {
 
             return CatzHood.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(angle));
         }, Set.of(CatzHood.Instance));
+    }
+
+    public Command applyHoodInterpolatedSetpoint(){
+        return CatzHood.Instance.followSetpointCommand(() -> {
+            Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
+            return ShooterRegression.getHoodSetpoint(dist, RegressionMode.HUB);
+        });
     }
 
     public Command applyFlywheelTuningSetpoint() {

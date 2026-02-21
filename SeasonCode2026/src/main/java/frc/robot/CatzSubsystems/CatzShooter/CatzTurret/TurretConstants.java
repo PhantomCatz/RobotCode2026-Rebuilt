@@ -48,6 +48,8 @@ public class TurretConstants {
 	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.3;//25;
 
 	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-5).in(Units.Meters),  Units.Inches.of(5).in(Units.Meters));
+	public static final double TURRET_DIST_TO_CENTER = Math.hypot(TURRET_OFFSET.getX(), TURRET_OFFSET.getY());
+	public static final Rotation2d TURRET_RADIAL_ANGLE = new Rotation2d(Math.PI * 0.75);
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
