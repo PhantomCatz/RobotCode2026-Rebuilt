@@ -22,6 +22,10 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
         AutoTrajectory traj7 = getTrajectory("Half_Hoard_Cycle_Depot",6);
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Cycle_Depot",7);
         AutoTrajectory traj9 = getTrajectory("Half_Hoard_Cycle_Depot",8);
+        AutoTrajectory traj10 = getTrajectory("Half_Hoard_Cycle_Depot",9);
+        AutoTrajectory traj11 = getTrajectory("Half_Hoard_Cycle_Depot",10);
+        AutoTrajectory traj12 = getTrajectory("Half_Hoard_Cycle_Depot",11);
+        AutoTrajectory traj13 = getTrajectory("Half_Hoard_Cycle_Depot",12);
 
         traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.CLOSE_HOARD)));

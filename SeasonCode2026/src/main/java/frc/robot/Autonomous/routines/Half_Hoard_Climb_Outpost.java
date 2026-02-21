@@ -42,6 +42,7 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj6),
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
+            followTrajectoryWithAccuracy(traj9),
             Commands.print("Climb"), //TODO
             Commands.print("done")
         );

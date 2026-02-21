@@ -12,6 +12,16 @@ public class R3_IAS extends AutoRoutineBase{
     public R3_IAS(){
         super("R3_IAS");
 
+/*
+ * 
+ * 
+ * 
+ * Out of service - we gave up on depot stuff cuz drivetrain too low
+ * 
+ * 
+ * 
+ */
+
         AutoTrajectory traj1 = getTrajectory("R3_IAS",0);
         AutoTrajectory traj2 = getTrajectory("R3_IAS",1);
         AutoTrajectory traj3 = getTrajectory("R3_IAS",2);

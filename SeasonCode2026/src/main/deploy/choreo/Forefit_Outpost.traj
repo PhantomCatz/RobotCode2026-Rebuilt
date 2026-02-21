@@ -4,11 +4,11 @@
  "snapshot":{
   "waypoints":[
     {"x":4.4, "y":0.6, "heading":0.0, "intervals":27, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":5.574068546295166, "y":0.6683170199394226, "heading":0.12750953104867688, "intervals":44, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":5.574068546295166, "y":0.6683170199394226, "heading":0.12750953104867688, "intervals":44, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.674447059631348, "y":2.0307247638702393, "heading":0.843951313806681, "intervals":56, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.554336547851562, "y":3.393132448196411, "heading":1.57, "intervals":57, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.582719802856445, "y":5.507702827453613, "heading":1.57, "intervals":51, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":8.355650901794434, "y":6.5295090675354, "heading":-2.2455372690184494, "intervals":32, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":8.355650901794434, "y":6.5295090675354, "heading":-2.2455372690184494, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.692971229553223, "y":6.654094696044922, "heading":-1.57, "intervals":84, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.713101387023926, "y":3.473526954650879, "heading":-1.5707963267948966, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -27,11 +27,11 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"4.4 m", "val":4.4}, "y":{"exp":"0.6 m", "val":0.6}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":27, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"5.574068546295166 m", "val":5.574068546295166}, "y":{"exp":"0.6683170199394226 m", "val":0.6683170199394226}, "heading":{"exp":"0.12750953104867688 rad", "val":0.12750953104867688}, "intervals":44, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"5.574068546295166 m", "val":5.574068546295166}, "y":{"exp":"0.6683170199394226 m", "val":0.6683170199394226}, "heading":{"exp":"0.12750953104867688 rad", "val":0.12750953104867688}, "intervals":44, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.674447059631348 m", "val":7.674447059631348}, "y":{"exp":"2.0307247638702393 m", "val":2.0307247638702393}, "heading":{"exp":"0.843951313806681 rad", "val":0.843951313806681}, "intervals":56, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.554336547851562 m", "val":8.554336547851562}, "y":{"exp":"3.393132448196411 m", "val":3.393132448196411}, "heading":{"exp":"3.14 / 2 rad", "val":1.57}, "intervals":57, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.582719802856445 m", "val":8.582719802856445}, "y":{"exp":"5.507702827453613 m", "val":5.507702827453613}, "heading":{"exp":"3.14 / 2 rad", "val":1.57}, "intervals":51, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"8.355650901794434 m", "val":8.355650901794434}, "y":{"exp":"6.5295090675354 m", "val":6.5295090675354}, "heading":{"exp":"-2.2455372690184494 rad", "val":-2.2455372690184494}, "intervals":32, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"8.355650901794434 m", "val":8.355650901794434}, "y":{"exp":"6.5295090675354 m", "val":6.5295090675354}, "heading":{"exp":"-2.2455372690184494 rad", "val":-2.2455372690184494}, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.692971229553223 m", "val":7.692971229553223}, "y":{"exp":"6.654094696044922 m", "val":6.654094696044922}, "heading":{"exp":"-3.14 / 2 rad", "val":-1.57}, "intervals":84, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.713101387023926 m", "val":7.713101387023926}, "y":{"exp":"3.473526954650879 m", "val":3.473526954650879}, "heading":{"exp":"-90 deg", "val":-1.5707963267948966}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -429,7 +429,7 @@
     {"t":23.71281, "x":7.71326, "y":3.48378, "heading":-1.57077, "vx":-0.00219, "vy":-0.1351, "omega":-0.00018, "ax":0.01496, "ay":0.8616, "alpha":0.00003, "fx":[0.24707,0.25845,0.26248,0.25016], "fy":[14.6619,14.66142,14.64936,14.64967]},
     {"t":23.78647, "x":7.71314, "y":3.47617, "heading":-1.57078, "vx":-0.00109, "vy":-0.07164, "omega":-0.00018, "ax":0.01481, "ay":0.97269, "alpha":0.00243, "fx":[0.24813,0.25119,0.25638,0.25211], "fy":[16.56037,16.55982,16.53012,16.53046]},
     {"t":23.86012, "x":7.7131, "y":3.47353, "heading":-1.5708, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,71,127,184,267]
+  "splits":[0,27,71,127,184,235,267]
  },
  "events":[
    {"name":"Intake2", "from":{"target":2, "targetTimestamp":5.6544, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Intake2"}}},

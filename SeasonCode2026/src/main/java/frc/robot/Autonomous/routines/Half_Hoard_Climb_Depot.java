@@ -31,6 +31,9 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdFullStop());
         traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                                     .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
+        traj10.atTime("Score10").onTrue(CatzSuperstructure.Instance.cmdHubShoot());
+
+
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.toggleIntakeDeploy(),

@@ -32,6 +32,9 @@ public class PNZO extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
+            followTrajectoryWithAccuracy(traj4),
+            followTrajectoryWithAccuracy(traj5),
+            followTrajectoryWithAccuracy(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
 

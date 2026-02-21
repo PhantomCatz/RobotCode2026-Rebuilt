@@ -7,6 +7,7 @@ import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class Forefit_Depot extends AutoRoutineBase{
     public Forefit_Depot(){
@@ -19,10 +20,10 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("Forefit_Depot",4);
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
 
-        traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT),
-                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy()),
-                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy()));
-        traj2.atTime("Hoard2").cmdHoardShoot();
+        traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+                                      .alongWith(CatzSuperstructure.Instance.toggleIntakeDeploy())
+                                      .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.CLOSE_HOARD)));
+        traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
