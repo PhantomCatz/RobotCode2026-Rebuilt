@@ -16,6 +16,7 @@ import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 
 public class AutoRoutineBase {
     private AutoRoutine routine;
@@ -26,16 +27,18 @@ public class AutoRoutineBase {
 
     protected void prepRoutine(AutoTrajectory startTraj, Command... sequence) {
         routine.active().onTrue(
-                new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get()))
+                new InstantCommand(() -> {
+                    CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get());
+                    CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
+                })
                         .andThen(Commands.sequence(sequence).alongWith(CatzSuperstructure.Instance.turretTrackHubCommand())));
     }
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withDeadline(Commands.waitSeconds(2.4)), //~around the amount of time it takes to dispense all balls
-            new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop()
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time), 
+            CatzSuperstructure.Instance.cmdShooterStop()
         );
     }
 
@@ -86,7 +89,7 @@ public class AutoRoutineBase {
 
                         () -> isAtPose(traj),
 
-                        CatzDrivetrain.getInstance()));
+                        CatzDrivetrain.getInstance())).withTimeout(traj.getRawTrajectory().getTotalTime() + 2.0);
     }
 
     private boolean isAtPose(AutoTrajectory trajectory) {

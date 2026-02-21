@@ -7,6 +7,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
 
@@ -32,6 +33,10 @@ public class FieldConstants {
   private static final Pose2d CLIMB_CLOSE_LEFT = new Pose2d(1.1707948446273804, 2.8092310428619385, Rotation2d.k180deg);
 
   private static final Translation2d CLIMB_TURRET_TRACKING_LOCATION = new Translation2d(0, fieldYHalf);
+  private static final Translation2d RIGHT_CORNER = new Translation2d(0.5798526406288147, 0.503104567527771);
+  private static final double NET_LENGTH = 2.0; //meters
+  public static final double NET_LENGTH_HALF = NET_LENGTH / 2.0;
+  private static final Translation2d NET_POS = new Translation2d(5.527492523193359, fieldYHalf);
   /**
    * Returns the position of the hub in the correct alliance.
    */
@@ -48,6 +53,10 @@ public class FieldConstants {
     return AllianceFlipUtil.apply(RIGHT_CORNER_HOARD);
   }
 
+  public static Translation2d getNetLocation(){
+    return AllianceFlipUtil.apply(NET_POS);
+  }
+
   public static Pose2d getClimbBackAwayPosition(boolean isRight) {
     Pose2d pose = CLIMB_BACK_AWAY_LEFT;
     if (!isRight) {
@@ -62,6 +71,15 @@ public class FieldConstants {
       pose = new Pose2d(pose.getX(), fieldWidth - pose.getY(), Rotation2d.kZero);
     }
     return AllianceFlipUtil.apply(pose);
+  }
+
+  public static Translation2d getCorner(boolean isRight){
+    Translation2d allianceFlipped = AllianceFlipUtil.apply(RIGHT_CORNER);
+    if(isRight){
+      return allianceFlipped;
+    }else{
+      return new Translation2d(allianceFlipped.getX(), fieldWidth - allianceFlipped.getY());
+    }
   }
 
   public static Translation2d getClimbTurretTrackingLocation() {
