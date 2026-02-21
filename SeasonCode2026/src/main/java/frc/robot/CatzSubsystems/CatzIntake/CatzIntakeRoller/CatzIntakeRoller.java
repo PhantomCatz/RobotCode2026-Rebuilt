@@ -1,6 +1,7 @@
 package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller;
 
 
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.Utilities.Setpoint;
@@ -50,5 +51,10 @@ public class CatzIntakeRoller extends GenericMotorSubsystem<IntakeRollerIO, Inta
             state = IntakeState.OFF;
             return IntakeRollerConstants.OFF_SETPOINT;
         }
+    }
+
+    public void setCurrentPosition(Angle of) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCurrentPosition'");
     }
 }

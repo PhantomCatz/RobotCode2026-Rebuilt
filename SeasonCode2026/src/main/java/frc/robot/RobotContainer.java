@@ -20,7 +20,7 @@ public class RobotContainer {
   private final static CatzSuperstructure superstructure = CatzSuperstructure.Instance;
 
   private static final CommandXboxController xboxDrv = new CommandXboxController(0);
-  private static final CommandXboxController xboxAux = new CommandXboxController(1)
+  private static final CommandXboxController xboxAux = new CommandXboxController(1);
   private static final CommandXboxController xboxTest = new CommandXboxController(2);
 
   public RobotContainer() {
@@ -66,24 +66,28 @@ public class RobotContainer {
     xboxTest.a().onTrue(superstructure.startIndexers());
     xboxTest.x().onTrue(superstructure.stopAllShooting());
 
-
     //Manual Overide Commands
     
-    xboxAux.rightBumper().toggleOnTrue(superstructure.manualCommandSwitch());
+    xboxAux.rightBumper().multiPress(2, 0.3).onTrue(superstructure.manualCommandSwitch());
 
-    xboxAux.a().and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.hoodManualCommand().alongWith(superstructure.stopFlywheelManualCommand())
-        .alongWith(superstructure.stopTurretManualCommand()));
+    xboxAux.a().multiPress(2, 0.3).and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.hoodManualCommand().alongWith(superstructure.stopFlywheelManualCommand())
+        .alongWith(superstructure.stopTurretManualCommand().alongWith(superstructure.deployManualCommand())));
 
-    xboxAux.b().and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.flywheelManualCommand().alongWith(superstructure.stopHoodManualCommand())
-        .alongWith(superstructure.stopTurretManualCommand()));
+        xboxAux.b().multiPress(2, 0.3).and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.flywheelManualCommand().alongWith(superstructure.stopHoodManualCommand())
+        .alongWith(superstructure.stopTurretManualCommand().alongWith(superstructure.deployManualCommand())));
 
-    xboxAux.y().and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.turretManualCommand().alongWith(superstructure.stopHoodManualCommand())
-        .alongWith(superstructure.stopFlywheelManualCommand()));
+        xboxAux.x().multiPress(2, 0.3).and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.turretManualCommand().alongWith(superstructure.stopHoodManualCommand())
+        .alongWith(superstructure.stopFlywheelManualCommand().alongWith(superstructure.deployManualCommand())));
+
+        xboxAux.y().multiPress(2, 0.3).and(() -> CatzSuperstructure.isManualCommandOn).onTrue(superstructure.deployManualCommand().alongWith(superstructure.stopHoodManualCommand())
+        .alongWith(superstructure.stopFlywheelManualCommand().alongWith(superstructure.stopTurretManualCommand())));
+
+        //xboxAux.leftBumper().onTrue(superstructure.stopIntakeDeployUpDownCommand());
+
+        xboxAux.leftTrigger().multiPress(2, .3).onTrue(superstructure.resetPosOnSubsystemsCommand());
   }
 
   public static void rumbleDrv(double val) {
     xboxDrv.setRumble(RumbleType.kBothRumble, val);
   }
-
-
 }

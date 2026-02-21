@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.Utilities.GeomUtil;
@@ -219,8 +220,9 @@ public class CatzRobotTracker {
   /**
    * Reset estimated pose and odometry pose to pose <br>
    * Clear pose buffer
+ * @return 
    */
-  public void resetPose(Pose2d initialPose) {
+  public Command resetPose(Pose2d initialPose) {
     // System.out.println(initialPose.getRotation().getDegrees());
     estimatedPose = initialPose;
     odometryPose = initialPose;

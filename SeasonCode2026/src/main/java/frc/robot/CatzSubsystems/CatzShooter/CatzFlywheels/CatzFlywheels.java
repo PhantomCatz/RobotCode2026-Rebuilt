@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels;
 
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.FlywheelMotorSubsystem;
 
@@ -45,5 +46,10 @@ public class CatzFlywheels extends FlywheelMotorSubsystem<FlywheelsIO, Flywheels
 
     private CatzFlywheels() {
         super(io, inputs, "CatzFlywheels", FlywheelConstants.FLYWHEEL_THRESHOLD);
+    }
+
+    public void setCurrentPosition(Angle of) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCurrentPosition'");
     }
 }

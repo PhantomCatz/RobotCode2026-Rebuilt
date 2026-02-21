@@ -19,6 +19,9 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
@@ -39,6 +42,11 @@ public class CatzSuperstructure {
 
     public static boolean isManualCommandOn = false;
     public static boolean isHoodManualCommandOn = false;
+    private boolean isIntakeOverrideOn = false;
+    public boolean hoodman=false;
+    public boolean flyman=false;
+    public boolean turretman=false;
+    public boolean deployman=false;
 
     private enum ManualState{
         HOOD,
@@ -63,6 +71,30 @@ public class CatzSuperstructure {
                 setShootingAllowed(false));
     }
 
+    public Command resetTurretPosCommand() {
+        return Commands.runOnce(() -> {
+            CatzTurret.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+        });
+    }
+
+    public Command resetDeployPosCommand() {
+        return Commands.runOnce(() -> {
+            CatzIntakeDeploy.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+        });
+    }
+
+    public Command resetHoodPosCommand() {
+        return Commands.runOnce(() -> {
+            CatzHood.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+        });
+    }
+
+    public Command resetFlywheelPosCommand() {
+        return Commands.runOnce(() -> {
+            CatzFlywheels.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+        });
+    }
+    
     public Command interpolateHoodAngle() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(), new Rotation2d());
@@ -89,6 +121,20 @@ public class CatzSuperstructure {
             CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(distFromHub));
         }, CatzFlywheels.Instance, CatzHood.Instance);
     }
+
+
+    public Command intakeDeployUpDownCommand() {
+        return Commands.runOnce(() -> {
+            if (isIntakeOverrideOn) {
+                CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.Zero);
+            } else {
+                CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.Sixty);
+            }
+            isIntakeOverrideOn = !isIntakeOverrideOn;
+            
+        }, CatzIntakeDeploy.Instance);
+    }
+
 
     public Command prepareForShooting() {
         return Commands.parallel(
@@ -140,6 +186,7 @@ public class CatzSuperstructure {
     public Command flywheelManualCommand() {
         System.out.print("flyWHeelmanIl");
         return CatzFlywheels.Instance.followSetpointCommand(() -> {
+            flyman = true;
             double input = (xboxDrv.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
@@ -149,6 +196,17 @@ public class CatzSuperstructure {
     public Command hoodManualCommand() {
         System.out.print("hoodManual");
         return CatzHood.Instance.followSetpointCommand(() -> {
+            hoodman = true;
+            double input = -(xboxTest.getLeftY()) * 1;
+            Logger.recordOutput("Xbox Voltage Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
+    }
+
+    public Command deployManualCommand() {
+        System.out.print("deployManual");
+        return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+            deployman = true;
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
@@ -158,6 +216,7 @@ public class CatzSuperstructure {
     public Command turretManualCommand() {
         System.out.print("turretManual");
         return CatzTurret.Instance.followSetpointCommand(() -> {
+            turretman = true;
             double input = -(xboxTest.getLeftY()) * 1;
             Logger.recordOutput("Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
@@ -167,22 +226,53 @@ public class CatzSuperstructure {
     public Command stopTurretManualCommand(){
         Command cmd = Commands.runOnce(()->{});
         cmd.addRequirements(CatzTurret.Instance);
-
+        turretman = false;
         return cmd;
     }
 
     public Command stopHoodManualCommand(){
         Command cmd = Commands.runOnce(()->{});
         cmd.addRequirements(CatzHood.Instance);
+        hoodman = false;
+        return cmd;
+    }
 
+    public Command stopIntakeDeployUpDownCommand(){
+        Command cmd = Commands.runOnce(()->{});
+        cmd.addRequirements(CatzIntakeDeploy.Instance);
+        deployman = false;
         return cmd;
     }
 
     public Command stopFlywheelManualCommand(){
         Command cmd = Commands.runOnce(()->{});
         cmd.addRequirements(CatzFlywheels.Instance);
-
+        flyman = false;
         return cmd;
+    }
+
+    public Command resetPosOnSubsystemsCommand() {
+        return Commands.parallel(
+            Commands.runOnce(() -> {
+                CatzHood.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+                hoodman = false;
+            }).onlyIf(() -> hoodman),
+
+            Commands.runOnce(() -> {
+                CatzFlywheels.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+                flyman = false;
+            }).onlyIf(() -> flyman),
+
+            Commands.runOnce(() -> {
+                CatzTurret.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+                turretman = false;
+            }).onlyIf(() -> turretman),
+
+            Commands.runOnce(() -> {
+                CatzIntakeDeploy.Instance.setCurrentPosition(Units.Degrees.of(0.0));
+                deployman = false;
+            }).onlyIf(() -> deployman)
+        );
     }
 
     public Command manualCommandOn() {
