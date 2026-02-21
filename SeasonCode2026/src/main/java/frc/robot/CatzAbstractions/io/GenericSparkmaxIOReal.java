@@ -74,8 +74,11 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         // 4. Apply Initial Config to Leader
         // We use ResetSafeParameters to clear old state, and NoPersist to avoid wearing out flash during dev
+        setMaxMotion(1000.0, 500.0, 0.1); //TODO make it a param in the cunstructor
         setGainsSlot0(gains.kP(), gains.kI(), gains.kD(), gains.kS(), gains.kV(), gains.kA(), gains.kG());
         leaderMotor.configure(sparkConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
+
+
 
     }
 
@@ -128,7 +131,10 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
     public void setMotionMagicSetpoint(double mechanismPosition) {
         // Map MotionMagic to REV SmartMotion (Slot 0)
+        System.out.println(leaderMotor.configAccessor.closedLoop.getP(ClosedLoopSlot.kSlot0));
         double targetRotations = mechanismPosition / gearRatio;
+        System.out.println("target: " + targetRotations);
+        System.out.println("Motor Position: " + encoder.getPosition());
         closedLoopController.setSetpoint(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
@@ -176,14 +182,22 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         });
     }
 
+    public void setMaxMotion(double maxVelocity, double maxAcceleration, double allowedError) {
+         applyConfigChange(config -> {
+            config.closedLoop.maxMotion
+                .cruiseVelocity(maxVelocity, ClosedLoopSlot.kSlot0)
+                .maxAcceleration(maxAcceleration, ClosedLoopSlot.kSlot0)
+                .allowedProfileError(allowedError, ClosedLoopSlot.kSlot0);
+        });
+    }
+
     @Override
     public void setGainsSlot0(double p, double i, double d, double s, double v, double a, double g) {
         applyConfigChange(config -> {
-            config.closedLoop.p(p, ClosedLoopSlot.kSlot0)
-                  .i(i, ClosedLoopSlot.kSlot0)
-                  .d(d, ClosedLoopSlot.kSlot0)
-                  .velocityFF(v, ClosedLoopSlot.kSlot0) // Mapping kV to FF
-                  .iZone(0.0, ClosedLoopSlot.kSlot0);
+        config.closedLoop.p(p, ClosedLoopSlot.kSlot0)
+            .i(i, ClosedLoopSlot.kSlot0)
+            .d(d, ClosedLoopSlot.kSlot0)
+            .velocityFF(v, ClosedLoopSlot.kSlot0);
         });
     }
 
@@ -195,6 +209,12 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
                   .d(d, ClosedLoopSlot.kSlot1)
                   .velocityFF(v, ClosedLoopSlot.kSlot1)
                   .iZone(0.0, ClosedLoopSlot.kSlot1);
+
+            // MAXMotion configuration
+            config.closedLoop.maxMotion
+                .cruiseVelocity(1000.0, ClosedLoopSlot.kSlot1)
+                .maxAcceleration(500.0, ClosedLoopSlot.kSlot1)
+                .allowedProfileError(0.1, ClosedLoopSlot.kSlot1);
         });
     }
 
