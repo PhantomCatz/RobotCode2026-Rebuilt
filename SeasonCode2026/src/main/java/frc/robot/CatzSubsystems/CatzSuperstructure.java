@@ -76,7 +76,7 @@ public class CatzSuperstructure {
                 initialShootReady = true;
             }
 
-            if (initialShootReady) {
+            if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { //check for turret because turret can wrap. 
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
                 CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
             } else {

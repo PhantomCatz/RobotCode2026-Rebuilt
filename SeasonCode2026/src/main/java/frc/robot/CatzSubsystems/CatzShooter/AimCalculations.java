@@ -165,6 +165,6 @@ public class AimCalculations {
         Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
         Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
         return CatzTurret.Instance.nearPositionSetpoint()
-                && CatzFlywheels.Instance.spunUp();
+                && CatzHood.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
     }
 }
