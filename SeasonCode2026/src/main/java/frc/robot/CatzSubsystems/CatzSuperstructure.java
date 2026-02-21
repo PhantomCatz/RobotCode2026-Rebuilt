@@ -94,6 +94,18 @@ public class CatzSuperstructure {
         }, CatzHood.Instance);
     }
 
+    public Command jiggleIntakeCommand() {
+        return Commands.run(() -> {
+            double time = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+            // Oscillates between 0 and 15 degrees. Adjust the 15.0 for speed.
+            double angleDeg = 7.5 + 7.5 * Math.sin(time * 0.5);
+            
+            CatzIntakeDeploy.Instance.applySetpoint(
+                Setpoint.withMotionMagicSetpoint(Units.Degrees.of(angleDeg))
+            );
+        }, CatzIntakeDeploy.Instance);
+    }
+
     /**
      * Feeds balls to shooter when ready.
      */
@@ -127,10 +139,11 @@ public class CatzSuperstructure {
 
     public Command cmdHoardShoot() {
         return Commands.parallel(
-            trackTarget(RegressionMode.CLOSE_HOARD),  //The arguments are placeholders to indicate hoarding.
-            rampUpFlywheels(RegressionMode.CLOSE_HOARD),//Actual modes are decided within the method
+            trackTarget(RegressionMode.CLOSE_HOARD),  
+            rampUpFlywheels(RegressionMode.CLOSE_HOARD),
             aimHood(RegressionMode.CLOSE_HOARD),
-            runFeeder()
+            runFeeder(),
+            jiggleIntakeCommand() // Adds the up and down movement
         );
     }
 
@@ -140,7 +153,8 @@ public class CatzSuperstructure {
             rampUpFlywheels(RegressionMode.CLOSE_HOARD),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW) // Resets intake
         );
     }
 
@@ -151,7 +165,8 @@ public class CatzSuperstructure {
             trackTarget(RegressionMode.HUB),
             rampUpFlywheels(RegressionMode.HUB),
             aimHood(RegressionMode.HUB),
-            runFeeder()
+            runFeeder(),
+            jiggleIntakeCommand() // Adds the up and down movement
         );
     }
 
@@ -161,7 +176,8 @@ public class CatzSuperstructure {
             rampUpFlywheels(RegressionMode.HUB),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW) // Resets intake
         );
     }
 
