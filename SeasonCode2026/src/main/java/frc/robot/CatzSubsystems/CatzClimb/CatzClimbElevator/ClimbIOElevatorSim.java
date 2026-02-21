@@ -3,9 +3,9 @@ package frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator;
 import frc.robot.CatzAbstractions.io.GenericIOSim;
 import frc.robot.Utilities.MotorUtil.Gains;
 
-public class ClimbIOTallElevator extends GenericIOSim<ClimbIOElevator.ClimbTallIOInputs> implements ClimbIOElevator {
+public class ClimbIOElevatorSim extends GenericIOSim<ClimbIOElevator.ClimbElevatorIOInputs> implements ClimbIOElevator {
 
-    public ClimbIOTallElevator(Gains gains) {
+    public ClimbIOElevatorSim(Gains gains) {
         super(gains);
     }
 
