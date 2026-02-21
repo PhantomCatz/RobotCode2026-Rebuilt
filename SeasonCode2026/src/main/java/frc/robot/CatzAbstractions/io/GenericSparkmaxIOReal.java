@@ -126,7 +126,9 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
     public void setMotionMagicSetpoint(double mechanismPosition) {
         // Map MotionMagic to REV SmartMotion (Slot 0)
+        System.out.println("rahhhhh it motion magicked");
         double targetRotations = mechanismPosition / gearRatio;
+        System.out.println(targetRotations);
         closedLoopController.setSetpoint(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 

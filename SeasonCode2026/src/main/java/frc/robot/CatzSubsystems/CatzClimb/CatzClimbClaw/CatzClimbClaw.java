@@ -7,6 +7,7 @@ import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 public class CatzClimbClaw extends ServoMotorSubsystem<ClimbIOClaw, ClimbIOClaw.ClimbClawIOInputs> {
 
     private static final ClimbIOClaw io = getIOInstance();
+    //io.setGainsSlot0(0,0,0,0,0,0,0);
     private static final ClimbClawIOInputsAutoLogged inputs = new ClimbClawIOInputsAutoLogged();
 
     private static ClimbIOClaw getIOInstance() {
