@@ -26,6 +26,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Utilities.Setpoint;
+import edu.wpi.first.wpilibj.Timer;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
@@ -198,6 +199,13 @@ public class CatzSuperstructure {
 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
+    }
+
+    public boolean isAgitator = false;
+    public Command intakeAgitator() {
+        return Commands.runOnce(() -> {
+            isAgitator = !isAgitator;
+        });
     }
 
     /* FUNCTIONAL COMMANDS */

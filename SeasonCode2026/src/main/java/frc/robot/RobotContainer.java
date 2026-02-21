@@ -90,7 +90,8 @@ public class RobotContainer {
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
     xboxTest.leftBumper().onTrue(superstructure.turretTrackCornerCommand());
-    xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
+    xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON))
+          .alongWith(superstructure.intakeAgitator()));
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 
     // xboxTest.leftBumper().onTrue(superstructure.turret30Deg());

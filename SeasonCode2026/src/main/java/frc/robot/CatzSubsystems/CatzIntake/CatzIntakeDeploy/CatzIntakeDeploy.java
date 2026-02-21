@@ -3,6 +3,10 @@ package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.Utilities.Setpoint;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.Timer;
 
 public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, IntakeDeployIO.IntakeDeployIOInputs>{
 
@@ -37,6 +41,22 @@ public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, Intake
             s = IntakeDeployConstants.kS.get();
             v = IntakeDeployConstants.kV.get();
         }
+
+        if (!CatzSuperstructure.Instance.isAgitator) {
+            return;
+        }
+
+        double centerRad = IntakeDeployConstants.DEPLOY_POSITION.in(Units.Radians);
+        double ampRad = Units.Degrees.of(15.0).in(Units.Radians);
+        double hz = 1.0;  // 1 oscillations per second
+
+        double t = Timer.getFPGATimestamp();
+
+        double target = centerRad + ampRad * Math.sin(2.0 * Math.PI * hz * t);
+
+        applySetpoint(
+            Setpoint.withMotionMagicSetpoint(Units.Radians.of(target))
+        );
     }
 
     private static IntakeDeployIO getIOInstance() {
