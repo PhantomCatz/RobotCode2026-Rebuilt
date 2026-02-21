@@ -13,8 +13,8 @@ import frc.robot.Utilities.Util;
 public class ClimbConstantsClaw {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
-	public static final Setpoint FULL_EXTEND = Setpoint.withVoltageSetpoint(0.5);
-	public static final Setpoint HOME = Setpoint.withMotionMagicSetpoint(1);
+	public static final Setpoint FULL_EXTEND = Setpoint.withMotionMagicSetpoint(1);
+	public static final Setpoint HOME = Setpoint.withMotionMagicSetpoint(0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

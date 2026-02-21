@@ -13,12 +13,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort.CatzClimbShort;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort.ClimbConstantsShort;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall.CatzClimbTall;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall.ClimbConstantsTall;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw.CatzClimbClaw;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw.ClimbConstantsClaw;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator.CatzClimbElevator;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator.ClimbConstantsElevator;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
@@ -85,77 +86,79 @@ public class CatzSuperstructure {
         }, Set.of(CatzFlywheels.Instance));
     }
 
-    public Command extendClimbCommand(){
-        return CatzClimbShort.Instance.setpointCommand(ClimbConstantsShort.FULL_EXTEND);
+
+    public WaitUntilCommand elevatorExtendThreshold() {
+        return new WaitUntilCommand(() -> CatzClimbElevator.Instance.getLatencyCompensatedPosition() >= ClimbConstantsElevator.CLAW_EXTEND_THRESHOLD);
     }
 
-    public Command extendClimbTallCommand(){
-        return CatzClimbTall.Instance.setpointCommand(ClimbConstantsTall.FULL_EXTEND);
+    public WaitUntilCommand elevatorRetractThreshold() {
+        return new WaitUntilCommand(() -> CatzClimbElevator.Instance.getLatencyCompensatedPosition() >= ClimbConstantsElevator.CLAW_RETRACT_THRESHOLD);
     }
 
-    public Command returnOriginalClimbCommand(){
-        return CatzClimbShort.Instance.setpointCommand(ClimbConstantsShort.HOME);
+    public Command extendClimbElevatorCommand(){
+        return CatzClimbElevator.Instance.setpointCommand(ClimbConstantsElevator.FULL_EXTEND);
     }
 
-    public Command returnOriginalClimbTallCommand(){
-        return CatzClimbTall.Instance.setpointCommand(ClimbConstantsTall.HOME);
+    public Command extendClimbClawCommand(){
+        return CatzClimbClaw.Instance.setpointCommand(ClimbConstantsClaw.FULL_EXTEND);
     }
 
-    public SequentialCommandGroup fullClimb() {
-        return new SequentialCommandGroup(
-            extendClimbTallCommand(),
-            Commands.waitSeconds(1.0),
-            returnOriginalClimbTallCommand(),
-            Commands.waitSeconds(1.0),
-            extendClimbCommand(),
-            Commands.waitSeconds(1.0),
-            returnOriginalClimbCommand(),
-            Commands.waitSeconds(1.0),
-            extendClimbTallCommand(),
-            Commands.waitSeconds(1.0),
-            returnOriginalClimbTallCommand(),
-            Commands.waitSeconds(1.0),
-            extendClimbCommand(),
-            Commands.waitSeconds(1.0),
-            returnOriginalClimbCommand(),
-            Commands.waitSeconds(1.0)
-
-        );
+    public Command retractClimbElevatorCommand(){
+        return CatzClimbElevator.Instance.setpointCommand(ClimbConstantsElevator.HOME);
     }
 
-    public Command tallShrinkShortRise(){
+     public Command retractClimbClawCommand(){
+        return CatzClimbClaw.Instance.setpointCommand(ClimbConstantsClaw.HOME);
+    }
+
+    public ParallelCommandGroup extendFullClimb() {
         return new ParallelCommandGroup(
-            returnOriginalClimbTallCommand(),
-            extendClimbCommand()
+            extendClimbElevatorCommand(),
+            new SequentialCommandGroup(
+                elevatorExtendThreshold(),
+                extendClimbClawCommand()
+            )
         );
     }
-    public Command manualExtendCLimb() {
-        return CatzClimbShort.Instance.followSetpointCommand(() -> {
+
+    //passive hooks from elevator lock onto to tower, so no need for multiple claws
+    public ParallelCommandGroup RetractFullClimb() {
+        return new ParallelCommandGroup(
+            retractClimbElevatorCommand(),
+            new SequentialCommandGroup(
+                elevatorRetractThreshold(),
+                retractClimbClawCommand()
+            )
+        );
+    }
+
+    public SequentialCommandGroup levelOneClimb() {
+        return new SequentialCommandGroup(
+            extendFullClimb(),
+            RetractFullClimb()
+        );
+    }
+
+    public SequentialCommandGroup levelTwoClimb() {
+        return new SequentialCommandGroup(
+            levelOneClimb(),
+            levelOneClimb()
+        );
+    }
+
+    public SequentialCommandGroup levelThreeClimb() {
+        return new SequentialCommandGroup(
+            levelTwoClimb(),
+            levelOneClimb()
+        );
+    }
+
+    public Command manualExtendClimb() {
+        return CatzClimbElevator.Instance.followSetpointCommand(() -> {
             double input = (RobotContainer.xboxDrv.getLeftY()) * 2;
             Logger.recordOutput("Climb Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
-    }
-
-        public Command manualExtendClimbTall() {
-        return CatzClimbTall.Instance.followSetpointCommand(() -> {
-            double input = (RobotContainer.xboxDrv.getRightY()) * -4;
-            Logger.recordOutput("Climb Xbox Voltage Input", input);
-            return Setpoint.withVoltageSetpoint(input);
-        });
-    }
-
-
-
-    public Command Climbing(){
-        return new SequentialCommandGroup(
-            extendClimbTallCommand(),
-            tallShrinkShortRise(),
-            extendClimbTallCommand(),
-            tallShrinkShortRise(),
-            extendClimbTallCommand(),
-            tallShrinkShortRise()
-        );
     }
 
     public Command hoodTestCommand(){

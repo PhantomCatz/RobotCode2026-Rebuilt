@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw.CatzClimbClaw;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw.ClimbConstantsClaw;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort.CatzClimbShort;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator.CatzClimbElevator;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -19,7 +19,7 @@ import frc.robot.Utilities.DoublePressTracker;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
-  private final CatzClimbShort climb = CatzClimbShort.Instance;
+  private final CatzClimbElevator climb = CatzClimbElevator.Instance;
   private final CatzDrivetrain drivetrain = new CatzDrivetrain();
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
 
@@ -70,7 +70,7 @@ public class RobotContainer {
     // xboxDrv.y().onTrue(superstructure.returnOriginalClimbTallCommand());
     // xboxDrv.x().onTrue(superstructure.returnOriginalClimbTallCommand());
 
-    xboxDrv.rightBumper().onTrue(superstructure.fullClimb());
+    // xboxDrv.rightBumper().onTrue(superstructure.fullClimb());
 
 
       // xboxTest.a().onTrue(superstructure.startIndexers());

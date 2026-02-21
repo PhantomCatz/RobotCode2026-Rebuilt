@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimb.CatzClimbTall;
+package frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,7 +15,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
-public class ClimbConstantsTall {
+public class ClimbConstantsElevator {
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
 
 	public static final Distance FULL_EXTENSION = Units.Inches.of(12.0);
@@ -37,9 +37,12 @@ public class ClimbConstantsTall {
     private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    private static final int CLIMB_MOTOR_ID = 61;
+    private static final int CLIMB_MOTOR_ID_1 = 60;
+	private static final int CLIMB_MOTOR_ID_2 = 61;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
+	public static final double CLAW_EXTEND_THRESHOLD = 10.0; //TODO add real number
+	public static final double CLAW_RETRACT_THRESHOLD = 10.0; //TODO add real number
 
     public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
 
@@ -76,15 +79,15 @@ public class ClimbConstantsTall {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = CLIMB_MOTOR_ID; //TODO magic numbers!!
+		IOConfig.mainID = CLIMB_MOTOR_ID_1; //TODO magic numbers!!
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Aligned};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
+		IOConfig.followerIDs = new int[] {CLIMB_MOTOR_ID_2}; //TODO magic numbers!!
 		return IOConfig;
 	}
 }

@@ -24,7 +24,7 @@ import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbShort.CatzClimbShort;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator.CatzClimbElevator;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
@@ -139,7 +139,7 @@ public class Robot extends LoggedRobot {
         }
       }
     }
-    allSubsystems[0] = CatzClimbShort.Instance;
+    allSubsystems[0] = CatzClimbElevator.Instance;
     allSubsystems[1] = CatzSpindexer.Instance;
     allSubsystems[2] = CatzYdexer.Instance;
     allSubsystems[3] = CatzIntakeDeploy.Instance;
