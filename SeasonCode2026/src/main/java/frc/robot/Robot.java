@@ -181,8 +181,6 @@ public class Robot extends LoggedRobot {
       }
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
-      CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
-
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);
