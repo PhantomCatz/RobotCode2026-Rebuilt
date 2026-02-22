@@ -194,7 +194,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
-    if(++slowTick >= 3) {
+    if(++slowTick >= 5) {
       BaseStatusSignal.refreshAll(allSignals);
       slowTick = 0;
     }
