@@ -253,10 +253,10 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             if(isHoodAtHome){
                 isHoodAtHome = false;
-                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_TEST_SETPOINT);
             }else{
                 isHoodAtHome = true;
-                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_TEST_SETPOINT);
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_HOME_SETPOINT);
             }
         }, CatzHood.Instance);
     }
