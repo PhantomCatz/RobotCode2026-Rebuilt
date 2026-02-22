@@ -189,11 +189,14 @@ public class Robot extends LoggedRobot {
       coralDetectionThread.startPeriodic(0.1);
   }
 
+  private int slowTick = 0;
+
   @Override
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
-    if(allSignals.length > 0) {
+    if(++slowTick >= 3) {
       BaseStatusSignal.refreshAll(allSignals);
+      slowTick = 0;
     }
     CommandScheduler.getInstance().run();
   }
