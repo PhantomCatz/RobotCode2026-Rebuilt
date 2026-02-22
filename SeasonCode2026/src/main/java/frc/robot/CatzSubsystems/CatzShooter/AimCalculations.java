@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -26,7 +25,6 @@ import org.littletonrobotics.junction.Logger;
 public class AimCalculations {
     private static final double phaseDelay = 0.05;
     private static LaguerreSolver solver = new LaguerreSolver();
-    private static Translation2d predictedHubLocation = new Translation2d();
 
     public enum HoardTargetType {
         RELATIVE_CLOSE,
@@ -45,7 +43,7 @@ public class AimCalculations {
 
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target) {
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
-        System.out.println("aim at "+target.getX()+" "+target.getY());
+        System.out.println("aim at " + target.getX() + " " + target.getY());
         double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
@@ -89,7 +87,7 @@ public class AimCalculations {
         double netYMax = FieldConstants.fieldYHalf + (FieldConstants.NET_LENGTH_HALF);
 
         if ((turretPos.getX() <= netX && targetPos.getX() >= netX) ||
-            (turretPos.getX() >= netX && targetPos.getX() <= netX)) {
+                (turretPos.getX() >= netX && targetPos.getX() <= netX)) {
 
             double slope = (targetPos.getY() - turretPos.getY()) / (targetPos.getX() - turretPos.getX());
             double yInt = turretPos.getY() + slope * (netX - turretPos.getX());
@@ -117,24 +115,34 @@ public class AimCalculations {
         ChassisSpeeds currentVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
         Twist2d currentAccelerationRobotRelative = CatzRobotTracker.Instance.getRobotAccelerations();
 
-        Translation2d currentAccelerationFieldRelative = new Translation2d(currentAccelerationRobotRelative.dx, currentAccelerationRobotRelative.dy).rotateBy(predictedRobotPose.getRotation());
+        Translation2d currentAccelerationFieldRelative = new Translation2d(currentAccelerationRobotRelative.dx,
+                currentAccelerationRobotRelative.dy)
+                .rotateBy(CatzRobotTracker.Instance.getEstimatedPose().getRotation());
 
-        ChassisSpeeds futureVelocity = currentVelocity.plus(new ChassisSpeeds(currentAccelerationFieldRelative.getX() * phaseDelay, currentAccelerationFieldRelative.getY() * phaseDelay, currentAccelerationRobotRelative.dtheta * phaseDelay));
+        ChassisSpeeds futureVelocity = currentVelocity
+                .plus(new ChassisSpeeds(currentAccelerationFieldRelative.getX() * phaseDelay,
+                        currentAccelerationFieldRelative.getY() * phaseDelay,
+                        currentAccelerationRobotRelative.dtheta * phaseDelay));
 
-        double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE)).getRadians();
+        double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
+                .getRadians();
 
-        double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER + futureVelocity.vxMetersPerSecond;
-        double turretYVelocity = Math.cos(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER + futureVelocity.vyMetersPerSecond;
+        double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
+                * futureVelocity.omegaRadiansPerSecond + futureVelocity.vxMetersPerSecond;
+        double turretYVelocity = Math.cos(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
+                * futureVelocity.omegaRadiansPerSecond + futureVelocity.vyMetersPerSecond;
 
         return new Translation2d(-turretXVelocity, -turretYVelocity);
     }
 
-    private static double getFutureShootAirtime(Pose2d robotPose, Translation2d targetVelocity, Translation2d targetPos, RegressionMode mode) {
+    private static double getFutureShootAirtime(Pose2d robotPose, Translation2d targetVelocity, Translation2d targetPos,
+            RegressionMode mode) {
         Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret(robotPose);
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
         double distToTarget = targetToTurret.getNorm();
 
-        double turretTargetRadians = Math.abs(MathUtil.angleModulus(targetToTurret.getAngle().getRadians() - targetVelocity.getAngle().getRadians()));
+        double turretTargetRadians = Math.abs(
+                MathUtil.angleModulus(targetToTurret.getAngle().getRadians() - targetVelocity.getAngle().getRadians()));
         double[] regCoeffs = ShooterRegression.getAirtimeCoeffs(mode);
 
         double targetSpeed = targetVelocity.getNorm();
@@ -144,7 +152,7 @@ public class AimCalculations {
         double d = 2 * targetSpeed * distToTarget * Math.cos(turretTargetRadians) + regCoeffs[3];
         double e = regCoeffs[4] - distToTarget * distToTarget;
 
-        double[] coeffs = {e, d, c, b, a};
+        double[] coeffs = { e, d, c, b, a };
         Complex[] roots = solver.solveAllComplex(coeffs, 0);
 
         double minPositiveRealRoot = Double.MAX_VALUE;
@@ -163,9 +171,10 @@ public class AimCalculations {
         Twist2d robotAcceleration = CatzRobotTracker.Instance.getRobotAccelerations();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dx * phaseDelay*phaseDelay,
-                robotVelocity.vyMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dy * phaseDelay*phaseDelay,
-                robotVelocity.omegaRadiansPerSecond * phaseDelay + 0.5 * robotAcceleration.dtheta * phaseDelay*phaseDelay);
+                robotVelocity.vxMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dx * phaseDelay * phaseDelay,
+                robotVelocity.vyMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dy * phaseDelay * phaseDelay,
+                robotVelocity.omegaRadiansPerSecond * phaseDelay
+                        + 0.5 * robotAcceleration.dtheta * phaseDelay * phaseDelay);
 
         return currentPose.exp(twist);
     }
