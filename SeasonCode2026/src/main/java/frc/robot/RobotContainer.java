@@ -54,13 +54,13 @@ public class RobotContainer {
     // );
 
     // -------------------------------------------------------------------------
-    // HOARDING (Right Bumper)
+    // HOARDING (Left Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+    xboxDrv.leftBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
-    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdHoardStandby());
+    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdHoardStandby());
 
     // Toggle Location
     xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
@@ -70,13 +70,13 @@ public class RobotContainer {
 
 
     // -------------------------------------------------------------------------
-    // HUB SCORING (Left Bumper)
+    // HUB SCORING (Right Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.leftBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
+    xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
-    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdHubStandby());
+    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdHubStandby());
 
 
     // -------------------------------------------------------------------------

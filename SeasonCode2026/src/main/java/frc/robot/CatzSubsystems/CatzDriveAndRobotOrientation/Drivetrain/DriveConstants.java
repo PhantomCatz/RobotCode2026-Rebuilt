@@ -45,7 +45,7 @@ public class DriveConstants {
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
         .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(22)
+        .maxLinearAcceleration(30)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();

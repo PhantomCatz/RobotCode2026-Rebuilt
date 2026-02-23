@@ -16,6 +16,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
@@ -24,6 +25,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
     private static final double phaseDelay = 0.05;
+    private static final LoggedTunableNumber delayy = new LoggedTunableNumber("phase delay", phaseDelay);
     private static LaguerreSolver solver = new LaguerreSolver();
 
     public enum HoardTargetType {
@@ -159,9 +161,9 @@ public class AimCalculations {
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * phaseDelay,
-                robotVelocity.vyMetersPerSecond * phaseDelay,
-                robotVelocity.omegaRadiansPerSecond * phaseDelay
+                robotVelocity.vxMetersPerSecond * delayy.get(),
+                robotVelocity.vyMetersPerSecond * delayy.get(),
+                robotVelocity.omegaRadiansPerSecond * delayy.get()
                 );
 
         return currentPose.exp(twist);
