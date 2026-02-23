@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
@@ -33,6 +34,10 @@ public class TeleopDriveCmd extends Command {
   private double turningVelocity;
 
   private ChassisSpeeds chassisSpeeds;
+
+  private double lockedDriveDirectionX = 0.0;
+  private double lockedDriveDirectionY = 0.0;
+  private static final double SHOOTING_JOYSTICK_DEADBAND = 0.8;
 
   // --------------------------------------------------------------------------------------
   //
@@ -84,13 +89,30 @@ public void initialize() {}
       m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
     }
 
-    if(Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y) < XboxInterfaceConstants.kDeadband){
-      m_headingAndVelocity_X = 0.0;
-      m_headingAndVelocity_Y = 0.0;
+    boolean isScoring = CatzSuperstructure.Instance.getIsScoring();
+    double currentMagnitude = Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y);
+
+    double finalVelX = 0.0;
+    double finalVelY = 0.0;
+
+    if(isScoring){
+      if(currentMagnitude > SHOOTING_JOYSTICK_DEADBAND){
+        lockedDriveDirectionX = (m_headingAndVelocity_X / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
+        lockedDriveDirectionY = (m_headingAndVelocity_Y / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
+      }
+
+      finalVelX = lockedDriveDirectionX;
+      finalVelY = lockedDriveDirectionY;
     }else{
-      m_headingAndVelocity_X *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-      m_headingAndVelocity_Y *= DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      lockedDriveDirectionX = 0.0;
+      lockedDriveDirectionY = 0.0;
+
+      if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+        finalVelX = m_headingAndVelocity_X * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      }
     }
+
     turningVelocity =
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
             ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
@@ -98,13 +120,13 @@ public void initialize() {}
 
     // Construct desired chassis speeds
 
-    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(m_headingAndVelocity_X,
-                                                          m_headingAndVelocity_Y,
+    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(finalVelX,
+                                                          finalVelY,
                                                           turningVelocity,
                                                           CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
     // Send new chassisspeeds object to the drivetrain
-    m_drivetrain.moveWhileShootAccControl(chassisSpeeds);
+    m_drivetrain.drive(chassisSpeeds);
     debugLogsDrive();
   } // end of execute()
 

@@ -43,7 +43,6 @@ public class AimCalculations {
 
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target) {
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
-        System.out.println("aim at " + target.getX() + " " + target.getY());
         double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
@@ -113,24 +112,14 @@ public class AimCalculations {
 
     private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
         ChassisSpeeds currentVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
-        Twist2d currentAccelerationRobotRelative = CatzRobotTracker.Instance.getRobotAccelerations();
-
-        Translation2d currentAccelerationFieldRelative = new Translation2d(currentAccelerationRobotRelative.dx,
-                currentAccelerationRobotRelative.dy)
-                .rotateBy(CatzRobotTracker.Instance.getEstimatedPose().getRotation());
-
-        ChassisSpeeds futureVelocity = currentVelocity
-                .plus(new ChassisSpeeds(currentAccelerationFieldRelative.getX() * phaseDelay,
-                        currentAccelerationFieldRelative.getY() * phaseDelay,
-                        currentAccelerationRobotRelative.dtheta * phaseDelay));
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
                 .getRadians();
 
         double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
-                * futureVelocity.omegaRadiansPerSecond + futureVelocity.vxMetersPerSecond;
+                * currentVelocity.omegaRadiansPerSecond + currentVelocity.vxMetersPerSecond;
         double turretYVelocity = Math.cos(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
-                * futureVelocity.omegaRadiansPerSecond + futureVelocity.vyMetersPerSecond;
+                * currentVelocity.omegaRadiansPerSecond + currentVelocity.vyMetersPerSecond;
 
         return new Translation2d(-turretXVelocity, -turretYVelocity);
     }
@@ -165,16 +154,15 @@ public class AimCalculations {
         return minPositiveRealRoot != Double.MAX_VALUE ? minPositiveRealRoot : 0.0;
     }
 
-    private static Pose2d getPredictedRobotPose() {
+    public static Pose2d getPredictedRobotPose() {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
-        Twist2d robotAcceleration = CatzRobotTracker.Instance.getRobotAccelerations();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dx * phaseDelay * phaseDelay,
-                robotVelocity.vyMetersPerSecond * phaseDelay + 0.5 * robotAcceleration.dy * phaseDelay * phaseDelay,
+                robotVelocity.vxMetersPerSecond * phaseDelay,
+                robotVelocity.vyMetersPerSecond * phaseDelay,
                 robotVelocity.omegaRadiansPerSecond * phaseDelay
-                        + 0.5 * robotAcceleration.dtheta * phaseDelay * phaseDelay);
+                );
 
         return currentPose.exp(twist);
     }

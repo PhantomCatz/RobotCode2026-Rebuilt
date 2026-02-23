@@ -59,7 +59,7 @@ public class CatzSuperstructure {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
         Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode);
-        Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
+        Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret(AimCalculations.getPredictedRobotPose())));
 
         if (activeRegressionMode != currentMode) {
             initialShootReady = false;
