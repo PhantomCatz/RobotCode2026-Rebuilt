@@ -19,20 +19,20 @@ public class R2_IAS extends AutoRoutineBase {
         AutoTrajectory traj5 = getTrajectory("R2_IAS",4);
         AutoTrajectory traj6 = getTrajectory("R2_IAS",5);
 
-        traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj3.atTime("IntakeStop+RampUp1").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
+        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj2.atTime("IntakeStop+RampUp2").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                    .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
-        traj4.atTime("Intake4").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj5.atTime("IntakeStop+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        traj3.atTime("Intake3").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj4.atTime("IntakeStop+RampUp4").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                                    .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
             // CatzSuperstructure.Instance.deployIntake(),
             followTrajectoryWithAccuracy(traj1),
-            followTrajectory(traj2),
+            followTrajectoryWithAccuracy(traj2),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj3),
-            followTrajectory(traj4),
+            followTrajectoryWithAccuracy(traj4),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
