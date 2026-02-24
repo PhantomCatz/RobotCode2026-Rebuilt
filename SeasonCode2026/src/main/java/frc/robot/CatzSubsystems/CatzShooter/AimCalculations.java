@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -47,8 +48,8 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose){
-        Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret(predictedRobotPose));
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose){
+        Translation2d hubDirection = target.minus(predictedTurretPose);
         double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
@@ -109,10 +110,9 @@ public class AimCalculations {
         return RegressionMode.OVER_TRENCH_HOARD;
     }
 
-    public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode) {
-        Pose2d robotPose = getPredictedRobotPose();
-        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(robotPose);
-        double futureAirtime = getFutureShootAirtime(robotPose, targetVelocity, baseTarget, mode);
+    public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode, Pose2d predictedRobotPose, Translation2d predictedTurretPose) {
+        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose);
+        double futureAirtime = getFutureShootAirtime(predictedTurretPose, targetVelocity, baseTarget, mode);
         return baseTarget.plus(targetVelocity.times(futureAirtime));
     }
 
@@ -130,9 +130,8 @@ public class AimCalculations {
         return new Translation2d(-turretXVelocity, -turretYVelocity);
     }
 
-    private static double getFutureShootAirtime(Pose2d robotPose, Translation2d targetVelocity, Translation2d targetPos,
+    private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity, Translation2d targetPos,
             RegressionMode mode) {
-        Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret(robotPose);
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
         double distToTarget = targetToTurret.getNorm();
 

@@ -37,7 +37,6 @@ public class RobotContainer {
     var vision = LimelightSubsystem.Instance;
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
 
-    CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
   }
 
   private void configureBindings() {
