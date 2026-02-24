@@ -39,7 +39,7 @@ public class TeleopDriveCmd extends Command {
   private double lockedDriveDirectionY = 0.0;
   private double lockedSpeed = 0.0;
   private boolean wasScoring = false;
-  private static final double SHOOTING_JOYSTICK_DEADBAND = 0.8;
+  private static final double SHOOTING_JOYSTICK_DEADBAND = 0.4;
 
   // --------------------------------------------------------------------------------------
   //
@@ -60,7 +60,6 @@ public class TeleopDriveCmd extends Command {
     this.m_drivetrain = drivetrain;
     System.out.println("TeleopDriveCmd drivetrain = " + drivetrain);
 
-
     addRequirements(this.m_drivetrain);
   }
 
@@ -70,7 +69,8 @@ public class TeleopDriveCmd extends Command {
   //
   // --------------------------------------------------------------------------------------
   @Override
-public void initialize() {}
+  public void initialize() {
+  }
 
   // --------------------------------------------------------------------------------------
   //
@@ -80,12 +80,12 @@ public void initialize() {}
   @Override
   public void execute() {
     // Obtain realtime joystick inputs with supplier methods
-    joyX = -m_headingPctOutput_Y.get(); //Raw accel
+    joyX = -m_headingPctOutput_Y.get(); // Raw accel
     joyY = -m_headingPctOutput_X.get();
-    turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
+    turningVelocity = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching
+                                                     // alliances
 
     // Flip Directions for left joystick if alliance is red
-
     if (DriverStation.getAlliance().get() == Alliance.Red) {
       joyX = -joyX;
       joyY = -joyY;
@@ -97,36 +97,56 @@ public void initialize() {}
     double finalVelX = 0.0;
     double finalVelY = 0.0;
 
-    if(isScoring){
-      if(currentMagnitude > SHOOTING_JOYSTICK_DEADBAND){
-        lockedDriveDirectionX = (joyX / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
-        lockedDriveDirectionY = (joyY / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
+    if (isScoring) {
+      if (!wasScoring) {
+        // Button was just pressed
+        // Lock in the exact speed and direction you are currently driving
+        if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+          lockedDriveDirectionX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+          lockedDriveDirectionY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+
+          // Calculate and save the absolute speed
+          lockedSpeed = Math.hypot(lockedDriveDirectionX, lockedDriveDirectionY);
+        } else {
+          lockedDriveDirectionX = 0.0;
+          lockedDriveDirectionY = 0.0;
+          lockedSpeed = 0.0;
+        }
+      } else if (currentMagnitude > SHOOTING_JOYSTICK_DEADBAND) {
+        // Button is being held and driver pushed stick hard to change direction
+        // Normalize the joystick vector and multiply by our saved lockedSpeed
+        lockedDriveDirectionX = (joyX / currentMagnitude) * lockedSpeed;
+        lockedDriveDirectionY = (joyY / currentMagnitude) * lockedSpeed;
       }
 
+      // Apply the locked speeds
       finalVelX = lockedDriveDirectionX;
       finalVelY = lockedDriveDirectionY;
-    }else{
-      lockedDriveDirectionX = 0.0;
-      lockedDriveDirectionY = 0.0;
-
+    } else {
+      // Normal teleop driving logic
       if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
         finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
         finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
       }
+
+      // Reset locks
+      lockedDriveDirectionX = 0.0;
+      lockedDriveDirectionY = 0.0;
+      lockedSpeed = 0.0;
     }
 
-    turningVelocity =
-        Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
-            ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
-            : 0.0;
+    // Save the current state for the next loop
+    wasScoring = isScoring;
+
+    turningVelocity = Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
+        ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
+        : 0.0;
 
     // Construct desired chassis speeds
-
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(finalVelX,
-                                                          finalVelY,
-                                                          turningVelocity,
-                                                          CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
-
+        finalVelY,
+        turningVelocity,
+        CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
     // Send new chassisspeeds object to the drivetrain
     m_drivetrain.drive(chassisSpeeds);
     debugLogsDrive();
@@ -149,7 +169,8 @@ public void initialize() {}
   //
   // --------------------------------------------------------------------------------------
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // --------------------------------------------------------------------------------------
   //
