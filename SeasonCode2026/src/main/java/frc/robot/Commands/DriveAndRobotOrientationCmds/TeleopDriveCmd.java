@@ -29,14 +29,16 @@ public class TeleopDriveCmd extends Command {
   private final Supplier<Double> m_angVelocityPctOutput;
 
   // drive variables
-  private double m_headingAndVelocity_X;
-  private double m_headingAndVelocity_Y;
+  private double joyX;
+  private double joyY;
   private double turningVelocity;
 
   private ChassisSpeeds chassisSpeeds;
 
   private double lockedDriveDirectionX = 0.0;
   private double lockedDriveDirectionY = 0.0;
+  private double lockedSpeed = 0.0;
+  private boolean wasScoring = false;
   private static final double SHOOTING_JOYSTICK_DEADBAND = 0.8;
 
   // --------------------------------------------------------------------------------------
@@ -78,27 +80,27 @@ public void initialize() {}
   @Override
   public void execute() {
     // Obtain realtime joystick inputs with supplier methods
-    m_headingAndVelocity_X = -m_headingPctOutput_Y.get(); //Raw accel
-    m_headingAndVelocity_Y = -m_headingPctOutput_X.get();
+    joyX = -m_headingPctOutput_Y.get(); //Raw accel
+    joyY = -m_headingPctOutput_X.get();
     turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
 
     // Flip Directions for left joystick if alliance is red
 
     if (DriverStation.getAlliance().get() == Alliance.Red) {
-      m_headingAndVelocity_X = -m_headingAndVelocity_X;
-      m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
+      joyX = -joyX;
+      joyY = -joyY;
     }
 
     boolean isScoring = CatzSuperstructure.Instance.getIsScoring();
-    double currentMagnitude = Math.hypot(m_headingAndVelocity_X, m_headingAndVelocity_Y);
+    double currentMagnitude = Math.hypot(joyX, joyY);
 
     double finalVelX = 0.0;
     double finalVelY = 0.0;
 
     if(isScoring){
       if(currentMagnitude > SHOOTING_JOYSTICK_DEADBAND){
-        lockedDriveDirectionX = (m_headingAndVelocity_X / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
-        lockedDriveDirectionY = (m_headingAndVelocity_Y / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
+        lockedDriveDirectionX = (joyX / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
+        lockedDriveDirectionY = (joyY / currentMagnitude) * DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY;
       }
 
       finalVelX = lockedDriveDirectionX;
@@ -108,8 +110,8 @@ public void initialize() {}
       lockedDriveDirectionY = 0.0;
 
       if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
-        finalVelX = m_headingAndVelocity_X * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-        finalVelY = m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
       }
     }
 

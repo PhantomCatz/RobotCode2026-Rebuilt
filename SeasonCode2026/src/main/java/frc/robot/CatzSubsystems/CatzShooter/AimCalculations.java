@@ -49,6 +49,13 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose){
+        Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret(predictedRobotPose));
+        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+                .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
+
     public static Translation2d getCornerHoardingTarget(HoardTargetType targetType) {
         Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
         Translation2d targetPos = FieldConstants.getRightCornerHoardLocation();
