@@ -27,6 +27,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Setpoint;
+import java.util.Set;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
@@ -68,13 +69,43 @@ public class CatzSuperstructure {
         });
     }
 
-    public Command setHomePositionStep1() {
-        return Commands.parallel(
-            CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_HOME_SETPOINT),
-            Commands.waitSeconds(1.0).andThen(() -> CatzHood.Instance.setCurrentPosition(Units.Degree.of(0)))
-            .andThen(() -> CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_STOP))
+    /*/ public Command setHoodHomePosition() {
+        return Commands.sequence(
+            CatzHood.Instance.setpointCommand(Setpoint.withVoltageSetpoint(-1.5)),
+            Commands.waitSeconds(0.2),
+            Commands.waitUntil(() -> Math.abs(CatzHood.Instance.getVelocity().in(Units.DegreesPerSecond)) < 0.5),
+            Commands.runOnce(() -> CatzHood.Instance.setCurrentPosition(Units.Degrees.of(0.0))),
+            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOP)
         );
     }
+   */
+
+
+
+
+    // public Command setHoodHomePosition() {
+    //     return Commands.defer(() -> {
+    //         // create debounce
+    //         Debouncer stallDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kRising);
+    //         return Commands.sequence(
+    //             // apply neg volatge
+    //             CatzHood.Instance.setpointCommand(Setpoint.withVoltageSetpoint(-1.5)),
+    //             //  add frac of sec time so motor starm move
+    //             Commands.waitSeconds(0.2),
+    //             // wait for near0 volocity and .1 sec spike
+    //             Commands.waitUntil(() -> {
+    //                 boolean isStalling = Math.abs(CatzHood.Instance.getVelocity().in(Units.DegreesPerSecond)) < 0.5
+    //                                   && CatzHood.Instance.getStatorCurrent() > 10.0;
+    //                 return stallDebouncer.calculate(isStalling);
+    //             }),
+    //             // zero encoder where installed
+    //             Commands.runOnce(() -> CatzHood.Instance.setCurrentPosition(Units.Degrees.of(0.0))),
+    //             // stop motor
+    //             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOP)
+    //         ).withTimeout(2.0); //failsafe
+    //     }, Set.of(CatzHood.Instance));
+    // }
+
 
     public Command interpolateShootingValues() {
         return Commands.run(() -> {

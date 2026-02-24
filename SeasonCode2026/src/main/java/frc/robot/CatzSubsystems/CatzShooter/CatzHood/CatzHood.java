@@ -2,8 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzHood;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
-import frc.robot.Utilities.Setpoint;
-import edu.wpi.first.units.Units;
 
 public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
 
@@ -56,4 +54,12 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     public static final CatzHood Instance = new CatzHood();
 
     public double currentVelocity = inputs.velocityRPS;
+
+    // public double getStatorCurrent() {
+    //     return inputs.statorCurrentAmps;
+    // }
+
+    public edu.wpi.first.units.measure.AngularVelocity getVelocity() {
+        return edu.wpi.first.units.Units.RotationsPerSecond.of(inputs.velocityRPS);
+    }
 }
