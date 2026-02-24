@@ -2,7 +2,7 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -59,14 +59,15 @@ public class CatzSuperstructure {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
         Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode);
-        Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret(AimCalculations.getPredictedRobotPose())));
+        Pose2d predictedRobotPose = AimCalculations.getPredictedRobotPose();
+        Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret(predictedRobotPose)));
 
         if (activeRegressionMode != currentMode) {
             initialShootReady = false;
             activeRegressionMode = currentMode;
         }
 
-        CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc));
+        CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose));
         CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
 
         if (isShooting) {

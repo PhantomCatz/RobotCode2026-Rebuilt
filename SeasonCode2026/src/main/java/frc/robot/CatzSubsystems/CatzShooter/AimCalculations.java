@@ -26,7 +26,6 @@ import org.littletonrobotics.junction.Logger;
 public class AimCalculations {
     private static final double phaseDelay = 0.05;
     private static final LoggedTunableNumber delayy = new LoggedTunableNumber("phase delay", phaseDelay);
-    private static LaguerreSolver solver = new LaguerreSolver();
 
     public enum HoardTargetType {
         RELATIVE_CLOSE,
@@ -45,6 +44,13 @@ public class AimCalculations {
 
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target) {
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
+        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+                .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
+
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose){
+        Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret(predictedRobotPose));
         double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
@@ -137,23 +143,30 @@ public class AimCalculations {
         double[] regCoeffs = ShooterRegression.getAirtimeCoeffs(mode);
 
         double targetSpeed = targetVelocity.getNorm();
-        double a = regCoeffs[0];
-        double b = regCoeffs[1];
-        double c = regCoeffs[2] - targetSpeed * targetSpeed;
-        double d = 2 * targetSpeed * distToTarget * Math.cos(turretTargetRadians) + regCoeffs[3];
-        double e = regCoeffs[4] - distToTarget * distToTarget;
 
-        double[] coeffs = { e, d, c, b, a };
-        Complex[] roots = solver.solveAllComplex(coeffs, 0);
+        double a = targetSpeed*targetSpeed - regCoeffs[0];
+        double b = -2*targetSpeed*distToTarget*Math.cos(turretTargetRadians) - regCoeffs[1];
+        double c = distToTarget*distToTarget - regCoeffs[2];
 
-        double minPositiveRealRoot = Double.MAX_VALUE;
-        for (Complex r : roots) {
-            if (Math.abs(r.getImaginary()) < 1e-6 && r.getReal() > 0.0) {
-                minPositiveRealRoot = Math.min(minPositiveRealRoot, r.getReal());
-            }
+        double discriminant = b*b - 4*a*c;
+
+        if(discriminant < 0){
+            return 0.0;
         }
 
-        return minPositiveRealRoot != Double.MAX_VALUE ? minPositiveRealRoot : 0.0;
+        double sqrtDiscriminant = Math.sqrt(discriminant);
+        double biggerRoot = (-b + sqrtDiscriminant) / (2*a);
+        double smallerRoot = (-b - sqrtDiscriminant) / (2*a);
+
+        if(smallerRoot > 0){
+            return smallerRoot;
+        }
+
+        if(biggerRoot > 0){
+            return biggerRoot;
+        }
+
+        return 0.0;
     }
 
     public static Pose2d getPredictedRobotPose() {
