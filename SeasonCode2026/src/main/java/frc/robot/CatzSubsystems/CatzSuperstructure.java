@@ -58,19 +58,22 @@ public class CatzSuperstructure {
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
-        Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode);
+
         Pose2d predictedRobotPose = AimCalculations.getPredictedRobotPose();
-        Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret(predictedRobotPose)));
+        Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
+
+        Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode, predictedRobotPose, predictedTurretPose);
+        Distance dist = Units.Meters.of(targetLoc.getDistance(predictedTurretPose));
 
         if (activeRegressionMode != currentMode) {
             initialShootReady = false;
             activeRegressionMode = currentMode;
         }
 
-        CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose));
         CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
-
+        
         if (isShooting) {
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedTurretPose));
             CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
 
             if (!initialShootReady && AimCalculations.readyToShoot()) {
@@ -88,6 +91,7 @@ public class CatzSuperstructure {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
             CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));//don't aim at future pose
             initialShootReady = false;
         }
     }
