@@ -112,6 +112,10 @@ public void initialize() {}
         finalVelY = m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
       }
     }
+    if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+        finalVelX = m_headingAndVelocity_X * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      }
 
     turningVelocity =
         Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband

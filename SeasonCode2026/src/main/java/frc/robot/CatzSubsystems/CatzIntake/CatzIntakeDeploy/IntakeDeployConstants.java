@@ -17,7 +17,10 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.34);
+	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.50);
+	public static final LoggedTunableNumber STOW_POSITION = new LoggedTunableNumber("Intake Deploy/Stow Pos", -0.2);
+	public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos", DEPLOY_POSITION.in(Units.Rotations));
+
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
 	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
@@ -28,7 +31,7 @@ public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(3.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
+        case SN2 -> new Gains(7.5, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -41,7 +44,7 @@ public class IntakeDeployConstants {
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.83;
+	public static final double GRAVITY_FEEDFORWARD = 0.7;
 	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {

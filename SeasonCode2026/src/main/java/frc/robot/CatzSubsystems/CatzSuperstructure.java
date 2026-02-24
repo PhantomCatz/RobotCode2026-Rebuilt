@@ -171,11 +171,11 @@ public class CatzSuperstructure {
     }
 
     public Command deployIntake(){
-        return CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.DEPLOY).alongWith(Commands.runOnce(()-> isIntakeDeployed = true));
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = true));
     }
 
     public Command stowIntake(){
-        return CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
     }
 
     public Command toggleIntakeRollers() {
