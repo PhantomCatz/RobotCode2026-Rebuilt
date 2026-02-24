@@ -27,7 +27,8 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
 
 
         traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj5.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
         traj7.atTime("RampUp+IntakeStop7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
@@ -38,7 +39,6 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),

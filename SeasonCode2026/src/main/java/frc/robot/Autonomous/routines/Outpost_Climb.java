@@ -17,14 +17,14 @@ public class Outpost_Climb extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("Outpost_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Outpost_Climb",3);
 
-        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
         traj2.atTime("IntakeStop+RampUp2").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
         traj3.atTime("Score3").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.deployIntake(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),

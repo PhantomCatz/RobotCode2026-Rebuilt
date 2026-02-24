@@ -27,7 +27,7 @@ public class R2_IAS extends AutoRoutineBase {
                                                    .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
-            // CatzSuperstructure.Instance.deployIntake(),
+            Commands.runOnce(() -> CatzSuperstructure.Instance.deployIntake().schedule()),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),

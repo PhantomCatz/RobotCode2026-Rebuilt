@@ -38,7 +38,7 @@ public class R3_IAS extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.deployIntake(),
+            Commands.runOnce(() -> CatzSuperstructure.Instance.deployIntake().schedule()),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
