@@ -19,8 +19,6 @@ import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.Regres
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
-import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
-import org.apache.commons.math3.complex.Complex;
 import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
