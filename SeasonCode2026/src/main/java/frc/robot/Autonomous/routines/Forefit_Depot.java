@@ -19,12 +19,12 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
 
         traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+                                                .alongWith(CatzSuperstructure.Instance.deployIntake()));
         traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.deployIntake(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),

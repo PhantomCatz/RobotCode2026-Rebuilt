@@ -134,6 +134,10 @@ public class TeleopDriveCmd extends Command {
       lockedDriveDirectionY = 0.0;
       lockedSpeed = 0.0;
     }
+    if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      }
 
     // Save the current state for the next loop
     wasScoring = isScoring;

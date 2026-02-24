@@ -64,9 +64,11 @@ public class RobotContainer {
 
     // Toggle Location
     xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
-    
-    xboxDrv.rightTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY += 1.0));
-    xboxDrv.leftTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY -= 1.0));
+
+    // xboxDrv.rightTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY += 1.0));
+    // xboxDrv.leftTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY -= 1.0));
+    xboxDrv.rightTrigger().onTrue(CatzSuperstructure.Instance.deployIntake());
+    xboxDrv.leftTrigger().onTrue(CatzSuperstructure.Instance.stowIntake());
     // xboxDrv.rightTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(true), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
     // xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 

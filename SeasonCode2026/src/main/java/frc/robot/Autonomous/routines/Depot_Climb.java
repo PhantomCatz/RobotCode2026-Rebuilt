@@ -20,13 +20,13 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Depot_Climb",5);
         AutoTrajectory traj7 = getTrajectory("Depot_Climb",6);
 
-        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT).alongWith(Commands.print("Intake")));
+        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
         traj3.atTime("RampUp+StopIntake2").onTrue(CatzSuperstructure.Instance.cmdHubStandby().alongWith(Commands.print("RampUp+StopIntake3"))
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
 
         prepRoutine(
             traj1,
-            // CatzSuperstructure.Instance.deployIntake(),
 
             followTrajectoryWithAccuracy(traj1),
             followTrajectory(traj2),

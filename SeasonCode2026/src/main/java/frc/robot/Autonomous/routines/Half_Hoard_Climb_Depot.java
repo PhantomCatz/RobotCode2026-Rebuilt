@@ -25,7 +25,8 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         AutoTrajectory traj11 = getTrajectory("Half_Hoard_Climb_Depot",10);
 
         traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
         traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
@@ -35,7 +36,6 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.deployIntake(),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
