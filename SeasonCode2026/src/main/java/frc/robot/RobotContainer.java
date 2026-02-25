@@ -97,14 +97,14 @@ public class RobotContainer {
     xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE
     // -------------------------------------------------------------------------
-    xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
-    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    // xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    // xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
-    // xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
+    xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
 
 

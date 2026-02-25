@@ -45,14 +45,14 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     public void periodic(){
         super.periodic();
 
-        // if(HoodConstants.kP.get() != p || HoodConstants.kD.get() != d || HoodConstants.kS.get() != s || HoodConstants.kV.get() != v || HoodConstants.kG.get() != g){
-        //     setPDSVGGains(HoodConstants.kP.get(), HoodConstants.kD.get(), HoodConstants.kS.get(), HoodConstants.kV.get(), HoodConstants.kG.get());
-        //     p = HoodConstants.kP.get();
-        //     d = HoodConstants.kD.get();
-        //     s = HoodConstants.kS.get();
-        //     v = HoodConstants.kV.get();
-        //     g = HoodConstants.kG.get();
-        // }
+        if(HoodConstants.kP.get() != p || HoodConstants.kD.get() != d || HoodConstants.kS.get() != s || HoodConstants.kV.get() != v || HoodConstants.kG.get() != g){
+            setPDSVGGains(HoodConstants.kP.get(), HoodConstants.kD.get(), HoodConstants.kS.get(), HoodConstants.kV.get(), HoodConstants.kG.get());
+            p = HoodConstants.kP.get();
+            d = HoodConstants.kD.get();
+            s = HoodConstants.kS.get();
+            v = HoodConstants.kV.get();
+            g = HoodConstants.kG.get();
+        }
     }
 
     public static final CatzHood Instance = new CatzHood();
