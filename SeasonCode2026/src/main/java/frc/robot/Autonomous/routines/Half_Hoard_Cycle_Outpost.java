@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -27,8 +28,7 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
 
 
         traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
-                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj5.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
         traj7.atTime("RampUp+IntakeStop7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
@@ -39,6 +39,8 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
+
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
@@ -47,6 +49,11 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj6),
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
+            followTrajectoryWithAccuracy(traj9),
+            followTrajectoryWithAccuracy(traj10),
+            followTrajectoryWithAccuracy(traj11),
+            followTrajectoryWithAccuracy(traj12),
+
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("done")
         );
