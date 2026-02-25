@@ -9,7 +9,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.CatzConstants;
+import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;

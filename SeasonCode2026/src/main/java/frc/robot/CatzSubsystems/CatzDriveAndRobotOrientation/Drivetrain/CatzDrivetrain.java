@@ -183,19 +183,7 @@ public class CatzDrivetrain extends SubsystemBase {
         getModuleStates(),
         gyroAngle2d,
         Timer.getFPGATimestamp());
-    CatzRobotTracker.Instance.addOdometryObservation(observation);
-
-    // Update current velocities use gyro when possible
-    Twist2d robotRelativeVelocity = getTwist2dSpeeds();
-
-    // Only use gyro yaw velocity if connected and NOT in SIM (Sim uses the perfect twist from getTwist2dSpeeds)
-    if (CatzConstants.hardwareMode != CatzConstants.RobotHardwareMode.SIM) {
-        robotRelativeVelocity.dtheta = gyroInputs.gyroConnected
-            ? Math.toRadians(gyroInputs.gyroYawVel)
-            : robotRelativeVelocity.dtheta;
-    }
-
-    CatzRobotTracker.Instance.addVelocityData(robotRelativeVelocity);
+    CatzRobotTracker.Instance.addOdometryObservation(observation);;
 
   } // end of drivetrain periodic
 
