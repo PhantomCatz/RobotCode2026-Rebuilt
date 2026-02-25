@@ -16,11 +16,11 @@ import frc.robot.Utilities.Setpoint;
 
 public class FlywheelConstants {
 	public static final Setpoint OFF_SETPOINT = Setpoint.withDutyCycleSetpoint(0.0);
-	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpoint(40.0);
+	public static final Setpoint TEST_SETPOINT = Setpoint.withVelocitySetpointVoltage(40.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
-        case SN2 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
+        case SN2 -> new Gains(0.6000, 0.0, 0.0, 0.0, 0.1464, 0.0, 0.0); //with duty cycle: p=0.05, v=0.0122
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -31,7 +31,7 @@ public class FlywheelConstants {
     // private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-    public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRps", 60.0);
+    public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRps", 30.0);
 
 	public static final double FLYWHEEL_THRESHOLD = 0.04;
 

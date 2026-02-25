@@ -15,14 +15,22 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
-import org.apache.commons.math3.complex.Complex;
+
+import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
-    private static final double phaseDelay = 0.03;
-    private static LaguerreSolver solver = new LaguerreSolver();
+    private static final double phaseDelay = 0.05;
+    private static final LoggedTunableNumber delayy = new LoggedTunableNumber("phase delay", phaseDelay);
+
+    public enum HoardTargetType {
+        RELATIVE_CLOSE,
+        RELATIVE_FAR,
+        ABSOLUTE_LEFT,
+        ABSOLUTE_RIGHT
+    }
 
     /**
      * Calculates the best turret angle setpoint to point to the hub
@@ -32,37 +40,43 @@ public class AimCalculations {
         return calculateTurretTrackingSetpoint(FieldConstants.getHubLocation());
     }
 
-    public static Setpoint calculateCornerTrackingSetpoint(){
-        return calculateTurretTrackingSetpoint(getCornerHoardingTarget(true));
-    }
-
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target) {
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
-
         double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
-
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Translation2d getCornerHoardingTarget(boolean isCloseCornerHoarding) {
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose){
+        Translation2d hubDirection = target.minus(predictedTurretPose);
+        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+                .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
+        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
+    }
+
+    public static Translation2d getCornerHoardingTarget(HoardTargetType targetType) {
         Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
         Translation2d targetPos = FieldConstants.getRightCornerHoardLocation();
-
         boolean shouldMirror = false;
 
-        if (DriverStation.getAlliance().get() == Alliance.Blue) {
-            if (turretPos.getY() >= FieldConstants.fieldYHalf) {
-                shouldMirror = true;
-            }
-        } else {
-            if (turretPos.getY() <= FieldConstants.fieldYHalf) {
-                shouldMirror = true;
-            }
+        boolean isLeftHalf = turretPos.getY() >= FieldConstants.fieldYHalf;
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+            isLeftHalf = turretPos.getY() <= FieldConstants.fieldYHalf;
         }
 
-        if (!isCloseCornerHoarding) {
-            shouldMirror = !shouldMirror;
+        switch (targetType) {
+            case RELATIVE_CLOSE:
+                shouldMirror = isLeftHalf;
+                break;
+            case RELATIVE_FAR:
+                shouldMirror = !isLeftHalf;
+                break;
+            case ABSOLUTE_LEFT:
+                shouldMirror = true;
+                break;
+            case ABSOLUTE_RIGHT:
+                shouldMirror = false;
+                break;
         }
 
         if (shouldMirror) {
@@ -70,135 +84,105 @@ public class AimCalculations {
         }
         return targetPos;
     }
-//              // B. TURN THE ROBOT
-//              // We need to spin the robot to bring the target back to center (0 degrees).
-//              // Determine direction:
-//              // If target is +179, we want to spin robot LEFT (positive omega) to make target relative angle smaller.
-//              // If target is -179, we want to spin robot RIGHT (negative omega).
 
-//              // Simple P-Controller for the Drivetrain rotation
-//              // kP should be tuned (start low, e.g., 2.0)
-//              double kP_Chassis = 4.0;
-//              robotTurnCmd = targetRadians * kP_Chassis;
-//         }
+    public static boolean doesTrajectoryCrossNet(Translation2d turretPos, Translation2d targetPos) {
+        Translation2d netBase = FieldConstants.getNetLocation();
+        double netX = netBase.getX();
+        double netYMin = FieldConstants.fieldYHalf - (FieldConstants.NET_LENGTH_HALF);
+        double netYMax = FieldConstants.fieldYHalf + (FieldConstants.NET_LENGTH_HALF);
 
-//         // 4. Calculate Turret Feedforward (Standard)
-//         double r2 = targetVector.getNorm() * targetVector.getNorm();
-//         double crossProduct = targetVector.getX() * relativeHubVelocity.getY()
-//                             - targetVector.getY() * relativeHubVelocity.getX();
-//         double turretFF = (r2 > 1e-6) ? (crossProduct / r2) : 0.0;
+        if ((turretPos.getX() <= netX && targetPos.getX() >= netX) ||
+                (turretPos.getX() >= netX && targetPos.getX() <= netX)) {
 
-//         // If we are commanding the robot to turn, we must SUBTRACT that velocity from the turret
-//         // so the turret stays "world stabilized" while the chassis spins beneath it.
-//         if (robotTurnCmd != null) {
-//             turretFF -= robotTurnCmd;
-//         }
+            double slope = (targetPos.getY() - turretPos.getY()) / (targetPos.getX() - turretPos.getX());
+            double yInt = turretPos.getY() + slope * (netX - turretPos.getX());
 
-//         return new AimingParameters(
-//             new Rotation2d(clampedTurretGoal),
-//             turretFF,
-//             robotTurnCmd
-//         );
-//     }
-
-    public static Translation2d getPredictedHubLocation() {
-        Translation2d hubVelocity = getHubVelocity();
-        double futureAirtime = getFutureShootAirtime(hubVelocity);
-        return hubVelocity.times(futureAirtime);
+            return yInt >= netYMin && yInt <= netYMax;
+        }
+        return false;
     }
 
-    /**
-     * Calculates the hub's velocity vector relative to the turret pretending as if
-     * the robot is stationary and the hub is moving.
-     *
-     * @return
-     */
-    private static Translation2d getHubVelocity() {
-        Pose2d robotPose = getPredictedRobotPose();
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
-        double robotAngle = robotPose.getRotation().getRadians();
-
-        double cosRobotAngle = Math.cos(robotAngle);
-        double sinRobotAngle = Math.sin(robotAngle);
-
-        double turretVelocityX = robotVelocity.vxMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                        * (TurretConstants.TURRET_OFFSET.getY() * cosRobotAngle
-                                - TurretConstants.TURRET_OFFSET.getX() * sinRobotAngle);
-        double turretVelocityY = robotVelocity.vyMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                        * (TurretConstants.TURRET_OFFSET.getX() * cosRobotAngle
-                                - TurretConstants.TURRET_OFFSET.getY() * sinRobotAngle);
-
-        return new Translation2d(-turretVelocityX, -turretVelocityY);
+    public static RegressionMode getHoardRegressionMode(Translation2d targetPos) {
+        if (doesTrajectoryCrossNet(CatzTurret.Instance.getFieldToTurret(), targetPos)) {
+            return RegressionMode.OVER_NET_HOARD;
+        }
+        return RegressionMode.OVER_TRENCH_HOARD;
     }
 
-    /**
-     * Calculates the airtime that the ball will take when shot at the predicted future location of the hub
-     *
-     * We avoid the problem of needing to iteratively search the potential solution by approximating the inverse airtime
-     * function as a second degree polynomial.
-     *
-     * @return The predicted future airtime of the ball. If no solution is found, return 0.
-     */
-    private static double getFutureShootAirtime(Translation2d hubVelocity) {
-        Translation2d fieldToTurret = CatzTurret.Instance.getFieldToTurret();
-        Translation2d hubToTurret = fieldToTurret.minus(FieldConstants.getHubLocation());
+    public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode, Pose2d predictedRobotPose, Translation2d predictedTurretPose) {
+        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose);
+        double futureAirtime = getFutureShootAirtime(predictedTurretPose, targetVelocity, baseTarget, mode);
+        return baseTarget.plus(targetVelocity.times(futureAirtime));
+    }
 
-        double distToHub = hubToTurret.getNorm();
+    private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
+        ChassisSpeeds currentVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
 
-        // calculate the angle between the hub velocity and hub displacement vectors
-        double turretHubRadians = Math
-                .abs(MathUtil.angleModulus(hubToTurret.getAngle().getRadians() - hubVelocity.getAngle().getRadians()));
+        double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
+                .getRadians();
 
-        //get the coefficient terms of the inverse airtime polynomial
-        double regressionATerm = ShooterRegression.airtimeRegA;
-        double regressionBTerm = ShooterRegression.airtimeRegB;
-        double regressionCTerm = ShooterRegression.airtimeRegC;
-        double regressionDTerm = ShooterRegression.airtimeRegD;
-        double regressionETerm = ShooterRegression.airtimeRegE;
+        double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
+                * currentVelocity.omegaRadiansPerSecond + currentVelocity.vxMetersPerSecond;
+        double turretYVelocity = Math.cos(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
+                * currentVelocity.omegaRadiansPerSecond + currentVelocity.vyMetersPerSecond;
 
-        double hubSpeed = hubVelocity.getNorm();
-        double a = regressionATerm;
-        double b = regressionBTerm;
-        double c = regressionCTerm - hubSpeed*hubSpeed;
-        double d = 2*hubSpeed*distToHub*Math.cos(turretHubRadians) + regressionDTerm;
-        double e = regressionETerm - distToHub*distToHub;
+        return new Translation2d(-turretXVelocity, -turretYVelocity);
+    }
 
-        double[] coeffs = {e, d, c, b, a};
-        PolynomialFunction poly = new PolynomialFunction(coeffs);
+    private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity, Translation2d targetPos,
+            RegressionMode mode) {
+        Translation2d targetToTurret = fieldToTurret.minus(targetPos);
+        double distToTarget = targetToTurret.getNorm();
 
-        Complex[] roots = solver.solveAllComplex(coeffs, 0);
+        double turretTargetRadians = Math.abs(
+                MathUtil.angleModulus(targetToTurret.getAngle().getRadians() - targetVelocity.getAngle().getRadians()));
+        double[] regCoeffs = ShooterRegression.getAirtimeCoeffs(mode);
 
-        double minNonnegativeRealRoot = 9999999.9;
+        double targetSpeed = targetVelocity.getNorm();
 
-        for (Complex r : roots) {
-            if (Math.abs(r.getImaginary()) < 1e-6 && r.getReal() > 0.0) {
-                minNonnegativeRealRoot = Math.min(minNonnegativeRealRoot, r.getReal());
-            }
+        double a = targetSpeed*targetSpeed - regCoeffs[0];
+        double b = -2*targetSpeed*distToTarget*Math.cos(turretTargetRadians) - regCoeffs[1];
+        double c = distToTarget*distToTarget - regCoeffs[2];
+
+        double discriminant = b*b - 4*a*c;
+
+        if(discriminant < 0){
+            return 0.0;
         }
 
-        if (minNonnegativeRealRoot != 9999999.9) {
-            return minNonnegativeRealRoot;
+        double sqrtDiscriminant = Math.sqrt(discriminant);
+        double biggerRoot = (-b + sqrtDiscriminant) / (2*a);
+        double smallerRoot = (-b - sqrtDiscriminant) / (2*a);
+
+        if(smallerRoot > 0){
+            return smallerRoot;
         }
 
-        return 0.0; // both roots negative (if that's even possible)
+        if(biggerRoot > 0){
+            return biggerRoot;
+        }
+
+        return 0.0;
     }
 
-    private static Pose2d getPredictedRobotPose() {
+    public static Pose2d getPredictedRobotPose() {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * phaseDelay,
-                robotVelocity.vyMetersPerSecond * phaseDelay,
-                robotVelocity.omegaRadiansPerSecond * phaseDelay);
+                robotVelocity.vxMetersPerSecond * delayy.get(),
+                robotVelocity.vyMetersPerSecond * delayy.get(),
+                robotVelocity.omegaRadiansPerSecond * delayy.get()
+                );
 
         return currentPose.exp(twist);
     }
 
     public static boolean readyToShoot() {
-        return CatzTurret.Instance.nearPositionSetpoint() && CatzHood.Instance.nearPositionSetpoint()
-                && CatzFlywheels.Instance.spunUp();
+        Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
+        Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
+        Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
+        return CatzTurret.Instance.nearPositionSetpoint()
+                && CatzHood.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
     }
 }

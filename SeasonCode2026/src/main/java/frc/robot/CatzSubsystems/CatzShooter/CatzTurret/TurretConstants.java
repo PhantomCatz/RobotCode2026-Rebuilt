@@ -39,20 +39,21 @@ public class TurretConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
 
-	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(3.0);
+	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(90.0);
 
-	public static final Angle TURRET_MAX = Units.Degrees.of(120); // TODO change to 180 after turret is fixed
-	public static final Angle TURRET_MIN = Units.Degrees.of(-120); // TODO change to 180 after turret is fixed
+	public static final Angle TURRET_MAX = Units.Degrees.of(180);
+	public static final Angle TURRET_MIN = Units.Degrees.of(-180);
 
-	public static final LoggedTunableNumber omegaFF = new LoggedTunableNumber("Turret/omegaFF", 5.0);
-	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.3;//25;
-	public static final double ROBOT_ACCELERATION_FEEDFORWARD = 0.00;
+	public static final LoggedTunableNumber omegaFF = new LoggedTunableNumber("Turret/omegaFF", 4.67);
+	public static final double ROBOT_OMEGA_FEEDFORWARD = 4.67;//25;
 
 	public static final Translation2d TURRET_OFFSET = new Translation2d(Units.Inches.of(-5).in(Units.Meters),  Units.Inches.of(5).in(Units.Meters));
+	public static final double TURRET_DIST_TO_CENTER = Math.hypot(TURRET_OFFSET.getX(), TURRET_OFFSET.getY());
+	public static final Rotation2d TURRET_RADIAL_ANGLE = new Rotation2d(Math.PI * 0.75);
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
-public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
+	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

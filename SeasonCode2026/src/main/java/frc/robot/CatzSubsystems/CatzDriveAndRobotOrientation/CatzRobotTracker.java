@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.Utilities.GeomUtil;
@@ -87,11 +86,10 @@ public class CatzRobotTracker {
       };
 
   private Rotation2d lastGyroAngle = new Rotation2d();
-  private Twist2d robotVelocity = new Twist2d();
-  private Twist2d trajectoryVelocity = new Twist2d();
+  private Twist2d robotAccelerations = new Twist2d();
   private ChassisSpeeds m_lastChassisSpeeds = new ChassisSpeeds();
   private Translation2d visionPoseShift = new Translation2d();
-
+  private double lastTimestamp = 0.0;
 
   // ------------------------------------------------------------------------------------------------------
   //
@@ -133,6 +131,16 @@ public class CatzRobotTracker {
     }
     // Add pose to buffer at timestamp
     POSE_BUFFER.addSample(observation.timestamp(), odometryPose);
+    ChassisSpeeds chassisSpeeds = KINEMATICS.toChassisSpeeds(observation.moduleStates);
+    robotAccelerations =
+      new Twist2d(
+        (chassisSpeeds.vxMetersPerSecond - m_lastChassisSpeeds.vxMetersPerSecond) / (observation.timestamp - lastTimestamp),
+        (chassisSpeeds.vyMetersPerSecond - m_lastChassisSpeeds.vyMetersPerSecond) / (observation.timestamp - lastTimestamp),
+        (chassisSpeeds.omegaRadiansPerSecond - m_lastChassisSpeeds.omegaRadiansPerSecond) / (observation.timestamp - lastTimestamp)
+      );
+
+    m_lastChassisSpeeds = chassisSpeeds;
+    lastTimestamp = observation.timestamp;
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
@@ -198,22 +206,14 @@ public class CatzRobotTracker {
     // then replaying odometry data
     scaledTransform = new Transform2d(scaledTransform.getTranslation(), new Rotation2d()); //remove rotation input
 
-    Logger.recordOutput("CamTransform"+observation.name, transform);
     //TODO hopefully the latency does not matter here?
     visionPoseShift = scaledTransform.getTranslation();
 
     estimatedPose = estimateAtTime.plus(scaledTransform).plus(sampleToOdometryTransform);
   } // end of addVisionObservation(OdometryObservation observation)
 
-
-  public void addVelocityData(Twist2d robotVelocity) {
-    this.robotVelocity = robotVelocity;
-  }
-
-  public void addFeedFowardData() {}
-
-  public void addTrajectoryVelocityData(Twist2d robotVelocity) {
-    trajectoryVelocity = robotVelocity;
+  public Twist2d getRobotAccelerations(){
+    return robotAccelerations;
   }
 
   /**
@@ -239,40 +239,19 @@ public class CatzRobotTracker {
   //  CatzRobotTracker Getters
   //
   // ------------------------------------------------------------------------------------------------------
-  @AutoLogOutput(key = "CatzRobotTracker/FieldVelocity")
-  public Twist2d fieldVelocity() {
-    Translation2d linearFieldVelocity =
-        new Translation2d(robotVelocity.dx, robotVelocity.dy).rotateBy(estimatedPose.getRotation());
-    return new Twist2d(
-        linearFieldVelocity.getX(), linearFieldVelocity.getY(), robotVelocity.dtheta);
-  }
 
   public Translation2d getVisionPoseShift(){
     return visionPoseShift;
   }
 
-  /**
-   * Predicts what our pose will be in the future. Allows separate translation and rotation
-   * lookaheads to account for varying latencies in the different measurements.
-   *
-   * @param translationLookaheadS The lookahead time for the translation of the robot
-   * @param rotationLookaheadS The lookahead time for the rotation of the robot
-   * @return The predicted pose.
-   */
-  @AutoLogOutput(key = "CatzRobotTracker/PredictedPose")
-  public Pose2d getPredictedPose(double translationLookaheadS, double rotationLookaheadS) {
-    Twist2d velocity = DriverStation.isAutonomousEnabled() ? trajectoryVelocity : robotVelocity;
-    return getEstimatedPose()
-        .transformBy(
-            new Transform2d(
-                velocity.dx * translationLookaheadS,
-                velocity.dy * translationLookaheadS,
-                Rotation2d.fromRadians(velocity.dtheta * rotationLookaheadS)));
-  }
 
   @AutoLogOutput(key = "CatzRobotTracker/RecordedChassisSpeeds")
-  public ChassisSpeeds getRobotChassisSpeeds() {
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
     return m_lastChassisSpeeds;
+  }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(m_lastChassisSpeeds, estimatedPose.getRotation());
   }
 
   /********************************************************************************************************************************

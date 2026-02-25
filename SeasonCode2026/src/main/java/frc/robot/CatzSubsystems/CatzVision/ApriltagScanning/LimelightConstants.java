@@ -16,13 +16,13 @@ public class LimelightConstants {
     public static final int kDisabledPipeline = 1;
 
     private static final double limelightCrosshairCompensationPitch = 0.0;
-    private static final double limelightCrosshairCompensationYaw = -2.0; // -2.0 for sushi
+    private static final double limelightCrosshairCompensationYaw = 0.0; // -2.0 for sushi
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
-                    Inches.of(2.0).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
+                    Inches.of(2.25).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
                     Inches.of(5.375).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
                     Inches.of(21.125).in(Meters) //This makes it easy to account for latency.
                 ),
@@ -38,7 +38,7 @@ public class LimelightConstants {
     // public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
     // public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
     // public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
-    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limpelight/pPitch", 18.0);
+    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limelight/pPitch", 18.0);
     // public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
     // public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
     // public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);

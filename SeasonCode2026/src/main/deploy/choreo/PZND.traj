@@ -19,9 +19,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"3.6960484981536865 m", "val":3.6960484981536865}, "y":{"exp":"7.538652420043945 m", "val":7.538652420043945}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":39, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"5.71078634262085 m", "val":5.71078634262085}, "y":{"exp":"7.454634666442871 m", "val":7.454634666442871}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.155965805053711 m", "val":8.155965805053711}, "y":{"exp":"5.4060235023498535 m", "val":5.4060235023498535}, "heading":{"exp":"-1.0400230543960993 rad", "val":-1.040023054396099}, "intervals":42, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.273334980010986 m", "val":6.273334980010986}, "y":{"exp":"7.292361259460449 m", "val":7.292361259460449}, "heading":{"exp":"3.1314922118418784 rad", "val":3.1314922118418784}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.685314655303955 m", "val":3.685314655303955}, "y":{"exp":"7.5268049240112305 m", "val":7.5268049240112305}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":25, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"0.47450003027915955 m", "val":0.47450003027915955}, "y":{"exp":"6.022579669952393 m", "val":6.022579669952393}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -29,8 +27,8 @@
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"16.541 m", "val":16.541}, "h":{"exp":"8.0692 m", "val":8.0692}}}, "enabled":true},
     {"from":"first", "to":"last", "data":{"type":"KeepOutCircle", "props":{"x":{"exp":"4.745133931748569 m", "val":4.745133931748569}, "y":{"exp":"5.8381142765283585 m", "val":5.8381142765283585}, "r":{"exp":"1 m", "val":1.0}}}, "enabled":true},
-    {"from":4, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
-    {"from":2, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
+    {"from":2, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":1, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
   "targetDt":{
    "exp":"0.05 s",
    "val":0.05
@@ -173,10 +171,10 @@
   "splits":[0,39,81]
  },
  "events":[
-   {"name":"Intake2", "from":{"target":2, "targetTimestamp":2.04427, "offset":{"exp":"-1 s", "val":-1.0}}, "event":{"type":"named", "data":{"name":"Intake3"}}},
-   {"name":"Intake+RampUp4", "from":{"target":5, "targetTimestamp":5.8514, "offset":{"exp":"-0.9 s", "val":-0.9}}, "event":{"type":"named", "data":{"name":""}}},
+   {"name":"Intake2", "from":{"target":1, "targetTimestamp":2.04427, "offset":{"exp":"-1 s", "val":-1.0}}, "event":{"type":"named", "data":{"name":"Intake3"}}},
+   {"name":"Intake+RampUp4", "from":{"target":3, "targetTimestamp":5.8514, "offset":{"exp":"-0.9 s", "val":-0.9}}, "event":{"type":"named", "data":{"name":""}}},
    {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"Score4", "from":{"target":5, "targetTimestamp":5.8514, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score3", "from":{"target":4, "targetTimestamp":4.14777, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StopIntake+RampUp2", "from":{"target":2, "targetTimestamp":2.04427, "offset":{"exp":"1 s", "val":1.0}}, "event":null}]
+   {"name":"Score4", "from":{"target":3, "targetTimestamp":5.8514, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Score3", "from":{"target":2, "targetTimestamp":4.14777, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StopIntake+RampUp2", "from":{"target":1, "targetTimestamp":2.04427, "offset":{"exp":"1 s", "val":1.0}}, "event":null}]
 }

@@ -53,7 +53,7 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	}
 
 	/**
-	 * @return The closest Fuel pose.
+	 * @return The closest fuel pose.
 	 */
 	public Pose2d getFuelPose() {
 		return io.getFuelPose();
@@ -68,9 +68,9 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	}
 
 	/**
-	 * @param base The translation to evaluate the closest Fuel relative to
+	 * @param base The translation to evaluate the closest fuel relative to
 	 *
-	 * @return A pose with a rotation component equal to the angle to face the Fuel and the translation component of the closest Fuel.
+	 * @return A pose with a rotation component equal to the angle to face the fuel and the translation component of the closest fuel.
 	 */
 	public Pose2d getFuelTranslationAndPoint() {
 		Translation2d t = getFuelPose().getTranslation();
@@ -107,7 +107,6 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	@Override
 	public void run() {
 		while (true) {
-			System.out.println("thread running");
 			setNearestGroupPose();
 		}
 	}

@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.CatzConstants;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.LoggedTunableNumber;
+import frc.robot.Utilities.ModuleLimits;
 import lombok.Builder;
 
 public class DriveConstants {
@@ -35,6 +37,7 @@ public class DriveConstants {
   // Drive Subsytem Config info
   // ---------------------------------------------------------------------------------------------------------------
 
+
   public static final DriveConfig DRIVE_CONFIG =
     DriveConfig.builder()
         .wheelRadius(Units.inchesToMeters(1.7))
@@ -43,7 +46,7 @@ public class DriveConstants {
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
         .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(120)
+        .maxLinearAcceleration(30)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
@@ -55,6 +58,19 @@ public class DriveConstants {
       .maxAngularVelocity(Units.degreesToRadians(540))
       .maxAngularAcceleration(Units.degreesToRadians(720))
       .build();
+  private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
+
+  public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
+        DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+        accLimit.get(),
+        DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+
+  public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
+
+  public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
+    DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+    DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
+    DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
@@ -133,10 +149,10 @@ public class DriveConstants {
         break;
 
         case SN2:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.311035+0.5, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.100342+0.5, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.834229, false); //this one is changing?  0.811035 shifted by 7 degrees?
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.401855, false);
             MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.273926, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.34084, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.3394, false);
         break;
 
         case SN_TEST:
@@ -201,6 +217,7 @@ public class DriveConstants {
 
   public static final double ROBOT_MASS = 60.0;
   public static final double ROBOT_MOI = (2.0 / 12.0) * ROBOT_MASS * (Math.pow(DRIVE_CONFIG.bumperWidthX(), 2));
+  public static final double WHEEL_COF = 1.1; // Coefficient of friction for the wheels, used in simulation
 
 
 
@@ -209,6 +226,7 @@ public class DriveConstants {
   //      Simulation helpers
   //
   // -----------------------------------------------------------------------------------------------------------------------------
+
 
   /****************************************************************************************
    *

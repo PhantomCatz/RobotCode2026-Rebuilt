@@ -30,7 +30,6 @@ public class LimelightSubsystem extends SubsystemBase {
 								config.robotToCameraOffset.getRotation().getY()),
 						Units.radiansToDegrees(
 								config.robotToCameraOffset.getRotation().getZ()));
-				System.out.println("set camera pose");
 			}
 		}
 	}

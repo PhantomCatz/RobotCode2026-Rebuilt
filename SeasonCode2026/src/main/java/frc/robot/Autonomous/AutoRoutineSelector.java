@@ -8,7 +8,6 @@ import frc.robot.Autonomous.routines.Forefit_Depot;
 import frc.robot.Autonomous.routines.Forefit_Outpost;
 import frc.robot.Autonomous.routines.Outpost_Climb;
 import frc.robot.Autonomous.routines.PNZO;
-import frc.robot.Autonomous.routines.PZND;
 import frc.robot.Autonomous.routines.R1_IAS;
 import frc.robot.Autonomous.routines.R2_IAS;
 import frc.robot.Autonomous.routines.R3_IAS;
@@ -26,7 +25,6 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("R2_IAS", () -> new R2_IAS().getRoutine());
         autoSelector.addRoutine("R1_IAS", () -> new R1_IAS().getRoutine());
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
-        autoSelector.addRoutine("PNZD", () -> new PZND().getRoutine());
         autoSelector.addRoutine("Outpost_Climb", () -> new Outpost_Climb().getRoutine());
         autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
