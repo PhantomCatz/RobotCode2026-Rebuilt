@@ -232,7 +232,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
-          driveSimulationInstance.runChassisSpeeds(descreteSpeeds, new Translation2d(), true, true);
           driveSimulationInstance.getDriveTrainSimulation().setRobotSpeeds(descreteSpeeds);
           driveSimulationInstance.runSwerveStates(optimizedDesiredStates);
       }
