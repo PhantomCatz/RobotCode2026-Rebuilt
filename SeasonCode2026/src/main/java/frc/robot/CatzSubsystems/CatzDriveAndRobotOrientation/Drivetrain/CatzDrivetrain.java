@@ -27,11 +27,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
-import frc.robot.Utilities.EqualsUtil;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
@@ -271,7 +271,7 @@ public class CatzDrivetrain extends SubsystemBase {
     double safeSpeed = 2.0;
 
     // Get the robot's current velocity vector from the setpoint generator
-    ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+    ChassisSpeeds currentSpeeds = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
     // Calculate the magnitude (total speed) of current and desired vectors
     double currentSpeedMag = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
@@ -362,6 +362,34 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
+
+  public void moveWhileShootAccControl(ChassisSpeeds desiredSpeeds) {
+
+    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
+    ModuleLimits limits;
+
+    if(CatzSuperstructure.Instance.getIsScoring()){
+      limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
+    }else{
+      limits = DriveConstants.DRIVE_LIMITS;
+    }
+    currentSetpoint = swerveSetpointGenerator.generateSetpoint(
+        limits,
+        currentSetpoint,
+        discreteSpeeds,
+        0.02);
+
+    SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
+
+    for (int i = 0; i < 4; i++) {
+      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+
+      m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
+
+      optimizedDesiredStates[i] = optimizedState;
+    }
+  }
+
   /** Create a command to stop driving */
   public void stopDriving() {
     for (CatzSwerveModule module : m_swerveModules) {
@@ -402,38 +430,6 @@ public class CatzDrivetrain extends SubsystemBase {
       driveVelocityAverage += module.getCharacterizationVelocityRadPerSec();
     }
     return driveVelocityAverage / 4.0;
-  }
-
-  /**
-   * Returns command that orients all modules to {@code orientation}, ending when
-   * the modules have
-   * rotated.
-   */
-  public Command orientModules(Rotation2d orientation) {
-    return orientModules(new Rotation2d[] { orientation, orientation, orientation, orientation });
-  }
-
-  /**
-   * Returns command that orients all modules to {@code orientations[]}, ending
-   * when the modules
-   * have rotated.
-   */
-  public Command orientModules(Rotation2d[] orientations) {
-    return run(() -> {
-      for (int i = 0; i < orientations.length; i++) {
-        m_swerveModules[i].setModuleAngleAndVelocity(
-            new SwerveModuleState(0.0, orientations[i]));
-        // new SwerveModuleState(0.0, new Rotation2d()));
-      }
-    })
-        .until(
-            () -> Arrays.stream(m_swerveModules)
-                .allMatch(
-                    module -> EqualsUtil.epsilonEquals(
-                        module.getAngle().getDegrees(),
-                        module.getModuleState().angle.getDegrees(),
-                        2.0)))
-        .withName("Orient Modules");
   }
 
   /** Set Neutral mode for all swerve modules */
@@ -499,7 +495,6 @@ public class CatzDrivetrain extends SubsystemBase {
             Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
         curvature // Input the calculated curvature here
     );
-    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
 
     Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
     ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));

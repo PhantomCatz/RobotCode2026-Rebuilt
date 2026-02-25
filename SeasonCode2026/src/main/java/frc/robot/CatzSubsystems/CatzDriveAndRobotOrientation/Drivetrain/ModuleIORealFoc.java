@@ -168,7 +168,8 @@ public class ModuleIORealFoc implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.isAbsEncoderConnected = encoder.isConnected();
-
+    inputs.isDriveMotorConnected = drivePosition.getStatus().isOK();
+    inputs.isSteerMotorConnected = steerPosition.getStatus().isOK();
     // Refresh drive motor valuesp
     inputs.drivePositionUnits     = drivePosition.getValueAsDouble();
     inputs.driveVelocityRPS       = driveVelocity.getValueAsDouble();

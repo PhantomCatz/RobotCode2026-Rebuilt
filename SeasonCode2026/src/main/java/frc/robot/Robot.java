@@ -21,7 +21,6 @@ import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,7 +40,6 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
@@ -66,7 +64,7 @@ public class Robot extends LoggedRobot {
     switch (CatzConstants.hardwareMode) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
-        Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
+        Logger.addDataReceiver(new WPILOGWriter("/U/logs")); ///"home/lvuser/logs"
         Logger.addDataReceiver(new RLOGServer());
         Logger.addDataReceiver(new WPILOGWriter("/Logs"));
 
@@ -175,10 +173,10 @@ public class Robot extends LoggedRobot {
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
 
-      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
-      Notifier.setHALThreadPriority(false, 0);
-      System.out.println("Starting deteciton threaadf==================");
-      coralDetectionThread.startPeriodic(0.1);
+      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      // Notifier.setHALThreadPriority(false, 0);
+      // System.out.println("Starting deteciton threaadf==================");
+      // coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override

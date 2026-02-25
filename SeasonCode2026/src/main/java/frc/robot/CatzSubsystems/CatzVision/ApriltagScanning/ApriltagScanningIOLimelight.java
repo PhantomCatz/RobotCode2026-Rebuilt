@@ -33,7 +33,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 			latestEstimate = poseEstimate.pose;
 			latestEstimateTime = Units.Seconds.of(poseEstimate.timestampSeconds);
 			CatzRobotTracker.getInstance().addVisionObservation(
-                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
+                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}
 	}
@@ -54,7 +54,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	public void update() {
 		updateGyro();
 
-		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond);
+		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds().omegaRadiansPerSecond);
 		if (Math.abs(robotOmegaDegPerSec) > 300.0) {
             return; // Reject vision update if spinning too fast
         }

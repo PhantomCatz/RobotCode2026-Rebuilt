@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Time;
+import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -31,7 +32,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     public void update() {
         updateGyroWithTurret();
 
-        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond);
+        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds().omegaRadiansPerSecond);
 
         double turretOmegaDegPerSec = CatzTurret.Instance.getVelocity().in(Units.DegreesPerSecond);
 
@@ -75,10 +76,10 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
              * and using a time lookup table grabbing the past turret angle that matches the time of turret position calculations,
              * we can reverse calculate the robot position with correct latency correction.
              */
-            double timestamp = poseEstimate.timestampSeconds;
+            double timestamp = poseEstimate.timestampSeconds - AutonConstants.ARTIFICIAL_PING_SEC;
 
             Pose2d turretPoseFieldSpace = poseEstimate.pose;
-            Logger.recordOutput("Turret Pose Field Space", turretPoseFieldSpace);
+            Logger.recordOutput("Limelight Turret Pose Field Space", turretPoseFieldSpace);
 
             Rotation2d pastTurretRot = new Rotation2d(CatzTurret.Instance.getAngleAtTime(timestamp)).plus(TurretConstants.TURRET_ROTATION_OFFSET);
 
@@ -96,7 +97,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
                             config.name,
                             robotPoseFieldSpace,
                             timestamp,
-                            LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist)));
+                            config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist)));
         }
     }
 

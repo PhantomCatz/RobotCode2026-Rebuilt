@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
-import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.FieldLayout;
 import frc.robot.Utilities.LimelightHelpers;
@@ -120,7 +119,7 @@ public class DetectionIOLimelight extends DetectionIO {
 	public void updateInputs(DetectionIOInputs inputs) {
 
 		inputs.nearestFuel = getFuelPose();
-		// System.out.println("nearest Fuel "+inputs.nearestFuel);
+		// System.out.println("nearest fuel "+inputs.nearestFuel);
 		mStopwatch.startIfNotRunning();
 		if (pipelineToSet == LimelightHelpers.getCurrentPipelineIndex(config.name)) {
 			if (pipelineToSet == DetectionMode.AUTO.index) {
@@ -138,7 +137,7 @@ public class DetectionIOLimelight extends DetectionIO {
 					return;
 				}
 				newDet = new ArrayList<Fuel>();
-				// tracker.removeIf((Fuel) -> now - Fuel.detectionTime > 0.2);
+				// tracker.removeIf((fuel) -> now - fuel.detectionTime > 0.2);
 
 				// while (tracker.size() > 0) {
 				// 	tracker.remove(0);
@@ -162,18 +161,15 @@ public class DetectionIOLimelight extends DetectionIO {
 						// LogUtil.recordPose2d(config.name + "Last Fuel Pose Outside Field", fuelPose);
 						continue;
 					}
-					if (testInOpposingArea(fuelPose)) { // TODO this is just for the auton testy change to the non test function
-						continue;
-					}
 					newDet.add(new Fuel(fuelPose, fuelTranslation, now - (latencyMs / 1000)));
 				}
 
-				for (Fuel Fuel : newDet) {
+				for (Fuel fuel : newDet) {
 					if (bestTranslation == null
 							|| bestFuelPose.getTranslation().getDistance(base)
-									> Fuel.fuelPose.getTranslation().getDistance(base)) {
-						bestTranslation = Fuel.fuelTranslation;
-						bestFuelPose = Fuel.fuelPose;
+									> fuel.fuelPose.getTranslation().getDistance(base)) {
+						bestTranslation = fuel.fuelTranslation;
+						bestFuelPose = fuel.fuelPose;
 					}
 				}
 
@@ -203,15 +199,15 @@ public class DetectionIOLimelight extends DetectionIO {
 		Translation2d bestTranslation = null;
 		Pose2d bestFuelPose = null;
 		Translation2d robotPose = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-		for (Fuel Fuel : tracker.get()) {
+		for (Fuel fuel : tracker.get()) {
 			if (bestTranslation == null
 					|| bestFuelPose.getTranslation().getDistance(robotPose)
-							> Fuel.fuelPose.getTranslation().getDistance(robotPose)) {
-				bestTranslation = Fuel.fuelTranslation;
-				bestFuelPose = Fuel.fuelPose;
+							> fuel.fuelPose.getTranslation().getDistance(robotPose)) {
+				bestTranslation = fuel.fuelTranslation;
+				bestFuelPose = fuel.fuelPose;
 			}
 		}
-		return bestFuelPose; // will return null if no Fuel
+		return bestFuelPose; // will return null if no fuel
 	}
 
 	private double getSquaredDistance(Translation2d iTranslation, Translation2d jTranslation) {
@@ -259,7 +255,7 @@ public class DetectionIOLimelight extends DetectionIO {
 		// 	System.out.println("group"+i+" size"+groups.get(i).size());
 		// }
 		// loop through groups and find which has best ratio
-		double bestRatio = 0.0; // ratio of size of group to distance of closest Fuel in group
+		double bestRatio = 0.0; // ratio of size of group to distance of closest fuel in group
 		for (int i=0; i<groups.size(); i++) {
 			double closestDistInGroup = 1e9;
 			Pose2d closestFuelPoseInGroup = null;
@@ -311,7 +307,7 @@ public class DetectionIOLimelight extends DetectionIO {
 		}
 
 
-		Distance distHypotenuseYToGround = BaseUnits.DistanceUnit.of(Math.hypot( //distance from lens to Fuel only in the y-axis
+		Distance distHypotenuseYToGround = BaseUnits.DistanceUnit.of(Math.hypot( //distance from lens to fuel only in the y-axis
 				distAwayY.in(BaseUnits.DistanceUnit),
 				heightFromFuel.in(BaseUnits.DistanceUnit)));
 
@@ -357,7 +353,7 @@ public class DetectionIOLimelight extends DetectionIO {
 			latestEstimateTime = edu.wpi.first.units.Units.Seconds.of(poseEstimate.timestampSeconds);
 			aprilTagPose.set(poseEstimate.pose);
 			CatzRobotTracker.getInstance().addVisionObservation(
-                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, LimelightConstants.enabledVisionStdDevs.times(poseEstimate.avgTagDist))
+                new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist))
 			);
 		}
 	}

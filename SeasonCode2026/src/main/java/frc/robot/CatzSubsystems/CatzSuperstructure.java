@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -18,6 +19,7 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstant
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
@@ -25,131 +27,136 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
-    private boolean isCloseCornerHoarding = true;
+    public boolean isClimbMode = false;
+    private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
+    private boolean isScoring = false;
+
+    private boolean initialShootReady = false;
+    private RegressionMode activeRegressionMode = RegressionMode.HUB;
 
     private CatzSuperstructure() {}
 
-    public Command trackTargetAndRampUp(RegressionMode mode) {
-        return Commands.run(() -> {
-            Translation2d targetLoc;
-            if (mode == RegressionMode.HUB) {
-                targetLoc = AimCalculations.getPredictedHubLocation();
-            } else {
-                //The only other states are hoarding states
-                targetLoc = AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
-            }
-
-            Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
-            Distance dist = Units.Meters.of(targetLoc.getDistance(turretPos));
-
-            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc));
-
-            RegressionMode specificMode = mode;
-            if (mode != RegressionMode.HUB) {
-                specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
-            }
-
-            CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, specificMode));
-
-        }, CatzFlywheels.Instance, CatzTurret.Instance);
+    private Translation2d getBaseTargetLocation(boolean isHub) {
+        if (isHub) {
+            return FieldConstants.getHubLocation();
+        } else {
+            return AimCalculations.getCornerHoardingTarget(currentHoardType);
+        }
     }
 
-    /**
-     * Updates Hood Angle based on the target mode.
-     */
-    private Command aimHood(RegressionMode mode) {
-        return Commands.run(() -> {
-            Translation2d targetLoc = (mode == RegressionMode.HUB) ?
-                AimCalculations.getPredictedHubLocation() :
-                AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
-
-            Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
-
-            RegressionMode specificMode = mode;
-            if (mode != RegressionMode.HUB) {
-                specificMode = isCloseCornerHoarding ? RegressionMode.CLOSE_HOARD : RegressionMode.OPP_HOARD;
-            }
-
-            CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, specificMode));
-        }, CatzHood.Instance);
+    private RegressionMode calculateDynamicMode(boolean isHub) {
+        if (isHub) return RegressionMode.HUB;
+        return AimCalculations.getHoardRegressionMode(getBaseTargetLocation(false));
     }
 
-    /**
-     * Feeds balls to shooter when ready.
-     */
-    private Command runFeeder() {
-        return Commands.run(() -> {
-            if (AimCalculations.readyToShoot() || CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.SIM) {
+    public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
+        RegressionMode currentMode = calculateDynamicMode(isHub);
+        Translation2d baseTarget = getBaseTargetLocation(isHub);
+
+        Pose2d predictedRobotPose = AimCalculations.getPredictedRobotPose();
+        Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
+
+        Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode, predictedRobotPose, predictedTurretPose);
+        Distance dist = Units.Meters.of(targetLoc.getDistance(predictedTurretPose));
+
+        if (activeRegressionMode != currentMode) {
+            initialShootReady = false;
+            activeRegressionMode = currentMode;
+        }
+
+        CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
+
+        if (isShooting) {
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedTurretPose));
+            CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
+
+            if (!initialShootReady && AimCalculations.readyToShoot()) {
+                initialShootReady = true;
+            }
+
+            if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { //check for turret because turret can wrap.
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
                 CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
             } else {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
-        }, CatzSpindexer.Instance, CatzYdexer.Instance);
+        } else {
+            CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
+            CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
+            CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));//don't aim at future pose
+            initialShootReady = false;
+        }
     }
 
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
 
-    //Stops everything but the turret
-    public Command cmdFullStop() {
+    public Command cmdShooterStop() {
         return Commands.parallel(
             CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
             CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            Commands.runOnce(() -> initialShootReady = false),
+            Commands.runOnce(() -> isScoring = false)
         );
+    }
+
+    public Command trackStaticHub() {
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
     /* --- HOARDING --- */
 
     public Command cmdHoardShoot() {
-        return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.CLOSE_HOARD), // Mode argument is placeholder, logic handles Close/Opp
-            aimHood(RegressionMode.CLOSE_HOARD),
-            runFeeder()
-        );
+        return Commands.run(() -> {
+            updateAndApplyShooterState(false, true);
+        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
 
     public Command cmdHoardStandby() {
-        return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.CLOSE_HOARD),
-            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
-            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
-        );
+        return Commands.run(() -> {
+            updateAndApplyShooterState(false, false);
+        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
 
     /* --- HUB SCORING --- */
 
     public Command cmdHubShoot() {
-        return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.HUB),
-            aimHood(RegressionMode.HUB),
-            runFeeder()
-        ).withDeadline(Commands.waitSeconds(2.4)); //~around the amount of time it takes to dispense all balls
+        return Commands.run(() -> {
+            updateAndApplyShooterState(true, true);
+        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+        .beforeStarting(() -> isScoring = true);
     }
 
     public Command cmdHubStandby() {
-        return Commands.parallel(
-            trackTargetAndRampUp(RegressionMode.HUB),
-            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
-            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
-            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF)
-        );
+        return Commands.run(() -> {
+            updateAndApplyShooterState(true, false);
+        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+        .beforeStarting(() -> isScoring = false);
     }
 
     public Command toggleHoardLocation() {
         return Commands.runOnce(() -> {
-            isCloseCornerHoarding = !isCloseCornerHoarding;
+            if (currentHoardType == HoardTargetType.RELATIVE_CLOSE) {
+                currentHoardType = HoardTargetType.RELATIVE_FAR;
+            } else {
+                currentHoardType = HoardTargetType.RELATIVE_CLOSE;
+            }
         });
+    }
+
+    public void setAbsoluteHoardingType(HoardTargetType type) {
+        this.currentHoardType = type;
     }
 
     /* --- INTAKE --- */
@@ -168,6 +175,14 @@ public class CatzSuperstructure {
         }, CatzIntakeDeploy.Instance);
     }
 
+    public Command deployIntake(){
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = true));
+    }
+
+    public Command stowIntake(){
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
+    }
+
     public Command toggleIntakeRollers() {
         return Commands.runOnce(() -> {
             if(isIntakeOn){
@@ -181,6 +196,86 @@ public class CatzSuperstructure {
         }, CatzIntakeRoller.Instance);
     }
 
+    public boolean getIsScoring(){
+        return isScoring;
+    }
+
+    /* FUNCTIONAL COMMANDS */
+    private boolean isSpindexerSpinning = false;
+    public Command toggleSpindexer() {
+        return Commands.runOnce(() -> {
+            if(isSpindexerSpinning){
+                isSpindexerSpinning = false;
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
+            }else{
+                isSpindexerSpinning = true;
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+            }
+        }, CatzSpindexer.Instance);
+    }
+
+    private boolean isYdexerSpinning = false;
+    public Command toggleYdexer() {
+        return Commands.runOnce(() -> {
+            if(isYdexerSpinning){
+                isYdexerSpinning = false;
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
+            }else{
+                isYdexerSpinning = true;
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+            }
+        }, CatzYdexer.Instance);
+    }
+
+    private boolean isFlywheelSpinning = false;
+    public Command toggleFlywheel() {
+        return Commands.runOnce(() -> {
+            if(isFlywheelSpinning){
+                isFlywheelSpinning = false;
+                CatzFlywheels.Instance.applySetpoint(FlywheelConstants.OFF_SETPOINT);
+            }else{
+                isFlywheelSpinning = true;
+                CatzFlywheels.Instance.applySetpoint(FlywheelConstants.TEST_SETPOINT);
+            }
+        }, CatzFlywheels.Instance);
+    }
+
+    private boolean isTurretAtZero = true;
+    public Command toggleTurret() {
+        return Commands.runOnce(() -> {
+            if(isTurretAtZero){
+                isTurretAtZero = false;
+                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(90)));
+            }else{
+                isTurretAtZero = true;
+                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(0)));
+            }
+        }, CatzTurret.Instance);
+    }
+
+    private boolean isHoodAtHome = true;
+    public Command toggleHood() {
+        return Commands.runOnce(() -> {
+            if(isHoodAtHome){
+                isHoodAtHome = false;
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_TEST_SETPOINT);
+            }else{
+                isHoodAtHome = true;
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
+            }
+        }, CatzHood.Instance);
+    }
+
+    /* --- REVERSIONARY MODES --- */
+
+    public Command setHoodHomePosition() {
+        return Commands.parallel(
+            CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_HOME_SETPOINT),
+            Commands.waitSeconds(1.0).andThen(() -> CatzHood.Instance.setCurrentPosition(Units.Degree.of(0)))
+            .andThen(() -> CatzHood.Instance.setpointCommand(() -> HoodConstants.HOOD_STOP))
+        );
+    }
+
     /* --- COMMANDS FOR TESTING --- */
 
     public Command applyHoodTuningSetpoint() {
@@ -189,6 +284,13 @@ public class CatzSuperstructure {
 
             return CatzHood.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(angle));
         }, Set.of(CatzHood.Instance));
+    }
+
+    public Command applyHoodInterpolatedSetpoint(){
+        return CatzHood.Instance.followSetpointCommand(() -> {
+            Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
+            return ShooterRegression.getHoodSetpoint(dist, RegressionMode.HUB);
+        });
     }
 
     public Command applyFlywheelTuningSetpoint() {
@@ -213,5 +315,23 @@ public class CatzSuperstructure {
 
     public Command turretTrackHubCommand() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
+    }
+
+    public Command alignToBackUpClimb(boolean isRight) {
+        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true).onlyIf(()->isClimbMode);
+    }
+
+    public Command alignToCloseClimb(boolean isRight) {
+        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true).onlyIf(()->isClimbMode);
+    }
+
+    public Command alignToClimb(boolean isRight) {
+        return Commands.deadline(
+            Commands.sequence(
+                alignToBackUpClimb(isRight),
+                alignToCloseClimb(isRight)
+            ),
+            CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbTurretTrackingLocation()))
+        );
     }
 }

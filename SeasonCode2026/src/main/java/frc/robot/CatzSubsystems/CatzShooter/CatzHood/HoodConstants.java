@@ -16,15 +16,19 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
 public class HoodConstants {
-	public static final Angle HOOD_ZERO_POS = Units.Degrees.of(16.0);
-	public static final Angle HOOD_MAX_POS = Units.Degrees.of(45.0);
+	public static final Angle HOOD_ZERO_POS = Units.Degrees.of(14.0);
+	public static final Angle HOOD_MAX_POS = Units.Degrees.of(47.0);
 	public static final Angle HOOD_TEST_POS = Units.Degrees.of(35.0);
 	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS);
 	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_TEST_POS);
+	public static final Setpoint HOOD_STOP = Setpoint.withVelocitySetpoint(0.0);
+
+	// Set home position constants
+	public static final Setpoint HOOD_HOME_SETPOINT = Setpoint.withVelocitySetpoint(-0.3);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(35.0, 0.0, 3.0, 0.25, 1.4,0.0, 0.2);
-        case SN2 -> new Gains(35.0, 0.0, 3.0, 0.25, 1.4,0.0, 0.2);
+        case SN2 -> new Gains(100.0, 0.0, 0.0, 0.0, 1.4,0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -40,8 +44,12 @@ public class HoodConstants {
 	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodAngle", HOOD_ZERO_POS.in(Units.Degrees));
 
     private static final int HOOD_MOTOR_ID = 22;
+	public static final double HOOD_GRAVITY_FF = 0.05;
+	public static final double HOOD_GRAVITY_FF_PHASE_SHIFT = Units.Degrees.of(-10.0).in(Units.Radians);
+	public static final LoggedTunableNumber hoodPhaseShift = new LoggedTunableNumber("Hood/Gravity Phase Shift Deg", Math.toDegrees(HOOD_GRAVITY_FF_PHASE_SHIFT));
+	public static final LoggedTunableNumber hoodGravityFF = new LoggedTunableNumber("Hood/Gravity FF", HOOD_GRAVITY_FF);
 
-	public static final Angle HOOD_THRESHOLD = Units.Degrees.of(1.0);
+	public static final Angle HOOD_THRESHOLD = Units.Degrees.of(3.0);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

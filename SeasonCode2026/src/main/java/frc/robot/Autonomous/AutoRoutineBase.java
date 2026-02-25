@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -26,16 +25,17 @@ public class AutoRoutineBase {
 
     protected void prepRoutine(AutoTrajectory startTraj, Command... sequence) {
         routine.active().onTrue(
-                new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get()))
+                new InstantCommand(() -> {
+                    CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get());
+                })
                         .andThen(Commands.sequence(sequence)));
     }
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot(),
-            new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop()
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
+            CatzSuperstructure.Instance.cmdShooterStop()
         );
     }
 
@@ -86,7 +86,7 @@ public class AutoRoutineBase {
 
                         () -> isAtPose(traj),
 
-                        CatzDrivetrain.getInstance()));
+                        CatzDrivetrain.getInstance())).withTimeout(traj.getRawTrajectory().getTotalTime() + 2.0);
     }
 
     private boolean isAtPose(AutoTrajectory trajectory) {

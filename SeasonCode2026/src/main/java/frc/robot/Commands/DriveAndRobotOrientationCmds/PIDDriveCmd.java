@@ -1,6 +1,8 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -81,7 +83,7 @@ public class PIDDriveCmd extends Command {
 
     @Override
     public void initialize(){
-        // Logger.recordOutput("PID Target Pose", goalPos);
+        Logger.recordOutput("PID Target Pose", goalPos);
     }
 
     @Override
@@ -115,7 +117,7 @@ public class PIDDriveCmd extends Command {
 
     private boolean isAtTargetState(){
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisSpeeds currentSpeed = CatzRobotTracker.Instance.getRobotChassisSpeeds();
+        ChassisSpeeds currentSpeed = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         double distanceError = currentPose.getTranslation().getDistance(goalPos.getTranslation());
         double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);

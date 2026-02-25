@@ -58,13 +58,12 @@ public class SpindexerConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-
-		FXConfig.Feedback.SensorToMechanismRatio = 8.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 8.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

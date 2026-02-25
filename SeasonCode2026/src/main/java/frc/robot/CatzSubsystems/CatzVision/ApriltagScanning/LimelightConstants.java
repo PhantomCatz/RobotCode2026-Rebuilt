@@ -14,16 +14,15 @@ public class LimelightConstants {
 
     public static final int kEnabledPipeline = 0;
     public static final int kDisabledPipeline = 1;
-    public static final Vector<N3> enabledVisionStdDevs = VecBuilder.fill(0.3, 0.3, 99999.0);
 
     private static final double limelightCrosshairCompensationPitch = 0.0;
-    private static final double limelightCrosshairCompensationYaw = -2.0; // -2.0 for sushi
+    private static final double limelightCrosshairCompensationYaw = 0.0; // -2.0 for sushi
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
-                    Inches.of(2.0).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
+                    Inches.of(2.25).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
                     Inches.of(5.375).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
                     Inches.of(21.125).in(Meters) //This makes it easy to account for latency.
                 ),
@@ -48,7 +47,7 @@ public class LimelightConstants {
     public static class LimelightConfig {
         public String name = "no-name-assigned";
         public Pose3d robotToCameraOffset = new Pose3d();
-        public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.1, 0.1, 99999.0);
+        public Vector<N3> aprilTagVisionStdDevs = VecBuilder.fill(0.01, 0.01, 99999.0);
 
         public LimelightConfig(String name, Pose3d robotToCameraOffset){
             this.name = name;

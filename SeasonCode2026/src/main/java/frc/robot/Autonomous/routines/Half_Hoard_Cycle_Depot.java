@@ -7,7 +7,6 @@ import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
     public Half_Hoard_Cycle_Depot(){
@@ -22,36 +21,33 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
         AutoTrajectory traj7 = getTrajectory("Half_Hoard_Cycle_Depot",6);
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Cycle_Depot",7);
         AutoTrajectory traj9 = getTrajectory("Half_Hoard_Cycle_Depot",8);
+        AutoTrajectory traj10 = getTrajectory("Half_Hoard_Cycle_Depot",9);
+        AutoTrajectory traj11 = getTrajectory("Half_Hoard_Cycle_Depot",10);
+        AutoTrajectory traj12 = getTrajectory("Half_Hoard_Cycle_Depot",11);
+        AutoTrajectory traj13 = getTrajectory("Half_Hoard_Cycle_Depot",12);
 
-        traj1.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.CLOSE_HOARD)));
-        traj5.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdFullStop());
-        traj7.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                    .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
-        traj8.atTime("Intake9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj9.atTime("RampUp+IntakeStop10").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                    .alongWith(CatzSuperstructure.Instance.trackTargetAndRampUp(RegressionMode.HUB)));
+        //I'm sorry william i lowkey don't know what I'm doing (sob emoji)
+
+        traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
+        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        traj8.atTime("IntakeStop+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                                    .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
+        traj10.atTime("Score10").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        traj11.atTime("Intake11").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj13.atTime("RampUp+IntakeStop13").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+                                                    .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj1),
-
-            CatzSuperstructure.Instance.cmdHoardShoot(),
-
             followTrajectoryWithAccuracy(traj2),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
             followTrajectoryWithAccuracy(traj7),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
