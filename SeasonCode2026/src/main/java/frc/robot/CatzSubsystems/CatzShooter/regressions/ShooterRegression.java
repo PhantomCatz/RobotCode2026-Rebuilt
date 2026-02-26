@@ -72,10 +72,10 @@ public class ShooterRegression {
     public static PolynomialRegression airtimeOverNetHoardInversePoly;
     public static PolynomialRegression airtimeOppHoardInversePoly;
 
-    public static final double[] airtimeHubCoeffs = new double[5];
-    public static final double[] airtimeOverTrenchHoardCoeffs = new double[5];
-    public static final double[] airtimeOverNetHoardCoeffs = new double[5];
-    public static final double[] airtimeOppHoardCoeffs = new double[5];
+    public static final double[] airtimeHubCoeffs = new double[3];
+    public static final double[] airtimeOverTrenchHoardCoeffs = new double[3];
+    public static final double[] airtimeOverNetHoardCoeffs = new double[3];
+    public static final double[] airtimeOppHoardCoeffs = new double[3];
 
     private static final double HUB_HOOD_SLOPE;
     private static final double OVER_TRENCH_HOARD_HOOD_SLOPE;
@@ -119,19 +119,16 @@ public class ShooterRegression {
             invArr[i][1] = row[0];
             i++;
         }
-        return new PolynomialRegression(invArr, 2);
+        return new PolynomialRegression(invArr, 1);
     }
 
     private static void populateCoeffs(PolynomialRegression poly, double[] targetArray) {
-        double a = poly.beta(2);
-        double b = poly.beta(1);
-        double c = poly.beta(0);
+        double a = poly.beta(1);
+        double b = poly.beta(0);
 
         targetArray[0] = a * a;
         targetArray[1] = 2 * a * b;
-        targetArray[2] = b * b + 2 * a * c;
-        targetArray[3] = 2 * b * c;
-        targetArray[4] = c * c;
+        targetArray[2] = b * b;
     }
 
     private static double calculateSlope(double[] min, double[] max) {

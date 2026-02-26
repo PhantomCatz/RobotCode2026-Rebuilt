@@ -45,7 +45,7 @@ public class DriveConstants {
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
         .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(22)
+        .maxLinearAcceleration(30)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
@@ -63,6 +63,8 @@ public class DriveConstants {
         DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
         accLimit.get(),
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+
+  public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 
   public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),

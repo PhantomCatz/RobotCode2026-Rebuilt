@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -24,7 +25,8 @@ public class Forefit_Outpost extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.deployIntake(),
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
+
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),

@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -17,7 +18,6 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("PNZO",2);
         AutoTrajectory traj4 = getTrajectory("PNZO",3);
         AutoTrajectory traj5 = getTrajectory("PNZO",4);
-        AutoTrajectory traj6 = getTrajectory("PNZO",5);
         traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj4.atTime("RampUp+StopIntake4").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
@@ -27,13 +27,13 @@ public class PNZO extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.deployIntake(),
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
+
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
 

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -36,7 +37,6 @@ public class RobotContainer {
     var vision = LimelightSubsystem.Instance;
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
 
-    CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
   }
 
   private void configureBindings() {
@@ -54,29 +54,33 @@ public class RobotContainer {
     // );
 
     // -------------------------------------------------------------------------
-    // HOARDING (Right Bumper)
+    // HOARDING (Left Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+    xboxDrv.leftBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
-    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdHoardStandby());
+    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
     // Toggle Location
     xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
 
-    xboxDrv.rightTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(true), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
-    xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
+    // xboxDrv.rightTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY += 1.0));
+    // xboxDrv.leftTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY -= 1.0));
+    xboxDrv.rightTrigger().onTrue(CatzSuperstructure.Instance.deployIntake());
+    xboxDrv.leftTrigger().onTrue(CatzSuperstructure.Instance.stowIntake());
+    // xboxDrv.rightTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(true), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
+    // xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
 
     // -------------------------------------------------------------------------
-    // HUB SCORING (Left Bumper)
+    // HUB SCORING (Right Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.leftBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
+    xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
-    // Released: Go to Standby (Keep Flywheel, Stow Hood)
-    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdHubStandby());
+
+    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
 
     // -------------------------------------------------------------------------
@@ -93,14 +97,14 @@ public class RobotContainer {
     xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE
     // -------------------------------------------------------------------------
-    xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
-    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    // xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    // xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
-    // xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
+    xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
 
 

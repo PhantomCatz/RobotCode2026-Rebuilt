@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -38,7 +39,8 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
+
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
@@ -47,6 +49,11 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj6),
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
+            followTrajectoryWithAccuracy(traj9),
+            followTrajectoryWithAccuracy(traj10),
+            followTrajectoryWithAccuracy(traj11),
+            followTrajectoryWithAccuracy(traj12),
+
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("done")
         );
