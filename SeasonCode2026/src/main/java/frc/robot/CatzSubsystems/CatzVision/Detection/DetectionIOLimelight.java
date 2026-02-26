@@ -157,7 +157,7 @@ public class DetectionIOLimelight extends DetectionIO {
 
 
 					if (FieldLayout.outsideField(fuelPose)) {
-						SmartDashboard.putBoolean("Outside Field", FieldLayout.outsideField(fuelPose));
+						// SmartDashboard.putBoolean("Outside Field", FieldLayout.outsideField(fuelPose));
 						// LogUtil.recordPose2d(config.name + "Last Fuel Pose Outside Field", fuelPose);
 						continue;
 					}
@@ -316,8 +316,8 @@ public class DetectionIOLimelight extends DetectionIO {
 
 		Distance distAwayX = distHypotenuseYToGround.times(-Math.tan(totalAngleX)); // robot y. left/right
 
-		SmartDashboard.putNumber(config.name + "/tx", tx);
-		SmartDashboard.putNumber(config.name + "/ty", ty);
+		// SmartDashboard.putNumber(config.name + "/tx", tx);
+		// SmartDashboard.putNumber(config.name + "/ty", ty);
 		Logger.recordOutput(config.name + "/Distance Away Y", distAwayY.in(edu.wpi.first.units.Units.Meters));
 		Logger.recordOutput(config.name + "/Distance Away X", distAwayX.in(edu.wpi.first.units.Units.Meters));
 		Logger.recordOutput(config.name + "/Total Angle Y", Units.radiansToDegrees(totalAngleY));
@@ -344,10 +344,10 @@ public class DetectionIOLimelight extends DetectionIO {
 	}
 
 	public void setLatestEstimate(PoseEstimate poseEstimate, int minTagNum) {
-		SmartDashboard.putNumber(config.name + "/Tag Count", poseEstimate.tagCount);
-		SmartDashboard.putNumber(config.name + "/FGPA Timestamp", Timer.getFPGATimestamp());
-		SmartDashboard.putNumber(
-				config.name + "/Estimate to FGPA Timestamp", Utils.fpgaToCurrentTime(poseEstimate.timestampSeconds));
+		// SmartDashboard.putNumber(config.name + "/Tag Count", poseEstimate.tagCount);
+		// SmartDashboard.putNumber(config.name + "/FGPA Timestamp", Timer.getFPGATimestamp());
+		// SmartDashboard.putNumber(
+		// 		config.name + "/Estimate to FGPA Timestamp", Utils.fpgaToCurrentTime(poseEstimate.timestampSeconds));
 		if (poseEstimate.tagCount >= minTagNum) {
 			latestEstimate = poseEstimate.pose;
 			latestEstimateTime = edu.wpi.first.units.Units.Seconds.of(poseEstimate.timestampSeconds);
