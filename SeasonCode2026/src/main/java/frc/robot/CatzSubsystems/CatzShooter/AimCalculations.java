@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -20,8 +19,6 @@ import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.Regres
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
-import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
-import org.apache.commons.math3.complex.Complex;
 import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {

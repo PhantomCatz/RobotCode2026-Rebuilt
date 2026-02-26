@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -29,8 +30,7 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
         //I'm sorry william i lowkey don't know what I'm doing (sob emoji)
 
         traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
-                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
         traj8.atTime("IntakeStop+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
@@ -41,6 +41,8 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
                                                     .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
+
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
@@ -50,6 +52,10 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
+            followTrajectoryWithAccuracy(traj10),
+            followTrajectoryWithAccuracy(traj11),
+            followTrajectoryWithAccuracy(traj12),
+            followTrajectoryWithAccuracy(traj13),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
         );

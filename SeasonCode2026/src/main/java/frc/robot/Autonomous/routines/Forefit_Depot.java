@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -19,12 +20,13 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
 
         traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
-                                                .alongWith(CatzSuperstructure.Instance.deployIntake()));
+                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
+
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
