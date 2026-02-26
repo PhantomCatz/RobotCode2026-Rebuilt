@@ -75,7 +75,7 @@ public class HoodConstants {
         FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = HOOD_MAX_POS.in(Units.Rotations);
         FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = HOOD_ZERO_POS.in(Units.Rotations);
 
-        FXConfig.Feedback.SensorToMechanismRatio = 184 / 10.0; 
+        FXConfig.Feedback.SensorToMechanismRatio = 184 / 10.0;
         FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

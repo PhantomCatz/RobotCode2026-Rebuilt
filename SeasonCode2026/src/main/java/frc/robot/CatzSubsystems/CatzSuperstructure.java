@@ -1,10 +1,8 @@
 package frc.robot.CatzSubsystems;
 
-import static edu.wpi.first.units.Units.Rotation;
 
 import java.util.Set;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -39,7 +37,7 @@ public class CatzSuperstructure {
 
     private Translation2d getTargetLocation(RegressionMode mode) {
         if (mode == RegressionMode.HUB) {
-            return FieldConstants.getHubLocation(); 
+            return FieldConstants.getHubLocation();
         } else {
             return AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
         }
@@ -74,7 +72,7 @@ public class CatzSuperstructure {
     private Command aimHood(RegressionMode mode) {
         return Commands.run(() -> {
             Translation2d targetLoc = (mode == RegressionMode.HUB) ?
-                FieldConstants.getHubLocation() : 
+                FieldConstants.getHubLocation() :
                 AimCalculations.getCornerHoardingTarget(isCloseCornerHoarding);
 
             Distance dist = Units.Meters.of(targetLoc.getDistance(CatzTurret.Instance.getFieldToTurret()));
@@ -104,7 +102,7 @@ public class CatzSuperstructure {
         return Commands.run(() -> {
             double time = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
             double angleDeg = 7.5 + 7.5 * Math.sin(time * 0.1);
-            
+
             CatzIntakeDeploy.Instance.applySetpoint(
                 Setpoint.withMotionMagicSetpoint(Units.Rotation.of(angleDeg/360))
             );
@@ -122,7 +120,7 @@ public class CatzSuperstructure {
 
     public Command cmdHoardShoot() {
         return Commands.parallel(
-            trackTarget(RegressionMode.CLOSE_HOARD),  
+            trackTarget(RegressionMode.CLOSE_HOARD),
             rampUpFlywheels(RegressionMode.CLOSE_HOARD),
             aimHood(RegressionMode.CLOSE_HOARD),
             runFeeder(),
@@ -260,24 +258,24 @@ public class CatzSuperstructure {
         }, CatzHood.Instance);
     }
 
-    public Command setHoodHomePosition() {
-        return Commands.defer(() -> {
-            Debouncer stallDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kRising);
-            
-            return Commands.sequence(
-                CatzHood.Instance.setpointCommand(Setpoint.withVoltageSetpoint(-1.5)),
-                Commands.waitSeconds(0.2),
-                Commands.waitUntil(() -> {
-                    boolean isStalling = Math.abs(CatzHood.Instance.getVelocity().in(Units.DegreesPerSecond)) < 0.5 
-                                      && CatzHood.Instance.getStatorCurrent() > 10.0;
-                    
-                    return stallDebouncer.calculate(isStalling);
-                }),
-                Commands.runOnce(() -> CatzHood.Instance.setCurrentPosition(Units.Degrees.of(0.0))),
-                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOP)
-            ).withTimeout(2.0); 
-        }, Set.of(CatzHood.Instance));
-    }
+    // public Command setHoodHomePosition() {
+    //     return Commands.defer(() -> {
+    //         Debouncer stallDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kRising);
+
+    //         return Commands.sequence(
+    //             CatzHood.Instance.setpointCommand(Setpoint.withVoltageSetpoint(-1.5)),
+    //             Commands.waitSeconds(0.2),
+    //             Commands.waitUntil(() -> {
+    //                 boolean isStalling = Math.abs(CatzHood.Instance.getVelocity().in(Units.DegreesPerSecond)) < 0.5
+    //                                   && CatzHood.Instance.getStatorCurrent() > 10.0;
+
+    //                 return stallDebouncer.calculate(isStalling);
+    //             }),
+    //             Commands.runOnce(() -> CatzHood.Instance.setCurrentPosition(Units.Degrees.of(0.0))),
+    //             CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOP)
+    //         ).withTimeout(2.0);
+    //     }, Set.of(CatzHood.Instance));
+    // }
 
     public Command applyHoodTuningSetpoint() {
         return Commands.defer(() -> {
