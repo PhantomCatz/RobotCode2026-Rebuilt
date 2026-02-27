@@ -27,11 +27,11 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
                                          .alongWith(CatzSuperstructure.Instance.deployIntake()));
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        traj9.atTime("RampUp+IntakeStop9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                                     .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj10.atTime("Score10").onTrue(CatzSuperstructure.Instance.cmdHubShoot());
+        traj9.atTime("Score9").onTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
 
         prepRoutine(
@@ -46,7 +46,6 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
             followTrajectoryWithAccuracy(traj10),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj11),
             Commands.print("Climb"), //TODO
             Commands.print("done")

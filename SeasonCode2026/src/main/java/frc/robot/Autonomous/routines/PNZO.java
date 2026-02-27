@@ -18,11 +18,13 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj3 = getTrajectory("PNZO",2);
         AutoTrajectory traj4 = getTrajectory("PNZO",3);
         AutoTrajectory traj5 = getTrajectory("PNZO",4);
+        AutoTrajectory traj6 = getTrajectory("PNZO",5);
+
         traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj4.atTime("RampUp+StopIntake4").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
+        traj5.atTime("RampUp+StopIntake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                     .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
         traj5.atTime("Score5").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-        traj5.atTime("RampUp+Intake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
+        traj6.atTime("RampUp+Intake6").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)));
 
         prepRoutine(
@@ -34,6 +36,8 @@ public class PNZO extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            followTrajectoryWithAccuracy(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
 
