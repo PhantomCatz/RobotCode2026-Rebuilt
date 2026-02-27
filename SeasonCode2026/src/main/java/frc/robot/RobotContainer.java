@@ -67,8 +67,8 @@ public class RobotContainer {
 
     // xboxDrv.rightTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY += 1.0));
     // xboxDrv.leftTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY -= 1.0));
-    xboxDrv.rightTrigger().onTrue(CatzSuperstructure.Instance.deployIntake());
-    xboxDrv.leftTrigger().onTrue(CatzSuperstructure.Instance.stowIntake());
+    // xboxDrv.rightTrigger().onTrue(CatzSuperstructure.Instance.deployIntake());
+    // xboxDrv.leftTrigger().onTrue(CatzSuperstructure.Instance.stowIntake());
     // xboxDrv.rightTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(true), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
     // xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
@@ -82,7 +82,8 @@ public class RobotContainer {
 
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
-
+    xboxDrv.a().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
+    xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
     // -------------------------------------------------------------------------
     // GLOBAL STOP (X Button)
     // -------------------------------------------------------------------------
@@ -93,8 +94,10 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
 
     DoublePressTracker.createTrigger(xboxDrv.start()).onTrue(Commands.runOnce(() -> superstructure.isClimbMode = !superstructure.isClimbMode));
-    xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
-    xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
+
+    xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    // xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
+    // xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE
     // -------------------------------------------------------------------------
     // xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
@@ -106,9 +109,10 @@ public class RobotContainer {
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
-
+    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint());
 
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
+
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 
     // xboxTest.leftBumper().onTrue(superstructure.turret30Deg());

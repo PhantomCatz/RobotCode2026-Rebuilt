@@ -100,6 +100,18 @@ public class CatzSuperstructure {
     // Public Command States
     // --------------------------------------------------------------------------
 
+    public Command jiggleIntakeCommand() {
+        return Commands.run(() -> {
+            double time = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+            double angleDeg = IntakeDeployConstants.JIGGLE_AMPLITUDE_LOG.get()+ IntakeDeployConstants.JIGGLE_AMPLITUDE_LOG.get() * Math.sin(2*Math.PI*time* IntakeDeployConstants.JIGGLE_FREQUENCY);
+
+            CatzIntakeDeploy.Instance.applySetpoint(
+                Setpoint.withMotionMagicSetpoint(Units.Rotation.of(angleDeg/360))
+            );
+        }, CatzIntakeDeploy.Instance);
+    }
+
+
     public Command cmdShooterStop() {
         return Commands.parallel(
             CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
@@ -163,16 +175,29 @@ public class CatzSuperstructure {
     private boolean isIntakeDeployed = false;
     private boolean isIntakeOn = false;
 
+    // public Command toggleIntakeDeploy() {
+    //     return Commands.runOnce(() -> {
+    //         if(isIntakeDeployed){
+    //             isIntakeDeployed = false;
+    //             CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.STOW);
+    //         }else{
+    //             isIntakeDeployed = true;
+    //             CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.DEPLOY);
+    //         }
+    //     }, CatzIntakeDeploy.Instance);
+    // }
+
     public Command toggleIntakeDeploy() {
-        return Commands.runOnce(() -> {
+        return Commands.defer(() -> {
             if(isIntakeDeployed){
                 isIntakeDeployed = false;
-                CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.STOW);
+                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> IntakeDeployConstants.STOW);
             }else{
                 isIntakeDeployed = true;
-                CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.DEPLOY);
+                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> IntakeDeployConstants.DEPLOY);
             }
-        }, CatzIntakeDeploy.Instance);
+        }, Set.of(CatzIntakeDeploy.Instance));
+
     }
 
     public Command deployIntake(){
@@ -180,7 +205,7 @@ public class CatzSuperstructure {
     }
 
     public Command stowIntake(){
-        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
     }
 
     public Command toggleIntakeRollers() {
@@ -194,6 +219,14 @@ public class CatzSuperstructure {
 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
+    }
+
+    public Command intakeON(){
+        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT).alongWith(Commands.runOnce(()->isIntakeOn = true));
+    }
+
+    public Command intakeOFF(){
+        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT).alongWith(Commands.runOnce(()->isIntakeOn = false));
     }
 
     public boolean getIsScoring(){
@@ -290,6 +323,14 @@ public class CatzSuperstructure {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
             return ShooterRegression.getHoodSetpoint(dist, RegressionMode.HUB);
+        });
+    }
+
+    public Command applyHoodBisectorSetpoint() {
+        return CatzHood.Instance.followSetpointCommand(() -> {
+            Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
+            double angleRot = AimCalculations.calculateHoodBisectorAngle(dist.in(Units.Meters)) / (2*Math.PI);
+            return Setpoint.withMotionMagicSetpoint(angleRot);
         });
     }
 

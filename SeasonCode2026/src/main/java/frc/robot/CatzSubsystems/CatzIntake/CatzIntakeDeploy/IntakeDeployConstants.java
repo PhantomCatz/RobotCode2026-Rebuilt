@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -17,12 +18,19 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
+	public static final Angle STOW_POSITION = Units.Rotations.of(-0.2);
 	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.50);
-	public static final LoggedTunableNumber STOW_POSITION = new LoggedTunableNumber("Intake Deploy/Stow Pos", -0.2);
-	public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos", DEPLOY_POSITION.in(Units.Rotations));
 
+	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
+	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.10);
+	public static final double JIGGLE_FREQUENCY = 0.5; //times per second
 
-	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
+	public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
+	public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
+	public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Pos Deg", JIGGLE_POSITION.in(Units.Degrees));
+	public static final LoggedTunableNumber JIGGLE_AMPLITUDE_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Amplitude Deg", JIGGLE_AMPLITUDE.in(Units.Degrees));
+
+	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
 
 	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);

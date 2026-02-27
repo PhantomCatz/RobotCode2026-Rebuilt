@@ -19,10 +19,12 @@ import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.Regres
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
+import java.lang.reflect.Field;
+
 import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
-    private static final double phaseDelay = 0.05;
+    private static final double phaseDelay = 0.0;
     private static final LoggedTunableNumber delayy = new LoggedTunableNumber("phase delay", phaseDelay);
 
     public enum HoardTargetType {
@@ -30,6 +32,18 @@ public class AimCalculations {
         RELATIVE_FAR,
         ABSOLUTE_LEFT,
         ABSOLUTE_RIGHT
+    }
+
+    /**
+     * 
+     * @param distToCenter
+     * @return Angle in radians
+     */
+    public static double calculateHoodBisectorAngle(double distToCenter) {
+        double distToRim = distToCenter - FieldConstants.HUB_RIM_RADIUS.in(Units.Meter);
+
+        double slopeAngle = Math.atan2(FieldConstants.HEIGHT_DIFF, distToRim);
+        return (slopeAngle + (Math.PI / 2.0)) / 2.0;
     }
 
     /**
@@ -47,7 +61,7 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose){
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose) {
         Translation2d hubDirection = target.minus(predictedTurretPose);
         double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
@@ -109,7 +123,8 @@ public class AimCalculations {
         return RegressionMode.OVER_TRENCH_HOARD;
     }
 
-    public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode, Pose2d predictedRobotPose, Translation2d predictedTurretPose) {
+    public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode,
+            Pose2d predictedRobotPose, Translation2d predictedTurretPose) {
         Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose);
         double futureAirtime = getFutureShootAirtime(predictedTurretPose, targetVelocity, baseTarget, mode);
         return baseTarget.plus(targetVelocity.times(futureAirtime));
@@ -129,7 +144,8 @@ public class AimCalculations {
         return new Translation2d(-turretXVelocity, -turretYVelocity);
     }
 
-    private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity, Translation2d targetPos,
+    private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity,
+            Translation2d targetPos,
             RegressionMode mode) {
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
         double distToTarget = targetToTurret.getNorm();
@@ -140,25 +156,25 @@ public class AimCalculations {
 
         double targetSpeed = targetVelocity.getNorm();
 
-        double a = targetSpeed*targetSpeed - regCoeffs[0];
-        double b = -2*targetSpeed*distToTarget*Math.cos(turretTargetRadians) - regCoeffs[1];
-        double c = distToTarget*distToTarget - regCoeffs[2];
+        double a = targetSpeed * targetSpeed - regCoeffs[0];
+        double b = -2 * targetSpeed * distToTarget * Math.cos(turretTargetRadians) - regCoeffs[1];
+        double c = distToTarget * distToTarget - regCoeffs[2];
 
-        double discriminant = b*b - 4*a*c;
+        double discriminant = b * b - 4 * a * c;
 
-        if(discriminant < 0){
+        if (discriminant < 0) {
             return 0.0;
         }
 
         double sqrtDiscriminant = Math.sqrt(discriminant);
-        double biggerRoot = (-b + sqrtDiscriminant) / (2*a);
-        double smallerRoot = (-b - sqrtDiscriminant) / (2*a);
+        double biggerRoot = (-b + sqrtDiscriminant) / (2 * a);
+        double smallerRoot = (-b - sqrtDiscriminant) / (2 * a);
 
-        if(smallerRoot > 0){
+        if (smallerRoot > 0) {
             return smallerRoot;
         }
 
-        if(biggerRoot > 0){
+        if (biggerRoot > 0) {
             return biggerRoot;
         }
 
@@ -172,8 +188,7 @@ public class AimCalculations {
         Twist2d twist = new Twist2d(
                 robotVelocity.vxMetersPerSecond * delayy.get(),
                 robotVelocity.vyMetersPerSecond * delayy.get(),
-                robotVelocity.omegaRadiansPerSecond * delayy.get()
-                );
+                robotVelocity.omegaRadiansPerSecond * delayy.get());
 
         return currentPose.exp(twist);
     }

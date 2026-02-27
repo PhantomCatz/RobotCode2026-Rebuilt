@@ -13,4 +13,5 @@ public class AutonConstants {
     public static final double RETURN_FROM_COLLECTING_SHOOTING_WAIT = 2.8;
 
     public static final double ARTIFICIAL_PING_SEC = 0.15;
+    public static final double DEPLOY_INTAKE_WAIT = 1.0;
 }

@@ -5,7 +5,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -15,7 +17,14 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
 public class ClimbConstants {
-	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(1.0));
+	private static final double SPOOL_DIAMETER_INCH = 0.95; 
+	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
+
+	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(5.0));
+	private static final Angle STOW_POSITION = converter.toAngle(Units.Inches.of(0.0));
+
+	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(REACH_POSITION.in(Units.Rotations));
+	public static final Setpoint STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(STOW_POSITION.in(Units.Rotations));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
@@ -36,7 +45,7 @@ public class ClimbConstants {
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
-    public static final Setpoint OFF = Setpoint.withVelocitySetpoint(0.0);
+    public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -45,23 +54,22 @@ public class ClimbConstants {
 		FXConfig.Slot0.kS = gains.kS();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 50.0;
-
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 28.75 / (2*Math.PI*SPOOL_DIAMETER_INCH/2.0);
+        FXConfig.MotionMagic.MotionMagicAcceleration = 64.3 / (2*Math.PI*SPOOL_DIAMETER_INCH/2.0);
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

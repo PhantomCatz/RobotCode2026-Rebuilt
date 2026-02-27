@@ -4,13 +4,12 @@ import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 
 public class Forefit_Depot extends AutoRoutineBase{
     public Forefit_Depot(){
-        super("Forefit_Outpost");
+        super("Forefit_Depot");
 
         AutoTrajectory traj1 = getTrajectory("Forefit_Depot",0);
         AutoTrajectory traj2 = getTrajectory("Forefit_Depot",1);
@@ -19,14 +18,14 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("Forefit_Depot",4);
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
 
-        traj1.atTime("Intake+RampUp1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        traj1.atTime("Intake+RampUp1").onTrue(CatzSuperstructure.Instance.intakeON()
                                                 .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
-
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
+            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
@@ -34,7 +33,7 @@ public class Forefit_Depot extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
             CatzSuperstructure.Instance.cmdShooterStop(),
-            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT),
+            CatzSuperstructure.Instance.intakeOFF(),
             Commands.print("done")
         );
     }

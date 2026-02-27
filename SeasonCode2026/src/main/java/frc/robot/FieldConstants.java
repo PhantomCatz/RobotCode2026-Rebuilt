@@ -7,6 +7,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
 
@@ -36,6 +38,11 @@ public class FieldConstants {
   private static final double NET_LENGTH = 2.0; //meters
   public static final double NET_LENGTH_HALF = NET_LENGTH / 2.0;
   private static final Translation2d NET_POS = new Translation2d(5.527492523193359, fieldYHalf);
+
+  public static final Distance HUB_HEIGHT = edu.wpi.first.units.Units.Inches.of(72.0);
+  public static final Distance HUB_RIM_RADIUS = edu.wpi.first.units.Units.Inches.of(41.0/2.0);
+  public static final double HEIGHT_DIFF = FieldConstants.HUB_HEIGHT.in(edu.wpi.first.units.Units.Meters) - TurretConstants.TURRET_HEIGHT.in(edu.wpi.first.units.Units.Meters);
+
   /**
    * Returns the position of the hub in the correct alliance.
    */

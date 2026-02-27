@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 
 public class Depot_Climb extends AutoRoutineBase{
     public Depot_Climb(){
@@ -19,17 +17,18 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
         AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
 
-        traj1.atTime("Intake1").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj1.atTime("Intake1").onTrue(CatzSuperstructure.Instance.intakeON());
         traj3.atTime("RampUp+StopIntake2").onTrue(CatzSuperstructure.Instance.cmdHubStandby().alongWith(Commands.print("RampUp+StopIntake3"))
-                                                    .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
+                                                    .alongWith(CatzSuperstructure.Instance.intakeOFF()));
 
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
-
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
+            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectory(traj2),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            CatzSuperstructure.Instance.stowIntake(),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),

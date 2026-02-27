@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -24,18 +25,19 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         AutoTrajectory traj10 = getTrajectory("Half_Hoard_Climb_Depot",9);
         AutoTrajectory traj11 = getTrajectory("Half_Hoard_Climb_Depot",10);
 
-        traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
-                                         .alongWith(CatzSuperstructure.Instance.deployIntake()));
+        traj2.atTime("RampUp+Intake2").onTrue(CatzSuperstructure.Instance.intakeON()
+                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        traj8.atTime("RampUp+IntakeStop8").onTrue(CatzSuperstructure.Instance.intakeOFF()
                                                     .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         traj10.atTime("Score10").onTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
 
         prepRoutine(
             traj1,
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
+            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
