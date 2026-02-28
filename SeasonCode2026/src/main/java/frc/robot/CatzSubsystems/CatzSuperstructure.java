@@ -2,19 +2,17 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.FieldConstants;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
-import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -25,11 +23,8 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.FieldConstants;
-import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzClimbElevator.CatzClimbElevator;
 import frc.robot.CatzSubsystems.CatzClimbElevator.ClimbConstantsElevator;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -38,10 +33,8 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
-import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -383,13 +376,6 @@ public class CatzSuperstructure {
         );
     }
 
-    public Command manualExtendClimb() {
-        return CatzClimbElevator.Instance.followSetpointCommand(() -> {
-            double input = (RobotContainer.xboxDrv.getLeftY()) * 2;
-            Logger.recordOutput("Climb Xbox Voltage Input", input);
-            return Setpoint.withVoltageSetpoint(input);
-        });
-    }
 
     public Command hoodTestCommand(){
         return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
@@ -412,14 +398,6 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(targetRads, Units.Radians));
     }
 
-    // interpolates distance to target for shooter setpoint along regression
-    private double getShooterSetpointFromRegression(double range) {
-        if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
-            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
-        } else {
-            return 0.0;
-        }
-    }
 
 
     // public Command shootTuning(){

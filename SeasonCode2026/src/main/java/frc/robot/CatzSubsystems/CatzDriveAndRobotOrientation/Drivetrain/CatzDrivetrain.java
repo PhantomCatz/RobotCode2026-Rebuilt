@@ -47,7 +47,7 @@ import org.littletonrobotics.junction.Logger;
 public class CatzDrivetrain extends SubsystemBase {
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-  public static final CatzDrivetrain Instance = new CatzDrivetrain();
+  public static CatzDrivetrain Instance = new CatzDrivetrain();
 
   private double distanceError = 999999.9; //meters
 

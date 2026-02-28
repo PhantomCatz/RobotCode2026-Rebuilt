@@ -15,7 +15,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
-public class ClimbConstants {
+public class ClimbConstantsElevator {
 	private static final double SPOOL_DIAMETER_INCH = 0.95;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 

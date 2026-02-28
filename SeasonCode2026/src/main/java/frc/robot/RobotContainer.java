@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzClimbElevator.CatzClimbElevator;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
@@ -19,6 +19,7 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.DoublePressTracker;
 
@@ -117,12 +118,11 @@ public class RobotContainer {
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
-    xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
-    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
-
-    xboxTest.povUp().onTrue(superstructure);
+    xboxTest.povUp().onTrue(superstructure.extendClimbElevatorCommand());
+    xboxTest.povDown().onTrue(superstructure.retractClimbElevatorCommand());
+    // xboxTest.povUp().onTrue(superstructure);
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 
     // xboxTest.leftBumper().onTrue(superstructure.turret30Deg());
