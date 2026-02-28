@@ -55,7 +55,7 @@ public class TurretConstants {
 
 	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
-	public static final Distance TURRET_HEIGHT = Units.Inches.of(20.0); //TODO fill out the correct 
+	public static final Distance TURRET_HEIGHT = Units.Inches.of(20.0); //TODO fill out the correct
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+
 
 public class Forefit_Outpost extends AutoRoutineBase{
     public Forefit_Outpost(){
@@ -21,7 +20,8 @@ public class Forefit_Outpost extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Forefit_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Forefit_Outpost",6);
 
-        traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON()
+                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
@@ -37,6 +37,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj7),
             CatzSuperstructure.Instance.cmdShooterStop(),
             CatzSuperstructure.Instance.intakeOFF(),
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.stowIntake())),
             Commands.print("done")
         );
     }

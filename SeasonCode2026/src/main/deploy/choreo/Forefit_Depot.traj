@@ -4,7 +4,7 @@
  "snapshot":{
   "waypoints":[
     {"x":3.6, "y":7.5, "heading":0.0, "intervals":31, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.226888179779053, "y":7.352630138397217, "heading":0.0, "intervals":46, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.226888179779053, "y":7.352630138397217, "heading":0.0, "intervals":46, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.795595169067383, "y":7.11137056350708, "heading":-1.8018871041535016, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.5, "y":5.0, "heading":-1.57, "intervals":79, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":8.5, "y":2.3429434299468994, "heading":-1.5707963267948966, "intervals":34, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
@@ -465,9 +465,9 @@
     {"t":15.52564, "x":7.73323, "y":5.76582, "heading":1.5708, "vx":-0.00002, "vy":0.45544, "omega":0.0, "ax":0.00015, "ay":-4.57305, "alpha":0.0, "fx":[0.00261,0.00261,0.00261,0.00261], "fy":[-77.78626,-77.78626,-77.78626,-77.78626]},
     {"t":15.57542, "x":7.73323, "y":5.78283, "heading":1.5708, "vx":-0.00001, "vy":0.22777, "omega":0.0, "ax":0.00015, "ay":-4.57495, "alpha":0.0, "fx":[0.00263,0.00263,0.00263,0.00263], "fy":[-77.81867,-77.81867,-77.81867,-77.81867]},
     {"t":15.62521, "x":7.73323, "y":5.7885, "heading":1.5708, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,77,110,189,223,258]
+  "splits":[0,31,77,110,189,223,258]
  },
  "events":[
-   {"name":"Intake+RampUp2", "from":{"target":2, "targetTimestamp":2.45547, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
-   {"name":"Hoard3", "from":{"target":3, "targetTimestamp":3.82266, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Hoard3"}}}]
+   {"name":"Intake+RampUp2", "from":{"target":2, "targetTimestamp":2.45547, "offset":{"exp":"-0.2 s", "val":-0.2}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
+   {"name":"Hoard3", "from":{"target":3, "targetTimestamp":3.82266, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Hoard3"}}}]
 }

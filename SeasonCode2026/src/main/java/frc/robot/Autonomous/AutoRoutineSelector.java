@@ -27,7 +27,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Half_Hoard_Cycle_Depot", () -> new Half_Hoard_Cycle_Depot().getRoutine());
         autoSelector.addRoutine("Half_Hoard_Cycle_Outpost", () -> new Half_Hoard_Cycle_Outpost().getRoutine());
 
-        
+
         SmartDashboard.putData("Auto Path Selection", autoSelector);
     }
 

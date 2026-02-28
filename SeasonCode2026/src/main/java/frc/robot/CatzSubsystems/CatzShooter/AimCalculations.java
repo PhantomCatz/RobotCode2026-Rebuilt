@@ -19,7 +19,6 @@ import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.Regres
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
-import java.lang.reflect.Field;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -35,7 +34,7 @@ public class AimCalculations {
     }
 
     /**
-     * 
+     *
      * @param distToCenter
      * @return Angle in radians
      */
