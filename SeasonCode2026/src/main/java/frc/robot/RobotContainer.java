@@ -96,20 +96,20 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     DoublePressTracker.createTrigger(xboxDrv.start()).onTrue(Commands.runOnce(() -> superstructure.isClimbMode = !superstructure.isClimbMode));
 
-    // xboxDrv.leftStick().and(()->CatzSuperstructure.Instance.isIntakeDeployed).onTrue(
-    //   Commands.runOnce(() -> CatzSuperstructure.Instance.isIntakeDeployed = false).
-    //   andThen(CatzSuperstructure.Instance.stowIntake()).alongWith(Commands.print("STOWING intake"))
-    // );
+    xboxDrv.leftStick().and(()->CatzSuperstructure.Instance.isIntakeDeployed).onTrue(
+      Commands.runOnce(() -> CatzSuperstructure.Instance.isIntakeDeployed = false).
+      andThen(CatzSuperstructure.Instance.stowIntake()).alongWith(Commands.print("STOWING intake"))
+    );
 
-    // xboxDrv.leftStick().and(()->!CatzSuperstructure.Instance.isIntakeDeployed).onTrue(
-    //   Commands.runOnce(() -> CatzSuperstructure.Instance.isIntakeDeployed = true).
-    //   andThen(CatzSuperstructure.Instance.deployIntake())
-    // );
+    xboxDrv.leftStick().and(()->!CatzSuperstructure.Instance.isIntakeDeployed).onTrue(
+      Commands.runOnce(() -> CatzSuperstructure.Instance.isIntakeDeployed = true).
+      andThen(CatzSuperstructure.Instance.deployIntake())
+    );
     // xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
     // xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE
     // -------------------------------------------------------------------------
-    // xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     // ---------------------Testing Controls--------------------

@@ -19,6 +19,13 @@ public class EpsilonRegression {
     {2.0202,0.89},
     {3.827, 1.03}
     };
+
+    /*
+     * Bisector Flywheel speed:
+     * 
+     * 1.443
+     * 
+     */
 //     public static final double[] CLOSEST_HOOD_ANGLE_HUB = { 1.350, 14.0 }; // high arc, for shoot while move.
 //     public static final double[] FARTHEST_HOOD_ANGLE_HUB = { 5.192, 27.0 };
 
