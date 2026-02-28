@@ -16,10 +16,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw.CatzClimbClaw;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbClaw.ClimbConstantsClaw;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator.CatzClimbElevator;
-import frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator.ClimbConstantsElevator;
+import frc.robot.CatzSubsystems.CatzClimbElevator.CatzClimbElevator;
+import frc.robot.CatzSubsystems.CatzClimbElevator.ClimbConstantsElevator;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
@@ -86,70 +84,38 @@ public class CatzSuperstructure {
         }, Set.of(CatzFlywheels.Instance));
     }
 
-
-    public WaitUntilCommand elevatorExtendThreshold() {
-        return new WaitUntilCommand(() -> CatzClimbElevator.Instance.getLatencyCompensatedPosition() >= ClimbConstantsElevator.CLAW_EXTEND_THRESHOLD);
-    }
-
-    public WaitUntilCommand elevatorRetractThreshold() {
-        return new WaitUntilCommand(() -> CatzClimbElevator.Instance.getLatencyCompensatedPosition() >= ClimbConstantsElevator.CLAW_RETRACT_THRESHOLD);
-    }
-
     public Command extendClimbElevatorCommand(){
         return CatzClimbElevator.Instance.setpointCommand(ClimbConstantsElevator.FULL_EXTEND);
-    }
-
-    public Command extendClimbClawCommand(){
-        return CatzClimbClaw.Instance.setpointCommand(ClimbConstantsClaw.FULL_EXTEND);
     }
 
     public Command retractClimbElevatorCommand(){
         return CatzClimbElevator.Instance.setpointCommand(ClimbConstantsElevator.HOME);
     }
 
-     public Command retractClimbClawCommand(){
-        return CatzClimbClaw.Instance.setpointCommand(ClimbConstantsClaw.HOME);
-    }
-
-    public ParallelCommandGroup extendFullClimb() {
-        return new ParallelCommandGroup(
-            extendClimbElevatorCommand(),
-            new SequentialCommandGroup(
-                elevatorExtendThreshold(),
-                extendClimbClawCommand()
-            )
-        );
-    }
-
-    //passive hooks from elevator lock onto to tower, so no need for multiple claws
-    public ParallelCommandGroup RetractFullClimb() {
-        return new ParallelCommandGroup(
-            retractClimbElevatorCommand(),
-            new SequentialCommandGroup(
-                elevatorRetractThreshold(),
-                retractClimbClawCommand()
-            )
-        );
-    }
-
     public SequentialCommandGroup levelOneClimb() {
         return new SequentialCommandGroup(
-            extendFullClimb(),
-            RetractFullClimb()
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand()
         );
     }
 
     public SequentialCommandGroup levelTwoClimb() {
         return new SequentialCommandGroup(
-            levelOneClimb(),
-            levelOneClimb()
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand(),
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand()
         );
     }
 
     public SequentialCommandGroup levelThreeClimb() {
         return new SequentialCommandGroup(
-            levelTwoClimb(),
-            levelOneClimb()
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand(),
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand(),
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand()
         );
     }
 

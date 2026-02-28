@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzClimb.CatzClimbElevator;
+package frc.robot.CatzSubsystems.CatzClimbElevator;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -69,7 +69,7 @@ public class ClimbConstantsElevator {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 19.25; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
