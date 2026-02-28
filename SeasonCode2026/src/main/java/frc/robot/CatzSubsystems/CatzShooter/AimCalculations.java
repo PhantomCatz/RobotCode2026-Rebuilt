@@ -19,7 +19,6 @@ import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.Regres
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
-import java.lang.reflect.Field;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -35,7 +34,7 @@ public class AimCalculations {
     }
 
     /**
-     * 
+     *
      * @param distToCenter
      * @return Angle in radians
      */
@@ -43,7 +42,7 @@ public class AimCalculations {
         double distToRim = distToCenter - FieldConstants.HUB_RIM_RADIUS.in(Units.Meter);
 
         double slopeAngle = Math.atan2(FieldConstants.HEIGHT_DIFF, distToRim);
-        return (slopeAngle + (Math.PI / 2.0)) / 2.0;
+        return Math.PI/2.0 - (slopeAngle + (Math.PI / 2.0)) / 2.0;
     }
 
     /**

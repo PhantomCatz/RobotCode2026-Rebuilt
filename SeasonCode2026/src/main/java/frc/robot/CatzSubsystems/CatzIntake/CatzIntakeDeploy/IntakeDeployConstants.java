@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -25,6 +24,7 @@ public class IntakeDeployConstants {
 	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.10);
 	public static final double JIGGLE_FREQUENCY = 0.5; //times per second
 
+	//STOW POSITION: -60.0
 	public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
 	public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
 	public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Pos Deg", JIGGLE_POSITION.in(Units.Degrees));

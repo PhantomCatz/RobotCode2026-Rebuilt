@@ -9,6 +9,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
@@ -176,7 +177,7 @@ public class CatzSuperstructure {
     }
 
     /* --- INTAKE --- */
-    private boolean isIntakeDeployed = false;
+    public boolean isIntakeDeployed = false;
     private boolean isIntakeOn = false;
 
     // public Command toggleIntakeDeploy() {
@@ -193,23 +194,27 @@ public class CatzSuperstructure {
 
     public Command toggleIntakeDeploy() {
         return Commands.defer(() -> {
+            System.out.println("clickk!!!!!!!!!!!");
             if(isIntakeDeployed){
                 isIntakeDeployed = false;
-                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> IntakeDeployConstants.STOW);
+                System.out.println("STOWWW!!!");
+                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get()/360.0));
             }else{
                 isIntakeDeployed = true;
-                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> IntakeDeployConstants.DEPLOY);
+                System.out.println("DEPLOYYY!!!");
+
+                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get()/360.0));
             }
-        }, Set.of(CatzIntakeDeploy.Instance));
+        }, Set.of(CatzIntakeDeploy.Instance)).withInterruptBehavior(InterruptionBehavior.kCancelSelf).alongWith(Commands.print("Toggle Intake1=!!!"));
 
     }
 
     public Command deployIntake(){
-        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = true));
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get()/360.0)).alongWith(Commands.runOnce(()-> isIntakeDeployed = true));
     }
 
     public Command stowIntake(){
-        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get())).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
+        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get()/360.0)).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
     }
 
     public Command toggleIntakeRollers() {
@@ -334,6 +339,7 @@ public class CatzSuperstructure {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
             double angleRot = AimCalculations.calculateHoodBisectorAngle(dist.in(Units.Meters)) / (2*Math.PI);
+            System.out.println("Target Angle: " + angleRot);
             return Setpoint.withMotionMagicSetpoint(angleRot);
         });
     }

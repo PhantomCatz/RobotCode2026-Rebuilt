@@ -24,8 +24,8 @@ public class Depot_Climb extends AutoRoutineBase{
         traj1.atTime("Intake1").onTrue(CatzSuperstructure.Instance.intakeON());
         traj3.atTime("RampUp+StopIntake2").onTrue(CatzSuperstructure.Instance.cmdHubStandby().alongWith(Commands.print("RampUp+StopIntake3"))
                                                     .alongWith(CatzSuperstructure.Instance.intakeOFF()));
-                                             
-                                                    
+
+
         traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.cmdHubStandby().alongWith(Commands.print("RampUp+StopIntake3"))
                                                     .alongWith(CatzSuperstructure.Instance.intakeOFF()));

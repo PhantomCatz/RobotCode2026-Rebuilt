@@ -5,7 +5,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -17,7 +16,7 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
 public class ClimbConstants {
-	private static final double SPOOL_DIAMETER_INCH = 0.95; 
+	private static final double SPOOL_DIAMETER_INCH = 0.95;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 
 	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(5.0));

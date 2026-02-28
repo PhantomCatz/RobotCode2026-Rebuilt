@@ -82,8 +82,8 @@ public class RobotContainer {
 
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
-    xboxDrv.a().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
+    // xboxDrv.a().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
+    // xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
     // -------------------------------------------------------------------------
     // GLOBAL STOP (X Button)
     // -------------------------------------------------------------------------
@@ -92,16 +92,23 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // CLIMB (D pad Left and Right)
     // -------------------------------------------------------------------------
-
     DoublePressTracker.createTrigger(xboxDrv.start()).onTrue(Commands.runOnce(() -> superstructure.isClimbMode = !superstructure.isClimbMode));
 
-    xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    // xboxDrv.leftStick().and(()->CatzSuperstructure.Instance.isIntakeDeployed).onTrue(
+    //   Commands.runOnce(() -> CatzSuperstructure.Instance.isIntakeDeployed = false).
+    //   andThen(CatzSuperstructure.Instance.stowIntake()).alongWith(Commands.print("STOWING intake"))
+    // );
+
+    // xboxDrv.leftStick().and(()->!CatzSuperstructure.Instance.isIntakeDeployed).onTrue(
+    //   Commands.runOnce(() -> CatzSuperstructure.Instance.isIntakeDeployed = true).
+    //   andThen(CatzSuperstructure.Instance.deployIntake())
+    // );
     // xboxDrv.povLeft().onTrue(CatzSuperstructure.Instance.alignToClimb(false));
     // xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.alignToClimb(true));
     // INTAKE
     // -------------------------------------------------------------------------
     // xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
-    // xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
@@ -109,7 +116,7 @@ public class RobotContainer {
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
-    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint());
+    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
 
@@ -138,7 +145,9 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS
     // -------------------------------------------------------------------------
 
-    xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+    xboxFunctional.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
+
     xboxFunctional.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxFunctional.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxFunctional.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
