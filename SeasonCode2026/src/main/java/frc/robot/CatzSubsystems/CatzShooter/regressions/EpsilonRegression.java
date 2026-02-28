@@ -4,35 +4,35 @@ public class EpsilonRegression {
 
     //TODO decrease angle by 3 degrees
     // Hub Scoring
-    // public static final double[] CLOSEST_HOOD_ANGLE_HUB = {1.557, 25.0}; //low
-    // arc. static shooting
-    // public static final double[] FARTHEST_HOOD_ANGLE_HUB = {5.549, 42.0};
-
-    // public static double[][] flywheelHubRPS = {
-    // {1.557, 28.0},
-    // {3.827, 36.0},
-    // {5.549, 40.0}
-    // };
-
-    // public static double[][] airtimeHub = {
-    // {5.549, 1.08},
-    // {2.0202,0.89},
-    // {3.827, 1.03}
-    // };
-    public static final double[] CLOSEST_HOOD_ANGLE_HUB = { 1.350, 14.0 }; // high arc, for shoot while move.
-    public static final double[] FARTHEST_HOOD_ANGLE_HUB = { 5.192, 27.0 };
+    public static final double[] CLOSEST_HOOD_ANGLE_HUB = {1.557, 22.0}; //low
+//     arc. static shooting
+    public static final double[] FARTHEST_HOOD_ANGLE_HUB = {5.549, 39.0};
 
     public static double[][] flywheelHubRPS = {
-            { 1.350, 30.0 },
-
-            { 5.192, 41.0 }
+    {1.557, 28.0},
+    {3.827, 36.0},
+    {5.549, 40.0}
     };
 
     public static double[][] airtimeHub = {
-            { 5.549, 1.08 },
-            { 2.0202, 0.89 },
-            { 3.827, 1.03 }
+    {5.549, 1.08},
+    {2.0202,0.89},
+    {3.827, 1.03}
     };
+//     public static final double[] CLOSEST_HOOD_ANGLE_HUB = { 1.350, 14.0 }; // high arc, for shoot while move.
+//     public static final double[] FARTHEST_HOOD_ANGLE_HUB = { 5.192, 27.0 };
+
+//     public static double[][] flywheelHubRPS = {
+//             { 1.350, 30.0 },
+
+//             { 5.192, 41.0 }
+//     };
+
+//     public static double[][] airtimeHub = {
+//             { 5.549, 1.08 },
+//             { 2.0202, 0.89 },
+//             { 3.827, 1.03 }
+//     };
 
     /*
      * High arc for shoot while move:

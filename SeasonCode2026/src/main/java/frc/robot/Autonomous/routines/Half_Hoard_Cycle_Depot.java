@@ -41,7 +41,7 @@ public class Half_Hoard_Cycle_Depot extends AutoRoutineBase{
         traj11.atTime("Intake11").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj13.atTime("RampUp+IntakeStop13").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                                     .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        
+
         prepRoutine(
             traj1,
             Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),

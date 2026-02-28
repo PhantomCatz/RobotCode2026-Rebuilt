@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -37,6 +38,7 @@ public class RobotContainer {
     var vision = LimelightSubsystem.Instance;
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
 
+    new Trigger(() -> Robot.autonInit).onTrue(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(Commands.runOnce(()->Robot.autonInit = false)));
   }
 
   private void configureBindings() {

@@ -48,6 +48,8 @@ public class Robot extends LoggedRobot {
 
   public static double autonStartTime = 0.0;
 
+  public static boolean autonInit = false;
+
   public Robot() {
   }
 

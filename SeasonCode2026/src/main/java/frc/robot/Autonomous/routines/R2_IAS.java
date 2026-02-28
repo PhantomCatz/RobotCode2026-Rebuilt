@@ -39,7 +39,6 @@ public class R2_IAS extends AutoRoutineBase {
                                                      .alongWith(CatzSuperstructure.Instance.trackTower()));
 
 
-        
         prepRoutine(
             traj1,
             Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
