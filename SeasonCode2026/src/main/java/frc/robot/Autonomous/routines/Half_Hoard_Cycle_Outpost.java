@@ -30,11 +30,11 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
         traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-        traj5.atTime("HoardStop5").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj7.atTime("RampUp+IntakeStop7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         traj9.atTime("Score9").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-        traj10.atTime("Intake10").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        traj11.atTime("Intake11").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
         traj12.atTime("RampUp+IntakeStop12").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(

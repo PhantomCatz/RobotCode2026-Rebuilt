@@ -17,10 +17,11 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Forefit_Depot",3);
         AutoTrajectory traj5 = getTrajectory("Forefit_Depot",4);
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
+        AutoTrajectory traj7 = getTrajectory("Forefit_Depot",6);
 
-        traj1.atTime("Intake+RampUp1").onTrue(CatzSuperstructure.Instance.intakeON()
+        traj2.atTime("Intake+RampUp1").onTrue(CatzSuperstructure.Instance.intakeON()
                                                 .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
-        traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
@@ -32,6 +33,7 @@ public class Forefit_Depot extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
+            followTrajectoryWithAccuracy(traj7),
             CatzSuperstructure.Instance.cmdShooterStop(),
             CatzSuperstructure.Instance.intakeOFF(),
             Commands.print("done")

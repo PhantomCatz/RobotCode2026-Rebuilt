@@ -22,13 +22,13 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
         AutoTrajectory traj7 = getTrajectory("Half_Hoard_Climb_Outpost",6);
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Climb_Outpost",7);
         AutoTrajectory traj9 = getTrajectory("Half_Hoard_Climb_Outpost",8);
-
+        AutoTrajectory traj10 = getTrajectory("Half_Hoard_Climb_Outpost",9);
 
         traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj7.atTime("RampUp+Intake7").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        traj7.atTime("IntakeStop+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
         prepRoutine(
@@ -44,7 +44,8 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
-            Commands.print("Climb"), //TODO
+            followTrajectoryWithAccuracy(traj10),
+            Commands.print("Climb"),
             Commands.print("done")
         );
     }

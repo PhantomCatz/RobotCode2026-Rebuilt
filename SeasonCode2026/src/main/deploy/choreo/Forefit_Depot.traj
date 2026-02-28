@@ -29,7 +29,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"3.6 m", "val":3.6}, "y":{"exp":"7.5 m", "val":7.5}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":31, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.226888179779053 m", "val":6.226888179779053}, "y":{"exp":"7.352630138397217 m", "val":7.352630138397217}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":46, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.226888179779053 m", "val":6.226888179779053}, "y":{"exp":"7.352630138397217 m", "val":7.352630138397217}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":46, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.795595169067383 m", "val":8.795595169067383}, "y":{"exp":"7.11137056350708 m", "val":7.11137056350708}, "heading":{"exp":"-1.8018871041535018 rad", "val":-1.8018871041535016}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.5 m", "val":8.5}, "y":{"exp":"5 m", "val":5.0}, "heading":{"exp":"-3.14 / 2 rad", "val":-1.57}, "intervals":79, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":{"exp":"8.5 m", "val":8.5}, "y":{"exp":"2.3429434299468994 m", "val":2.3429434299468994}, "heading":{"exp":"-90 deg", "val":-1.5707963267948966}, "intervals":34, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
@@ -468,7 +468,6 @@
   "splits":[0,77,110,189,223,258]
  },
  "events":[
-   {"name":"Hoard1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}},
-   {"name":"Intake2", "from":{"target":2, "targetTimestamp":2.45547, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
+   {"name":"Intake+RampUp2", "from":{"target":2, "targetTimestamp":2.45547, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
    {"name":"Hoard3", "from":{"target":3, "targetTimestamp":3.82266, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Hoard3"}}}]
 }

@@ -26,11 +26,11 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"3.6 m", "val":3.6}, "y":{"exp":"0.6 m", "val":0.6}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.212696075439453 m", "val":6.212696075439453}, "y":{"exp":"0.6399333477020264 m", "val":0.6399333477020264}, "heading":{"exp":"25.151920854666102 mrad", "val":0.025151920854666103}, "intervals":46, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.212696075439453 m", "val":6.212696075439453}, "y":{"exp":"0.6399333477020264 m", "val":0.6399333477020264}, "heading":{"exp":"25.151920854666102 mrad", "val":0.025151920854666103}, "intervals":46, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.809785842895508 m", "val":8.809785842895508}, "y":{"exp":"1.0656856298446655 m", "val":1.0656856298446655}, "heading":{"exp":"1.6495813688448098 rad", "val":1.6495813688448098}, "intervals":28, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.525951385498047 m", "val":8.525951385498047}, "y":{"exp":"2.711928367614746 m", "val":2.711928367614746}, "heading":{"exp":"3.14 / 2 rad", "val":1.57}, "intervals":90, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":{"exp":"8.5680513381958 m", "val":8.5680513381958}, "y":{"exp":"5.691558361053467 m", "val":5.691558361053467}, "heading":{"exp":"3.14 / 2 rad", "val":1.57}, "intervals":51, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
-    {"x":{"exp":"8.313075065612793 m", "val":8.313075065612793}, "y":{"exp":"6.671426296234131 m", "val":6.671426296234131}, "heading":{"exp":"-2.2455372690184494 rad", "val":-2.2455372690184494}, "intervals":32, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"8.313075065612793 m", "val":8.313075065612793}, "y":{"exp":"6.671426296234131 m", "val":6.671426296234131}, "heading":{"exp":"-2.2455372690184494 rad", "val":-2.2455372690184494}, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.651177883148193 m", "val":7.651177883148193}, "y":{"exp":"6.627336025238037 m", "val":6.627336025238037}, "heading":{"exp":"-3.14 / 2 rad", "val":-1.57}, "intervals":128, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.699803352355957 m", "val":7.699803352355957}, "y":{"exp":"2.2799322605133057 m", "val":2.2799322605133057}, "heading":{"exp":"-90 deg", "val":-1.5707963267948966}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -487,7 +487,6 @@
   "splits":[0,79,107,197,280]
  },
  "events":[
-   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score1"}}},
    {"name":"Intake2", "from":{"target":2, "targetTimestamp":2.45178, "offset":{"exp":"-0.43 s", "val":-0.43}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
    {"name":"Hoard3", "from":{"target":3, "targetTimestamp":3.66102, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":{"type":"named", "data":{"name":"Hoard3"}}}]
 }

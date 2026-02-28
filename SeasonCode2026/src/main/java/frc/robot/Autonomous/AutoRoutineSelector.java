@@ -4,14 +4,7 @@ import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Autonomous.routines.Depot_Climb;
-import frc.robot.Autonomous.routines.Forefit_Depot;
-import frc.robot.Autonomous.routines.Forefit_Outpost;
-import frc.robot.Autonomous.routines.Outpost_Climb;
-import frc.robot.Autonomous.routines.PNZO;
-import frc.robot.Autonomous.routines.R1_IAS;
-import frc.robot.Autonomous.routines.R2_IAS;
-import frc.robot.Autonomous.routines.R3_IAS;
-import frc.robot.Autonomous.routines.Test;
+import frc.robot.Autonomous.routines.*;
 
 public class AutoRoutineSelector {
     public static final AutoRoutineSelector Instance = new AutoRoutineSelector();
@@ -29,7 +22,12 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
         autoSelector.addRoutine("Depot_Climb", () -> new Depot_Climb().getRoutine());
+        autoSelector.addRoutine("Half_Hoard_Climb_Depot", () -> new Half_Hoard_Climb_Depot().getRoutine());
+        autoSelector.addRoutine("Half_Hoard_Climb_Outpost", () -> new Half_Hoard_Climb_Outpost().getRoutine());
+        autoSelector.addRoutine("Half_Hoard_Cycle_Depot", () -> new Half_Hoard_Cycle_Depot().getRoutine());
+        autoSelector.addRoutine("Half_Hoard_Cycle_Outpost", () -> new Half_Hoard_Cycle_Outpost().getRoutine());
 
+        
         SmartDashboard.putData("Auto Path Selection", autoSelector);
     }
 
