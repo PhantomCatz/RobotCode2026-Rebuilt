@@ -21,31 +21,37 @@ public class Depot_Climb extends AutoRoutineBase{
 
         traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj7.atTime("StowIntake+TrackTower7").onTrue();
+
+
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectoryWithAccuracy(traj1)
+                    followTrajectoryWithAccuracy(traj1),
+                    followTrajectoryWithAccuracy(traj2),
+                    followTrajectoryWithAccuracy(traj3),
+                    followTrajectoryWithAccuracy(traj4),
+                    followTrajectoryWithAccuracy(traj5)
                 ),
                 CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
-            followTrajectoryWithAccuracy(traj2),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj6),
+                followTrajectoryWithAccuracy(traj6), 
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj7),
-                CatzSuperstructure.Instance.trackTower().alongWith(CatzSuperstructure.Instance.stowIntake())
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj7),
+                    followTrajectoryWithAccuracy(traj8),
+                    followTrajectoryWithAccuracy(traj9)
+                ),
+                CatzSuperstructure.Instance.trackTower()
+                .alongWith(CatzSuperstructure.Instance.stowIntake())
             ),
-            followTrajectoryWithAccuracy(traj8),
-            followTrajectoryWithAccuracy(traj9),
             Commands.print("Climb"),
             Commands.print("done")
         );

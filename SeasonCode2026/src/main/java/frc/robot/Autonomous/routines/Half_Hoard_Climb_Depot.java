@@ -25,32 +25,46 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         AutoTrajectory traj10 = getTrajectory("Half_Hoard_Climb_Depot",9);
         AutoTrajectory traj11 = getTrajectory("Half_Hoard_Climb_Depot",10);
 
-        traj2.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+        traj2.atTime("RampUp+Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj9.atTime("RampUp+IntakeStop9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                    .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj10.atTime("Score+StowIntake+TrackTower10").onTrue(CatzSuperstructure.Instance.cmdHubShoot()
-                                                     .alongWith(CatzSuperstructure.Instance.stowIntake())
-                                                     .alongWith(CatzSuperstructure.Instance.trackStaticHub()));
-
+        traj9.atTime("RampUp+IntakeStop9").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj10.atTime("Score+StowIntake+TrackTower10").onTrue();
 
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj1),
-            followTrajectoryWithAccuracy(traj2),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectoryWithAccuracy(traj1),
+                    followTrajectoryWithAccuracy(traj2)
+                ),
+                CatzSuperstructure.Instance.deployIntake()
+                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+            ),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
             followTrajectoryWithAccuracy(traj6),
             followTrajectoryWithAccuracy(traj7),
             followTrajectoryWithAccuracy(traj8),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(5)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+                .alongWith(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT))
+            ),
             followTrajectoryWithAccuracy(traj9),
-            followTrajectoryWithAccuracy(traj10),
-            followTrajectoryWithAccuracy(traj11),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj10),
+                    followTrajectoryWithAccuracy(traj11)
+                ), 
+                CatzSuperstructure.Instance.stowIntake()
+                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+            ),
             Commands.print("Climb"), //TODO
             Commands.print("done")
         );

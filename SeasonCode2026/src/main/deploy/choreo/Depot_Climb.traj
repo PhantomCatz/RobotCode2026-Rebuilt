@@ -386,6 +386,5 @@
    {"name":"Climb10", "from":{"target":9, "targetTimestamp":9.36935, "offset":{"exp":"-0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Climb5"}}},
    {"name":"RampUp+StopIntake6", "from":{"target":6, "targetTimestamp":6.41046, "offset":{"exp":"-1.1 s", "val":-1.1}}, "event":null},
    {"name":"Intake2", "from":{"target":2, "targetTimestamp":2.2929, "offset":{"exp":"-1 s", "val":-1.0}}, "event":{"type":"named", "data":{"name":"Intake1"}}},
-   {"name":"StowIntake+TrackTower7", "from":{"target":6, "targetTimestamp":6.41046, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
-   {"name":"InitSetup", "from":{"target":null, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"StowIntake+TrackTower7", "from":{"target":6, "targetTimestamp":6.41046, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}}]
 }

@@ -19,25 +19,36 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
         AutoTrajectory traj7 = getTrajectory("Forefit_Depot",6);
 
-        traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON()
-                                                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+        traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON());
         traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake()
-                    .alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj1),
-            followTrajectoryWithAccuracy(traj2),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
-            followTrajectoryWithAccuracy(traj7),
-            CatzSuperstructure.Instance.cmdShooterStop(),
-            CatzSuperstructure.Instance.intakeOFF(),
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.stowIntake())),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectoryWithAccuracy(traj1),
+                    followTrajectoryWithAccuracy(traj2)
+                ), 
+                CatzSuperstructure.Instance.cmdHoardStandby()
+                    .alongWith(CatzSuperstructure.Instance.deployIntake())
+            ),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj3),
+                    followTrajectoryWithAccuracy(traj4),
+                    followTrajectoryWithAccuracy(traj5),
+                    followTrajectoryWithAccuracy(traj6),
+                    followTrajectoryWithAccuracy(traj7)
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            Commands.deadline(
+                Commands.waitSeconds(4.4), 
+                CatzSuperstructure.Instance.stowIntake()
+                    .alongWith(CatzSuperstructure.Instance.cmdShooterStop()
+                    .alongWith(CatzSuperstructure.Instance.intakeOFF()))
+            ),
             Commands.print("done")
         );
     }

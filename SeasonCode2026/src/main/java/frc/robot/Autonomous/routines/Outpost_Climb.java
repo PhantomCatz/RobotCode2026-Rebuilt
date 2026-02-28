@@ -21,23 +21,37 @@ public class Outpost_Climb extends AutoRoutineBase{
         AutoTrajectory traj8 = getTrajectory("Outpost_Climb",7);
 
         traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
-                                                    .alongWith(CatzSuperstructure.Instance.intakeOFF()));
-        traj7.atTime("Score+StowIntake+TrackTower7").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
-                                                    .alongWith(CatzSuperstructure.Instance.stowIntake())
-                                                    .alongWith(CatzSuperstructure.Instance.trackTower()));
+        traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        traj7.atTime("Score+StowIntake+TrackTower7").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj1),
-            followTrajectoryWithAccuracy(traj2),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectoryWithAccuracy(traj1),
+                    followTrajectoryWithAccuracy(traj2)
+                ),
+                CatzSuperstructure.Instance.deployIntake()
+                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+            ),
             followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj4),
+                    followTrajectoryWithAccuracy(traj5)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
             followTrajectoryWithAccuracy(traj6),
-            followTrajectoryWithAccuracy(traj7),
-            followTrajectoryWithAccuracy(traj8),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj7),
+                    followTrajectoryWithAccuracy(traj8)
+                ),
+                CatzSuperstructure.Instance.stowIntake()
+                .alongWith(CatzSuperstructure.Instance.trackTower())
+            ),
+
             Commands.print("Climb"), //TODO
             Commands.print("done")
         );
