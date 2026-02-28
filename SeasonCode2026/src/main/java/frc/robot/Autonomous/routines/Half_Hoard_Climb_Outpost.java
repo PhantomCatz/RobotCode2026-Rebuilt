@@ -26,11 +26,14 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
 
         traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
-        traj2.atTime("Hoard2").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-        traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj7.atTime("IntakeStop+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        traj4.atTime("Hoard4").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        traj7.atTime("HoardStop7").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        traj9.atTime("Score+StowIntake+TrackTower9").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
+                                                   .alongWith(CatzSuperstructure.Instance.stowIntake())
+                                                   .alongWith(CatzSuperstructure.Instance.trackTower()));
+
         prepRoutine(
             traj1,
             Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),

@@ -25,6 +25,8 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
         AutoTrajectory traj10 = getTrajectory("Half_Hoard_Cycle_Outpost",9);
         AutoTrajectory traj11 = getTrajectory("Half_Hoard_Cycle_Outpost",10);
         AutoTrajectory traj12 = getTrajectory("Half_Hoard_Cycle_Outpost",11);
+        AutoTrajectory traj13 = getTrajectory("Half_Hoard_Cycle_Outpost",12);
+        AutoTrajectory traj14 = getTrajectory("Half_Hoard_Cycle_Outpost",13);
 
 
         traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
@@ -33,14 +35,14 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
         traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
         traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj9.atTime("Score9").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        traj10.atTime("Score10").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
         traj11.atTime("Intake11").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj12.atTime("RampUp+IntakeStop12").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        traj13.atTime("RampUp+IntakeStop13").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
                                          .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake())),
-
+            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
+            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             followTrajectoryWithAccuracy(traj1),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
@@ -53,7 +55,8 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj10),
             followTrajectoryWithAccuracy(traj11),
             followTrajectoryWithAccuracy(traj12),
-
+            followTrajectoryWithAccuracy(traj13),
+            followTrajectoryWithAccuracy(traj14),
             shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("done")
         );

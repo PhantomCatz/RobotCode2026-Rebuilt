@@ -4,14 +4,14 @@
  "snapshot":{
   "waypoints":[
     {"x":3.6, "y":7.5, "heading":0.0, "intervals":22, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":4.936839580535889, "y":7.466626167297363, "heading":0.0, "intervals":58, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":4.936839580535889, "y":7.466626167297363, "heading":0.0, "intervals":58, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.991251945495605, "y":6.040745258331299, "heading":-1.5707963267948966, "intervals":26, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":8.679034233093262, "y":4.735104560852051, "heading":-2.0258969687706747, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":8.2803373336792, "y":3.747634887695313, "heading":2.8911494597863454, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.653099536895752, "y":4.01943826675415, "heading":1.5567124795738203, "intervals":37, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":7.653099536895752, "y":5.629350185394287, "heading":0.0, "intervals":22, "split":true, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":7.621737003326416, "y":6.277496337890625, "heading":1.2251231424672, "intervals":41, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":5.776717185974121, "y":7.402838230133057, "heading":0.0, "intervals":28, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":5.776717185974121, "y":7.402838230133057, "heading":0.0, "intervals":28, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":3.6, "y":7.490157604217529, "heading":0.0, "intervals":38, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":1.0566422939300537, "y":4.834847927093506, "heading":0.0, "intervals":9, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":1.0566422939300537, "y":4.615314483642578, "heading":0.0, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
@@ -437,14 +437,13 @@
     {"t":11.07118, "x":1.05664, "y":4.63728, "heading":0.0, "vx":0.0, "vy":-0.44822, "omega":0.0, "ax":0.0, "ay":4.57323, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[77.78925,77.78925,77.78925,77.78925]},
     {"t":11.12018, "x":1.05664, "y":4.62081, "heading":0.0, "vx":0.0, "vy":-0.22415, "omega":0.0, "ax":0.0, "ay":4.57461, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[77.81275,77.81275,77.81275,77.81275]},
     {"t":11.16918, "x":1.05664, "y":4.61531, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,80,106,146,178,215,237,306,344]
+  "splits":[0,22,80,106,146,178,215,237,278,306,344]
  },
  "events":[
-   {"name":"Score1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp+Intake2", "from":{"target":2, "targetTimestamp":2.49111, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null},
-   {"name":"Hoard2", "from":{"target":2, "targetTimestamp":2.49111, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Hoard3", "from":{"target":2, "targetTimestamp":2.49111, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"HoardStop6", "from":{"target":6, "targetTimestamp":6.54973, "offset":{"exp":"-0.5 s", "val":-0.5}}, "event":null},
    {"name":"RampUp+IntakeStop9", "from":{"target":9, "targetTimestamp":8.85694, "offset":{"exp":"-0.67 s", "val":-0.67}}, "event":null},
-   {"name":"Score9", "from":{"target":9, "targetTimestamp":8.85694, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Score+StowIntake+TrackTower10", "from":{"target":9, "targetTimestamp":8.85694, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Climb", "from":{"target":11, "targetTimestamp":11.16918, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

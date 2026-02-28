@@ -10,18 +10,22 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 public class Outpost_Climb extends AutoRoutineBase{
     public Outpost_Climb(){
         super("Outpost_Climb");
-//Warning if this crashes its jadens fault
+
         AutoTrajectory traj1 = getTrajectory("Outpost_Climb",0);
         AutoTrajectory traj2 = getTrajectory("Outpost_Climb",1);
         AutoTrajectory traj3 = getTrajectory("Outpost_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Outpost_Climb",3);
+        AutoTrajectory traj5 = getTrajectory("Outpost_Climb",4);
+        AutoTrajectory traj6 = getTrajectory("Outpost_Climb",5);
+        AutoTrajectory traj7 = getTrajectory("Outpost_Climb",6);
+        AutoTrajectory traj8 = getTrajectory("Outpost_Climb",7);
 
-        //TODO This looks kind of sus? Doesn't scoring happen on trajectory 2? Also use shootAllBalls inside prepRoutine and not with event markers
-        traj1.atTime("Intake1").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj2.atTime("IntakeStop+RampUp2").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
+        traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                     .alongWith(CatzSuperstructure.Instance.intakeOFF()));
-        traj3.atTime("Score3").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-
+        traj7.atTime("Score+StowIntake+TrackTower7").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
+                                                    .alongWith(CatzSuperstructure.Instance.stowIntake())
+                                                    .alongWith(CatzSuperstructure.Instance.trackTower()));
         prepRoutine(
             traj1,
             Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
@@ -30,6 +34,10 @@ public class Outpost_Climb extends AutoRoutineBase{
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
+            followTrajectoryWithAccuracy(traj5),
+            followTrajectoryWithAccuracy(traj6),
+            followTrajectoryWithAccuracy(traj7),
+            followTrajectoryWithAccuracy(traj8),
             Commands.print("Climb"), //TODO
             Commands.print("done")
         );
