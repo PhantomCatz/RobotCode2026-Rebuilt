@@ -101,10 +101,12 @@ public class CatzSuperstructure {
     public Command jiggleIntakeCommand() {
         return Commands.run(() -> {
             double time = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
-            double angleDeg = 7.5 + 7.5 * Math.sin(time * 0.1);
+
+            // Evaluates to 15.0 when sine is positive and 0.0 when negative
+            double angleDeg = Math.sin(time * 2) > 0 ? 15.0 : 0.0;
 
             CatzIntakeDeploy.Instance.applySetpoint(
-                Setpoint.withMotionMagicSetpoint(Units.Rotation.of(angleDeg/360))
+                Setpoint.withMotionMagicSetpoint(Units.Rotation.of(angleDeg / 360.0))
             );
         }, CatzIntakeDeploy.Instance);
     }

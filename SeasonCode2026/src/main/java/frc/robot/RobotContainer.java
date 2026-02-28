@@ -87,6 +87,7 @@ public class RobotContainer {
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
     // xboxTest.a().onTrue(superstructure.hoodManualCommand());
+    xboxTest.rightTrigger().whileTrue(superstructure.cmdHoardShoot());
     xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
     xboxTest.y().onTrue(superstructure.applyHoodTuningSetpoint());
     xboxTest.leftBumper().onTrue(superstructure.turretTrackCornerCommand());
