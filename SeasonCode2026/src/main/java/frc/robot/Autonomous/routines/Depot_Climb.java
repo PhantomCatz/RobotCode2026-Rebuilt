@@ -1,7 +1,6 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -20,27 +19,31 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj8 = getTrajectory("Depot_Climb",7);
         AutoTrajectory traj9 = getTrajectory("Depot_Climb",8);
 
-        traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON().asProxy());
-        traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.cmdHubStandby().asProxy()
-                                                    .alongWith(CatzSuperstructure.Instance.intakeOFF().asProxy()));
-        traj7.atTime("StowIntake+TrackTower7").onTrue(CatzSuperstructure.Instance.stowIntake().asProxy()
-                                                   .alongWith(CatzSuperstructure.Instance.trackTower().asProxy()));
-
-
+        traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
 
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().asProxy().alongWith(CatzSuperstructure.Instance.trackStaticHub().asProxy()))),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj1),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectoryWithAccuracy(traj1)
+                ),
+                CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
+            ),
             followTrajectoryWithAccuracy(traj2),
             followTrajectoryWithAccuracy(traj3),
             followTrajectoryWithAccuracy(traj4),
             followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
+            Commands.deadline(
+                followTrajectoryWithAccuracy(traj6),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            followTrajectoryWithAccuracy(traj7),
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.trackStaticHub().asProxy())),
+            Commands.deadline(
+                followTrajectoryWithAccuracy(traj7),
+                CatzSuperstructure.Instance.trackTower().alongWith(CatzSuperstructure.Instance.stowIntake())
+            ),
             followTrajectoryWithAccuracy(traj8),
             followTrajectoryWithAccuracy(traj9),
             Commands.print("Climb"),
