@@ -38,22 +38,23 @@ public class R2_IAS extends AutoRoutineBase {
             traj1,
             Commands.deadline(
                 Commands.sequence(
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT)
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectoryWithAccuracy(traj1),
+                    followTrajectoryWithAccuracy(traj2),
+                    followTrajectoryWithAccuracy(traj3),
+                    followTrajectoryWithAccuracy(traj4),
+                    followTrajectoryWithAccuracy(traj5)
                 ),
                 CatzSuperstructure.Instance.deployIntake()
                     .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
-            followTrajectoryWithAccuracy(traj1),
-            followTrajectoryWithAccuracy(traj2),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectoryWithAccuracy(traj6),
                     followTrajectoryWithAccuracy(traj7)
                 ), 
                 CatzSuperstructure.Instance.cmdHubStandby()
+                    .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj8),
@@ -65,6 +66,8 @@ public class R2_IAS extends AutoRoutineBase {
                     followTrajectoryWithAccuracy(traj13)
                 ), 
                 CatzSuperstructure.Instance.cmdHubStandby()
+                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+
             ),
             Commands.deadline(
                 Commands.sequence(

@@ -21,7 +21,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
         AutoTrajectory traj7 = getTrajectory("Forefit_Outpost",6);
 
         traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        // traj3.atTime("Hoard3").onTrue();
 
         prepRoutine(
             traj1,
@@ -42,7 +42,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
                     followTrajectoryWithAccuracy(traj6),
                     followTrajectoryWithAccuracy(traj7)
                 ), 
-                CatzSuperstructure.Instance.trackStaticHub()
+                CatzSuperstructure.Instance.cmdHoardShoot()
             ),
             Commands.deadline(
                 Commands.waitSeconds(3.1),
