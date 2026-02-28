@@ -26,6 +26,7 @@ import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -235,10 +236,13 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // CatzSuperstructure.Instance.toggleIntakeDeploy().schedule(); // TODO delete later
   }
 
   @Override
   public void teleopPeriodic() {
+    CatzSuperstructure.Instance.toggleIntakeDeploy().schedule(); // TODO delete later
+    // Timer.delay(1.0);
   }
 
   @Override

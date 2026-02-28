@@ -9,7 +9,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
@@ -180,33 +179,40 @@ public class CatzSuperstructure {
     public boolean isIntakeDeployed = false;
     private boolean isIntakeOn = false;
 
-    // public Command toggleIntakeDeploy() {
-    //     return Commands.runOnce(() -> {
-    //         if(isIntakeDeployed){
-    //             isIntakeDeployed = false;
-    //             CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.STOW);
-    //         }else{
-    //             isIntakeDeployed = true;
-    //             CatzIntakeDeploy.Instance.applySetpoint(IntakeDeployConstants.DEPLOY);
-    //         }
-    //     }, CatzIntakeDeploy.Instance);
-    // }
-
     public Command toggleIntakeDeploy() {
-        return Commands.defer(() -> {
-            System.out.println("clickk!!!!!!!!!!!");
-            if(isIntakeDeployed){
-                isIntakeDeployed = false;
-                System.out.println("STOWWW!!!");
-                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get()/360.0));
-            }else{
-                isIntakeDeployed = true;
-                System.out.println("DEPLOYYY!!!");
+        // return Commands.defer(() -> {
+        //     // System.out.println("clickk!!!!!!!!!!!");
+        //     if(isIntakeDeployed){
+        //         isIntakeDeployed = false;
+        //         // System.out.println("STOWWW!!!");
+        //         return CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get()/360.0));
+        //     }else{
+        //         isIntakeDeployed = true;
+        //         // System.out.println("DEPLOYYY!!!");
 
-                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get()/360.0));
-            }
-        }, Set.of(CatzIntakeDeploy.Instance)).withInterruptBehavior(InterruptionBehavior.kCancelSelf).alongWith(Commands.print("Toggle Intake1=!!!"));
+        //         return CatzIntakeDeploy.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get()/360.0));
+        //     }
+        // }, Set.of(CatzIntakeDeploy.Instance)).withInterruptBehavior(InterruptionBehavior.kCancelSelf).alongWith(Commands.print("Toggle Intake1=!!!"));
+    return Commands.either(
+            // Command if true (Stow)
+            CatzIntakeDeploy.Instance.followSetpointCommand(() ->
+                Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get()/360.0))
+                .beforeStarting(() -> {
+                    System.out.println("Stow");
+                    isIntakeDeployed = false;
+                }),
 
+            // Command if false (Deploy)
+            CatzIntakeDeploy.Instance.followSetpointCommand(() ->
+                Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get()/360.0))
+                .beforeStarting(() -> {
+                    System.out.println("Deploy");
+                    isIntakeDeployed = true;
+                }),
+
+            // The condition
+            () -> isIntakeDeployed
+        );
     }
 
     public Command deployIntake(){
