@@ -2,11 +2,13 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -23,11 +25,20 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.FieldConstants;
+import frc.robot.RobotContainer;
+import frc.robot.CatzSubsystems.CatzClimbElevator.CatzClimbElevator;
+import frc.robot.CatzSubsystems.CatzClimbElevator.ClimbConstantsElevator;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
@@ -326,69 +337,94 @@ public class CatzSuperstructure {
         return Commands.defer(() -> {
             Angle angle = Units.Degrees.of(HoodConstants.adjustableHoodAngle.get());
 
-            return CatzHood.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(angle));
+            return CatzHood.Instance.followSetpointCommand(() ->Setpoint.withMotionMagicSetpoint(angle));
         }, Set.of(CatzHood.Instance));
     }
 
-    public Command applyHoodInterpolatedSetpoint(){
-        return CatzHood.Instance.followSetpointCommand(() -> {
-            Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
-            return ShooterRegression.getHoodSetpoint(dist, RegressionMode.HUB);
-        });
-    }
-
-    public Command applyHoodBisectorSetpoint() {
-        return CatzHood.Instance.followSetpointCommand(() -> {
-            Distance dist = Units.Meters.of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
-            double angleRot = AimCalculations.calculateHoodBisectorAngle(dist.in(Units.Meters)) / (2*Math.PI);
-            System.out.println("Target Angle: " + angleRot);
-            return Setpoint.withMotionMagicSetpoint(angleRot);
-        });
-    }
-
-    public Command applyFlywheelTuningSetpoint() {
+    public Command applyFlywheelTuningSetpoint(){
         return Commands.defer(() -> {
-            return CatzFlywheels.Instance.setpointCommand(
-                    Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
+
+            return CatzFlywheels.Instance.setpointCommand(Setpoint.withVelocitySetpointVoltage((FlywheelConstants.SHOOTING_RPS_TUNABLE.get())));
         }, Set.of(CatzFlywheels.Instance));
     }
 
-    // public Command turretManualCommand() {
-    //     return CatzTurret.Instance.followSetpointCommand(() -> {
-
-    //     });
-    // }
-
-    public Command turret30Deg() {
-        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(30.0)));
-    }
-    public Command turretMinus30Deg() {
-        return CatzTurret.Instance.setpointCommand(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(-30.0)));
+    public Command extendClimbElevatorCommand(){
+        return CatzClimbElevator.Instance.setpointCommand(ClimbConstantsElevator.FULL_EXTEND);
     }
 
-    public Command turretTrackHubCommand() {
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
+    public Command retractClimbElevatorCommand(){
+        return CatzClimbElevator.Instance.setpointCommand(ClimbConstantsElevator.HOME);
     }
 
-    public Command alignToBackUpClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true).onlyIf(()->isClimbMode);
-    }
-
-    public Command alignToCloseClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true).onlyIf(()->isClimbMode);
-    }
-
-    public Command alignToClimb(boolean isRight) {
-        return Commands.deadline(
-            Commands.sequence(
-                alignToBackUpClimb(isRight),
-                alignToCloseClimb(isRight)
-            ),
-            CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbTurretTrackingLocation()))
+    public SequentialCommandGroup levelOneClimb() {
+        return new SequentialCommandGroup(
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand()
         );
     }
 
-    public Command climbExtendCommand(){
-        return CatzClimb.Instance.followSetpointCommand(() -> ClimbConstants.REACH_SETPOINT);   
+    public SequentialCommandGroup levelTwoClimb() {
+        return new SequentialCommandGroup(
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand(),
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand()
+        );
     }
+
+    public SequentialCommandGroup levelThreeClimb() {
+        return new SequentialCommandGroup(
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand(),
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand(),
+            extendClimbElevatorCommand(),
+            retractClimbElevatorCommand()
+        );
+    }
+
+    public Command manualExtendClimb() {
+        return CatzClimbElevator.Instance.followSetpointCommand(() -> {
+            double input = (RobotContainer.xboxDrv.getLeftY()) * 2;
+            Logger.recordOutput("Climb Xbox Voltage Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
+    }
+
+    public Command hoodTestCommand(){
+        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
+    }
+
+    public Command applyHoodSetpoint(){
+        return CatzHood.Instance.setpointCommand(HoodConstants.HOOD_TEST_SETPOINT);
+    }
+
+    /**
+     * Calculates the best turret angle setpoint to point to the hub
+     * while respecting physical limits and minimizing movement
+     */
+    public Setpoint calculateHubTrackingSetpoint() {
+        Pose2d robotPose = CatzRobotTracker.Instance.getEstimatedPose();
+        Translation2d hubDirection = FieldConstants.getHubLocation().minus(robotPose.getTranslation());
+        double targetRads = hubDirection.getAngle().getRadians()
+                - MathUtil.angleModulus(robotPose.getRotation().getRadians());
+
+        return CatzTurret.Instance.calculateWrappedSetpoint(Angle.ofBaseUnits(targetRads, Units.Radians));
+    }
+
+    // interpolates distance to target for shooter setpoint along regression
+    private double getShooterSetpointFromRegression(double range) {
+        if (ShooterRegression.kUseFlywheelAutoAimPolynomial) {
+            return ShooterRegression.flywheelAutoAimPolynomial.predict(range);
+        } else {
+            return 0.0;
+        }
+    }
+
+
+    // public Command shootTuning(){
+    // return
+    // CatzFlywheels.Instance.setpointCommand(CatzShooter.Instance.getTunableSetpoint());
+    // }
+
 }

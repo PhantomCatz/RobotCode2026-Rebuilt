@@ -11,13 +11,14 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.PersistMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.ResetMode;
+import frc.robot.Utilities.MotorUtil.Gains;
 
 public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T> {
 
@@ -65,7 +66,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
                               .smartCurrentLimit(config.currentLimitAmps);
 
                 // Apply config to follower
-                followerMotors[i].configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+                followerMotors[i].configure(followerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
             }
         } else {
             followerMotors = new SparkMax[0];
@@ -73,7 +74,11 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         // 4. Apply Initial Config to Leader
         // We use ResetSafeParameters to clear old state, and NoPersist to avoid wearing out flash during dev
-        leaderMotor.configure(sparkConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        setMaxMotion(config.maxVelocity, config.maxAcceleration, config.allowedError); //TODO make it a param in the cunstructor
+        setGainsSlot0(config.gains.kP(), config.gains.kI(), config.gains.kD(), config.gains.kS(), config.gains.kV(), config.gains.kA(), config.gains.kG());
+        leaderMotor.configure(sparkConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
+
+
 
     }
 
@@ -126,7 +131,10 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
     public void setMotionMagicSetpoint(double mechanismPosition) {
         // Map MotionMagic to REV SmartMotion (Slot 0)
+        System.out.println(leaderMotor.configAccessor.closedLoop.getP(ClosedLoopSlot.kSlot0));
         double targetRotations = mechanismPosition / gearRatio;
+        System.out.println("target: " + targetRotations);
+        System.out.println("Motor Position: " + encoder.getPosition());
         closedLoopController.setSetpoint(targetRotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
@@ -174,14 +182,22 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         });
     }
 
+    public void setMaxMotion(double maxVelocity, double maxAcceleration, double allowedError) {
+         applyConfigChange(config -> {
+            config.closedLoop.maxMotion
+                .cruiseVelocity(maxVelocity, ClosedLoopSlot.kSlot0)
+                .maxAcceleration(maxAcceleration, ClosedLoopSlot.kSlot0)
+                .allowedProfileError(allowedError, ClosedLoopSlot.kSlot0);
+        });
+    }
+
     @Override
     public void setGainsSlot0(double p, double i, double d, double s, double v, double a, double g) {
         applyConfigChange(config -> {
-            config.closedLoop.p(p, ClosedLoopSlot.kSlot0)
-                  .i(i, ClosedLoopSlot.kSlot0)
-                  .d(d, ClosedLoopSlot.kSlot0)
-                  //.velocityFF(v, ClosedLoopSlot.kSlot0) // Mapping kV to FF
-                  .iZone(0.0, ClosedLoopSlot.kSlot0);
+        config.closedLoop.p(p, ClosedLoopSlot.kSlot0)
+            .i(i, ClosedLoopSlot.kSlot0)
+            .d(d, ClosedLoopSlot.kSlot0)
+            .velocityFF(v, ClosedLoopSlot.kSlot0);
         });
     }
 
@@ -191,8 +207,14 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
             config.closedLoop.p(p, ClosedLoopSlot.kSlot1)
                   .i(i, ClosedLoopSlot.kSlot1)
                   .d(d, ClosedLoopSlot.kSlot1)
-                  //.velocityFF(v, ClosedLoopSlot.kSlot1)
+                  .velocityFF(v, ClosedLoopSlot.kSlot1)
                   .iZone(0.0, ClosedLoopSlot.kSlot1);
+
+            // MAXMotion configuration
+            config.closedLoop.maxMotion
+                .cruiseVelocity(1000.0, ClosedLoopSlot.kSlot1)
+                .maxAcceleration(500.0, ClosedLoopSlot.kSlot1)
+                .allowedProfileError(0.1, ClosedLoopSlot.kSlot1);
         });
     }
 
@@ -205,9 +227,9 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
 
         applyConfigChange(config -> {
             // Smart Motion is configured under closedLoop.smartMotion
-            config.closedLoop.maxMotion.cruiseVelocity(cruiseVelRPM, ClosedLoopSlot.kSlot0)
+            config.closedLoop.maxMotion.maxVelocity(cruiseVelRPM, ClosedLoopSlot.kSlot0)
                   .maxAcceleration(maxAccRPMs, ClosedLoopSlot.kSlot0)
-                  .allowedProfileError(0.01, ClosedLoopSlot.kSlot0);
+                  .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0);
         });
     }
 
@@ -219,7 +241,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         threadPoolExecutor.submit(() -> {
             // Update Leader Config
             sparkConfig.idleMode(mode);
-            leaderMotor.configure(sparkConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+            leaderMotor.configure(sparkConfig, com.revrobotics.ResetMode.kNoResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
 
             // Update Followers
             for (SparkMax follower : followerMotors) {
@@ -230,7 +252,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
                 // Assuming followers were set up once in constructor, we just push IdleMode.
                 followerConfig.idleMode(mode)
                               .follow(leaderMotor); // Re-assert follow
-                follower.configure(followerConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+                follower.configure(followerConfig, com.revrobotics.ResetMode.kNoResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
             }
         });
     }
@@ -246,5 +268,10 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         public boolean invertMotor = false;
         public int currentLimitAmps = 40;
         public double gearRatio = 1.0;
+        public Gains gains = new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        public double maxVelocity = 1000.0;
+        public double maxAcceleration = 500.0;
+        public double allowedError = 0.1;
+
     }
 }
