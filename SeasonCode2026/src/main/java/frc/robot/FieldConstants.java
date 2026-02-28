@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.CatzConstants.AllianceColor;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class FieldConstants {
 
   private static final Pose2d CLIMB_BACK_AWAY_LEFT = new Pose2d(1.1506646871566772, 1.8027223348617554, Rotation2d.k180deg);
   private static final Pose2d CLIMB_CLOSE_LEFT = new Pose2d(1.1707948446273804, 2.8092310428619385, Rotation2d.k180deg);
+  private static final Translation2d CLIMB_APRILTAG_POSE = new Translation2d(0.1896783709526062, 3.731929063796997);
 
   private static final Translation2d CLIMB_TURRET_TRACKING_LOCATION = new Translation2d(0, fieldYHalf);
   private static final Translation2d RIGHT_CORNER = new Translation2d(0.5798526406288147, 0.503104567527771);
@@ -49,6 +51,10 @@ public class FieldConstants {
   public static Translation2d getHubLocation(){
     //This apply method correctly accounts for alliance color
     return AllianceFlipUtil.apply(HUB_LOCATION);
+  }
+
+  public static Translation2d getClimbApriltagLocation(){
+    return AllianceFlipUtil.apply(CLIMB_APRILTAG_POSE);
   }
 
   public static Translation2d getTrenchShootingLocation(){

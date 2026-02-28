@@ -127,6 +127,10 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
+    public Command trackTower(){
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbApriltagLocation()));
+    }
+
     /* --- HOARDING --- */
 
     public Command cmdHoardShoot() {
