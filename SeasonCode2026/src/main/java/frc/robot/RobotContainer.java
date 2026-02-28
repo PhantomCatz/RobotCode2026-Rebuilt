@@ -122,6 +122,7 @@ public class RobotContainer {
 
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
 
+    xboxTest.povUp().onTrue(superstructure);
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 
     // xboxTest.leftBumper().onTrue(superstructure.turret30Deg());
