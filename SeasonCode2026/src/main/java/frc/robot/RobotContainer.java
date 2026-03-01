@@ -52,20 +52,12 @@ public class RobotContainer {
     // xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
 
-    // xboxDrv.b().onTrue(superstructure.applyShooterSetpoint());
-    // xboxDrv.y().onTrue(superstructure.flywheelManualCommand());
-    // xboxDrv.a().onTrue(superstructure.)
-    // xboxDrv.y().onTrue(superstructure.hoodManualCommand());
-    // xboxDrv.a().onTrue(superstructure.applyFlywheelTuningSetpoint().alongWith(superstructure.applyHoodTuningSetpoint()));
-    // xboxDrv.b().onTrue(CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT));
-    // xboxDrv.x().onTrue(CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS));
+    //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
+    xboxDrv.x().onTrue(CatzHood.Instance.setpointCommand(() -> IntakeRollerConstants.S_SETPOINT));
+    xboxDrv.b().onTrue(CatzTurret.Instance.setpointCommand(() -> TurretConstants.backwordsbeastmode));
+    xboxDrv.y().onTrue(superstructure.IntakeOn());
+    xboxDrv.a().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
 
-    // xboxDrv.leftBumper().onTrue(superstructure.hoodTestCommand());
-    // xboxDrv.rightBumper().onTrue(superstructure.applyShooterSetpoint());
-
-    xboxDrv.a().onTrue(superstructure.manualExtendClimb());
-      // xboxTest.a().onTrue(superstructure.startIndexers());
-    // xboxTest.x().onTrue(superstructure.stopAllShooting());
 
   }
 
