@@ -1,7 +1,6 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -52,9 +51,8 @@ public class R2_IAS extends AutoRoutineBase {
                 Commands.sequence(
                     followTrajectoryWithAccuracy(traj6),
                     followTrajectoryWithAccuracy(traj7)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
-                    .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectoryWithAccuracy(traj8),
@@ -63,10 +61,10 @@ public class R2_IAS extends AutoRoutineBase {
                     followTrajectoryWithAccuracy(traj9),
                     followTrajectoryWithAccuracy(traj10),
                     followTrajectoryWithAccuracy(traj11),
+                    followTrajectoryWithAccuracy(traj12),
                     followTrajectoryWithAccuracy(traj13)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
-                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
 
             ),
             Commands.deadline(
@@ -75,9 +73,13 @@ public class R2_IAS extends AutoRoutineBase {
                 ),
                 shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
                 .alongWith(CatzSuperstructure.Instance.stowIntake())
-                .alongWith(CatzSuperstructure.Instance.trackTower())
             ),
-            followTrajectoryWithAccuracy(traj14),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj14)
+                ),
+                CatzSuperstructure.Instance.trackTower()
+            ),
             Commands.print("Climb"),
             Commands.print("done")
         );

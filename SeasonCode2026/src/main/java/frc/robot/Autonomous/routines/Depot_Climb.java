@@ -39,7 +39,7 @@ public class Depot_Climb extends AutoRoutineBase{
                 CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj6), 
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),

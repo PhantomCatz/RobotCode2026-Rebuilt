@@ -1,7 +1,6 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -32,7 +31,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
                     followTrajectoryWithAccuracy(traj2)
                 ),
                 CatzSuperstructure.Instance.deployIntake()
-                    .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+                    .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             Commands.deadline(
                 Commands.sequence(
@@ -41,7 +40,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
                     followTrajectoryWithAccuracy(traj5),
                     followTrajectoryWithAccuracy(traj6),
                     followTrajectoryWithAccuracy(traj7)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),
             Commands.deadline(
@@ -50,7 +49,7 @@ public class Forefit_Outpost extends AutoRoutineBase{
                 .alongWith(CatzSuperstructure.Instance.intakeOFF())
                 .alongWith(CatzSuperstructure.Instance.stowIntake())
             ),
-            
+
             Commands.print("done")
         );
     }

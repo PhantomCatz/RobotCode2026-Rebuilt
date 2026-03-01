@@ -9,15 +9,15 @@ public class EpsilonRegression {
     public static final double[] FARTHEST_HOOD_ANGLE_HUB = {5.549, 39.0};
 
     public static double[][] flywheelHubRPS = {
-    {1.557, 28.0},
-    {3.827, 36.0},
-    {5.549, 40.0}
+    {1.331, 28.5},
+    {2.915, 32.0},
+    {4.780, 37.0}
     };
 
     public static double[][] airtimeHub = {
-    {5.549, 1.08},
-    {2.0202,0.89},
-    {3.827, 1.03}
+        {1.331, 0.91},
+        {2.915, 0.97},
+        {4.780, 1.10}
     };
 
     /*

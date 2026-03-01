@@ -74,7 +74,12 @@ public class CatzSuperstructure {
 
         if (isShooting) {
             CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedTurretPose));
-            CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
+
+            if(isHub){
+                CatzHood.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(AimCalculations.calculateHoodBisectorAngle(dist.in(Units.Meters)) / (2*Math.PI)));
+            }else{
+                CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
+            }
 
             if (!initialShootReady && AimCalculations.readyToShoot()) {
                 initialShootReady = true;
@@ -209,7 +214,7 @@ public class CatzSuperstructure {
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
             }else{
                 isIntakeOn = true;
-                CatzIntakeRoller.Instance.applySetpoint(Setpoint.withDutyCycleSetpoint(IntakeRollerConstants.TUNABLE_PERCENT.get()));
+                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);

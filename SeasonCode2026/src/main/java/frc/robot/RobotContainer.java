@@ -62,7 +62,7 @@ public class RobotContainer {
     xboxDrv.leftBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
-    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
+    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
     // Toggle Location
     xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
@@ -82,7 +82,7 @@ public class RobotContainer {
     xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
 
-    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
+    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
     // xboxDrv.a().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
     // xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());

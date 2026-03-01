@@ -8,7 +8,6 @@ import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -36,8 +35,7 @@ public class AutoRoutineBase {
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
             CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
-            CatzSuperstructure.Instance.cmdShooterStop(),
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.trackStaticHub()))
+            CatzSuperstructure.Instance.cmdShooterStop()
         );
     }
 

@@ -1,13 +1,10 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 
 public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
     public Half_Hoard_Climb_Depot(){
@@ -61,7 +58,7 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
                 Commands.sequence(
                     followTrajectoryWithAccuracy(traj10),
                     followTrajectoryWithAccuracy(traj11)
-                ), 
+                ),
                 CatzSuperstructure.Instance.stowIntake()
                 .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
