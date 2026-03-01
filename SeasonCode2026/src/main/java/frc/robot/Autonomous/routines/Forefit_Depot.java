@@ -18,7 +18,7 @@ public class Forefit_Depot extends AutoRoutineBase{
         AutoTrajectory traj6 = getTrajectory("Forefit_Depot",5);
         AutoTrajectory traj7 = getTrajectory("Forefit_Depot",6);
 
-        traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj3.atTime("Hoard3").onTrue();
 
         prepRoutine(
@@ -26,19 +26,21 @@ public class Forefit_Depot extends AutoRoutineBase{
             Commands.deadline(
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectoryWithAccuracy(traj1),
-                    followTrajectoryWithAccuracy(traj2)
+                    followTrajectory(traj1),
+                    followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.cmdHoardStandby()
                     .alongWith(CatzSuperstructure.Instance.deployIntake())
+                    .alongWith(Commands.waitUntil(traj2.atTime("Intake+RampUp2"))
+                                   .andThen(CatzSuperstructure.Instance.intakeON()))
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj3),
-                    followTrajectoryWithAccuracy(traj4),
-                    followTrajectoryWithAccuracy(traj5),
-                    followTrajectoryWithAccuracy(traj6),
-                    followTrajectoryWithAccuracy(traj7)
+                    followTrajectory(traj3),
+                    followTrajectory(traj4),
+                    followTrajectory(traj5),
+                    followTrajectory(traj6),
+                    followTrajectory(traj7)
                 ),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),

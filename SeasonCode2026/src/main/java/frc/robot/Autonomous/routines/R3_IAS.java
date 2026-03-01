@@ -42,10 +42,10 @@ public class R3_IAS extends AutoRoutineBase{
             traj1,
             Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
             Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj1),
-            followTrajectoryWithAccuracy(traj2),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
+            followTrajectory(traj1),
+            followTrajectory(traj2),
+            followTrajectory(traj3),
+            followTrajectory(traj4),
             Commands.print("Climb5"),
             Commands.print("done")
         );

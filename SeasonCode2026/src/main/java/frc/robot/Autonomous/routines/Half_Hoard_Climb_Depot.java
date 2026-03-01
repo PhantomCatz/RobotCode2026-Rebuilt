@@ -33,19 +33,19 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
             Commands.deadline(
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectoryWithAccuracy(traj1),
-                    followTrajectoryWithAccuracy(traj2)
+                    followTrajectory(traj1),
+                    followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.deployIntake()
                 .alongWith(CatzSuperstructure.Instance.trackStaticHub())
                 .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
             ),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
-            followTrajectoryWithAccuracy(traj7),
-            followTrajectoryWithAccuracy(traj8),
+            followTrajectory(traj3),
+            followTrajectory(traj4),
+            followTrajectory(traj5),
+            followTrajectory(traj6),
+            followTrajectory(traj7),
+            followTrajectory(traj8),
             Commands.deadline(
                 Commands.sequence(
                     Commands.waitSeconds(5)
@@ -53,11 +53,11 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
                 CatzSuperstructure.Instance.cmdHubStandby()
                 .alongWith(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT))
             ),
-            followTrajectoryWithAccuracy(traj9),
+            followTrajectory(traj9),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj10),
-                    followTrajectoryWithAccuracy(traj11)
+                    followTrajectory(traj10),
+                    followTrajectory(traj11)
                 ),
                 CatzSuperstructure.Instance.stowIntake()
                 .alongWith(CatzSuperstructure.Instance.trackStaticHub())
