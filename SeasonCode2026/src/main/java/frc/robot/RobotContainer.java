@@ -111,6 +111,8 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxDrv.a().onTrue(CatzSuperstructure.Instance.upIntake());
+    xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
 
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());

@@ -14,7 +14,6 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
@@ -104,18 +103,6 @@ public class CatzSuperstructure {
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
-
-    public Command jiggleIntakeCommand() {
-        return Commands.run(() -> {
-            double time = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
-            double angleDeg = IntakeDeployConstants.JIGGLE_AMPLITUDE_LOG.get()+ IntakeDeployConstants.JIGGLE_AMPLITUDE_LOG.get() * Math.sin(2*Math.PI*time* IntakeDeployConstants.JIGGLE_FREQUENCY);
-
-            CatzIntakeDeploy.Instance.applySetpoint(
-                Setpoint.withMotionMagicSetpoint(Units.Rotation.of(angleDeg/360))
-            );
-        }, CatzIntakeDeploy.Instance);
-    }
-
 
     public Command cmdShooterStop() {
         return Commands.parallel(
@@ -207,12 +194,16 @@ public class CatzSuperstructure {
         });
     }
 
+    public Command upIntake(){
+        return Commands.runOnce(() -> intakeSetpoint = IntakeDeployConstants.UP_POSITION);
+    }
+
     public Command deployIntake(){
-        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get()/360.0)).alongWith(Commands.runOnce(()-> isIntakeDeployed = true));
+        return Commands.runOnce(() -> {intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION; isIntakeDeployed = true;});
     }
 
     public Command stowIntake(){
-        return CatzIntakeDeploy.Instance.followSetpointCommand(()->Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get()/360.0)).alongWith(Commands.runOnce(()-> isIntakeDeployed = false));
+        return Commands.runOnce(() -> {intakeSetpoint = IntakeDeployConstants.STOW_POSITION; isIntakeDeployed = false;});
     }
 
     public Command toggleIntakeRollers() {
