@@ -39,31 +39,31 @@ public class R2_IAS extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectoryWithAccuracy(traj1),
-                    followTrajectoryWithAccuracy(traj2),
-                    followTrajectoryWithAccuracy(traj3),
-                    followTrajectoryWithAccuracy(traj4),
-                    followTrajectoryWithAccuracy(traj5)
+                    followTrajectory(traj1),
+                    followTrajectory(traj2),
+                    followTrajectory(traj3),
+                    followTrajectory(traj4),
+                    followTrajectory(traj5)
                 ),
                 CatzSuperstructure.Instance.deployIntake()
                     .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6),
-                    followTrajectoryWithAccuracy(traj7)
+                    followTrajectory(traj6),
+                    followTrajectory(traj7)
                 ), 
                 CatzSuperstructure.Instance.cmdHubStandby()
                     .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            followTrajectoryWithAccuracy(traj8),
+            followTrajectory(traj8),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj9),
-                    followTrajectoryWithAccuracy(traj10),
-                    followTrajectoryWithAccuracy(traj11),
-                    followTrajectoryWithAccuracy(traj13)
+                    followTrajectory(traj9),
+                    followTrajectory(traj10),
+                    followTrajectory(traj11),
+                    followTrajectory(traj13)
                 ), 
                 CatzSuperstructure.Instance.cmdHubStandby()
                 .alongWith(CatzSuperstructure.Instance.trackStaticHub())
