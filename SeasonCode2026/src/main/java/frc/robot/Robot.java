@@ -24,6 +24,7 @@ import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimbElevator.CatzClimbElevator;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -34,7 +35,6 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;

@@ -3,7 +3,6 @@ package frc.robot.CatzSubsystems.CatzClimbElevator;
 
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzClimbElevator.ClimbElevatorIOInputsAutoLogged;
 
 public class CatzClimbElevator extends ServoMotorSubsystem<ClimbIOElevator, ClimbIOElevator.ClimbElevatorIOInputs> {
 

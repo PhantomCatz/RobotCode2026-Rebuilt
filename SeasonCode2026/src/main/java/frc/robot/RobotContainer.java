@@ -44,19 +44,13 @@ public class RobotContainer {
             .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
       }
     }));
-    // );
-
-    // ----------------------Shooting-----------------------
-    // xboxDrv.leftBumper().onTrue(superstructure.prepareForShooting());
-    // xboxDrv.leftBumper().onFalse(superstructure.setShootingAllowed(true));
-    // xboxDrv.x().onTrue(superstructure.stopAllShooting());
 
 
-    //xboxTest.y().onTrue(superstructure.intakeDeployManualCommand());
-    xboxDrv.x().onTrue(CatzHood.Instance.setpointCommand(() -> IntakeRollerConstants.S_SETPOINT));
-    xboxDrv.b().onTrue(CatzTurret.Instance.setpointCommand(() -> TurretConstants.backwordsbeastmode));
-    xboxDrv.y().onTrue(superstructure.IntakeOn());
-    xboxDrv.a().onTrue(CatzIntakeRoller.Instance.setpointCommand(() -> IntakeRollerConstants.OFF_SETPOINT));
+
+
+    xboxDrv.x().onTrue(superstructure.manualExtendClimb());
+    xboxDrv.a().onTrue(superstructure.extendClimbElevatorCommand());
+    xboxDrv.b().onTrue(superstructure.retractClimbElevatorCommand());
 
 
   }
@@ -64,12 +58,4 @@ public class RobotContainer {
   public static void rumbleDrv(double val) {
     xboxDrv.setRumble(RumbleType.kBothRumble, val);
   }
-
-  //  public Command getClimbCommand() {
-  //   return Commands.sequence(
-  //     CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Extend).withTimeout(2.0),
-  //     Commands.waitSeconds(7),
-  //     CatzClimb.Instance.followSetpointCommand(()->ClimbConstants.Stow).withTimeout(2.0)
-  //   );
-  // }
 }

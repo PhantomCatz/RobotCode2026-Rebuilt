@@ -68,6 +68,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return setpoint;
 	}
 
+
 	public AngularVelocity getVelocity() {
 		return Units.RotationsPerSecond.of(inputs.velocityRPS);
 	}

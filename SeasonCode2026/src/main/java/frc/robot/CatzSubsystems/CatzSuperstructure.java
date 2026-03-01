@@ -12,9 +12,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzClimbElevator.CatzClimbElevator;
@@ -31,6 +29,8 @@ import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
+
+    private final SubsystemVisualizer visualizer;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
@@ -166,9 +166,9 @@ public class CatzSuperstructure {
     // }
 
     public void UpdateSim() {
-        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzIntakeRoller.Instance.getPosition());
-        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getPosition());
-        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getPosition());
+        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzClimbElevator.Instance.getLatencyCompensatedPosition());
+        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getLatencyCompensatedPosition());
+        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition());
 
         visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
     }
