@@ -61,6 +61,7 @@ public class R2_IAS extends AutoRoutineBase {
                     followTrajectory(traj9),
                     followTrajectory(traj10),
                     followTrajectory(traj11),
+                    followTrajectory(traj12),
                     followTrajectory(traj13)
                 ), 
                 CatzSuperstructure.Instance.cmdHubStandby()
