@@ -34,7 +34,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
@@ -89,15 +88,7 @@ public class Robot extends LoggedRobot {
 
     CatzIntakeDeploy.Instance.setDefaultCommand(
       Commands.run(() -> {
-          if (CatzSuperstructure.Instance.isIntakeDeployed) {
-              CatzIntakeDeploy.Instance.applySetpoint(
-                  Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.DEPLOY_POSITION_LOG.get() / 360.0)
-              );
-          } else {
-              CatzIntakeDeploy.Instance.applySetpoint(
-                  Setpoint.withMotionMagicSetpoint(IntakeDeployConstants.STOW_POSITION_LOG.get() / 360.0)
-              );
-          }
+        CatzIntakeDeploy.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.intakeSetpoint));
       }, CatzIntakeDeploy.Instance)
   );
     Logger.start();

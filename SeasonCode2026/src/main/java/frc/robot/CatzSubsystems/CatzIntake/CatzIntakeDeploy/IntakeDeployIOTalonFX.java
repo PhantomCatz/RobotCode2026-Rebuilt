@@ -14,8 +14,12 @@ public class IntakeDeployIOTalonFX extends GenericTalonFXIOReal<IntakeDeployIO.I
 
     @Override
     public void setMotionMagicSetpoint(double target){
-        //TODO do not apply feed forward when intake is down to save some battery.
-        double feedforward = -IntakeDeployConstants.kG.get() * Math.sin(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
+        double feedforward;
+        if(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() > 0.28){
+            feedforward = 0.0;
+        }else{
+            feedforward = -IntakeDeployConstants.kG.get() * Math.sin(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
+        }
         Logger.recordOutput("Intake Deploy Setpoint", target);
         setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
     }

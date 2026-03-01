@@ -51,7 +51,7 @@ public class R2_IAS extends AutoRoutineBase {
                 Commands.sequence(
                     followTrajectory(traj6),
                     followTrajectory(traj7)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
@@ -63,7 +63,7 @@ public class R2_IAS extends AutoRoutineBase {
                     followTrajectory(traj11),
                     followTrajectory(traj12),
                     followTrajectory(traj13)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
 
             ),
