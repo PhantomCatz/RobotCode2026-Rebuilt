@@ -27,25 +27,25 @@ public class Outpost_Climb extends AutoRoutineBase{
             Commands.deadline(
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectoryWithAccuracy(traj1),
-                    followTrajectoryWithAccuracy(traj2)
+                    followTrajectory(traj1),
+                    followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.deployIntake()
                 .alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
-            followTrajectoryWithAccuracy(traj3),
+            followTrajectory(traj3),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj4),
-                    followTrajectoryWithAccuracy(traj5)
+                    followTrajectory(traj4),
+                    followTrajectory(traj5)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectoryWithAccuracy(traj6),
+            followTrajectory(traj6),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj7),
-                    followTrajectoryWithAccuracy(traj8)
+                    followTrajectory(traj7),
+                    followTrajectory(traj8)
                 ),
                 CatzSuperstructure.Instance.stowIntake()
                 .alongWith(CatzSuperstructure.Instance.trackTower())

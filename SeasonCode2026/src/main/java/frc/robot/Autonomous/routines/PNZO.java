@@ -32,12 +32,12 @@ public class PNZO extends AutoRoutineBase{
             traj1,
             Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
             Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj1),
-            followTrajectoryWithAccuracy(traj2),
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
+            followTrajectory(traj1),
+            followTrajectory(traj2),
+            followTrajectory(traj3),
+            followTrajectory(traj4),
+            followTrajectory(traj5),
+            followTrajectory(traj6),
             Commands.print("done")
 
         );

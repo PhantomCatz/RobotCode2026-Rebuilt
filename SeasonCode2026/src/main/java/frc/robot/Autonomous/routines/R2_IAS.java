@@ -25,8 +25,8 @@ public class R2_IAS extends AutoRoutineBase {
         AutoTrajectory traj13 = getTrajectory("R2_IAS",12);
         AutoTrajectory traj14 = getTrajectory("R2_IAS",13);
 
-        traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
 
         traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
@@ -46,6 +46,9 @@ public class R2_IAS extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.deployIntake()
                     .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+                    .alongWith(Commands.waitUntil(traj2.atTime("Intake2"))
+                                   .andThen(CatzSuperstructure.Instance.intakeON()))
+
             ),
             Commands.deadline(
                 Commands.sequence(
@@ -53,6 +56,8 @@ public class R2_IAS extends AutoRoutineBase {
                     followTrajectory(traj7)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
+                .alongWith(Commands.waitUntil(traj6.atTime("IntakeStop+RampUp6"))
+                                   .andThen(CatzSuperstructure.Instance.intakeOFF()))
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectory(traj8),
@@ -76,7 +81,7 @@ public class R2_IAS extends AutoRoutineBase {
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj14)
+                    followTrajectory(traj14)
                 ),
                 CatzSuperstructure.Instance.trackTower()
             ),

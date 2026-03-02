@@ -35,26 +35,25 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
             traj1,
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj1),
-                    followTrajectoryWithAccuracy(traj2),
-                    followTrajectoryWithAccuracy(traj3),
-                    followTrajectoryWithAccuracy(traj4),
-                    followTrajectoryWithAccuracy(traj5),
-                    followTrajectoryWithAccuracy(traj6)
+                    followTrajectory(traj1),
+                    followTrajectory(traj2),
+                    followTrajectory(traj3),
+                    followTrajectory(traj4),
+                    followTrajectory(traj5),
+                    followTrajectory(traj6)
                 ),
                 CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
             ),
             Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectoryWithAccuracy(traj7),
-            followTrajectoryWithAccuracy(traj8),
+            followTrajectory(traj7),
+            followTrajectory(traj8),
             Commands.deadline(
                 Commands.waitSeconds(4),
                 shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
-                    .alongWith(CatzSuperstructure.Instance.trackTower()
-                    .alongWith(CatzSuperstructure.Instance.stowIntake()))
+                    .alongWith(CatzSuperstructure.Instance.stowIntake())
             ),
-            followTrajectoryWithAccuracy(traj9),
-            followTrajectoryWithAccuracy(traj10),
+            followTrajectory(traj9),
+            followTrajectory(traj10),
             Commands.print("Climb"),
             Commands.print("done")
         );
