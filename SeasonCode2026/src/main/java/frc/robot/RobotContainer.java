@@ -38,7 +38,6 @@ public class RobotContainer {
     var vision = LimelightSubsystem.Instance;
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
 
-    new Trigger(() -> Robot.autonInit).onTrue(CatzSuperstructure.Instance.deployIntake().asProxy().alongWith(CatzSuperstructure.Instance.trackStaticHub().asProxy()).alongWith(Commands.runOnce(()->Robot.autonInit = false)).asProxy());
   }
 
   private void configureBindings() {

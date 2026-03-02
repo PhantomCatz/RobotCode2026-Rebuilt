@@ -16,6 +16,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
@@ -34,6 +35,7 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
@@ -50,8 +52,6 @@ public class Robot extends LoggedRobot {
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
 
   public static double autonStartTime = 0.0;
-
-  public static boolean autonInit = false;
 
   public Robot() {
   }
@@ -208,6 +208,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(200);
   }
 
   @Override
@@ -220,9 +221,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     autonStartTime = Timer.getFPGATimestamp();
-    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
+    CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
+    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     System.out.println("auton: " + m_autonomousCommand);
     if (m_autonomousCommand != null) {
@@ -240,6 +243,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
