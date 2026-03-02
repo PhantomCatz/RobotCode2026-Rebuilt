@@ -55,7 +55,7 @@ public class EpsilonRegression {
     public static double[][] flywheelOverTrenchHoardRPS = {
             { 5.768, 30.0 },
             { 7.528, 40.0 },
-            { 9.314, 50.0 }
+            { 9.314, 45.0 }
     };
 
     public static double[][] airtimeOverTrenchHoard = {
