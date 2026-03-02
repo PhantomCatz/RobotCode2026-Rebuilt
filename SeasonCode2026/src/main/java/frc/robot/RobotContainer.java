@@ -15,6 +15,8 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -111,8 +113,9 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    xboxDrv.a().onTrue(CatzSuperstructure.Instance.upIntake());
-    xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
+
+    xboxDrv.y().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
+    xboxDrv.y().onFalse(CatzSuperstructure.Instance.deployIntake().alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
 
     // ---------------------Testing Controls--------------------
     // xboxTest.b().onTrue(superstructure.flywheelManualCommand());

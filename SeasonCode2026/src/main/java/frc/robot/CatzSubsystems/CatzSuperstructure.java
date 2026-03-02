@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
@@ -204,6 +205,20 @@ public class CatzSuperstructure {
 
     public Command stowIntake(){
         return Commands.runOnce(() -> {intakeSetpoint = IntakeDeployConstants.STOW_POSITION; isIntakeDeployed = false;});
+    }
+
+    public Command jiggleIntakeCommand(){
+        Command jiggleCmd = Commands.run(() -> {
+            double time = Timer.getFPGATimestamp();
+            double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY * (2*Math.PI)) > 0 ?
+                                IntakeDeployConstants.UP_POSITION.in(Units.Rotations) : IntakeDeployConstants.DEPLOY_POSITION.in(Units.Rotations);
+            CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
+            intakeSetpoint = Units.Rotations.of(angleRot);
+
+        });
+        //TODO abuse of requirements. uses catz intake rollers to stop this command but shouldn't do this
+        jiggleCmd.addRequirements(CatzIntakeRoller.Instance);
+        return jiggleCmd;
     }
 
     public Command toggleIntakeRollers() {
