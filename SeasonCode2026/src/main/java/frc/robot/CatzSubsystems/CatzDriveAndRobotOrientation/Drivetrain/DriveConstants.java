@@ -199,7 +199,7 @@ public class DriveConstants {
       new PIDController(10.0, 0.0, 0.3),
       new PIDController(10.0, 0.0, 0.3),
       new ProfiledPIDController(
-        9.0,
+        13.0,
         0.0,
         0.3,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)

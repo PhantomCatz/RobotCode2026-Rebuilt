@@ -49,7 +49,7 @@ public class AutoRoutineBase {
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
-                    () -> isAtLoosePose(traj));
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
