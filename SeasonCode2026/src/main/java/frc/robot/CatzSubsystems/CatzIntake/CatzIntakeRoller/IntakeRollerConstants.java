@@ -19,6 +19,7 @@ public class IntakeRollerConstants {
 	// public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(6.7);
 	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(8.4);
 	public static final Setpoint S_SETPOINT = Setpoint.withDutyCycleSetpoint(0.7);
+	public static final Setpoint JIGGLE_SETPOINT = Setpoint.withVoltageSetpoint(3.0);
 	public static final LoggedTunableNumber TUNABLE_PERCENT = new LoggedTunableNumber("IntakeRollers/Speed", 0.7);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
