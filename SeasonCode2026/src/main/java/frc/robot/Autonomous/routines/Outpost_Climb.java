@@ -42,14 +42,12 @@ public class Outpost_Climb extends AutoRoutineBase{
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             followTrajectory(traj6),
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj7),
-                    followTrajectory(traj8)
-                ),
-                CatzSuperstructure.Instance.stowIntake()
-                .alongWith(CatzSuperstructure.Instance.trackTower())
-            ),
+
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
+            .deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand()),
+            CatzSuperstructure.Instance.intakeOFF().andThen(CatzSuperstructure.Instance.deployIntake()),
+            
+            CatzSuperstructure.Instance.autoClimbCommand(),
 
             Commands.print("Climb"), //TODO
             Commands.print("done")
