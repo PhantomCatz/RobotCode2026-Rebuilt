@@ -20,9 +20,9 @@ public class EpsilonRegression {
         };
 
         public static double[][] airtimeHub = {
-                        { 1.263, 0.91 }, // distance meters, time seconds
-                        { 3.264, 0.97 },
-                        { 5.274, 1.10 }
+                        { 1.263, 0.875 }, // distance meters, time seconds
+                        { 3.264, 0.98 },
+                        { 5.274, 1.08 }
         };
 
         /*
