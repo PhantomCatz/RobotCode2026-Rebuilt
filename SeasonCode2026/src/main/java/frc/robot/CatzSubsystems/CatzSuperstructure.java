@@ -9,11 +9,9 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
-import frc.robot.CatzConstants.AllianceColor;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -420,9 +418,10 @@ public class CatzSuperstructure {
     public Command autoClimbCommand() {
         return Commands.deadline(
                 Commands.sequence(
+                        cmdClimbReach(),
                         alignToBackUpClimb(),
                         alignToCloseClimb(),
-                        cmdClimbReach(),
+                        stowIntake(),
                         cmdClimbStow()
                 ),
                 trackTower()
@@ -438,10 +437,10 @@ public class CatzSuperstructure {
     }
 
     public Command cmdClimbReach() {
-        return CatzClimb.Instance.setpointCommandWithWait(ClimbConstants.REACH_SETPOINT);
+        return CatzClimb.Instance.setpointCommand(ClimbConstants.REACH_SETPOINT);
     }
 
     public Command cmdClimbStow() {
-        return CatzClimb.Instance.setpointCommandWithWait(ClimbConstants.STOW_SETPOINT);
+        return CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
     }
 }

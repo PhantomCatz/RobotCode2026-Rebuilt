@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -97,7 +96,8 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     DoublePressTracker.createTrigger(xboxDrv.start()).onTrue(Commands.runOnce(() -> superstructure.isClimbMode = !superstructure.isClimbMode)
                                                               .alongWith(superstructure.trackTower()));
-  
+
+    xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.autoClimbCommand());
     // INTAKE
     // -------------------------------------------------------------------------
     xboxDrv.leftStick().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());

@@ -59,7 +59,8 @@ public class R2_IAS extends AutoRoutineBase {
                 .alongWith(Commands.waitUntil(traj6.atTime("IntakeStop+RampUp6"))
                                    .andThen(CatzSuperstructure.Instance.intakeOFF()))
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT).alongWith(CatzSuperstructure.Instance.jiggleIntakeCommand()),
+            CatzSuperstructure.Instance.intakeOFF().andThen(CatzSuperstructure.Instance.deployIntake()),
             followTrajectory(traj8),
             Commands.deadline(
                 Commands.sequence(
@@ -72,15 +73,10 @@ public class R2_IAS extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
 
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj14)
-                ),
-                CatzSuperstructure.Instance.trackTower().alongWith(CatzSuperstructure.Instance.stowIntake())
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT).alongWith(CatzSuperstructure.Instance.jiggleIntakeCommand()),
+            CatzSuperstructure.Instance.intakeOFF().andThen(CatzSuperstructure.Instance.deployIntake()),
 
-            ),
+            CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("Climb"),
             Commands.print("done")
         );

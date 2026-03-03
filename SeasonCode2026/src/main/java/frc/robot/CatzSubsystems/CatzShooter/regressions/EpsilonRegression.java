@@ -8,16 +8,21 @@ public class EpsilonRegression {
         // arc. static shooting
         public static final double[] FARTHEST_HOOD_ANGLE_HUB = { 5.549, 39.0 };
 
+        public static final double HOOD_ANGLE_OFFSET = 4.0;
+
         public static double[][] flywheelHubRPS = {
-                        { 1.331, 28.5 }, // distance meters, flywheel rps
-                        { 2.915, 32.0 },
-                        { 4.780, 37.0 }
+                        // { 1.331, 28.5 }, // distance meters, flywheel rps
+                        // { 2.915, 32.0 },
+                        // { 4.780, 37.0 }
+                        { 1.263, 27.0 }, // distance meters, flywheel rps
+                        { 3.264, 31.5 },
+                        { 5.274, 38.5 }
         };
 
         public static double[][] airtimeHub = {
-                        { 1.331, 0.91 }, // distance meters, time seconds
-                        { 2.915, 0.97 },
-                        { 4.780, 1.10 }
+                        { 1.263, 0.91 }, // distance meters, time seconds
+                        { 3.264, 0.97 },
+                        { 5.274, 1.10 }
         };
 
         /*

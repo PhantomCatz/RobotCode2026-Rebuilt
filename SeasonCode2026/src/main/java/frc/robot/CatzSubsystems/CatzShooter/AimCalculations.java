@@ -14,6 +14,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
+import frc.robot.CatzSubsystems.CatzShooter.regressions.EpsilonRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Utilities.LoggedTunableNumber;
@@ -42,7 +43,7 @@ public class AimCalculations {
         double distToRim = distToCenter - FieldConstants.HUB_RIM_RADIUS.in(Units.Meter);
 
         double slopeAngle = Math.atan2(FieldConstants.HEIGHT_DIFF, distToRim);
-        return Math.PI/2.0 - (slopeAngle + (Math.PI / 2.0)) / 2.0;
+        return Math.PI/2.0 - (slopeAngle + (Math.PI / 2.0)) / 2.0 - Math.toRadians(EpsilonRegression.HOOD_ANGLE_OFFSET);
     }
 
     /**

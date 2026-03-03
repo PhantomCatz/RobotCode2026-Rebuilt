@@ -32,11 +32,11 @@ public class FieldConstants {
 
 
   //******CLIMB BLUE ALLIANCE RELATIVE********/
-  public static final double TOWER_Y_CENTER = Units.inchesToMeters(146.86); 
+  public static final double TOWER_Y_CENTER = Units.inchesToMeters(146.86);
   private static final double RUNG_SPACING = Units.inchesToMeters(32.250 + 2 * 1.50); //distance from center of climb to rung
-  private static final double CLIMB_DISTANCE_AWAY = 0.2; //meters, distance from the tower we want to be when climbing
+  private static final double CLIMB_DISTANCE_AWAY = 0.3; //meters, distance from the tower we want to be when climbing
 
-  public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(0.0); 
+  public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(0.0);
   public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(0.0);
 
   public static final Translation2d ROBOT_CLIMB_OFFSET = new Translation2d(0, Units.inchesToMeters(35.0/2));
@@ -44,28 +44,28 @@ public class FieldConstants {
   private static final double CLIMB_CLOSE_BASE_X = Units.inchesToMeters(40.0 + 3.51/2.0);
 
   private static final Translation2d CLIMB_CLOSE_RIGHT_TARGET = new Translation2d(
-      CLIMB_CLOSE_BASE_X, 
+      CLIMB_CLOSE_BASE_X,
       TOWER_Y_CENTER - (RUNG_SPACING / 2.0)
   );
-  
+
   private static final Translation2d CLIMB_CLOSE_LEFT_TARGET = new Translation2d(
-      CLIMB_CLOSE_BASE_X, 
+      CLIMB_CLOSE_BASE_X,
       TOWER_Y_CENTER + (RUNG_SPACING / 2.0)
   );
 
   private static final Pose2d CLIMB_CLOSE_RIGHT = new Pose2d(
       new Translation2d(
-          CLIMB_CLOSE_RIGHT_TARGET.getX() + ROBOT_CLIMB_OFFSET.getX(), 
+          CLIMB_CLOSE_RIGHT_TARGET.getX() + ROBOT_CLIMB_OFFSET.getX(),
           CLIMB_CLOSE_RIGHT_TARGET.getY() - ROBOT_CLIMB_OFFSET.getY()
-      ), 
+      ),
       Rotation2d.k180deg
   );
-  
+
   private static final Pose2d CLIMB_CLOSE_LEFT = new Pose2d(
       new Translation2d(
-          CLIMB_CLOSE_LEFT_TARGET.getX() - ROBOT_CLIMB_OFFSET.getX(), 
+          CLIMB_CLOSE_LEFT_TARGET.getX() - ROBOT_CLIMB_OFFSET.getX(),
           CLIMB_CLOSE_LEFT_TARGET.getY() + ROBOT_CLIMB_OFFSET.getY()
-      ), 
+      ),
       new Rotation2d()
   );
 
@@ -97,21 +97,18 @@ public class FieldConstants {
 
     double xVariationOffset = AllianceFlipUtil.shouldFlip() ? RED_CLIMB_X_OFFSET : BLUE_CLIMB_X_OFFSET;
     Translation2d variationTranslation = new Translation2d(xVariationOffset, 0.0);
-    
+
     return new Pose2d(closerPose.getTranslation().plus(variationTranslation), closerPose.getRotation());
   }
 
   public static Pose2d getClimbAwayPosition(Translation2d robotPose) {
     Pose2d closePose = getClimbClosePosition(robotPose);
-    
-    Translation2d awayTranslation = new Translation2d(
-        -CLIMB_DISTANCE_AWAY * closePose.getRotation().getCos(),
-        -CLIMB_DISTANCE_AWAY * closePose.getRotation().getSin()
-    );
-    
+
+    double awayY = (closePose.getY() < TOWER_Y_CENTER) ? -CLIMB_DISTANCE_AWAY : CLIMB_DISTANCE_AWAY;
+    Translation2d awayTranslation = new Translation2d(0.0, awayY);
+
     return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
   }
-
   /**
    * Returns the position of the hub in the correct alliance.
    */
@@ -141,7 +138,7 @@ public class FieldConstants {
     }
   }
 
- 
+
 
   @Getter
   public enum AprilTagLayoutType {
