@@ -27,12 +27,11 @@ public class Forefit_Depot extends AutoRoutineBase{
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
+                    CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.cmdHoardStandby()
                     .alongWith(CatzSuperstructure.Instance.deployIntake())
-                    .alongWith(Commands.waitUntil(traj2.atTime("Intake+RampUp2"))
-                                   .andThen(CatzSuperstructure.Instance.intakeON()))
             ),
             Commands.deadline(
                 Commands.sequence(
@@ -44,9 +43,8 @@ public class Forefit_Depot extends AutoRoutineBase{
                 ),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),
-            CatzSuperstructure.Instance.stowIntake()
-                    .alongWith(CatzSuperstructure.Instance.cmdShooterStop()
-                    .alongWith(CatzSuperstructure.Instance.intakeOFF())),
+            CatzSuperstructure.Instance.cmdShooterStop()
+                .alongWith(CatzSuperstructure.Instance.intakeOFF()),
             Commands.print("done")
         );
     }

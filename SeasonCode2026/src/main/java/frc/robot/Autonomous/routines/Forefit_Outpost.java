@@ -28,12 +28,11 @@ public class Forefit_Outpost extends AutoRoutineBase{
                 Commands.sequence(
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
-                    followTrajectory(traj2)
+                    followTrajectory(traj2),
+                    CatzSuperstructure.Instance.intakeON()
                 ),
                 CatzSuperstructure.Instance.deployIntake()
                     .alongWith(CatzSuperstructure.Instance.trackStaticHub())
-                    .alongWith(Commands.waitUntil(traj2.atTime("Intake+RampUp2"))
-                                   .andThen(CatzSuperstructure.Instance.intakeON()))
             ),
 
             Commands.deadline(
