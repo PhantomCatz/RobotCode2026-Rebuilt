@@ -46,12 +46,9 @@ public class Forefit_Outpost extends AutoRoutineBase{
                 ),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),
-            Commands.deadline(
-                Commands.waitSeconds(3.1),
-                CatzSuperstructure.Instance.cmdShooterStop()
+            CatzSuperstructure.Instance.cmdShooterStop()
                 .alongWith(CatzSuperstructure.Instance.intakeOFF())
-                .alongWith(CatzSuperstructure.Instance.stowIntake())
-            ),
+                .alongWith(CatzSuperstructure.Instance.stowIntake()),
 
             Commands.print("done")
         );

@@ -37,7 +37,6 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
                     followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.deployIntake()
-                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
                 .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
             ),
             followTrajectory(traj3),

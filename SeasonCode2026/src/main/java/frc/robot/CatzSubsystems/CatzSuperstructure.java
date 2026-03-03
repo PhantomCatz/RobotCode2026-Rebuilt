@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
 import frc.robot.CatzConstants.AllianceColor;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
@@ -372,7 +374,6 @@ public class CatzSuperstructure {
             Distance dist = Units.Meters
                     .of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
             double angleRot = AimCalculations.calculateHoodBisectorAngle(dist.in(Units.Meters)) / (2 * Math.PI);
-            System.out.println("Target Angle: " + angleRot);
             return Setpoint.withMotionMagicSetpoint(angleRot);
         });
     }
@@ -402,29 +403,45 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
-    public Command alignToBackUpClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbBackAwayPosition(isRight), true).onlyIf(() -> isClimbMode);
-    }
-
-    public Command alignToCloseClimb(boolean isRight) {
-        return new PIDDriveCmd(FieldConstants.getClimbClosePosition(isRight), true).onlyIf(() -> isClimbMode);
-    }
-
-    public Command alignToClimb() {
+    public Command alignToBackUpClimb() {
         return Commands.defer(() -> {
-            double robotY = CatzRobotTracker.Instance.getEstimatedPose().getY();
-            boolean isRight;
-            if(DriverStation.getAlliance().get().equals(Alliance.Blue)){
-                isRight = robotY < FieldConstants.fieldYHalf;
-            }else{
-                isRight = robotY > FieldConstants.fieldYHalf;
-            }
-            
-            return Commands.deadline(
-                    Commands.sequence(
-                            alignToBackUpClimb(isRight),
-                            alignToCloseClimb(isRight)),
-                    trackTower());
-        }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance));
+            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            return new PIDDriveCmd(FieldConstants.getClimbAwayPosition(currentTranslation), true);
+        }, Set.of(CatzDrivetrain.getInstance())).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+    }
+
+    public Command alignToCloseClimb() {
+        return Commands.defer(() -> {
+            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            return new PIDDriveCmd(FieldConstants.getClimbClosePosition(currentTranslation), true);
+        }, Set.of(CatzDrivetrain.getInstance())).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+    }
+
+    public Command autoClimbCommand() {
+        return Commands.deadline(
+                Commands.sequence(
+                        alignToBackUpClimb(),
+                        alignToCloseClimb(),
+                        cmdClimbReach(),
+                        cmdClimbStow()
+                ),
+                trackTower()
+        ).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+    }
+
+    public Command manualClimbUpCommand() {
+        return cmdClimbReach().onlyIf(() -> isClimbMode);
+    }
+
+    public Command manualClimbDownCommand() {
+        return cmdClimbStow().onlyIf(() -> isClimbMode);
+    }
+
+    public Command cmdClimbReach() {
+        return CatzClimb.Instance.setpointCommandWithWait(ClimbConstants.REACH_SETPOINT);
+    }
+
+    public Command cmdClimbStow() {
+        return CatzClimb.Instance.setpointCommandWithWait(ClimbConstants.STOW_SETPOINT);
     }
 }

@@ -21,7 +21,7 @@ public class Outpost_Climb extends AutoRoutineBase{
 
         traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        traj7.atTime("Score+StowIntake+TrackTower7").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        
         prepRoutine(
             traj1,
             Commands.deadline(

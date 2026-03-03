@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 
 public class Depot_Climb extends AutoRoutineBase{
     public Depot_Climb(){
@@ -47,15 +48,7 @@ public class Depot_Climb extends AutoRoutineBase{
                                    .andThen(CatzSuperstructure.Instance.intakeOFF()))
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj7),
-                    followTrajectory(traj8),
-                    followTrajectory(traj9)
-                ),
-                CatzSuperstructure.Instance.trackTower()
-                .alongWith(CatzSuperstructure.Instance.stowIntake())
-            ),
+            CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("Climb"),
             Commands.print("done")
         );

@@ -72,18 +72,14 @@ public class R2_IAS extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
 
             ),
-            Commands.deadline(
-                Commands.sequence(
-                    Commands.waitSeconds(5)
-                ),
-                shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
-                .alongWith(CatzSuperstructure.Instance.stowIntake())
-            ),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj14)
                 ),
-                CatzSuperstructure.Instance.trackTower()
+                CatzSuperstructure.Instance.trackTower().alongWith(CatzSuperstructure.Instance.stowIntake())
+
             ),
             Commands.print("Climb"),
             Commands.print("done")
