@@ -39,29 +39,27 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
                 ),
                 CatzSuperstructure.Instance.cmdHoardStandby()
             ),
-            followTrajectory(traj3),
-            followTrajectory(traj4),
-            followTrajectory(traj5),
-            followTrajectory(traj6),
-            followTrajectory(traj7),
-            followTrajectory(traj8),
             Commands.deadline(
                 Commands.sequence(
-                    Commands.waitSeconds(5)
+                    followTrajectory(traj3),
+                    followTrajectory(traj4),
+                    followTrajectory(traj5),
+                    followTrajectory(traj6)
+                ), 
+                CatzSuperstructure.Instance.cmdHoardShoot()
+            ),
+            CatzSuperstructure.Instance.cmdShooterStop(),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj7),
+                    followTrajectory(traj8),
+                    followTrajectory(traj9)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
-                .alongWith(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT))
             ),
-            followTrajectory(traj9),
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj10),
-                    followTrajectory(traj11)
-                ),
-                CatzSuperstructure.Instance.stowIntake()
-                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
-            ),
-            Commands.print("Climb"), //TODO
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            CatzSuperstructure.Instance.stowIntake(),
+            CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );
     }

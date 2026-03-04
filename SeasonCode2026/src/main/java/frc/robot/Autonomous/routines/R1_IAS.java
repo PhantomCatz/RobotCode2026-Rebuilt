@@ -28,13 +28,13 @@ public class R1_IAS extends AutoRoutineBase{
         // traj1.atTime("Intake1").onTrue();
         // traj5.atTime("StopIntake+RampUp5").onTrue(
                                                     // .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj6.atTime("Score6").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-        traj8.atTime("Intake8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj9.atTime("StopIntake+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                   .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj11.atTime("Score+StowIntake+TrackTower11").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
-                                                     .alongWith(CatzSuperstructure.Instance.stowIntake())
-                                                     .alongWith(CatzSuperstructure.Instance.trackTower()));
+        // traj6.atTime("Score6").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        // traj8.atTime("Intake8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        // traj9.atTime("StopIntake+RampUp9").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        //                                            .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
+        // traj11.atTime("Score+StowIntake+TrackTower11").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
+        //                                              .alongWith(CatzSuperstructure.Instance.stowIntake())
+        //                                              .alongWith(CatzSuperstructure.Instance.trackTower()));
 
         prepRoutine(
             traj1,
