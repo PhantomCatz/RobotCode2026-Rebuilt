@@ -19,6 +19,7 @@ import lombok.Getter;
 public class FieldConstants {
   public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
   public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
+  public static final double fieldXHalf = fieldLength / 2.0;
   public static final double fieldYHalf = fieldWidth / 2.0;
 
   public static final int aprilTagCount = AprilTagLayoutType.OFFICIAL.getLayout().getTags().size();
@@ -81,6 +82,9 @@ public class FieldConstants {
   public static final Distance HUB_HEIGHT = edu.wpi.first.units.Units.Inches.of(72.0);
   public static final Distance HUB_RIM_RADIUS = edu.wpi.first.units.Units.Inches.of(41.0/2.0);
   public static final double HEIGHT_DIFF = FieldConstants.HUB_HEIGHT.in(edu.wpi.first.units.Units.Meters) - TurretConstants.TURRET_HEIGHT.in(edu.wpi.first.units.Units.Meters);
+
+  public static final double BOTTOM_TRENCH_MAX_Y = 1.143760085105896;
+  public static final double TOP_TRENCH_MIN_Y = fieldWidth - BOTTOM_TRENCH_MAX_Y;
 
   public static Translation2d getClimbApriltagLocation(){
     return AllianceFlipUtil.apply(CLIMB_APRILTAG_POSE);

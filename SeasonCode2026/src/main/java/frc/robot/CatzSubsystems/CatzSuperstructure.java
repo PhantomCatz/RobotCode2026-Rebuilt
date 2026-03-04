@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
+import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -62,6 +63,14 @@ public class CatzSuperstructure {
         return AimCalculations.getHoardRegressionMode(getBaseTargetLocation(false));
     }
 
+    private double getRumbleStrength() {
+        Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
+        if (currentPose.getY() > FieldConstants.BOTTOM_TRENCH_MAX_Y && currentPose.getY() < FieldConstants.TOP_TRENCH_MIN_Y) {
+            return 0.0;
+        }
+        return 1.0 - Math.abs(currentPose.getX() - FieldConstants.fieldXHalf) / FieldConstants.fieldXHalf;
+    }
+
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
@@ -103,6 +112,7 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
+            RobotContainer.rumbleDrv(getRumbleStrength());
         } else {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
@@ -111,6 +121,7 @@ public class CatzSuperstructure {
                                                                                                            // at future
                                                                                                            // pose
             initialShootReady = false;
+            RobotContainer.rumbleDrv(0.0);
         }
     }
 
