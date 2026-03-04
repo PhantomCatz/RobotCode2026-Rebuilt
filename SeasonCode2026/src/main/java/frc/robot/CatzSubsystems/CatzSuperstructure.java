@@ -68,7 +68,7 @@ public class CatzSuperstructure {
         if (currentPose.getY() > FieldConstants.BOTTOM_TRENCH_MAX_Y && currentPose.getY() < FieldConstants.TOP_TRENCH_MIN_Y) {
             return 0.0;
         }
-        return 1.0 - Math.abs(currentPose.getX() - FieldConstants.fieldXHalf) / FieldConstants.fieldXHalf;
+        return 1.0 - Math.max(Math.abs(currentPose.getX() - FieldConstants.LEFT_TRENCH_X), Math.abs(currentPose.getX() - FieldConstants.RIGHT_TRENCH_X)) / FieldConstants.LEFT_TRENCH_X;
     }
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
@@ -136,7 +136,8 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
                 Commands.runOnce(() -> initialShootReady = false),
-                Commands.runOnce(() -> isScoring = false));
+                Commands.runOnce(() -> isScoring = false),
+                Commands.runOnce(() -> RobotContainer.rumbleDrv(0.0)));
     }
 
     public Command trackStaticHub() {

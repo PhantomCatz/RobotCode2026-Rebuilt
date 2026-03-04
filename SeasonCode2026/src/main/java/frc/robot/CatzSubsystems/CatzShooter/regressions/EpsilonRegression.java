@@ -13,15 +13,15 @@ public class EpsilonRegression {
                         // { 1.331, 28.5 }, // distance meters, flywheel rps
                         // { 2.915, 32.0 },
                         // { 4.780, 37.0 }
-                        { 1.263, 27.0 }, // distance meters, flywheel rps
-                        { 3.264, 31.5 },
-                        { 5.274, 38.5 }
+                        { 1.246, 29.5 }, // distance meters, flywheel rps
+                        { 2.877, 32.5 },
+                        { 5.256, 39.0 }
         };
 
         public static double[][] airtimeHub = {
-                        { 1.263, 0.875 }, // distance meters, time seconds
-                        { 3.264, 0.98 },
-                        { 5.274, 1.08 }
+                        { 1.246, 1.001 }, // distance meters, time seconds
+                        { 2.800, 1.016 },
+                        { 5.256, 1.24 }
         };
 
         /*

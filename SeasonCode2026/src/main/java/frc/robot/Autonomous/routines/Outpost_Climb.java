@@ -44,7 +44,7 @@ public class Outpost_Climb extends AutoRoutineBase{
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
             .deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand()),
             CatzSuperstructure.Instance.intakeOFF().andThen(CatzSuperstructure.Instance.deployIntake()),
-            
+
             CatzSuperstructure.Instance.autoClimbCommand(),
 
             Commands.print("Climb"), //TODO

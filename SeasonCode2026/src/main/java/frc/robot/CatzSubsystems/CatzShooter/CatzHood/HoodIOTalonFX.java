@@ -15,7 +15,6 @@ public class HoodIOTalonFX extends GenericTalonFXIOReal<HoodIO.HoodIOInputs> imp
         double feedforward;
         if(target == HoodConstants.HOOD_ZERO_POS.in(Units.Rotations)){
             feedforward = 0.0;
-            System.out.println("HOOD FF DISABLED!!!!");
         }else{
             feedforward = HoodConstants.hoodGravityFF.get() * Math.cos(CatzHood.Instance.getLatencyCompensatedPosition() * 2 * Math.PI - Math.toRadians(HoodConstants.hoodPhaseShift.get()));
         }
