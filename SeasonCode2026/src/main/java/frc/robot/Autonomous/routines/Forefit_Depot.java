@@ -31,7 +31,7 @@ public class Forefit_Depot extends AutoRoutineBase{
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2)
                 ),
-                CatzSuperstructure.Instance.cmdHoardStandby()
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
