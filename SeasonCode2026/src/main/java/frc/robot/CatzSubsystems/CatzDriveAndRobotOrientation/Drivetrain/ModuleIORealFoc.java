@@ -179,7 +179,11 @@ public class ModuleIORealFoc implements ModuleIO {
 
     // Refresh steer Motor Values
     inputs.rawAbsEncValueRotation = encoder.getPosition().getValueAsDouble();
-    inputs.steerAbsPosition       = Rotation2d.fromRotations(inputs.rawAbsEncValueRotation - absoluteEncoderOffset.getRotations());
+    if(inputs.isAbsEncoderConnected){
+      inputs.steerAbsPosition = Rotation2d.fromRotations(inputs.rawAbsEncValueRotation - absoluteEncoderOffset.getRotations());
+    }else{
+      inputs.steerAbsPosition = Rotation2d.fromRotations(steerPosition.getValueAsDouble() / MODULE_GAINS_AND_RATIOS.steerReduction());
+    }
 
     inputs.steerVelocityRadsPerSec = Units.rotationsToRadians(steerVelocity.getValueAsDouble());
     inputs.steerSupplyCurrentAmps  = steerSupplyCurrent.getValueAsDouble();
