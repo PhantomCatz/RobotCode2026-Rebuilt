@@ -37,21 +37,27 @@ public class FieldConstants {
   private static final double RUNG_SPACING = Units.inchesToMeters(32.250 + 2 * 1.50); //distance from center of climb to rung
   private static final double CLIMB_DISTANCE_AWAY = 0.3; //meters, distance from the tower we want to be when climbing
 
-  public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(-1.5);
-  public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(-1.5);
+  public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(1.5);
+  public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(1.5);
+
+  private static final double LEFT_X_OFFSET = Units.inchesToMeters(1.5);
+  private static final double RIGHT_X_OFFSET = Units.inchesToMeters(0.0);
+
+  private static final double LEFT_Y_OFFSET = Units.inchesToMeters(0.0);
+  private static final double RIGHT_Y_OFFSET = Units.inchesToMeters(2.5);
 
   public static final Translation2d ROBOT_CLIMB_OFFSET = new Translation2d(0, Units.inchesToMeters(35.0/2));
 
   private static final double CLIMB_CLOSE_BASE_X = Units.inchesToMeters(40.0 + 3.51/2.0);
 
   private static final Translation2d CLIMB_CLOSE_RIGHT_TARGET = new Translation2d(
-      CLIMB_CLOSE_BASE_X,
-      TOWER_Y_CENTER - (RUNG_SPACING / 2.0)
+      CLIMB_CLOSE_BASE_X + RIGHT_X_OFFSET,
+      TOWER_Y_CENTER - (RUNG_SPACING / 2.0) + RIGHT_Y_OFFSET
   );
 
   private static final Translation2d CLIMB_CLOSE_LEFT_TARGET = new Translation2d(
-      CLIMB_CLOSE_BASE_X,
-      TOWER_Y_CENTER + (RUNG_SPACING / 2.0)
+      CLIMB_CLOSE_BASE_X + LEFT_X_OFFSET,
+      TOWER_Y_CENTER + (RUNG_SPACING / 2.0) - LEFT_Y_OFFSET
   );
 
   private static final Pose2d CLIMB_CLOSE_RIGHT = new Pose2d(
@@ -85,8 +91,9 @@ public class FieldConstants {
 
   public static final double BOTTOM_TRENCH_MAX_Y = 1.143760085105896;
   public static final double TOP_TRENCH_MIN_Y = fieldWidth - BOTTOM_TRENCH_MAX_Y;
-  public static final double LEFT_TRENCH_X = 4.664850234985352;
+  public static final double LEFT_TRENCH_X = 4.6245880126953125;
   public static final double RIGHT_TRENCH_X = fieldLength - LEFT_TRENCH_X;
+  public static final double MIN_RUMBLE_DIST = LEFT_TRENCH_X - 2.846224308013916;
 
   public static Translation2d getClimbApriltagLocation(){
     return AllianceFlipUtil.apply(CLIMB_APRILTAG_POSE);

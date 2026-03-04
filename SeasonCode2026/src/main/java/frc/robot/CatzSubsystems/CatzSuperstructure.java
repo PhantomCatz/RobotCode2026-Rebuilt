@@ -68,7 +68,9 @@ public class CatzSuperstructure {
         if (currentPose.getY() > FieldConstants.BOTTOM_TRENCH_MAX_Y && currentPose.getY() < FieldConstants.TOP_TRENCH_MIN_Y) {
             return 0.0;
         }
-        return 1.0 - Math.max(Math.abs(currentPose.getX() - FieldConstants.LEFT_TRENCH_X), Math.abs(currentPose.getX() - FieldConstants.RIGHT_TRENCH_X)) / FieldConstants.LEFT_TRENCH_X;
+        double distFromTrench = Math.min(Math.abs(currentPose.getX() - FieldConstants.LEFT_TRENCH_X), Math.abs(currentPose.getX() - FieldConstants.RIGHT_TRENCH_X));
+        if (distFromTrench > FieldConstants.MIN_RUMBLE_DIST) return 0.0;
+        return 1.0 - distFromTrench / FieldConstants.MIN_RUMBLE_DIST;
     }
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
