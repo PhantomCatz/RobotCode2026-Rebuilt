@@ -43,10 +43,10 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    CatzSuperstructure.Instance.deployIntake(),
                     followTrajectory(traj2)
                 ), 
                 CatzSuperstructure.Instance.cmdHoardStandby()

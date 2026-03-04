@@ -16,8 +16,6 @@ public class Outpost_Climb extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Outpost_Climb",3);
         AutoTrajectory traj5 = getTrajectory("Outpost_Climb",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_Climb",5);
-        AutoTrajectory traj7 = getTrajectory("Outpost_Climb",6);
-        AutoTrajectory traj8 = getTrajectory("Outpost_Climb",7);
 
         traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -26,12 +24,12 @@ public class Outpost_Climb extends AutoRoutineBase{
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     followTrajectory(traj2)
                 ),
-                CatzSuperstructure.Instance.deployIntake()
-                .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
             followTrajectory(traj3),
             Commands.deadline(

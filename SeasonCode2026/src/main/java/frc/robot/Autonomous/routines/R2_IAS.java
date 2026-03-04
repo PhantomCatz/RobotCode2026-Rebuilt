@@ -37,6 +37,7 @@ public class R2_IAS extends AutoRoutineBase {
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     followTrajectory(traj2),
@@ -44,8 +45,7 @@ public class R2_IAS extends AutoRoutineBase {
                     followTrajectory(traj4),
                     followTrajectory(traj5)
                 ),
-                CatzSuperstructure.Instance.deployIntake()
-                    .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+                    CatzSuperstructure.Instance.trackStaticHub()
                     .alongWith(Commands.waitUntil(traj2.atTime("Intake2"))
                                    .andThen(CatzSuperstructure.Instance.intakeON()))
             ),

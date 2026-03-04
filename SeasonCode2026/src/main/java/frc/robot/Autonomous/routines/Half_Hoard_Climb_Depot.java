@@ -22,22 +22,22 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         AutoTrajectory traj10 = getTrajectory("Half_Hoard_Climb_Depot",9);
         AutoTrajectory traj11 = getTrajectory("Half_Hoard_Climb_Depot",10);
 
-        traj2.atTime("RampUp+Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-        traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj9.atTime("RampUp+IntakeStop9").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj2.atTime("RampUp+Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        // traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        // traj9.atTime("RampUp+IntakeStop9").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj10.atTime("Score+StowIntake+TrackTower10").onTrue();
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     followTrajectory(traj2)
                 ),
-                CatzSuperstructure.Instance.deployIntake()
-                .alongWith(CatzSuperstructure.Instance.cmdHoardStandby())
+                CatzSuperstructure.Instance.cmdHoardStandby()
             ),
             followTrajectory(traj3),
             followTrajectory(traj4),

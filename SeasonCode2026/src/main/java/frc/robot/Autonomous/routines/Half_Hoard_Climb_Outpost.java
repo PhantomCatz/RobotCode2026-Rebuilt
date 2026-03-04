@@ -35,6 +35,8 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     followTrajectory(traj2),
                     followTrajectory(traj3),
@@ -42,9 +44,8 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
                     followTrajectory(traj5),
                     followTrajectory(traj6)
                 ),
-                CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             followTrajectory(traj7),
             followTrajectory(traj8),
             Commands.deadline(

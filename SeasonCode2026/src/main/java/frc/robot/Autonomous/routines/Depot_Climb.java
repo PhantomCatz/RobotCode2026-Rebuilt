@@ -15,9 +15,7 @@ public class Depot_Climb extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
         AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
         AutoTrajectory traj6 = getTrajectory("Depot_Climb",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_Climb",6); //Climb paths
-        AutoTrajectory traj8 = getTrajectory("Depot_Climb",7);
-        AutoTrajectory traj9 = getTrajectory("Depot_Climb",8);
+
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -29,6 +27,7 @@ public class Depot_Climb extends AutoRoutineBase{
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
@@ -37,7 +36,7 @@ public class Depot_Climb extends AutoRoutineBase{
                     followTrajectory(traj4),
                     followTrajectory(traj5)
                 ),
-                CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 followTrajectory(traj6),
