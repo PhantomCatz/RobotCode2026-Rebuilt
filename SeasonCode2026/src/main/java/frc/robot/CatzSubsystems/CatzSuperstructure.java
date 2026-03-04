@@ -93,7 +93,7 @@ public class CatzSuperstructure {
 
         if (isShooting) {
             CatzTurret.Instance
-                    .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedTurretPose));
+                    .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedTurretPose, dist.in(Units.Meters)));
 
             if (isHub) {
                 CatzHood.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(

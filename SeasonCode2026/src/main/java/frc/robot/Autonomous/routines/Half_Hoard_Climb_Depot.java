@@ -45,7 +45,7 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
                     followTrajectory(traj4),
                     followTrajectory(traj5),
                     followTrajectory(traj6)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),
             CatzSuperstructure.Instance.cmdShooterStop(),

@@ -46,7 +46,7 @@ public class Forefit_Depot extends AutoRoutineBase{
             CatzSuperstructure.Instance.cmdShooterStop()
                 .alongWith(CatzSuperstructure.Instance.intakeOFF())
                 .alongWith(CatzSuperstructure.Instance.stowIntake()),
-                
+
             Commands.print("done")
         );
     }
