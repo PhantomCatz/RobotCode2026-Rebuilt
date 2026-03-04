@@ -1,7 +1,6 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -20,7 +19,7 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("PNZO",4);
         AutoTrajectory traj6 = getTrajectory("PNZO",5);
 
-        traj2.atTime("Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        // traj2.atTime("Intake2").onTrue();
         traj5.atTime("RampUp+StopIntake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
                                                .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)));
         traj6.atTime("RampUp+Intake6").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
@@ -30,14 +29,34 @@ public class PNZO extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectory(traj1),
-            followTrajectory(traj2),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectory(traj1),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj2)
+                ),
+                CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub())
+            ),
             followTrajectory(traj3),
             followTrajectory(traj4),
-            followTrajectory(traj5),
-            followTrajectory(traj6),
+            Commands.deadline(
+                Commands.sequence(
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj5)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            Commands.deadline(
+                Commands.sequence(
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj6)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
+            CatzSuperstructure.Instance.intakeOFF(),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
 
         );

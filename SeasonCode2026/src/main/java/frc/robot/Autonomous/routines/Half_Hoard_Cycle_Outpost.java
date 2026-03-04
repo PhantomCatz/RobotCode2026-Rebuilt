@@ -29,35 +29,60 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
         AutoTrajectory traj14 = getTrajectory("Half_Hoard_Cycle_Outpost",13);
 
 
-        traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
-        traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
-        traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-        traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        traj10.atTime("Score10").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-        traj11.atTime("Intake11").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
-        traj13.atTime("RampUp+IntakeStop13").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
-        prepRoutine(
+        // traj2.atTime("Intake+RampUp2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        //                                  .alongWith(CatzSuperstructure.Instance.cmdHoardStandby()));
+        // traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        // traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        // traj8.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        //                                  .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
+        // traj10.atTime("Score10").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+        // traj11.atTime("Intake11").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT));
+        // traj13.atTime("RampUp+IntakeStop13").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
+        //                                  .alongWith(CatzSuperstructure.Instance.cmdHubStandby()));
+        prepRoutine( // copy pasted from the depot counterpart cuz same event markers and waypoints i hope this actually works
             traj1,
-            Commands.runOnce(() -> CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.deployIntake().alongWith(CatzSuperstructure.Instance.trackStaticHub()))),
-            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-            followTrajectory(traj1),
-            followTrajectory(traj2),
+            Commands.deadline(
+                Commands.sequence(
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectory(traj1),
+                    CatzSuperstructure.Instance.intakeON(),
+                    CatzSuperstructure.Instance.deployIntake(),
+                    followTrajectory(traj2)
+                ), 
+                CatzSuperstructure.Instance.cmdHoardStandby()
+            ),
             followTrajectory(traj3),
             followTrajectory(traj4),
-            followTrajectory(traj5),
-            followTrajectory(traj6),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj5),
+                    followTrajectory(traj6)
+                ), 
+                CatzSuperstructure.Instance.cmdShooterStop()
+            ),           
             followTrajectory(traj7),
             followTrajectory(traj8),
-            followTrajectory(traj9),
+            Commands.deadline(
+                Commands.sequence(
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj9)
+                ), 
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
             followTrajectory(traj10),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectory(traj11),
+            CatzSuperstructure.Instance.intakeON(),
             followTrajectory(traj12),
             followTrajectory(traj13),
-            followTrajectory(traj14),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
+            CatzSuperstructure.Instance.intakeOFF(),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj14)
+                ), 
+                CatzSuperstructure.Instance.cmdHubStandby() 
+            ),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
         );
     }

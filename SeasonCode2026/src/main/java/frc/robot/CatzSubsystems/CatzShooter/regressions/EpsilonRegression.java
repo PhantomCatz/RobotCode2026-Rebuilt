@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
 public class EpsilonRegression {
 
-        // TODO decrease angle by 3 degrees
         // Hub Scoring
         public static final double[] CLOSEST_HOOD_ANGLE_HUB = { 1.557, 22.0 }; // low
         // arc. static shooting

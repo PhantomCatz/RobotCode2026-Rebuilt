@@ -29,8 +29,8 @@ public class R2_IAS extends AutoRoutineBase {
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
 
-        traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj11.atTime("IntakeStop+RampUp11").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj11.atTime("IntakeStop+RampUp11").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj13.atTime("Score+StowIntake+TrackTower13")
 
         prepRoutine(
@@ -48,7 +48,6 @@ public class R2_IAS extends AutoRoutineBase {
                     .alongWith(CatzSuperstructure.Instance.trackStaticHub())
                     .alongWith(Commands.waitUntil(traj2.atTime("Intake2"))
                                    .andThen(CatzSuperstructure.Instance.intakeON()))
-
             ),
             Commands.deadline(
                 Commands.sequence(
@@ -59,23 +58,23 @@ public class R2_IAS extends AutoRoutineBase {
                 .alongWith(Commands.waitUntil(traj6.atTime("IntakeStop+RampUp6"))
                                    .andThen(CatzSuperstructure.Instance.intakeOFF()))
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT).alongWith(CatzSuperstructure.Instance.jiggleIntakeCommand()),
-            CatzSuperstructure.Instance.intakeOFF().andThen(CatzSuperstructure.Instance.deployIntake()),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectory(traj8),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj9),
+                    CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj10),
+                    CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj11),
                     followTrajectory(traj12),
-                    followTrajectory(traj13)
+                    followTrajectory(traj13),
+                    followTrajectory(traj14)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
 
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT).alongWith(CatzSuperstructure.Instance.jiggleIntakeCommand()),
-            CatzSuperstructure.Instance.intakeOFF().andThen(CatzSuperstructure.Instance.deployIntake()),
-
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("Climb"),
             Commands.print("done")

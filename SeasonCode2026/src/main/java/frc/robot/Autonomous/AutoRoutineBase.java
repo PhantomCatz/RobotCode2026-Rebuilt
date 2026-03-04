@@ -36,7 +36,9 @@ public class AutoRoutineBase {
             Commands.print("shootAllBalls command"),
             CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
             CatzSuperstructure.Instance.cmdShooterStop()
-        );
+        ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
+        .andThen(CatzSuperstructure.Instance.intakeOFF()
+        .andThen(CatzSuperstructure.Instance.deployIntake()));
     }
 
     protected Command followTrajectory(AutoTrajectory traj) {
