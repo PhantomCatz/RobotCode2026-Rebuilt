@@ -17,8 +17,8 @@ public class Outpost_Climb extends AutoRoutineBase{
         AutoTrajectory traj5 = getTrajectory("Outpost_Climb",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_Climb",5);
 
-        traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.intakeOFF());
 
         prepRoutine(
             traj1,

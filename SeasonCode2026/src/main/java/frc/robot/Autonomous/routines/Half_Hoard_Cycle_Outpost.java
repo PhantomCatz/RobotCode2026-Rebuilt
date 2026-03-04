@@ -1,13 +1,10 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 
 public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
     public Half_Hoard_Cycle_Outpost(){
@@ -48,7 +45,7 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHoardStandby()
             ),
             followTrajectory(traj3),
@@ -57,16 +54,16 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
                 Commands.sequence(
                     followTrajectory(traj5),
                     followTrajectory(traj6)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdShooterStop()
-            ),           
+            ),
             followTrajectory(traj7),
             followTrajectory(traj8),
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj9)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             followTrajectory(traj10),
@@ -79,8 +76,8 @@ public class Half_Hoard_Cycle_Outpost extends AutoRoutineBase{
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj14)
-                ), 
-                CatzSuperstructure.Instance.cmdHubStandby() 
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")

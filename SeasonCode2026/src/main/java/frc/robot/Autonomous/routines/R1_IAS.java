@@ -1,7 +1,6 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -55,7 +54,7 @@ public class R1_IAS extends AutoRoutineBase{
             Commands.deadline(
                 Commands.sequence(
                 followTrajectory(traj5)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
@@ -65,15 +64,15 @@ public class R1_IAS extends AutoRoutineBase{
                     followTrajectory(traj7),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj8)
-                ), 
+                ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            
+
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj9)
-                ), 
+                ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             followTrajectory(traj10),
