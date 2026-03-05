@@ -159,11 +159,11 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
     }
 
     @Override
-    public void useSoftLimits(boolean enable) {
-        this.softLimitsEnabled = enable;
+    public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
+        this.softLimitsEnabled = forward || reverse;
         UnaryOperator<TalonFXConfiguration> configChanger = (config) -> {
-            config.SoftwareLimitSwitch.ForwardSoftLimitEnable = enable;
-            config.SoftwareLimitSwitch.ReverseSoftLimitEnable = enable;
+            config.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
+            config.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
             return config;
         };
         changeMainConfig(configChanger);

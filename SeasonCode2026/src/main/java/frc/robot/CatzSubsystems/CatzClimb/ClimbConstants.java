@@ -2,6 +2,7 @@ package frc.robot.CatzSubsystems.CatzClimb;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -34,7 +35,7 @@ public class ClimbConstants {
     };
 
     // private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    // private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
+    // private static final LoggedTunableNumber kI = new LoggedTunableNumber("sFlywheels/kI", gains.kI());
     // private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
     // private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
     // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
@@ -61,11 +62,15 @@ public class ClimbConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 300.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
 
 
 		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number

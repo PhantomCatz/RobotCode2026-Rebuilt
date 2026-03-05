@@ -2,6 +2,8 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
@@ -456,5 +458,31 @@ public class CatzSuperstructure {
 
     public Command cmdClimbStow() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
+    }
+    public Command manualExtendClimb() {
+        return CatzClimb.Instance.followSetpointCommand(() -> {
+            if(Math.abs(RobotContainer.xboxTest.getLeftY()) < 0.07){
+                return Setpoint.withVoltageSetpoint(0.0);
+            }
+            double input = -(RobotContainer.xboxTest.getLeftY()) * 12;
+            Logger.recordOutput("Climb Xbox Voltage Input", input);
+            return Setpoint.withVoltageSetpoint(input);
+        });
+    }
+
+    public Command resetClimbPose(){
+        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+    public Command enableClimbSoftLimit(){
+        return Commands.runOnce(() -> {
+            CatzClimb.Instance.setSoftLimitsEnabled(false, true);
+        });
+    }
+
+    public Command disableClimbSoftLimit(){
+        return Commands.runOnce(() -> {
+            CatzClimb.Instance.setSoftLimitsEnabled(false, false);
+        });
     }
 }

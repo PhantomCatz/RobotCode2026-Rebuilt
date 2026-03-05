@@ -255,6 +255,23 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	/**
+     * Explicitly sets the enable state of the forward and reverse soft limits.
+     *
+     * @param enableForward True to enable the forward soft limit, false to disable.
+     * @param enableReverse True to enable the reverse soft limit, false to disable.
+     */
+	@Override
+    public void setSoftLimitsEnabled(boolean enableForward, boolean enableReverse) {
+        UnaryOperator<TalonFXConfiguration> configChanger = (cfg) -> {
+            cfg.SoftwareLimitSwitch.ForwardSoftLimitEnable = enableForward;
+            cfg.SoftwareLimitSwitch.ReverseSoftLimitEnable = enableReverse;
+            return cfg;
+        };
+
+        changeAllConfig(configChanger);
+    }
+
+	/**
 	 *
 	 * Applies a TalonFXConfiguration to all follower motors.
 	 *

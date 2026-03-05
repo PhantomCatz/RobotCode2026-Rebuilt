@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
@@ -27,9 +28,9 @@ public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
   private final CatzDrivetrain drivetrain = CatzDrivetrain.getInstance();
 
-  private static final CommandXboxController xboxDrv = new CommandXboxController(0);
-  private static final CommandXboxController xboxTest = new CommandXboxController(1);
-  private static final CommandXboxController xboxFunctional = new CommandXboxController(4);
+  public static final CommandXboxController xboxDrv = new CommandXboxController(0);
+  public static final CommandXboxController xboxTest = new CommandXboxController(1);
+  public static final CommandXboxController xboxFunctional = new CommandXboxController(4);
 
   public RobotContainer() {
     configureBindings();
@@ -37,6 +38,7 @@ public class RobotContainer {
     var turret = CatzTurret.Instance;
     var tracker = CatzRobotTracker.Instance;
     var vision = LimelightSubsystem.Instance;
+    var climb = CatzClimb.Instance;
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
 
   }
@@ -113,6 +115,11 @@ public class RobotContainer {
     xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
     // xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
     xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
+
+    xboxTest.y().onTrue(superstructure.manualExtendClimb());
+    xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
+    xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
+    xboxTest.povRight().onTrue(superstructure.resetClimbPose());
 
     xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
 

@@ -52,7 +52,7 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
    *
    * @param enable Whether to enable or disbale soft limits. True is enable, false is disable.
    */
-  public default void useSoftLimits(boolean enable) {}
+  public default void setSoftLimitsEnabled(boolean forward, boolean reverse) {}
 
   /**
    * Sets the motor to be idle. Should not be called directly, only applied through Setpoints.
