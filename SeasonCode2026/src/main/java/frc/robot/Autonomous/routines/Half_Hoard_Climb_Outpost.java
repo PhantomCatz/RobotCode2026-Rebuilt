@@ -9,7 +9,15 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
     public Half_Hoard_Climb_Outpost(){
         super("Half_Hoard_Climb_Outpost");
-
+/*
+ *
+ *
+ *
+ * Out of service - noo half hoaard inn Hueneme
+ *
+ *
+ *
+ */
         AutoTrajectory traj1 = getTrajectory("Half_Hoard_Climb_Outpost",0);
         AutoTrajectory traj2 = getTrajectory("Half_Hoard_Climb_Outpost",1);
         AutoTrajectory traj3 = getTrajectory("Half_Hoard_Climb_Outpost",2);

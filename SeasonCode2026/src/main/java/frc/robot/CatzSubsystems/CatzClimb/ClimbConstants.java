@@ -17,7 +17,7 @@ import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
 public class ClimbConstants {
-	private static final double SPOOL_DIAMETER_INCH = 0.95;
+	private static final double SPOOL_DIAMETER_INCH = 1.5;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 
 	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(5.0));
