@@ -23,6 +23,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Half_Hoard_Cycle_Depot", () -> new Half_Hoard_Cycle_Depot().getRoutine());
         autoSelector.addRoutine("Half_Hoard_Cycle_Outpost", () -> new Half_Hoard_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Climb", () -> new Outpost_2_Cycle_Climb().getRoutine());
+        autoSelector.addRoutine("Outpost_3_Cycle", () -> new Outpost_3_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_Climb", () -> new Outpost_Climb().getRoutine());
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
 
