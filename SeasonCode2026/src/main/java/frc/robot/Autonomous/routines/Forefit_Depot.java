@@ -33,9 +33,9 @@ public class Forefit_Depot extends AutoRoutineBase{
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
+            followTrajectory(traj3),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj3),
                     followTrajectory(traj4),
                     followTrajectory(traj5),
                     followTrajectory(traj6),

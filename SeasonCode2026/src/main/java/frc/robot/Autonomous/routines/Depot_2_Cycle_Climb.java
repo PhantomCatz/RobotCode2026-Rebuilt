@@ -6,22 +6,21 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class R1_IAS extends AutoRoutineBase{
-    public R1_IAS(){
-        super("R1_IAS");
+public class Depot_2_Cycle_Climb extends AutoRoutineBase{
+    public Depot_2_Cycle_Climb(){
+        super("Depot_2_Cycle_Climb");
 
-        AutoTrajectory traj1 = getTrajectory("R1_IAS",0);
-        AutoTrajectory traj2 = getTrajectory("R1_IAS",1);
-        AutoTrajectory traj3 = getTrajectory("R1_IAS",2);
-        AutoTrajectory traj4 = getTrajectory("R1_IAS",3);
-        AutoTrajectory traj5 = getTrajectory("R1_IAS",4);
-        AutoTrajectory traj6 = getTrajectory("R1_IAS",5);
-        AutoTrajectory traj7 = getTrajectory("R1_IAS",6);
-        AutoTrajectory traj8 = getTrajectory("R1_IAS",7);
-        AutoTrajectory traj9 = getTrajectory("R1_IAS",8);
-        AutoTrajectory traj10 = getTrajectory("R1_IAS",9);
-        AutoTrajectory traj11 = getTrajectory("R1_IAS",10);
-        AutoTrajectory traj12 = getTrajectory("R1_IAS",11);
+        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Climb",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Climb",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Climb",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Climb",3);
+        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Climb",4);
+        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Climb",5);
+        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_Climb",6);
+        AutoTrajectory traj8 = getTrajectory("Depot_2_Cycle_Climb",7);
+        AutoTrajectory traj9 = getTrajectory("Depot_2_Cycle_Climb",8);
+        AutoTrajectory traj10 = getTrajectory("Depot_2_Cycle_Climb",9);
+        AutoTrajectory traj11 = getTrajectory("Depot_2_Cycle_Climb",10);
 
         // traj1.atTime("Intake1").onTrue();
         // traj5.atTime("StopIntake+RampUp5").onTrue(
@@ -50,34 +49,31 @@ public class R1_IAS extends AutoRoutineBase{
             ),
             CatzSuperstructure.Instance.intakeOFF(),
             Commands.deadline(
-                Commands.sequence(
-                followTrajectory(traj5)
-                ),
+                followTrajectory(traj5),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
+            followTrajectory(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj6),
                     followTrajectory(traj7),
-                    CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj8)
+                    followTrajectory(traj8),
+                    CatzSuperstructure.Instance.intakeON()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-
+            CatzSuperstructure.Instance.intakeOFF(),
+            followTrajectory(traj9),
             Commands.deadline(
                 Commands.sequence(
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj9)
+                    followTrajectory(traj10),
+                    followTrajectory(traj11)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectory(traj10),
+            CatzSuperstructure.Instance.stowIntake(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             CatzSuperstructure.Instance.autoClimbCommand(),
-            // followTrajectory(traj11),
-            // followTrajectory(traj12),
             Commands.print("done")
         );
     }
