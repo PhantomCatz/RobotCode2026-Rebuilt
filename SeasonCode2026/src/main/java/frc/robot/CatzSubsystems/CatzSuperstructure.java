@@ -197,7 +197,7 @@ public class CatzSuperstructure {
 
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
-    private boolean isIntakeDeployed = false;
+    public boolean isIntakeDeployed = false;
     private boolean isIntakeOn = false;
 
     // public Command toggleIntakeDeploy() {
@@ -237,6 +237,7 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
             isIntakeDeployed = false;
+
         });
     }
 
