@@ -18,10 +18,10 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Depot_Climb", () -> new Depot_Climb().getRoutine());
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
         autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
-        autoSelector.addRoutine("Half_Hoard_Climb_Depot", () -> new Half_Hoard_Climb_Depot().getRoutine());
-        autoSelector.addRoutine("Half_Hoard_Climb_Outpost", () -> new Half_Hoard_Climb_Outpost().getRoutine());
-        autoSelector.addRoutine("Half_Hoard_Cycle_Depot", () -> new Half_Hoard_Cycle_Depot().getRoutine());
-        autoSelector.addRoutine("Half_Hoard_Cycle_Outpost", () -> new Half_Hoard_Cycle_Outpost().getRoutine());
+        // autoSelector.addRoutine("Half_Hoard_Climb_Depot", () -> new Half_Hoard_Climb_Depot().getRoutine());
+        // autoSelector.addRoutine("Half_Hoard_Climb_Outpost", () -> new Half_Hoard_Climb_Outpost().getRoutine());
+        // autoSelector.addRoutine("Half_Hoard_Cycle_Depot", () -> new Half_Hoard_Cycle_Depot().getRoutine());
+        // autoSelector.addRoutine("Half_Hoard_Cycle_Outpost", () -> new Half_Hoard_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Climb", () -> new Outpost_2_Cycle_Climb().getRoutine());
         autoSelector.addRoutine("Outpost_3_Cycle", () -> new Outpost_3_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_Climb", () -> new Outpost_Climb().getRoutine());
