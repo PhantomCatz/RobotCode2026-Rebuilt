@@ -64,7 +64,6 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()                    
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             followTrajectory(traj12),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
