@@ -13,7 +13,7 @@ public class AutoRoutineSelector {
 
     private AutoRoutineSelector(){
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
-        
+
         autoSelector.addRoutine("Depot_2_Cycle_Climb", () -> new Depot_2_Cycle_Climb().getRoutine());
         autoSelector.addRoutine("Depot_Climb", () -> new Depot_Climb().getRoutine());
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());

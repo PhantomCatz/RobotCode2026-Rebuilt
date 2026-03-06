@@ -61,7 +61,7 @@ public class Outpost_2_Cycle_Climb extends AutoRoutineBase {
                     followTrajectory(traj10),
                     followTrajectory(traj11)
                 ),
-                CatzSuperstructure.Instance.cmdHubStandby()                    
+                CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             // CatzSuperstructure.Instance.autoClimbCommand(),
