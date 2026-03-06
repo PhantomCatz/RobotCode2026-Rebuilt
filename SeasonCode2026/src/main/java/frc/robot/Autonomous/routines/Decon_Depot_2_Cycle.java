@@ -12,15 +12,12 @@ public class Decon_Depot_2_Cycle extends AutoRoutineBase{
 
         AutoTrajectory traj1 = getTrajectory("Decon_Depot_2_Cycle",0);
         AutoTrajectory traj2 = getTrajectory("Decon_Depot_2_Cycle",1);
-        AutoTrajectory traj3 = getTrajectory("Decon_Depot_2_Cycle",2);
-        AutoTrajectory traj4 = getTrajectory("Decon_Depot_2_Cycle",3);
-        AutoTrajectory traj5 = getTrajectory("Decon_Depot_2_Cycle",4);
-        AutoTrajectory traj6 = getTrajectory("Decon_Depot_2_Cycle",5);
-        AutoTrajectory traj7 = getTrajectory("Decon_Depot_2_Cycle",6);
-        AutoTrajectory traj8 = getTrajectory("Decon_Depot_2_Cycle",7);
-        AutoTrajectory traj9 = getTrajectory("Decon_Depot_2_Cycle",8);
-        AutoTrajectory traj10 = getTrajectory("Decon_Depot_2_Cycle",9);
-        AutoTrajectory traj11 = getTrajectory("Decon_Depot_2_Cycle",10);
+        AutoTrajectory traj5 = getTrajectory("Decon_Depot_2_Cycle",2);
+        AutoTrajectory traj6 = getTrajectory("Decon_Depot_2_Cycle",3);
+        AutoTrajectory traj7 = getTrajectory("Decon_Depot_2_Cycle",4);
+        AutoTrajectory traj9 = getTrajectory("Decon_Depot_2_Cycle",5);
+        AutoTrajectory traj10 = getTrajectory("Decon_Depot_2_Cycle",6);
+        AutoTrajectory traj11 = getTrajectory("Decon_Depot_2_Cycle",7);
 
         // traj1.atTime("Intake1").onTrue();
         // traj5.atTime("StopIntake+RampUp5").onTrue(
@@ -42,8 +39,6 @@ public class Decon_Depot_2_Cycle extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
                     CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj5)
                 ),
@@ -57,7 +52,6 @@ public class Decon_Depot_2_Cycle extends AutoRoutineBase{
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj7),
-                    followTrajectory(traj8),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj9),
                     CatzSuperstructure.Instance.intakeOFF(),

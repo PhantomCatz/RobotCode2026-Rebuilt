@@ -12,15 +12,12 @@ public class Decon_Outpost_2_Cycle_Climb extends AutoRoutineBase {
 
         AutoTrajectory traj1 = getTrajectory("Decon_Outpost_2_Cycle_Climb",0);
         AutoTrajectory traj2 = getTrajectory("Decon_Outpost_2_Cycle_Climb",1);
-        AutoTrajectory traj3 = getTrajectory("Decon_Outpost_2_Cycle_Climb",2);
-        AutoTrajectory traj4 = getTrajectory("Decon_Outpost_2_Cycle_Climb",3);
-        AutoTrajectory traj5 = getTrajectory("Decon_Outpost_2_Cycle_Climb",4);
-        AutoTrajectory traj6 = getTrajectory("Decon_Outpost_2_Cycle_Climb",5);
-        AutoTrajectory traj7 = getTrajectory("Decon_Outpost_2_Cycle_Climb",6);
-        AutoTrajectory traj8 = getTrajectory("Decon_Outpost_2_Cycle_Climb",7);
-        AutoTrajectory traj9 = getTrajectory("Decon_Outpost_2_Cycle_Climb",8);
-        AutoTrajectory traj10 = getTrajectory("Decon_Outpost_2_Cycle_Climb",9);
-        AutoTrajectory traj11 = getTrajectory("Decon_Outpost_2_Cycle_Climb",10);
+        AutoTrajectory traj5 = getTrajectory("Decon_Outpost_2_Cycle_Climb",3);
+        AutoTrajectory traj6 = getTrajectory("Decon_Outpost_2_Cycle_Climb",4);
+        AutoTrajectory traj7 = getTrajectory("Decon_Outpost_2_Cycle_Climb",5);
+        AutoTrajectory traj9 = getTrajectory("Decon_Outpost_2_Cycle_Climb",6);
+        AutoTrajectory traj10 = getTrajectory("Decon_Outpost_2_Cycle_Climb",7);
+        AutoTrajectory traj11 = getTrajectory("Decon_Outpost_2_Cycle_Climb",8);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -39,8 +36,6 @@ public class Decon_Outpost_2_Cycle_Climb extends AutoRoutineBase {
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
                     CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj5)
                 ),
@@ -54,7 +49,6 @@ public class Decon_Outpost_2_Cycle_Climb extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj7),
-                    followTrajectory(traj8),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj9),
                     CatzSuperstructure.Instance.intakeOFF(),

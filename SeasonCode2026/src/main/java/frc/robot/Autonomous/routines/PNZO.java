@@ -12,9 +12,6 @@ public class PNZO extends AutoRoutineBase{
 
         AutoTrajectory traj1 = getTrajectory("PNZO",0);
         AutoTrajectory traj2 = getTrajectory("PNZO",1);
-        AutoTrajectory traj3 = getTrajectory("PNZO",2);
-        AutoTrajectory traj4 = getTrajectory("PNZO",3);
-        AutoTrajectory traj5 = getTrajectory("PNZO",4);
         AutoTrajectory traj6 = getTrajectory("PNZO",5);
 
         // traj2.atTime("Intake2").onTrue();
@@ -34,10 +31,7 @@ public class PNZO extends AutoRoutineBase{
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
-                    followTrajectory(traj5)
+                    followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
