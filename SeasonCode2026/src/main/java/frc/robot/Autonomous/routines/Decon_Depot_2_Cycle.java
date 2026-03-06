@@ -6,21 +6,21 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_2_Cycle_Climb extends AutoRoutineBase{
-    public Depot_2_Cycle_Climb(){
-        super("Depot_2_Cycle_Climb");
+public class Decon_Depot_2_Cycle extends AutoRoutineBase{
+    public Decon_Depot_2_Cycle(){
+        super("Decon_Depot_2_Cycle");
 
-        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Climb",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Climb",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Climb",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Climb",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Climb",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Climb",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_Climb",6);
-        AutoTrajectory traj8 = getTrajectory("Depot_2_Cycle_Climb",7);
-        AutoTrajectory traj9 = getTrajectory("Depot_2_Cycle_Climb",8);
-        AutoTrajectory traj10 = getTrajectory("Depot_2_Cycle_Climb",9);
-        AutoTrajectory traj11 = getTrajectory("Depot_2_Cycle_Climb",10);
+        AutoTrajectory traj1 = getTrajectory("Decon_Depot_2_Cycle",0);
+        AutoTrajectory traj2 = getTrajectory("Decon_Depot_2_Cycle",1);
+        AutoTrajectory traj3 = getTrajectory("Decon_Depot_2_Cycle",2);
+        AutoTrajectory traj4 = getTrajectory("Decon_Depot_2_Cycle",3);
+        AutoTrajectory traj5 = getTrajectory("Decon_Depot_2_Cycle",4);
+        AutoTrajectory traj6 = getTrajectory("Decon_Depot_2_Cycle",5);
+        AutoTrajectory traj7 = getTrajectory("Decon_Depot_2_Cycle",6);
+        AutoTrajectory traj8 = getTrajectory("Decon_Depot_2_Cycle",7);
+        AutoTrajectory traj9 = getTrajectory("Decon_Depot_2_Cycle",8);
+        AutoTrajectory traj10 = getTrajectory("Decon_Depot_2_Cycle",9);
+        AutoTrajectory traj11 = getTrajectory("Decon_Depot_2_Cycle",10);
 
         // traj1.atTime("Intake1").onTrue();
         // traj5.atTime("StopIntake+RampUp5").onTrue(
