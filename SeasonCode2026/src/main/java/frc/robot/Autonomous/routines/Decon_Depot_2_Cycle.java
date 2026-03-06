@@ -73,7 +73,7 @@ public class Decon_Depot_2_Cycle extends AutoRoutineBase{
             ),
             CatzSuperstructure.Instance.stowIntake(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.autoClimbCommand(),
+            // CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );
     }
