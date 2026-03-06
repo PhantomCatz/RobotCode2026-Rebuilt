@@ -39,6 +39,7 @@ public class Depot_2_Cycle extends AutoRoutineBase{
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),
@@ -52,7 +53,7 @@ public class Depot_2_Cycle extends AutoRoutineBase{
                 followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("done")
         );
     }

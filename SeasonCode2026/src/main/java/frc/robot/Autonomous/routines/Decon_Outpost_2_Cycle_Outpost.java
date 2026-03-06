@@ -15,9 +15,9 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj5 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",2);
         AutoTrajectory traj6 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",3);
         AutoTrajectory traj7 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",4);
-        AutoTrajectory traj9 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",5);
-        AutoTrajectory traj10 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",6);
-        AutoTrajectory traj12 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",7);
+        AutoTrajectory traj8 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",5);
+        AutoTrajectory traj9 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",6);
+        AutoTrajectory traj10 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",7);
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
@@ -50,19 +50,19 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 Commands.sequence(
                     followTrajectory(traj7),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj9),
+                    followTrajectory(traj8),
                     CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj10)
+                    followTrajectory(traj9)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj12)
+                    followTrajectoryWithAccuracy(traj10)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
     }

@@ -12,7 +12,7 @@ public class PNZO extends AutoRoutineBase{
 
         AutoTrajectory traj1 = getTrajectory("PNZO",0);
         AutoTrajectory traj2 = getTrajectory("PNZO",1);
-        AutoTrajectory traj6 = getTrajectory("PNZO",5);
+        AutoTrajectory traj3 = getTrajectory("PNZO",2);
 
         // traj2.atTime("Intake2").onTrue();
         // traj5.atTime("RampUp+StopIntake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
@@ -30,19 +30,17 @@ public class PNZO extends AutoRoutineBase{
                 Commands.sequence(
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2)
+                    followTrajectory(traj2),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectoryWithAccuracy(traj6)
-                ),
+                followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
 
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
 
         );

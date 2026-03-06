@@ -36,7 +36,7 @@ public class Decon_Depot_1_Cycle extends AutoRoutineBase{
                 followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("Climb"),
             Commands.print("done")
         );

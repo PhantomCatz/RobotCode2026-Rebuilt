@@ -43,6 +43,7 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),
@@ -58,7 +59,7 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
     }
