@@ -15,9 +15,9 @@ public class AutoRoutineSelector {
 
         autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
         autoSelector.addRoutine("Decon_Depot_2_Cycle", () -> new Decon_Depot_2_Cycle().getRoutine());
-        autoSelector.addRoutine("Decon_Outpost_2_Cycle_Climb", () -> new Decon_Outpost_2_Cycle_Climb().getRoutine());
+        // autoSelector.addRoutine("Decon_Outpost_2_Cycle_Climb", () -> new Decon_Outpost_2_Cycle_Climb().getRoutine());
         autoSelector.addRoutine("Decon_Outpost_2_Cycle_Outpost", () -> new Decon_Outpost_2_Cycle_Outpost().getRoutine());
-        autoSelector.addRoutine("Decon_Outpost_Climb", () -> new Decon_Outpost_Climb().getRoutine());
+        // autoSelector.addRoutine("Decon_Outpost_Climb", () -> new Decon_Outpost_Climb().getRoutine());
         autoSelector.addRoutine("Decon_PNZO", () -> new Decon_PNZO().getRoutine());
         autoSelector.addRoutine("Depot_1_Cycle", () -> new Depot_1_Cycle().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle", () -> new Depot_2_Cycle().getRoutine());

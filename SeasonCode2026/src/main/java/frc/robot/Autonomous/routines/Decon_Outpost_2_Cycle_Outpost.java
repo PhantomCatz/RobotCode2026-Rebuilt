@@ -35,17 +35,17 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-
                     CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj5)
                 ),
-                    CatzSuperstructure.Instance.trackStaticHub()
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj6),
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj7),

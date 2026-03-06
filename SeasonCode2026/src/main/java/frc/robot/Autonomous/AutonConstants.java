@@ -14,5 +14,5 @@ public class AutonConstants {
     public static final double OUTPOST_SCORING_WAIT = 6.0;
 
     public static final double ARTIFICIAL_PING_SEC = 0.15;
-    public static final double DEPLOY_INTAKE_WAIT = 1.0; //try 0.6
+    public static final double DEPLOY_INTAKE_WAIT = 0.7; //try 0.6
 }

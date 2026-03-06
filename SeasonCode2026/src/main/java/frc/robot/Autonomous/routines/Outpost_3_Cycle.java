@@ -44,7 +44,7 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj5),
+                followTrajectoryWithAccuracy(traj5),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
@@ -58,9 +58,7 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj11)
-                ),
+                followTrajectoryWithAccuracy(traj11),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
@@ -75,7 +73,7 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj16),
+                followTrajectoryWithAccuracy(traj16),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),

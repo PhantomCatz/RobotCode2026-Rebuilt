@@ -45,10 +45,11 @@ public class Decon_Depot_2_Cycle extends AutoRoutineBase{
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj6),
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj7),
@@ -61,7 +62,7 @@ public class Decon_Depot_2_Cycle extends AutoRoutineBase{
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj11)
+                    followTrajectoryWithAccuracy(traj11)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
