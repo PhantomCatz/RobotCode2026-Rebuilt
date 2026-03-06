@@ -23,7 +23,7 @@ public class IntakeDeployConstants {
 
 	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
 	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
-	public static final double JIGGLE_FREQUENCY = 1.5; //times per second
+	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
 
 	//STOW POSITION: -60.0
 	public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));

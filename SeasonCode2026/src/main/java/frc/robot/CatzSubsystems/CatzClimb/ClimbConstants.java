@@ -73,7 +73,7 @@ public class ClimbConstants {
 
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 12.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 27.0; //TODO dont use magic number
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

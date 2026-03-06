@@ -58,7 +58,7 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj12)
+                    followTrajectoryWithAccuracy(traj12)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
