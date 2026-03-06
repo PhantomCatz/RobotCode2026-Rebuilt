@@ -13,11 +13,6 @@ public class Forefit_Outpost extends AutoRoutineBase{
 
         AutoTrajectory traj1 = getTrajectory("Forefit_Outpost",0);
         AutoTrajectory traj2 = getTrajectory("Forefit_Outpost",1);
-        AutoTrajectory traj3 = getTrajectory("Forefit_Outpost",2);
-        AutoTrajectory traj4 = getTrajectory("Forefit_Outpost",3);
-        AutoTrajectory traj5 = getTrajectory("Forefit_Outpost",4);
-        AutoTrajectory traj6 = getTrajectory("Forefit_Outpost",5);
-        AutoTrajectory traj7 = getTrajectory("Forefit_Outpost",6);
 
         // traj2.atTime("Intake+RampUp2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj3.atTime("Hoard3").onTrue();
@@ -29,24 +24,16 @@ public class Forefit_Outpost extends AutoRoutineBase{
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
-                    followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeON()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj3),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj4),
-                    followTrajectory(traj5),
-                    followTrajectory(traj6),
-                    followTrajectory(traj7)
-                ),
+                followTrajectory(traj2),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),
             CatzSuperstructure.Instance.cmdShooterStop()
-                .alongWith(CatzSuperstructure.Instance.intakeOFF())
-                .alongWith(CatzSuperstructure.Instance.stowIntake()),
+                .alongWith(CatzSuperstructure.Instance.intakeOFF()),
 
             Commands.print("done")
         );

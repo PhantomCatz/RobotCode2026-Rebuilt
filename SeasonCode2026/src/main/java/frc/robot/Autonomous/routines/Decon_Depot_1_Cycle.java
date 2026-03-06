@@ -12,11 +12,6 @@ public class Decon_Depot_1_Cycle extends AutoRoutineBase{
         AutoTrajectory traj1 = getTrajectory("Decon_Depot_1_Cycle",0);
         AutoTrajectory traj2 = getTrajectory("Decon_Depot_1_Cycle",1);
         AutoTrajectory traj3 = getTrajectory("Decon_Depot_1_Cycle",2);
-        AutoTrajectory traj4 = getTrajectory("Decon_Depot_1_Cycle",3);
-        AutoTrajectory traj5 = getTrajectory("Decon_Depot_1_Cycle",4);
-        AutoTrajectory traj6 = getTrajectory("Decon_Depot_1_Cycle",5);
-        AutoTrajectory traj7 = getTrajectory("Decon_Depot_1_Cycle",6);
-
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -33,20 +28,15 @@ public class Decon_Depot_1_Cycle extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
-                    followTrajectory(traj5),
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj6)
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj7),
+                followTrajectory(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            // CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("Climb"),
             Commands.print("done")
         );
