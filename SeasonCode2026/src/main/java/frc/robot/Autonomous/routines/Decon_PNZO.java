@@ -12,10 +12,10 @@ public class Decon_PNZO extends AutoRoutineBase{
 
         AutoTrajectory traj1 = getTrajectory("Decon_PNZO",0);
         AutoTrajectory traj2 = getTrajectory("Decon_PNZO",1);
+        // AutoTrajectory traj3 = getTrajectory("Decon_PNZO",2);
+        // AutoTrajectory traj4 = getTrajectory("Decon_PNZO",3);
         AutoTrajectory traj3 = getTrajectory("Decon_PNZO",2);
         AutoTrajectory traj4 = getTrajectory("Decon_PNZO",3);
-        AutoTrajectory traj5 = getTrajectory("Decon_PNZO",4);
-        AutoTrajectory traj6 = getTrajectory("Decon_PNZO",5);
 
         // traj2.atTime("Intake2").onTrue();
         // traj5.atTime("RampUp+StopIntake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
@@ -35,21 +35,13 @@ public class Decon_PNZO extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4)
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj3)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj5)
-                ),
-                CatzSuperstructure.Instance.cmdHubStandby()
-            ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            Commands.deadline(
-                followTrajectory(traj6),
+                followTrajectory(traj4),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),

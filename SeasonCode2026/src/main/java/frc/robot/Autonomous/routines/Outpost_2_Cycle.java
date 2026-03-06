@@ -51,20 +51,24 @@ public class Outpost_2_Cycle extends AutoRoutineBase {
             ),
             followTrajectory(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            followTrajectory(traj7),
-            followTrajectory(traj8),
-            CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj9),
-            CatzSuperstructure.Instance.intakeOFF(),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj7),
+                    followTrajectory(traj8),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj9),
+                    CatzSuperstructure.Instance.intakeOFF()
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj10),
                     followTrajectory(traj11)
                 ),
-                CatzSuperstructure.Instance.cmdHubStandby()                    
+                CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            Commands.print("Climb"),
             Commands.print("done")
         );
     }

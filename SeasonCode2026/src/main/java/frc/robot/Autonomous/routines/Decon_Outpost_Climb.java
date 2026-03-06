@@ -29,21 +29,21 @@ public class Decon_Outpost_Climb extends AutoRoutineBase{
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2)
+                    followTrajectory(traj2),
+                    followTrajectory(traj3),
+                    followTrajectory(traj4),
+                    followTrajectory(traj5),
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj6)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj3),
-            followTrajectory(traj4),
-            followTrajectory(traj5),
-            CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj6),
             Commands.deadline(
                 followTrajectory(traj7),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.autoClimbCommand(),
+            // CatzSuperstructure.Instance.autoClimbCommand(),
 
             Commands.print("done")
         );

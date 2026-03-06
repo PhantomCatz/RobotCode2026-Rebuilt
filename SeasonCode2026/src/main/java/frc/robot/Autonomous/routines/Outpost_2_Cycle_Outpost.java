@@ -22,6 +22,7 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj10 = getTrajectory("Outpost_2_Cycle_Outpost",9);
         AutoTrajectory traj11 = getTrajectory("Outpost_2_Cycle_Outpost",10);
         AutoTrajectory traj12 = getTrajectory("Outpost_2_Cycle_Outpost",11);
+        AutoTrajectory traj13 = getTrajectory("Outpost_2_Cycle_Outpost",12);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -52,19 +53,25 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
             ),
             followTrajectory(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            followTrajectory(traj7),
-            followTrajectory(traj8),
-            CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj9),
-            CatzSuperstructure.Instance.intakeOFF(),
             Commands.deadline(
                 Commands.sequence(
+                    followTrajectory(traj7),
+                    followTrajectory(traj8),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj9),
+                    CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectory(traj10),
                     followTrajectory(traj11)
                 ),
-                CatzSuperstructure.Instance.cmdHubStandby()                    
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj12),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj12),
+                    followTrajectory(traj13)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
         );

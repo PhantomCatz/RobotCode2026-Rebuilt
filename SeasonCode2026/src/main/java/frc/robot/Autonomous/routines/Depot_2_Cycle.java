@@ -15,11 +15,7 @@ public class Depot_2_Cycle extends AutoRoutineBase{
         AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle",3);
         AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle",4);
         AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle",6);
-        AutoTrajectory traj8 = getTrajectory("Depot_2_Cycle",7);
-        AutoTrajectory traj9 = getTrajectory("Depot_2_Cycle",8);
-        AutoTrajectory traj10 = getTrajectory("Depot_2_Cycle",9);
-        AutoTrajectory traj11 = getTrajectory("Depot_2_Cycle",10);
+
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -34,36 +30,28 @@ public class Depot_2_Cycle extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4)
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            CatzSuperstructure.Instance.intakeOFF(),
             Commands.deadline(
-                followTrajectory(traj5),
+                followTrajectory(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectory(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj7),
-                    followTrajectory(traj8),
-                    CatzSuperstructure.Instance.intakeON()
+                    followTrajectory(traj4),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj5),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj9),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj10),
-                    followTrajectory(traj11)
-                ),
+                followTrajectory(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            CatzSuperstructure.Instance.stowIntake(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
         );

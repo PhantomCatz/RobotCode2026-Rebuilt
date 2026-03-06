@@ -36,22 +36,19 @@ public class PNZO extends AutoRoutineBase{
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
                     followTrajectory(traj3),
-                    followTrajectory(traj4)
+                    followTrajectory(traj4),
+                    followTrajectory(traj5)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj5)
+                    followTrajectory(traj6)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            Commands.deadline(
-                followTrajectory(traj6),
-                CatzSuperstructure.Instance.cmdHubStandby()
-            ),
+
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.print("done")
 

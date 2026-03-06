@@ -39,6 +39,8 @@ public class RobotContainer {
     var tracker = CatzRobotTracker.Instance;
     var vision = LimelightSubsystem.Instance;
     var climb = CatzClimb.Instance;
+    var superstructure = CatzSuperstructure.Instance;
+    System.out.println(superstructure);
     var regression = ShooterRegression.TUNABLE_HOOD_ANGLE_MIN;
 
   }
@@ -61,7 +63,7 @@ public class RobotContainer {
     // HOARDING (Left Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.leftBumper().whileTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+    xboxDrv.leftBumper().whileTrue(superstructure.cmdHoardShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
     xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));

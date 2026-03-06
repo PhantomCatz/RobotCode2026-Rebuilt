@@ -12,10 +12,6 @@ public class Depot_1_Cycle extends AutoRoutineBase{
         AutoTrajectory traj1 = getTrajectory("Depot_1_Cycle",0);
         AutoTrajectory traj2 = getTrajectory("Depot_1_Cycle",1);
         AutoTrajectory traj3 = getTrajectory("Depot_1_Cycle",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_1_Cycle",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_1_Cycle",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_1_Cycle",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_1_Cycle",6);
 
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
@@ -33,16 +29,12 @@ public class Depot_1_Cycle extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
-                    followTrajectory(traj5)
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj6),
             Commands.deadline(
-                followTrajectory(traj7),
+                followTrajectory(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),

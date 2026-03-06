@@ -35,12 +35,12 @@ public class Decon_Depot_1_Cycle extends AutoRoutineBase{
                     followTrajectory(traj2),
                     followTrajectory(traj3),
                     followTrajectory(traj4),
-                    followTrajectory(traj5)
+                    followTrajectory(traj5),
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj6)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj6),
             Commands.deadline(
                 followTrajectory(traj7),
                 CatzSuperstructure.Instance.cmdHubStandby()

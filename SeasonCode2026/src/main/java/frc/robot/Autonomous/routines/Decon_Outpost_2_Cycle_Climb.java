@@ -41,24 +41,29 @@ public class Decon_Outpost_2_Cycle_Climb extends AutoRoutineBase {
                     followTrajectory(traj2),
                     followTrajectory(traj3),
                     followTrajectory(traj4),
-                    CatzSuperstructure.Instance.intakeOFF()
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj5)
                 ),
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj5),
+                followTrajectory(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectory(traj6),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            followTrajectory(traj7),
-            followTrajectory(traj8),
-            CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj9),
-            CatzSuperstructure.Instance.intakeOFF(),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj10),
+                    followTrajectory(traj7),
+                    followTrajectory(traj8),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj9),
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj10)
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            Commands.deadline(
+                Commands.sequence(
                     followTrajectory(traj11)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
