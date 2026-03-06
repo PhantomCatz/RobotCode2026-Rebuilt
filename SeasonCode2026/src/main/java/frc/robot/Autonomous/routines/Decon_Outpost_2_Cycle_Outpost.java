@@ -6,21 +6,22 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Outpost_2_Cycle_Climb extends AutoRoutineBase {
-    public Outpost_2_Cycle_Climb(){
-        super("Outpost_2_Cycle_Climb");
+public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
+    public Decon_Outpost_2_Cycle_Outpost(){
+        super("Decon_Outpost_2_Cycle_Outpost");
 
-        AutoTrajectory traj1 = getTrajectory("Outpost_2_Cycle_Climb",0);
-        AutoTrajectory traj2 = getTrajectory("Outpost_2_Cycle_Climb",1);
-        AutoTrajectory traj3 = getTrajectory("Outpost_2_Cycle_Climb",2);
-        AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Climb",3);
-        AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Climb",4);
-        AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Climb",5);
-        AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Climb",6);
-        AutoTrajectory traj8 = getTrajectory("Outpost_2_Cycle_Climb",7);
-        AutoTrajectory traj9 = getTrajectory("Outpost_2_Cycle_Climb",8);
-        AutoTrajectory traj10 = getTrajectory("Outpost_2_Cycle_Climb",9);
-        AutoTrajectory traj11 = getTrajectory("Outpost_2_Cycle_Climb",10);
+        AutoTrajectory traj1 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",0);
+        AutoTrajectory traj2 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",1);
+        AutoTrajectory traj3 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",2);
+        AutoTrajectory traj4 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",3);
+        AutoTrajectory traj5 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",4);
+        AutoTrajectory traj6 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",5);
+        AutoTrajectory traj7 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",6);
+        AutoTrajectory traj8 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",7);
+        AutoTrajectory traj9 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",8);
+        AutoTrajectory traj10 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",9);
+        AutoTrajectory traj11 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",10);
+        AutoTrajectory traj12 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",11);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -63,9 +64,8 @@ public class Outpost_2_Cycle_Climb extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()                    
             ),
+            followTrajectory(traj12),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.autoClimbCommand(),
-            Commands.print("Climb"),
             Commands.print("done")
         );
     }

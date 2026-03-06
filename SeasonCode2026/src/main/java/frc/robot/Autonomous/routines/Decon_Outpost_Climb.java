@@ -6,23 +6,20 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_Climb extends AutoRoutineBase{
-    public Depot_Climb(){
-        super("Depot_Climb");
-        AutoTrajectory traj1 = getTrajectory("Depot_Climb",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_Climb",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_Climb",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_Climb",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_Climb",6);
+public class Decon_Outpost_Climb extends AutoRoutineBase{
+    public Decon_Outpost_Climb(){
+        super("Decon_Outpost_Climb");
 
+        AutoTrajectory traj1 = getTrajectory("Decon_Outpost_Climb",0);
+        AutoTrajectory traj2 = getTrajectory("Decon_Outpost_Climb",1);
+        AutoTrajectory traj3 = getTrajectory("Decon_Outpost_Climb",2);
+        AutoTrajectory traj4 = getTrajectory("Decon_Outpost_Climb",3);
+        AutoTrajectory traj5 = getTrajectory("Decon_Outpost_Climb",4);
+        AutoTrajectory traj6 = getTrajectory("Decon_Outpost_Climb",5);
+        AutoTrajectory traj7 = getTrajectory("Decon_Outpost_Climb",6);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        // traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        // traj7.atTime("StowIntake+TrackTower7").onTrue();
-
-
+        // traj4.atTime("IntakeStop+RampUp4").onTrue(CatzSuperstructure.Instance.intakeOFF());
 
         prepRoutine(
             traj1,
@@ -32,13 +29,13 @@ public class Depot_Climb extends AutoRoutineBase{
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
-                    followTrajectory(traj5)
+                    followTrajectory(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
+            followTrajectory(traj3),
+            followTrajectory(traj4),
+            followTrajectory(traj5),
             CatzSuperstructure.Instance.intakeOFF(),
             followTrajectory(traj6),
             Commands.deadline(
@@ -47,7 +44,7 @@ public class Depot_Climb extends AutoRoutineBase{
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             CatzSuperstructure.Instance.autoClimbCommand(),
-            Commands.print("Climb"),
+
             Commands.print("done")
         );
     }

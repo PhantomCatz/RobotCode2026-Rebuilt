@@ -8,26 +8,26 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Outpost_3_Cycle extends AutoRoutineBase {
-    public Outpost_3_Cycle(){
-        super("Outpost_3_Cycle");
+public class Depot_3_Cycle extends AutoRoutineBase {
+    public Depot_3_Cycle(){
+        super("Depot_3_Cycle");
 
-        AutoTrajectory traj1 = getTrajectory("Outpost_3_Cycle",0);
-        AutoTrajectory traj2 = getTrajectory("Outpost_3_Cycle",1);
-        AutoTrajectory traj3 = getTrajectory("Outpost_3_Cycle",2);
-        AutoTrajectory traj4 = getTrajectory("Outpost_3_Cycle",3);
-        AutoTrajectory traj5 = getTrajectory("Outpost_3_Cycle",4);
-        AutoTrajectory traj6 = getTrajectory("Outpost_3_Cycle",5);
-        AutoTrajectory traj7 = getTrajectory("Outpost_3_Cycle",6);
-        AutoTrajectory traj8 = getTrajectory("Outpost_3_Cycle",7);
-        AutoTrajectory traj9 = getTrajectory("Outpost_3_Cycle",8);
-        AutoTrajectory traj10 = getTrajectory("Outpost_3_Cycle",9);
-        AutoTrajectory traj11 = getTrajectory("Outpost_3_Cycle",10);
-        AutoTrajectory traj12 = getTrajectory("Outpost_3_Cycle",11);
-        AutoTrajectory traj13 = getTrajectory("Outpost_3_Cycle",12);
-        AutoTrajectory traj14 = getTrajectory("Outpost_3_Cycle",13);
-        AutoTrajectory traj15 = getTrajectory("Outpost_3_Cycle",14);
-        AutoTrajectory traj16 = getTrajectory("Outpost_3_Cycle",15);
+        AutoTrajectory traj1 = getTrajectory("Depot_3_Cycle",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_3_Cycle",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_3_Cycle",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_3_Cycle",3);
+        AutoTrajectory traj5 = getTrajectory("Depot_3_Cycle",4);
+        AutoTrajectory traj6 = getTrajectory("Depot_3_Cycle",5);
+        AutoTrajectory traj7 = getTrajectory("Depot_3_Cycle",6);
+        AutoTrajectory traj8 = getTrajectory("Depot_3_Cycle",7);
+        AutoTrajectory traj9 = getTrajectory("Depot_3_Cycle",8);
+        AutoTrajectory traj10 = getTrajectory("Depot_3_Cycle",9);
+        AutoTrajectory traj11 = getTrajectory("Depot_3_Cycle",10);
+        AutoTrajectory traj12 = getTrajectory("Depot_3_Cycle",11);
+        AutoTrajectory traj13 = getTrajectory("Depot_3_Cycle",12);
+        AutoTrajectory traj14 = getTrajectory("Depot_3_Cycle",13);
+        AutoTrajectory traj15 = getTrajectory("Depot_3_Cycle",14);
+        AutoTrajectory traj16 = getTrajectory("Depot_3_Cycle",15);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
