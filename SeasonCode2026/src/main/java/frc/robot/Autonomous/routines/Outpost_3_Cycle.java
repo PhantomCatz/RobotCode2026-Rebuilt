@@ -70,7 +70,6 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
                     followTrajectory(traj7),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj8),
-                    // followTrajectory(traj9),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()

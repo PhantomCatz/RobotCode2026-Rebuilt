@@ -32,32 +32,31 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectory(traj1),
+                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2),
+                    followTrajectory(traj2).alongWith(Commands.print("traj2")),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj3),
+                followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("traj3")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj4),
+                    followTrajectory(traj4).alongWith(Commands.print("traj4")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj5),
-                    // followTrajectory(traj6),
+                    followTrajectory(traj5).alongWith(Commands.print("traj5")),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6)
+                    followTrajectoryWithAccuracy(traj6).alongWith(Commands.print("traj6"))
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),

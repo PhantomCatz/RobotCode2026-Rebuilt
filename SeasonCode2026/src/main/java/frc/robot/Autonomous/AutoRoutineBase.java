@@ -7,6 +7,7 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -41,6 +42,7 @@ public class AutoRoutineBase {
         .andThen(CatzSuperstructure.Instance.deployIntake()));
     }
 
+    private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {
             final Command choreoCommand = traj.cmd();
@@ -48,6 +50,7 @@ public class AutoRoutineBase {
                     () -> {
                         CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
+                        pathStartTime = Timer.getFPGATimestamp();
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
@@ -58,6 +61,7 @@ public class AutoRoutineBase {
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
         return Commands.sequence(
                 // Initial trajectory following
+                Commands.runOnce(()->pathStartTime = Timer.getFPGATimestamp()),
                 traj.cmd(),
 
                 new FunctionalCommand(
@@ -95,14 +99,14 @@ public class AutoRoutineBase {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
         // System.out.println((isAtTrans && isAtRot));
-        return isAtTrans && isAtRot;
+        return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
     private boolean isAtLoosePose(AutoTrajectory trajectory) {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_ANGLE_DEG);
 
-        return isAtTrans && isAtRot;
+        return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
     private boolean rotationIsFinished(AutoTrajectory trajectory, double epsilonAngleDeg) {

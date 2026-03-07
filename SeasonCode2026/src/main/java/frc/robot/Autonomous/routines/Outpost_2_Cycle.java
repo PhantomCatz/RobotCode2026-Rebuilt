@@ -50,7 +50,6 @@ public class Outpost_2_Cycle extends AutoRoutineBase {
                     followTrajectory(traj4),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj5),
-                    // followTrajectory(traj6),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
