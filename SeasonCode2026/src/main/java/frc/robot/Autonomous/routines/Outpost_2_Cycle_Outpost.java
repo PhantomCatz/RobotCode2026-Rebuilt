@@ -16,7 +16,7 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Outpost",3);
         AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Outpost",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Outpost",5);
-        AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Outpost",6);
+        // AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Outpost",6);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -50,14 +50,14 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                     followTrajectory(traj4),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj5),
-                    followTrajectory(traj6),
+                    // followTrajectory(traj6),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj7)
+                    followTrajectoryWithAccuracy(traj6)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),

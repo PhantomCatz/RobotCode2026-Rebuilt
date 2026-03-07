@@ -20,7 +20,7 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
         AutoTrajectory traj7 = getTrajectory("Outpost_3_Cycle",6);
         AutoTrajectory traj8 = getTrajectory("Outpost_3_Cycle",7);
         AutoTrajectory traj9 = getTrajectory("Outpost_3_Cycle",8);
-        AutoTrajectory traj10 = getTrajectory("Outpost_3_Cycle",9);
+        // AutoTrajectory traj10 = getTrajectory("Outpost_3_Cycle",9);
 
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
@@ -70,13 +70,13 @@ public class Outpost_3_Cycle extends AutoRoutineBase {
                     followTrajectory(traj7),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj8),
-                    followTrajectory(traj9),
+                    // followTrajectory(traj9),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj10),
+                followTrajectoryWithAccuracy(traj9),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
