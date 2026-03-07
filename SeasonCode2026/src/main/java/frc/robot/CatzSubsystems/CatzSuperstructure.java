@@ -75,6 +75,9 @@ public class CatzSuperstructure {
         return 1.0 - distFromTrench / FieldConstants.MIN_RUMBLE_DIST;
     }
 
+    private boolean isIntakeOn = false;
+
+
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
@@ -117,6 +120,9 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
             RobotContainer.rumbleDrv(getRumbleStrength());
+            if(isIntakeOn){
+                RobotContainer.rumbleDrv(0.05);
+            }
         } else {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
@@ -200,7 +206,6 @@ public class CatzSuperstructure {
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
     private boolean isIntakeDeployed = false;
-    private boolean isIntakeOn = false;
 
     // public Command toggleIntakeDeploy() {
     // return Commands.runOnce(() -> {
@@ -263,9 +268,11 @@ public class CatzSuperstructure {
             if (isIntakeOn) {
                 isIntakeOn = false;
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
+                RobotContainer.rumbleDrv(0.0);
             } else {
                 isIntakeOn = true;
                 CatzIntakeRoller.Instance.applySetpoint(Setpoint.withVoltageSetpoint(IntakeRollerConstants.ON_SETPOINT_LOG.get()));
+                RobotContainer.rumbleDrv(0.05);
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
