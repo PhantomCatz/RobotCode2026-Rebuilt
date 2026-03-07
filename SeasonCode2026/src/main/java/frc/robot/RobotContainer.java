@@ -149,7 +149,7 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS
     // -------------------------------------------------------------------------
-
+    //x on the drv controller to stop
     xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
     xboxFunctional.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
 
