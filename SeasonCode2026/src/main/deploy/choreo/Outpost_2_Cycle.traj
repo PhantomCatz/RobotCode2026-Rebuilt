@@ -11,7 +11,7 @@
     {"x":6.243539810180664, "y":0.6823198795318604, "heading":3.141592653589793, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":3.445305824279785, "y":0.6167726516723633, "heading":3.141592653589793, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.434184551239014, "y":0.6167726516723633, "heading":3.141592653589793, "intervals":50, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":5.750937461853027, "y":4.002296447753906, "heading":1.5707963267948966, "intervals":50, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":5.750937461853027, "y":4.002296447753906, "heading":1.5707963267948966, "intervals":50, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.418949604034424, "y":0.6433424353599548, "heading":3.141592653589793, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":3.5344295501708984, "y":0.5848724246025085, "heading":3.141592653589793, "intervals":28, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -42,7 +42,7 @@
     {"x":{"exp":"6.243539810180664 m", "val":6.243539810180664}, "y":{"exp":"0.6823198795318604 m", "val":0.6823198795318604}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.445305824279785 m", "val":3.445305824279785}, "y":{"exp":"0.6167726516723633 m", "val":0.6167726516723633}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.434184551239014 m", "val":6.434184551239014}, "y":{"exp":"0.6167726516723633 m", "val":0.6167726516723633}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":50, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"5.750937461853027 m", "val":5.750937461853027}, "y":{"exp":"4.002296447753906 m", "val":4.002296447753906}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":50, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"5.750937461853027 m", "val":5.750937461853027}, "y":{"exp":"4.002296447753906 m", "val":4.002296447753906}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":50, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.418949604034424 m", "val":6.418949604034424}, "y":{"exp":"0.6433424353599548 m", "val":0.6433424353599548}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":32, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.5344295501708984 m", "val":3.5344295501708984}, "y":{"exp":"0.5848724246025085 m", "val":0.5848724246025085}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":28, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -483,7 +483,7 @@
     {"t":12.88176, "x":3.55051, "y":0.5852, "heading":-3.14142, "vx":-0.38356, "vy":-0.00777, "omega":-0.00269, "ax":4.57308, "ay":0.09253, "alpha":0.02831, "fx":[77.78999,77.78388,77.78341,77.78957], "fy":[1.41932,1.72228,1.72895,1.42481]},
     {"t":12.9237, "x":3.53845, "y":0.58495, "heading":-3.14153, "vx":-0.19178, "vy":-0.00389, "omega":-0.0015, "ax":4.57332, "ay":0.09268, "alpha":0.0358, "fx":[77.79495,77.78722,77.78664,77.79445], "fy":[1.38107,1.76399,1.77268,1.38788]},
     {"t":12.96564, "x":3.53443, "y":0.58487, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,38,192,224,257,357]
+  "splits":[0,38,192,224,257,307,357]
  },
  "events":[
    {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.52539, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
