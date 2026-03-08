@@ -41,7 +41,9 @@ public class Outpost_1_Cycle_Outpost extends AutoRoutineBase {
                 followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("traj3")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT)
+            shootAllBallsNoJiggle(3),
+            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            Commands.print("Done")
         );
     }
 }

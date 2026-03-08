@@ -244,6 +244,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+    CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+    CatzSuperstructure.Instance.isIntakeDeployed = true;
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

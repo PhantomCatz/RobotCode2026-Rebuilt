@@ -153,15 +153,15 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
     xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
-    xboxFunctional.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
-
     xboxFunctional.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxFunctional.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
     xboxFunctional.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxFunctional.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    xboxFunctional.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxFunctional.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+
 
   }
 

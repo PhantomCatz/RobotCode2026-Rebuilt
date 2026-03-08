@@ -48,8 +48,7 @@ public class AutoRoutineBase {
             CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
             CatzSuperstructure.Instance.cmdShooterStop()
         )
-        .andThen(CatzSuperstructure.Instance.intakeOFF()
-        .andThen(CatzSuperstructure.Instance.deployIntake()));
+        .andThen(CatzSuperstructure.Instance.intakeOFF());
     }
 
     private double pathStartTime = 0.0;
