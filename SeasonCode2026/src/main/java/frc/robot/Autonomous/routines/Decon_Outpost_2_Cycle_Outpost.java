@@ -44,7 +44,7 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
             Commands.deadline(
                 Commands.sequence(

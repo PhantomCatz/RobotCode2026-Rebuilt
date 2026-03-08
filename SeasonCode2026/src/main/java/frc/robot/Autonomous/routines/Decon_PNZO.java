@@ -28,7 +28,7 @@ public class Decon_PNZO extends AutoRoutineBase{
         prepRoutine(
             traj1,
             CatzSuperstructure.Instance.deployIntake(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
+            shootAllBallsNoJiggle(AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj1),

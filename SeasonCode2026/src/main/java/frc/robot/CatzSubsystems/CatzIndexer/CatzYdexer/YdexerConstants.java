@@ -19,6 +19,7 @@ public class YdexerConstants {
 	private static final Voltage ON_VOLTS = Units.Volts.of(8.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
+	public static final Setpoint REVERSE = Setpoint.withVoltageSetpoint(ON_VOLTS.times(-1.0));
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {

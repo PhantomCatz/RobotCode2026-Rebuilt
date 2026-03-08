@@ -42,6 +42,16 @@ public class AutoRoutineBase {
         .andThen(CatzSuperstructure.Instance.deployIntake()));
     }
 
+    protected Command shootAllBallsNoJiggle(double time){
+        return Commands.sequence(
+            Commands.print("shootAllBalls w/out jiggle command"),
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
+            CatzSuperstructure.Instance.cmdShooterStop()
+        )
+        .andThen(CatzSuperstructure.Instance.intakeOFF()
+        .andThen(CatzSuperstructure.Instance.deployIntake()));
+    }
+
     private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {

@@ -203,6 +203,10 @@ public class CatzSuperstructure {
         this.currentHoardType = type;
     }
 
+    public Command reverseIndexers(){
+        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.REVERSE).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.REVERSE));
+    }
+
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
     private boolean isIntakeDeployed = false;
