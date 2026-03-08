@@ -12,12 +12,10 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
 
         AutoTrajectory traj1 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",0);
         AutoTrajectory traj2 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",1);
-        AutoTrajectory traj5 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",2);
-        AutoTrajectory traj6 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",3);
-        AutoTrajectory traj7 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",4);
-        AutoTrajectory traj8 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",5);
-        AutoTrajectory traj9 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",6);
-        AutoTrajectory traj10 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",7);
+        AutoTrajectory traj3 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",2);
+        AutoTrajectory traj4 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",3);
+        AutoTrajectory traj5 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",4);
+        AutoTrajectory traj6 = getTrajectory("Decon_Outpost_2_Cycle_Outpost",5);
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
@@ -32,33 +30,31 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectory(traj1),
+                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2),
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj5)
+                    followTrajectory(traj2).alongWith(Commands.print("traj2")),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
-                CatzSuperstructure.Instance.trackStaticHub()
+                    CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj6),
+                followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("traj3")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj7),
+                    followTrajectory(traj4).alongWith(Commands.print("traj4")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj8),
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj9)
+                    followTrajectory(traj5).alongWith(Commands.print("traj5")),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj10)
+                    followTrajectoryWithAccuracy(traj6).alongWith(Commands.print("traj6"))
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
