@@ -25,6 +25,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
         autoSelector.addRoutine("Forefit_Outpost", () -> new Forefit_Outpost().getRoutine());
         autoSelector.addRoutine("MiddlePath", () -> new MiddlePath().getRoutine());
+        autoSelector.addRoutine("Outpost_1_Cycle_Outpost", () -> new Outpost_1_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Outpost_1_Cycle", () -> new Outpost_1_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Outpost", () -> new Outpost_2_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle", () -> new Outpost_2_Cycle().getRoutine());
