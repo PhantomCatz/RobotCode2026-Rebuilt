@@ -21,6 +21,7 @@ public class FieldConstants {
   public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
   public static final double fieldXHalf = fieldLength / 2.0;
   public static final double fieldYHalf = fieldWidth / 2.0;
+  public static final double fieldTrenchX = 4.645359992980957;
 
   public static final int aprilTagCount = AprilTagLayoutType.OFFICIAL.getLayout().getTags().size();
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
