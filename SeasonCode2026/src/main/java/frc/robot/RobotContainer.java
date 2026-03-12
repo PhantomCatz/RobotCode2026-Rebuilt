@@ -1,5 +1,6 @@
 package frc.robot;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -152,17 +153,16 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
-    xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+    xboxFunctional.povRight().multiPress(10, 1).onTrue(CatzSuperstructure.Instance.durrr());
+    xboxFunctional.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxFunctional.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    xboxFunctional.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
     xboxFunctional.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxFunctional.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    xboxFunctional.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
-
-
+    xboxFunctional.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+    xboxFunctional.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
   }
 
   public static void rumbleDrv(double val) {

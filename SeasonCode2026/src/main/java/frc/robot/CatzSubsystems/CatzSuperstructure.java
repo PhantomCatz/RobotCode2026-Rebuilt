@@ -410,6 +410,11 @@ public class CatzSuperstructure {
         }, Set.of(CatzFlywheels.Instance));
     }
 
+    public Command durrr() {
+        return Commands.runOnce(() -> {
+            System.out.println("evan SUCKS");
+        });
+    }
     // public Command turretManualCommand() {
     // return CatzTurret.Instance.followSetpointCommand(() -> {
 
