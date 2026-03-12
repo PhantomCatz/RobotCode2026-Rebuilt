@@ -1,6 +1,7 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,6 +10,8 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
+import frc.robot.Utilities.ModuleLimits;
+import frc.robot.Utilities.SwerveSetpointGenerator;
 
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -37,9 +40,7 @@ public class TeleopDriveCmd extends Command {
 
   private double lockedDriveDirectionX = 0.0;
   private double lockedDriveDirectionY = 0.0;
-  private double lockedSpeed = 0.0;
-  private boolean wasScoring = false;
-  private static final double SHOOTING_JOYSTICK_DEADBAND = 0.4;
+  private boolean wasSpeeding = false;
 
   // --------------------------------------------------------------------------------------
   //
@@ -92,37 +93,43 @@ public class TeleopDriveCmd extends Command {
     }
 
     boolean isScoring = CatzSuperstructure.Instance.getIsScoring();
+    boolean isSpeeding = CatzSuperstructure.Instance.getIsScoring();
     double currentMagnitude = Math.hypot(joyX, joyY);
 
     double finalVelX = 0.0;
     double finalVelY = 0.0;
 
+    turningVelocity = Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
+        ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
+        : 0.0;
+
     if (isScoring) {
-      if (!wasScoring) {
-        // Button was just pressed
-        // Lock in the exact speed and direction you are currently driving
-        if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
-          lockedDriveDirectionX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-          lockedDriveDirectionY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-
-          // Calculate and save the absolute speed
-          lockedSpeed = Math.hypot(lockedDriveDirectionX, lockedDriveDirectionY);
-        } else {
-          lockedDriveDirectionX = 0.0;
-          lockedDriveDirectionY = 0.0;
-          lockedSpeed = 0.0;
+      if (isSpeeding) {
+        if (!wasSpeeding) {
+          // Button was just pressed
+          // Lock in the exact speed and direction you are currently driving
+          if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+            // Drive at max speed in the joystick direction
+            double joySpeed = Math.hypot(joyX, joyY);
+            double scale = DriveConstants.DRIVE_CONFIG.maxLinearVelocity() / joySpeed;
+            lockedDriveDirectionX = joyX * scale;
+            lockedDriveDirectionY = joyY * scale;
+          } else {
+            // Don't move
+            lockedDriveDirectionX = 0.0;
+            lockedDriveDirectionY = 0.0;
+          }
         }
-      } else if (currentMagnitude > SHOOTING_JOYSTICK_DEADBAND) {
-        // Button is being held and driver pushed stick hard to change direction
-        // Normalize the joystick vector and multiply by our saved lockedSpeed
-        lockedDriveDirectionX = (joyX / currentMagnitude) * lockedSpeed;
-        lockedDriveDirectionY = (joyY / currentMagnitude) * lockedSpeed;
+        // Drive with the locked speeds
+        CatzDrivetrain.getInstance().speedingAccControl(new ChassisSpeeds(lockedDriveDirectionX, lockedDriveDirectionY, turningVelocity));
       }
-
-      // Apply the locked speeds
-      finalVelX = lockedDriveDirectionX;
-      finalVelY = lockedDriveDirectionY;
-    } else {
+      else {
+        // Scoring but not speeding, so drive slow
+        finalVelX = joyX * DriveConstants.SHOOT_WHILE_MOVE_MOVE_SCALAR * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = joyY* DriveConstants.SHOOT_WHILE_MOVE_MOVE_SCALAR * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      }
+    }
+    else {
       // Normal teleop driving logic
       if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
         finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
@@ -132,27 +139,18 @@ public class TeleopDriveCmd extends Command {
       // Reset locks
       lockedDriveDirectionX = 0.0;
       lockedDriveDirectionY = 0.0;
-      lockedSpeed = 0.0;
     }
-    if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
-        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-      }
-
-    // Save the current state for the next loop
-    wasScoring = isScoring;
-
-    turningVelocity = Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
-        ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
-        : 0.0;
+    wasSpeeding = isSpeeding;
 
     // Construct desired chassis speeds
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(finalVelX,
         finalVelY,
         turningVelocity,
         CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
-    // Send new chassisspeeds object to the drivetrain
-    m_drivetrain.drive(chassisSpeeds);
+    // Send new chassisspeeds object to the drivetrain. Don't send if speeding because you already sent earlier
+    if (!isSpeeding) {
+      m_drivetrain.drive(chassisSpeeds);
+    }
     debugLogsDrive();
   } // end of execute()
 

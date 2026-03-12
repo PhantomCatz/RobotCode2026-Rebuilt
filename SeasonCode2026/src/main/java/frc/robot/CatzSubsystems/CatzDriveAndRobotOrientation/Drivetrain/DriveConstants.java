@@ -65,6 +65,7 @@ public class DriveConstants {
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
+  public static final double SHOOT_WHILE_MOVE_MOVE_SCALAR = 0.1; // TODO
 
   public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),

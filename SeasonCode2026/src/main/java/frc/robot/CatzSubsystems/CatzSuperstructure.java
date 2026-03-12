@@ -44,6 +44,7 @@ public class CatzSuperstructure {
     public boolean isClimbMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
     private boolean isScoring = false;
+    public boolean isSpeeding = false;
 
     private boolean initialShootReady = false;
     private RegressionMode activeRegressionMode = RegressionMode.HUB;
@@ -147,7 +148,9 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
                 Commands.runOnce(() -> initialShootReady = false),
                 Commands.runOnce(() -> isScoring = false),
-                Commands.runOnce(() -> RobotContainer.rumbleDrv(0.0)));
+                Commands.runOnce(() -> isSpeeding = false),
+                Commands.runOnce(() -> RobotContainer.rumbleDrv(0.0))
+        );
     }
 
     public Command trackStaticHub() {
@@ -294,6 +297,10 @@ public class CatzSuperstructure {
 
     public boolean getIsScoring() {
         return isScoring;
+    }
+
+    public boolean getIsSpeeding() {
+        return isSpeeding;
     }
 
     /* FUNCTIONAL COMMANDS */

@@ -359,6 +359,27 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
+  public void speedingAccControl(ChassisSpeeds desiredSpeeds) {
+    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
+    ModuleLimits limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
+
+    currentSetpoint = swerveSetpointGenerator.generateSetpoint(
+        limits,
+        currentSetpoint,
+        discreteSpeeds,
+        0.02);
+
+    SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
+
+    for (int i = 0; i < 4; i++) {
+      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+
+      m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
+
+      optimizedDesiredStates[i] = optimizedState;
+    }
+  }
+
   /** Create a command to stop driving */
   public void stopDriving() {
     for (CatzSwerveModule module : m_swerveModules) {
