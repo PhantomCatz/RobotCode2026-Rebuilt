@@ -199,7 +199,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    VirtualSubsystem.periodicAll();
+    CatzSuperstructure.Instance.UpdateSim();
     if(allSignals.length > 0) {
       BaseStatusSignal.refreshAll(allSignals);
     }

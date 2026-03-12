@@ -5,6 +5,7 @@ import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -57,6 +58,7 @@ public class CatzSuperstructure {
     private boolean deployManual = false;
 
     private CatzSuperstructure() {
+        this.visualizer = new SubsystemVisualizer("SuperstructureViz");
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
