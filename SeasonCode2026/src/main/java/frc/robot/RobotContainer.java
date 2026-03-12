@@ -120,7 +120,7 @@ public class RobotContainer {
     // xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
     xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
-    xboxTest.y().onTrue(superstructure.manualExtendClimb());
+    xboxTest.y().onTrue(superstructure.toggleManualExtendClimb());
     xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
     xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
     xboxTest.povRight().onTrue(superstructure.resetClimbPose());
@@ -161,7 +161,12 @@ public class RobotContainer {
     xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    // back, up, down, left, right, up right, up left, down right, down left, right trigger, left trigger
 
+    xboxFunctional.povUp().onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
+    xboxFunctional.povDown().onTrue(CatzSuperstructure.Instance.toggleManualHood());
+    xboxFunctional.povLeft().onTrue(CatzSuperstructure.Instance.toggleManualTurret());
+    xboxFunctional.povRight().onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
   }
 
