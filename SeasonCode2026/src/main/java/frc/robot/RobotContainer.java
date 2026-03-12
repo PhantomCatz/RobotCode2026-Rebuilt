@@ -85,8 +85,8 @@ public class RobotContainer {
     // Held: Shoot
     xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
-    xboxDrv.povUp().onTrue(Commands.runOnce(() -> CatzSuperstructure.Instance.isSpeeding = true));
-    xboxDrv.povUp().onFalse(Commands.runOnce(() -> CatzSuperstructure.Instance.isSpeeding = false));
+    xboxDrv.povUp().onTrue(Commands.runOnce(() -> CatzSuperstructure.Instance.isSpeeding = true).onlyIf(() -> CatzSuperstructure.Instance.getIsScoring()));
+    xboxDrv.povUp().onFalse(Commands.runOnce(() -> CatzSuperstructure.Instance.isSpeeding = false).onlyIf(() -> CatzSuperstructure.Instance.getIsScoring()));
 
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 

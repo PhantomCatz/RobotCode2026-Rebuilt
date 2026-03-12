@@ -1,7 +1,6 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,8 +9,6 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
-import frc.robot.Utilities.ModuleLimits;
-import frc.robot.Utilities.SwerveSetpointGenerator;
 
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -93,7 +90,7 @@ public class TeleopDriveCmd extends Command {
     }
 
     boolean isScoring = CatzSuperstructure.Instance.getIsScoring();
-    boolean isSpeeding = CatzSuperstructure.Instance.getIsScoring();
+    boolean isSpeeding = CatzSuperstructure.Instance.getIsSpeeding();
     double currentMagnitude = Math.hypot(joyX, joyY);
 
     double finalVelX = 0.0;
@@ -105,7 +102,9 @@ public class TeleopDriveCmd extends Command {
 
     if (isScoring) {
       if (isSpeeding) {
+        System.out.println("speeding");
         if (!wasSpeeding) {
+          System.out.println("start locking");
           // Button was just pressed
           // Lock in the exact speed and direction you are currently driving
           if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
@@ -124,12 +123,14 @@ public class TeleopDriveCmd extends Command {
         CatzDrivetrain.getInstance().speedingAccControl(new ChassisSpeeds(lockedDriveDirectionX, lockedDriveDirectionY, turningVelocity));
       }
       else {
+        System.out.println("drive slow");
         // Scoring but not speeding, so drive slow
         finalVelX = joyX * DriveConstants.SHOOT_WHILE_MOVE_MOVE_SCALAR * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
         finalVelY = joyY* DriveConstants.SHOOT_WHILE_MOVE_MOVE_SCALAR * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
       }
     }
     else {
+      System.out.println("drive normal");
       // Normal teleop driving logic
       if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
         finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
