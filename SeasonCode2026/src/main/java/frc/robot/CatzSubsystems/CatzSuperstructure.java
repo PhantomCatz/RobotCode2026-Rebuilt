@@ -568,12 +568,22 @@ public class CatzSuperstructure {
         );
     }
 
-
-
-
     public Command resetClimbPose(){
         return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
     }
+
+    public Command resetHoodPose(){
+        return CatzHood.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+    public Command resetTurretPose(){
+        return CatzTurret.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+    public Command resetDeployPose(){
+        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
 
     public Command enableClimbSoftLimit(){
         return Commands.runOnce(() -> {

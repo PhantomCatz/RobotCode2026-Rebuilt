@@ -168,6 +168,12 @@ public class RobotContainer {
     xboxFunctional.povLeft().onTrue(CatzSuperstructure.Instance.toggleManualTurret());
     xboxFunctional.povRight().onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
+    xboxFunctional.povUpRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetClimbPose());
+    xboxFunctional.povDownLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetHoodPose());
+    xboxFunctional.povUpLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetTurretPose());
+    xboxFunctional.povDownRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetDeployPose());
+
+
   }
 
   public static void rumbleDrv(double val) {
