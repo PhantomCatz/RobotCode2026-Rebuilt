@@ -31,8 +31,6 @@ public abstract class FlywheelMotorSubsystem<S extends GenericMotorIO<I>, I exte
 	 * @return Whether the subsystem is acceptably near it's setpoint's velocity. Returns false if not in velcity control mode.
 	 */
 	public boolean spunUp() {
-		// System.out.println("cur vel: " + getVelocity().baseUnitMagnitude());
-		// System.out.println("target vel " +BaseUnits.AngleUnit.per(BaseUnits.TimeUnit).of(getSetpoint().baseUnits).baseUnitMagnitude());
 		return nearVelocity(BaseUnits.AngleUnit.per(BaseUnits.TimeUnit).of(getSetpoint().baseUnits))
 				&& getSetpoint().mode.isVelocityControl();
 	}

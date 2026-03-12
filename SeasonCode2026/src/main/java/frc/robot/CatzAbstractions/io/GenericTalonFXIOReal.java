@@ -50,7 +50,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	protected final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
 	protected final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(false);
 	protected final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
-	protected final VelocityDutyCycle velocityVoltRequest = new VelocityDutyCycle(0).withSlot(0);
+	protected final VelocityVoltage velocityVoltRequest = new VelocityVoltage(0).withSlot(0);
 	protected final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0).withSlot(0);
 
 	private final boolean[] connectedBuffer;
@@ -180,8 +180,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	@Override
 	public void updateInputs(T inputs) {
 
-		inputs.isLeaderConnected = true;
+		inputs.isLeaderConnected = internalPositionRotations.getStatus().isOK();
 
+		if(followerTalons != null && followerTalons.length > 0) {
+			for(int i = 0; i < followerTalons.length; i++) {
+				connectedBuffer[i] = appliedVoltage.get(i+1).getStatus().isOK();
+			}
+		}
 		inputs.isFollowerConnected = connectedBuffer;
 
 		inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
@@ -248,6 +253,23 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 
 	}
+
+	/**
+     * Explicitly sets the enable state of the forward and reverse soft limits.
+     *
+     * @param enableForward True to enable the forward soft limit, false to disable.
+     * @param enableReverse True to enable the reverse soft limit, false to disable.
+     */
+	@Override
+    public void setSoftLimitsEnabled(boolean enableForward, boolean enableReverse) {
+        UnaryOperator<TalonFXConfiguration> configChanger = (cfg) -> {
+            cfg.SoftwareLimitSwitch.ForwardSoftLimitEnable = enableForward;
+            cfg.SoftwareLimitSwitch.ReverseSoftLimitEnable = enableReverse;
+            return cfg;
+        };
+
+        changeAllConfig(configChanger);
+    }
 
 	/**
 	 *

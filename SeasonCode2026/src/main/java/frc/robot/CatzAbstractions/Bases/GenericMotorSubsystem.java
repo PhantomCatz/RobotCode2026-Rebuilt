@@ -19,11 +19,15 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	protected final String name;
 	protected Setpoint setpoint = Setpoint.withBrakeSetpoint();
 
+	private final String TARGET_SETPOINT_STR;
+	private final double TO_ROT = 1 / (2*Math.PI);
+
 	public GenericMotorSubsystem(S io, I inputs, String name) {
 		super(name);
 		this.io = io;
 		this.inputs = inputs;
 		this.name = name;
+		this.TARGET_SETPOINT_STR = this.name + "Target Setpoint Rot";
 	}
 
 	@Override
@@ -35,6 +39,9 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
 		setpoint.apply(io);
+		if(setpoint.mode.isVelocityControl() || setpoint.mode.isPositionControl()){
+			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits * TO_ROT);
+		}
 	}
 
 	/**

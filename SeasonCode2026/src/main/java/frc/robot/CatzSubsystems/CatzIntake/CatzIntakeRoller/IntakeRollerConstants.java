@@ -17,10 +17,11 @@ public class IntakeRollerConstants {
 
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
 	// public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(6.7);
-	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(5.0);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(7.0);
 	public static final Setpoint S_SETPOINT = Setpoint.withDutyCycleSetpoint(0.7);
-	public static final LoggedTunableNumber TUNABLE_PERCENT = new LoggedTunableNumber("IntakeRollers/Speed", 0.7);
-
+	public static final Setpoint JIGGLE_SETPOINT = Setpoint.withVoltageSetpoint(3.0);
+	public static final LoggedTunableNumber ON_SETPOINT_LOG = new LoggedTunableNumber("IntakeRollers/Voltage", ON_SETPOINT.baseUnits);
+	public static final LoggedTunableNumber JIGGLE_SETPOINT_LOG = new LoggedTunableNumber("IntakeRollers/Jiggle Volts", JIGGLE_SETPOINT.baseUnits);
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
         case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -43,8 +44,8 @@ public class IntakeRollerConstants {
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;

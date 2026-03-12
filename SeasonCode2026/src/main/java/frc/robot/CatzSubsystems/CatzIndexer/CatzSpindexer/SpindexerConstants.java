@@ -21,6 +21,7 @@ public class SpindexerConstants {
 	private static final AngularVelocity ON_SPEED = Units.RotationsPerSecond.of(12.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
+	public static final Setpoint REVERSE = Setpoint.withVoltageSetpoint(ON_VOLTS.times(-1.0));
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
@@ -53,18 +54,17 @@ public class SpindexerConstants {
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 50.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 25.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-
-		FXConfig.Feedback.SensorToMechanismRatio = 8.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 8.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

@@ -17,9 +17,21 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeDeployConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.34);
+	public static final Angle STOW_POSITION = Units.Rotations.of(-0.1);
+	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.30);
+	public static final Angle UP_POSITION = Units.Rotations.of(0.05);
 
-	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
+	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
+	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
+	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
+
+	//STOW POSITION: -60.0
+	public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
+	public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
+	public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Pos Rot", UP_POSITION.in(Units.Rotations));
+	public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Frequency", JIGGLE_FREQUENCY);
+
+	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
 
 	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
@@ -28,7 +40,7 @@ public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
+        case SN2 -> new Gains(7.5, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -41,7 +53,7 @@ public class IntakeDeployConstants {
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.5;
+	public static final double GRAVITY_FEEDFORWARD = 0.7;
 	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {
@@ -52,7 +64,7 @@ public class IntakeDeployConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 5.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
 

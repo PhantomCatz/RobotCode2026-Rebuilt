@@ -7,11 +7,11 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -26,19 +26,32 @@ public class AutoRoutineBase {
 
     protected void prepRoutine(AutoTrajectory startTraj, Command... sequence) {
         routine.active().onTrue(
-                new InstantCommand(() -> CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get()))
-                        .andThen(Commands.sequence(sequence).alongWith(CatzSuperstructure.Instance.turretTrackHubCommand())));
+                new InstantCommand(() -> {
+                    CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get());
+                })
+                        .andThen(Commands.sequence(sequence)));
     }
 
     protected Command shootAllBalls(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withDeadline(Commands.waitSeconds(2.4)), //~around the amount of time it takes to dispense all balls
-            new WaitCommand(AutonConstants.PRELOAD_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.cmdFullStop()
-        );
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
+            CatzSuperstructure.Instance.cmdShooterStop()
+        ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
+        .andThen(CatzSuperstructure.Instance.intakeOFF()
+        .andThen(CatzSuperstructure.Instance.deployIntake()));
     }
 
+    protected Command shootAllBallsNoJiggle(double time){
+        return Commands.sequence(
+            Commands.print("shootAllBalls w/out jiggle command"),
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
+            CatzSuperstructure.Instance.cmdShooterStop()
+        )
+        .andThen(CatzSuperstructure.Instance.intakeOFF());
+    }
+
+    private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {
             final Command choreoCommand = traj.cmd();
@@ -46,16 +59,18 @@ public class AutoRoutineBase {
                     () -> {
                         CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
+                        pathStartTime = Timer.getFPGATimestamp();
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
-                    () -> isAtLoosePose(traj));
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
         return Commands.sequence(
                 // Initial trajectory following
+                Commands.runOnce(()->pathStartTime = Timer.getFPGATimestamp()),
                 traj.cmd(),
 
                 new FunctionalCommand(
@@ -86,21 +101,21 @@ public class AutoRoutineBase {
 
                         () -> isAtPose(traj),
 
-                        CatzDrivetrain.getInstance()));
+                        CatzDrivetrain.getInstance())).withTimeout(traj.getRawTrajectory().getTotalTime() + 2.0);
     }
 
     private boolean isAtPose(AutoTrajectory trajectory) {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
         // System.out.println((isAtTrans && isAtRot));
-        return isAtTrans && isAtRot;
+        return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
     private boolean isAtLoosePose(AutoTrajectory trajectory) {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_ANGLE_DEG);
 
-        return isAtTrans && isAtRot;
+        return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
     private boolean rotationIsFinished(AutoTrajectory trajectory, double epsilonAngleDeg) {

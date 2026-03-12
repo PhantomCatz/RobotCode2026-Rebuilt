@@ -14,10 +14,10 @@ public final class CatzConstants {
   //
   //  Robot Modes
   //
-  // --------------------------------------------------/
+  // --------------------------------------------------
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
-  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
-  private static RobotID robotType = RobotID.SN2;
+  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.SIM;
+  private static RobotID robotType = RobotID.SN_TEST  ;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
 

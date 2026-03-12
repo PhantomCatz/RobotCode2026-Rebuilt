@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 
@@ -12,9 +14,13 @@ public class IntakeDeployIOTalonFX extends GenericTalonFXIOReal<IntakeDeployIO.I
 
     @Override
     public void setMotionMagicSetpoint(double target){
-        double feedforward = -IntakeDeployConstants.kG.get() * Math.sin(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
-
-        System.out.println("ff: " + feedforward);
+        double feedforward;
+        if(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() > 0.28){
+            feedforward = 0.0;
+        }else{
+            feedforward = -IntakeDeployConstants.kG.get() * Math.sin(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
+        }
+        Logger.recordOutput("Intake Deploy Setpoint", target);
         setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
     }
 

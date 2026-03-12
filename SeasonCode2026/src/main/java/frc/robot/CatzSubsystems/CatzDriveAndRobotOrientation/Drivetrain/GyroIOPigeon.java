@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.GYRO_ID;
 
-import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -45,6 +44,5 @@ public class GyroIOPigeon implements GyroIO {
     //   inputs.gyroAngle = yaw.getValueAsDouble();
     // }
     inputs.gyroAngle = yaw.getValueAsDouble();
-    Logger.recordOutput("Gyro/NegativeYawAngleRotations", inputs.gyroAngle / -360.0);
   }
 }

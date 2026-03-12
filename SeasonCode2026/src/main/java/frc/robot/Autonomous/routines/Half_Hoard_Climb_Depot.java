@@ -5,14 +5,20 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
     public Half_Hoard_Climb_Depot(){
         super("Half_Hoard_Climb_Depot");
 
+/*
+ *
+ *
+ *
+ * Out of service - noo half hoaard inn Hueneme
+ *
+ *
+ *
+ */
         AutoTrajectory traj1 = getTrajectory("Half_Hoard_Climb_Depot",0);
         AutoTrajectory traj2 = getTrajectory("Half_Hoard_Climb_Depot",1);
         AutoTrajectory traj3 = getTrajectory("Half_Hoard_Climb_Depot",2);
@@ -22,37 +28,47 @@ public class Half_Hoard_Climb_Depot extends AutoRoutineBase{
         AutoTrajectory traj7 = getTrajectory("Half_Hoard_Climb_Depot",6);
         AutoTrajectory traj8 = getTrajectory("Half_Hoard_Climb_Depot",7);
         AutoTrajectory traj9 = getTrajectory("Half_Hoard_Climb_Depot",8);
+        AutoTrajectory traj10 = getTrajectory("Half_Hoard_Climb_Depot",9);
+        AutoTrajectory traj11 = getTrajectory("Half_Hoard_Climb_Depot",10);
 
-        traj1.atTime("RampUp+Intake2").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-                                         .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.CLOSE_HOARD)));
-        traj5.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdFullStop());
-        traj7.atTime("RampUp+IntakeStop8").onTrue(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-                                                    .alongWith(CatzSuperstructure.Instance.rampUpFlywheels(RegressionMode.HUB)));
+        // traj2.atTime("RampUp+Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj3.atTime("Hoard3").onTrue(CatzSuperstructure.Instance.cmdHoardShoot());
+        // traj6.atTime("HoardStop6").onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+        // traj9.atTime("RampUp+IntakeStop9").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj10.atTime("Score+StowIntake+TrackTower10").onTrue();
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.toggleIntakeDeploy(),
-            shootAllBalls(AutonConstants.PRELOAD_SHOOTING_WAIT),
-
-            followTrajectoryWithAccuracy(traj1),
-
-            CatzSuperstructure.Instance.cmdHoardShoot(),
-
-            followTrajectoryWithAccuracy(traj2),
-
+            Commands.deadline(
+                Commands.sequence(
+                    CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectory(traj1),
+                    followTrajectory(traj2)
+                ),
+                CatzSuperstructure.Instance.cmdHoardStandby()
+            ),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj3),
+                    followTrajectory(traj4),
+                    followTrajectory(traj5),
+                    followTrajectory(traj6)
+                ),
+                CatzSuperstructure.Instance.cmdHoardShoot()
+            ),
+            CatzSuperstructure.Instance.cmdShooterStop(),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj7),
+                    followTrajectory(traj8),
+                    followTrajectory(traj9)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
-            followTrajectoryWithAccuracy(traj3),
-            followTrajectoryWithAccuracy(traj4),
-            followTrajectoryWithAccuracy(traj5),
-            followTrajectoryWithAccuracy(traj6),
-            followTrajectoryWithAccuracy(traj7),
-
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
-            followTrajectoryWithAccuracy(traj8),
-            followTrajectoryWithAccuracy(traj9),
-            Commands.print("Climb"), //TODO
+            CatzSuperstructure.Instance.stowIntake(),
+            CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );
     }

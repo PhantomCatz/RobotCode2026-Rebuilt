@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
-import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -57,15 +56,15 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     public void periodic() {
         super.periodic();
 
-        if (TurretConstants.kP.get() != p || TurretConstants.kD.get() != d || TurretConstants.kS.get() != s
-                || TurretConstants.kV.get() != v) {
-            setPDSVGGains(TurretConstants.kP.get(), TurretConstants.kD.get(), TurretConstants.kS.get(),
-                    TurretConstants.kV.get(), 0.0);
-            p = TurretConstants.kP.get();
-            d = TurretConstants.kD.get();
-            s = TurretConstants.kS.get();
-            v = TurretConstants.kV.get();
-        }
+        // if (TurretConstants.kP.get() != p || TurretConstants.kD.get() != d || TurretConstants.kS.get() != s
+        //         || TurretConstants.kV.get() != v) {
+        //     setPDSVGGains(TurretConstants.kP.get(), TurretConstants.kD.get(), TurretConstants.kS.get(),
+        //             TurretConstants.kV.get(), 0.0);
+        //     p = TurretConstants.kP.get();
+        //     d = TurretConstants.kD.get();
+        //     s = TurretConstants.kS.get();
+        //     v = TurretConstants.kV.get();
+        // }
 
         Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
                 Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
@@ -75,7 +74,8 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
         double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
         Logger.recordOutput("Distance from Hub", distFromHub);
-        Logger.recordOutput("Distance from Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
+        // Logger.recordOutput("Distance from Close Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
+        // Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 
         Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
 
@@ -87,7 +87,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
      * while respecting physical limits and minimizing movement
      */
     public Setpoint calculateWrappedSetpoint(Angle target) {
-        double targetRads = target.in(Units.Radians);
+        double targetRads = target.in(Units.Radians) + Math.toRadians(-0.0); // TODO REMOVE
 
         targetRads = MathUtil.angleModulus(targetRads);
 
@@ -101,6 +101,10 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     public Translation2d getFieldToTurret() {
         Pose2d fieldToRobot = CatzRobotTracker.Instance.getEstimatedPose();
         return fieldToRobot.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(fieldToRobot.getRotation()));
+    }
+
+    public Translation2d getFieldToTurret(Pose2d predictedRobotPose){
+        return predictedRobotPose.getTranslation().plus(TurretConstants.TURRET_OFFSET.rotateBy(predictedRobotPose.getRotation()));
     }
 
     public double getAngleAtTime(double time) {
