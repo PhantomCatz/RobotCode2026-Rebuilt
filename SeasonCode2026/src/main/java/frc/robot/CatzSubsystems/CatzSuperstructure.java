@@ -482,18 +482,19 @@ public class CatzSuperstructure {
     public Command cmdClimbStow() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
     }
+
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
-            if (climbManual = false) {
+            if (climbManual == false) {
                 disableManuals();
+                climbManual = true;
                 CatzClimb.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
                     return Setpoint.withVoltageSetpoint(0.0);
                 }
                 double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
                 Logger.recordOutput("Climb Xbox Voltage Input", input);
-                climbManual = true;
-                return Setpoint.withVoltageSetpoint(input);});
+                return Setpoint.withVoltageSetpoint(input);}).schedule();
             } else {
                 CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
                 climbManual = false;
@@ -503,16 +504,16 @@ public class CatzSuperstructure {
 
     public Command toggleManualHood() {
         return Commands.runOnce(() -> {
-            if (hoodManual = false) {
+            if (hoodManual == false) {
                 disableManuals();
+                hoodManual = true;
                 CatzHood.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
                     return Setpoint.withVoltageSetpoint(0.0);
                 }
                 double input = -(RobotContainer.xboxFunctional.getLeftY()) * 2;
                 Logger.recordOutput("Climb Xbox Voltage Input", input);
-                hoodManual = true;
-                return Setpoint.withVoltageSetpoint(input);});
+                return Setpoint.withVoltageSetpoint(input);}).schedule();
             } else {
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT);
                 hoodManual = false;
@@ -522,16 +523,16 @@ public class CatzSuperstructure {
 
     public Command toggleManualTurret() {
         return Commands.runOnce(() -> {
-            if (turretManual = false) {
+            if (turretManual == false) {
                 disableManuals();
+                turretManual = true;
                 CatzTurret.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftX()) < 0.07){
                     return Setpoint.withVoltageSetpoint(0.0);
                 }
                 double input = -(RobotContainer.xboxFunctional.getLeftX()) * 2;
                 Logger.recordOutput("Climb Xbox Voltage Input", input);
-                turretManual = true;
-                return Setpoint.withVoltageSetpoint(input);});
+                return Setpoint.withVoltageSetpoint(input);}).schedule();
             } else {
                 CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT);
                 turretManual = false;
@@ -541,16 +542,16 @@ public class CatzSuperstructure {
 
     public Command toggleManualDeploy() {
         return Commands.runOnce(() -> {
-            if (deployManual = false) {
+            if (deployManual == false) {
                 disableManuals();
+                deployManual = true;
                 CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
                     return Setpoint.withVoltageSetpoint(0.0);
                 }
                 double input = -(RobotContainer.xboxFunctional.getLeftY()) * 2;
                 Logger.recordOutput("Climb Xbox Voltage Input", input);
-                deployManual = true;
-                return Setpoint.withVoltageSetpoint(input);});
+                return Setpoint.withVoltageSetpoint(input);}).schedule();
             } else {
                 CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW);
                 deployManual = false;
@@ -558,18 +559,18 @@ public class CatzSuperstructure {
         });
     }
 
-    private ParallelCommandGroup disableManuals() {
-        return new ParallelCommandGroup(
-            CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT),
-            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
-            CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT),
-            CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW),
-            Commands.runOnce(() -> climbManual = false),
-            Commands.runOnce(() -> hoodManual = false),
-            Commands.runOnce(() -> turretManual = false),
-            Commands.runOnce(() -> deployManual = false)
+    private void disableManuals() {
+    // Reset flags
+    climbManual = false;
+    hoodManual = false;
+    turretManual = false;
+    deployManual = false;
 
-        );
+    // Schedule the stow commands directly
+    CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+    CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
+    CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+    CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
     }
 
     public Command resetClimbPose(){
