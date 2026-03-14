@@ -13,8 +13,6 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -165,7 +163,7 @@ public class RobotContainer {
     xboxFunctional.povUp().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
     xboxFunctional.povDown().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxFunctional.povLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
-    xboxDrv.a().onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
+    xboxFunctional.povRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
 
     xboxFunctional.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());

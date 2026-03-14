@@ -9,6 +9,7 @@ import com.google.common.base.Supplier;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 import frc.robot.Utilities.Setpoint;
@@ -55,10 +56,10 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return run(() -> applySetpoint(supplier.get()));
 	}
 
-	public Command setpointCommand(Setpoint setpoint){
-		// System.out.println("settt:: " + setpoint.mode);
-		return runOnce(() -> applySetpoint(setpoint));
-	}
+	public Command setpointCommand(Setpoint setpoint) {
+    // We add "this" as a requirement so it cancels the manual command
+    return Commands.runOnce(() -> applySetpoint(setpoint), this);
+}
 
 	public Command setpointCommand(Supplier<Setpoint> supplier){
 		return runOnce(() -> applySetpoint(supplier.get()));
