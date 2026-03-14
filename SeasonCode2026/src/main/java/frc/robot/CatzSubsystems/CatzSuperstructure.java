@@ -35,8 +35,10 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.CatzSubsystems.CatzTestKit.CatzTestKit;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Utilities.Setpoint;
+import frc.robot.CatzSubsystems.CatzTestKit.TestKitConstants;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
@@ -294,6 +296,19 @@ public class CatzSuperstructure {
 
     public boolean getIsScoring() {
         return isScoring;
+    }
+
+    /* TestKit */
+    public Command testkitON() {
+        return Commands.runOnce(() -> {
+            CatzTestKit.Instance.applySetpoint(TestKitConstants.ON_SETPOINT);
+        });
+    }
+
+    public Command testkitPoint() {
+        return Commands.runOnce(() -> {
+            CatzTestKit.Instance.applySetpoint(TestKitConstants.POSITION_SETPOINT);
+        });
     }
 
     /* FUNCTIONAL COMMANDS */
