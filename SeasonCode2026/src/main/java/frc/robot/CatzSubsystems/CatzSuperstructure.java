@@ -5,6 +5,7 @@ import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -56,7 +57,10 @@ public class CatzSuperstructure {
     private boolean turretManual = false;
     private boolean deployManual = false;
 
+   private final SubsystemVisualizer visualizer;
+
     private CatzSuperstructure() {
+        this.visualizer = new SubsystemVisualizer("SuperstructureViz");
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -595,5 +599,13 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             CatzClimb.Instance.setSoftLimitsEnabled(false, false);
         });
+    }
+
+    public void UpdateSim() {
+        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzClimb.Instance.getLatencyCompensatedPosition());
+        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getLatencyCompensatedPosition());
+        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition());
+
+        visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
     }
 }

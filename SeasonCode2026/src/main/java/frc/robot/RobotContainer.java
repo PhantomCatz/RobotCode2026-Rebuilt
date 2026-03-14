@@ -163,15 +163,15 @@ public class RobotContainer {
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
     // back, up, down, left, right, up right, up left, down right, down left, right trigger, left trigger
 
-    xboxFunctional.povUp().onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
-    xboxFunctional.povDown().onTrue(CatzSuperstructure.Instance.toggleManualHood());
-    xboxFunctional.povLeft().onTrue(CatzSuperstructure.Instance.toggleManualTurret());
-    xboxFunctional.povRight().onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
+    xboxFunctional.povUp().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
+    xboxFunctional.povDown().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualHood());
+    xboxFunctional.povLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
+    xboxFunctional.povRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
-    xboxFunctional.povUpRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetClimbPose());
-    xboxFunctional.povDownLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetHoodPose());
-    xboxFunctional.povUpLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetTurretPose());
-    xboxFunctional.povDownRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.resetDeployPose());
+    xboxFunctional.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());
+    xboxFunctional.povDownLeft().onTrue(CatzSuperstructure.Instance.resetHoodPose());
+    xboxFunctional.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
+    xboxFunctional.povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
 
 
   }
