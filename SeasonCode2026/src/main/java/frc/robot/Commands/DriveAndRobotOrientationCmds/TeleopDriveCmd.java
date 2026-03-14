@@ -1,17 +1,20 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.Utilities.SwerveSetpoint;
+import frc.robot.Utilities.SwerveSetpointGenerator;
 
 /**************************************************************************************************
  *
@@ -34,12 +37,15 @@ public class TeleopDriveCmd extends Command {
   private double turningVelocity;
 
   private ChassisSpeeds chassisSpeeds;
-
-  private double lockedDriveDirectionX = 0.0;
-  private double lockedDriveDirectionY = 0.0;
-  private double lockedSpeed = 0.0;
-  private boolean wasScoring = false;
-  private static final double SHOOTING_JOYSTICK_DEADBAND = 0.4;
+  private SwerveSetpoint currentSetpoint = new SwerveSetpoint(
+      new ChassisSpeeds(),
+      new SwerveModuleState[] {
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState()
+      });
+  private final SwerveSetpointGenerator swerveSetpointGenerator;
 
   // --------------------------------------------------------------------------------------
   //
@@ -61,6 +67,8 @@ public class TeleopDriveCmd extends Command {
     System.out.println("TeleopDriveCmd drivetrain = " + drivetrain);
 
     addRequirements(this.m_drivetrain);
+
+    swerveSetpointGenerator = new SwerveSetpointGenerator(DriveConstants.SWERVE_KINEMATICS, DriveConstants.MODULE_TRANSLATIONS);
   }
 
   // --------------------------------------------------------------------------------------
@@ -91,56 +99,16 @@ public class TeleopDriveCmd extends Command {
       joyY = -joyY;
     }
 
-    boolean isScoring = CatzSuperstructure.Instance.getIsScoring();
     double currentMagnitude = Math.hypot(joyX, joyY);
 
     double finalVelX = 0.0;
     double finalVelY = 0.0;
 
-    if (isScoring) {
-      if (!wasScoring) {
-        // Button was just pressed
-        // Lock in the exact speed and direction you are currently driving
-        if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
-          lockedDriveDirectionX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-          lockedDriveDirectionY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-
-          // Calculate and save the absolute speed
-          lockedSpeed = Math.hypot(lockedDriveDirectionX, lockedDriveDirectionY);
-        } else {
-          lockedDriveDirectionX = 0.0;
-          lockedDriveDirectionY = 0.0;
-          lockedSpeed = 0.0;
-        }
-      } else if (currentMagnitude > SHOOTING_JOYSTICK_DEADBAND) {
-        // Button is being held and driver pushed stick hard to change direction
-        // Normalize the joystick vector and multiply by our saved lockedSpeed
-        lockedDriveDirectionX = (joyX / currentMagnitude) * lockedSpeed;
-        lockedDriveDirectionY = (joyY / currentMagnitude) * lockedSpeed;
-      }
-
-      // Apply the locked speeds
-      finalVelX = lockedDriveDirectionX;
-      finalVelY = lockedDriveDirectionY;
-    } else {
-      // Normal teleop driving logic
-      if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
-        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-      }
-
-      // Reset locks
-      lockedDriveDirectionX = 0.0;
-      lockedDriveDirectionY = 0.0;
-      lockedSpeed = 0.0;
-    }
+    // Normal teleop driving logic
     if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
-        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
-      }
-
-    // Save the current state for the next loop
-    wasScoring = isScoring;
+      finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+    }
 
     turningVelocity = Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
         ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
@@ -151,8 +119,15 @@ public class TeleopDriveCmd extends Command {
         finalVelY,
         turningVelocity,
         CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
-    // Send new chassisspeeds object to the drivetrain
-    m_drivetrain.drive(chassisSpeeds);
+
+    currentSetpoint = swerveSetpointGenerator.generateSetpoint(
+      DriveConstants.DRIVE_LIMITS,
+      currentSetpoint,
+      chassisSpeeds,
+      0.02);
+
+    // Send new chassisspeeds object to the drivetrain queue to use later
+    m_drivetrain.pushToQueue(Timer.getFPGATimestamp()+CatzDrivetrain.getInstance().getDelay(), currentSetpoint);
     debugLogsDrive();
   } // end of execute()
 

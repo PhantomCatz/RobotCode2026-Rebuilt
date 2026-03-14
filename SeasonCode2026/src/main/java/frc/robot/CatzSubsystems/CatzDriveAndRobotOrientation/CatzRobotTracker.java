@@ -57,6 +57,9 @@ public class CatzRobotTracker {
   @Getter
   private Pose2d estimatedPose = new Pose2d(8.0, 4.0, new Rotation2d());
 
+  @Getter
+  @Setter
+  private Pose2d futurePose = new Pose2d();
 
   @Getter @Setter
   @AutoLogOutput(key = "CatzRobotTracker/ReachedGoal")
@@ -144,6 +147,7 @@ public class CatzRobotTracker {
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
+    Logger.recordOutput("CatzRobotTracker/FutrePose", futurePose);
   } // end of addOdometryObservation
 
   /** Add Vision Observation */

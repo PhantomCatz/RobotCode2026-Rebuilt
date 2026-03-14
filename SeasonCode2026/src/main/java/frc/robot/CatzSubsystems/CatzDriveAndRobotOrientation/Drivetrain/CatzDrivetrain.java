@@ -8,6 +8,7 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -32,13 +33,17 @@ import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
+import edu.wpi.first.math.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 // import org.littletonrobotics.junction.AutoLogOutput;
 // import org.littletonrobotics.junction.Logger;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -65,6 +70,8 @@ public class CatzDrivetrain extends SubsystemBase {
   public final CatzSwerveModule LT_FRNT_MODULE;
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
+
+  private Queue<Pair<Double, SwerveSetpoint>> futureSwerveSetpoints = new LinkedList<>();
 
   private final Field2d field;
 
@@ -172,6 +179,39 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroAngle2d,
         Timer.getFPGATimestamp());
     CatzRobotTracker.Instance.addOdometryObservation(observation);
+    double currentTime = Timer.getFPGATimestamp();
+    // find the last element with time before or equal the current time
+    while (!futureSwerveSetpoints.isEmpty() && futureSwerveSetpoints.peek().getFirst() <= currentTime) {
+      currentSetpoint = futureSwerveSetpoints.poll().getSecond();
+    }
+    // now the first element in the queue is the first one with time after the current time
+    // drive with the latest speed
+    swerveSetpointDrive(currentSetpoint);
+
+    // calculate robot state 0.1 seconds in the future
+    Iterator<Pair<Double, SwerveSetpoint>> it = futureSwerveSetpoints.iterator();
+    Pair<Double, SwerveSetpoint> lastElement = new Pair<Double,SwerveSetpoint>(currentTime, currentSetpoint);
+    Pair<Double, SwerveSetpoint> curElement;
+    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
+    while (it.hasNext() && lastElement.getFirst() < currentTime+getDelay()) {
+      curElement = it.next();
+      double driveTime;
+      ChassisSpeeds speeds = lastElement.getSecond().chassisSpeeds();
+      ChassisSpeeds fieldRelativeSpeed = speeds.fromRobotRelativeSpeeds(speeds, curPose.getRotation());
+      // this movement starts in 0.1 second window, so completely finish previous movement
+      if (curElement.getFirst() < currentTime+getDelay()) {
+        driveTime = curElement.getFirst() - lastElement.getFirst();
+      }
+      // this movement starts after 0.1 second window ends, so apply previous movement until end of 0.1 second window
+      else {
+        driveTime = currentTime+getDelay()-lastElement.getFirst();
+      }
+      curPose = curPose.plus(new Transform2d(new Translation2d(fieldRelativeSpeed.vxMetersPerSecond*driveTime,
+                                                                fieldRelativeSpeed.vyMetersPerSecond*driveTime),
+                                            new Rotation2d(fieldRelativeSpeed.omegaRadiansPerSecond*driveTime)));
+      lastElement = curElement;
+    }
+    CatzRobotTracker.Instance.setFuturePose(curPose);
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------
@@ -359,6 +399,18 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
+  public void swerveSetpointDrive(SwerveSetpoint setpoint) {
+    SwerveModuleState[] setpointStates = setpoint.moduleStates();
+
+    for (int i = 0; i < 4; i++) {
+      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+
+      m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
+
+      optimizedDesiredStates[i] = optimizedState;
+    }
+  }
+
   /** Create a command to stop driving */
   public void stopDriving() {
     for (CatzSwerveModule module : m_swerveModules) {
@@ -534,6 +586,19 @@ public class CatzDrivetrain extends SubsystemBase {
       Instance = new CatzDrivetrain();
     }
     return Instance;
+  }
+
+  public void pushToQueue(double time, SwerveSetpoint setpoint) {
+    futureSwerveSetpoints.add(new Pair<Double,SwerveSetpoint>(time, setpoint));
+  }
+
+  public double getDelay() {
+    if (CatzSuperstructure.Instance.getIsScoring()) {
+      return DriveConstants.DRIVE_DELAY_TIME;
+    }
+    else {
+      return 0.0;
+    }
   }
 
 }

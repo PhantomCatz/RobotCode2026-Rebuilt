@@ -66,16 +66,9 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose) {
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose, Translation2d predictedTurretPose, double distFromHub) {
         Translation2d hubDirection = target.minus(predictedTurretPose);
-        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
-                .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
-        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
-    }
-
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose, double distFromHub) {
-        Translation2d hubDirection = target.minus(predictedTurretPose);
-        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+        double targetRads = hubDirection.getAngle().minus(predictedRobotPose.getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
         if(distFromHub < 2.0){
