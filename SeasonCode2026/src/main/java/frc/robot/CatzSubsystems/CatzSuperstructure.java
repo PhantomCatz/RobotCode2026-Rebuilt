@@ -560,17 +560,17 @@ public class CatzSuperstructure {
     }
 
     private void disableManuals() {
-    // Reset flags
-    climbManual = false;
-    hoodManual = false;
-    turretManual = false;
-    deployManual = false;
+        // Reset flags
+        climbManual = false;
+        hoodManual = false;
+        turretManual = false;
+        deployManual = false;
 
-    // Schedule the stow commands directly
-    CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
-    CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
-    CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
-    CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+        // Schedule the stow commands directly
+        CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+        CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
+        CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+        CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
     }
 
     public Command resetClimbPose(){
