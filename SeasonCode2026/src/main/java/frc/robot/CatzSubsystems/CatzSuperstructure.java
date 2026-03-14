@@ -485,18 +485,23 @@ public class CatzSuperstructure {
 
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current climbManual is: " + climbManual);
+
             if (climbManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzClimb.Instance);
                 climbManual = true;
+
                 CatzClimb.Instance.followSetpointCommand(() -> {
-                if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
-                    return Setpoint.withVoltageSetpoint(0.0);
-                }
-                double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
-                Logger.recordOutput("Climb Xbox Voltage Input", input);
-                return Setpoint.withVoltageSetpoint(input);}).schedule();
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
             } else {
-                CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
                 climbManual = false;
             }
         });
@@ -504,18 +509,23 @@ public class CatzSuperstructure {
 
     public Command toggleManualHood() {
         return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current hoodManual is: " + hoodManual);
+
             if (hoodManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzHood.Instance);
                 hoodManual = true;
+
                 CatzHood.Instance.followSetpointCommand(() -> {
-                if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
-                    return Setpoint.withVoltageSetpoint(0.0);
-                }
-                double input = -(RobotContainer.xboxFunctional.getLeftY()) * 2;
-                Logger.recordOutput("Climb Xbox Voltage Input", input);
-                return Setpoint.withVoltageSetpoint(input);}).schedule();
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
             } else {
-                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT);
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT).schedule();
                 hoodManual = false;
             }
         });
@@ -523,18 +533,23 @@ public class CatzSuperstructure {
 
     public Command toggleManualTurret() {
         return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current turretManual is: " + turretManual);
+
             if (turretManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzTurret.Instance);
                 turretManual = true;
+
                 CatzTurret.Instance.followSetpointCommand(() -> {
-                if(Math.abs(RobotContainer.xboxFunctional.getLeftX()) < 0.07){
-                    return Setpoint.withVoltageSetpoint(0.0);
-                }
-                double input = -(RobotContainer.xboxFunctional.getLeftX()) * 2;
-                Logger.recordOutput("Climb Xbox Voltage Input", input);
-                return Setpoint.withVoltageSetpoint(input);}).schedule();
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
             } else {
-                CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT);
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
                 turretManual = false;
             }
         });
@@ -542,18 +557,23 @@ public class CatzSuperstructure {
 
     public Command toggleManualDeploy() {
         return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current deployManual is: " + deployManual);
+
             if (deployManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzIntakeDeploy.Instance);
                 deployManual = true;
+
                 CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
-                if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
-                    return Setpoint.withVoltageSetpoint(0.0);
-                }
-                double input = -(RobotContainer.xboxFunctional.getLeftY()) * 2;
-                Logger.recordOutput("Climb Xbox Voltage Input", input);
-                return Setpoint.withVoltageSetpoint(input);}).schedule();
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
             } else {
-                CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW);
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
                 deployManual = false;
             }
         });
