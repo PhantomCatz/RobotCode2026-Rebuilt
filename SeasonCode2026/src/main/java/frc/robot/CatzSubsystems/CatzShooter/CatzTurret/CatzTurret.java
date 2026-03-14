@@ -56,15 +56,15 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     public void periodic() {
         super.periodic();
 
-        // if (TurretConstants.kP.get() != p || TurretConstants.kD.get() != d || TurretConstants.kS.get() != s
-        //         || TurretConstants.kV.get() != v) {
-        //     setPDSVGGains(TurretConstants.kP.get(), TurretConstants.kD.get(), TurretConstants.kS.get(),
-        //             TurretConstants.kV.get(), 0.0);
-        //     p = TurretConstants.kP.get();
-        //     d = TurretConstants.kD.get();
-        //     s = TurretConstants.kS.get();
-        //     v = TurretConstants.kV.get();
-        // }
+        if (TurretConstants.kP.get() != p || TurretConstants.kD.get() != d || TurretConstants.kS.get() != s
+                || TurretConstants.kV.get() != v) {
+            setPDSVGGains(TurretConstants.kP.get(), TurretConstants.kD.get(), TurretConstants.kS.get(),
+                    TurretConstants.kV.get(), 0.0);
+            p = TurretConstants.kP.get();
+            d = TurretConstants.kD.get();
+            s = TurretConstants.kS.get();
+            v = TurretConstants.kV.get();
+        }
 
         Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
                 Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())

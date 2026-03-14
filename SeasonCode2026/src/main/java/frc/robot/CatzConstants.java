@@ -16,7 +16,7 @@ public final class CatzConstants {
   //
   // --------------------------------------------------
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
-  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.SIM;
+  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
   private static RobotID robotType = RobotID.SN_TEST  ;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
@@ -33,6 +33,7 @@ public final class CatzConstants {
   public static final boolean IntakeOn = true;
   public static final boolean ShooterOn = true;
   public static final boolean TurretOn = true;
+  public static final boolean BobaOn = true;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers

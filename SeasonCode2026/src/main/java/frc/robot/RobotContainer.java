@@ -30,6 +30,7 @@ public class RobotContainer {
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
   public static final CommandXboxController xboxTest = new CommandXboxController(1);
+  public static final CommandXboxController xboxBoba = new CommandXboxController(2);
   public static final CommandXboxController xboxFunctional = new CommandXboxController(4);
 
   public RobotContainer() {
@@ -58,6 +59,10 @@ public class RobotContainer {
       }
     }));
     // );
+
+    xboxBoba.a().onTrue(CatzSuperstructure.Instance.bobaOff());
+    xboxBoba.b().onTrue(CatzSuperstructure.Instance.bobaOn());
+    xboxBoba.x().onTrue(CatzSuperstructure.Instance.bobaPos());
 
     // -------------------------------------------------------------------------
     // HOARDING (Left Bumper)

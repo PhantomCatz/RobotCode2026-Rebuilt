@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
+import frc.robot.CatzSubsystems.CatzBoba.BobaConstants;
+import frc.robot.CatzSubsystems.CatzBoba.CatzBoba;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -495,5 +497,17 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             CatzClimb.Instance.setSoftLimitsEnabled(false, false);
         });
+    }
+
+    public Command bobaOff() {
+        return CatzBoba.Instance.setpointCommand(BobaConstants.OFF);
+    }
+
+    public Command bobaOn() {
+        return CatzBoba.Instance.setpointCommand(BobaConstants.FAST);
+    }
+
+    public Command bobaPos() {
+        return CatzBoba.Instance.setpointCommand(BobaConstants.POS);
     }
 }
