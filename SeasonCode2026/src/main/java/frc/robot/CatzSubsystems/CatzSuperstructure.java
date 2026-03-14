@@ -486,7 +486,7 @@ public class CatzSuperstructure {
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
             if (climbManual == false) {
-                disableManuals();
+                disableManuals(CatzClimb.Instance);
                 climbManual = true;
                 CatzClimb.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
@@ -505,7 +505,7 @@ public class CatzSuperstructure {
     public Command toggleManualHood() {
         return Commands.runOnce(() -> {
             if (hoodManual == false) {
-                disableManuals();
+                disableManuals(CatzHood.Instance);
                 hoodManual = true;
                 CatzHood.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
@@ -524,7 +524,7 @@ public class CatzSuperstructure {
     public Command toggleManualTurret() {
         return Commands.runOnce(() -> {
             if (turretManual == false) {
-                disableManuals();
+                disableManuals(CatzTurret.Instance);
                 turretManual = true;
                 CatzTurret.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftX()) < 0.07){
@@ -543,7 +543,7 @@ public class CatzSuperstructure {
     public Command toggleManualDeploy() {
         return Commands.runOnce(() -> {
             if (deployManual == false) {
-                disableManuals();
+                disableManuals(CatzIntakeDeploy.Instance);
                 deployManual = true;
                 CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
                 if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
@@ -559,19 +559,27 @@ public class CatzSuperstructure {
         });
     }
 
-    private void disableManuals() {
-        // Reset flags
-        climbManual = false;
-        hoodManual = false;
-        turretManual = false;
-        deployManual = false;
+    private void disableManuals(Object excludedSubsystem) {
+    // Reset flags
+    climbManual = false;
+    hoodManual = false;
+    turretManual = false;
+    deployManual = false;
 
-        // Schedule the stow commands directly
+    // Only schedule stow if it's NOT the one we are about to manually control
+    if (excludedSubsystem != CatzClimb.Instance) {
         CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+    }
+    if (excludedSubsystem != CatzHood.Instance) {
         CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
+    }
+    if (excludedSubsystem != CatzTurret.Instance) {
         CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+    }
+    if (excludedSubsystem != CatzIntakeDeploy.Instance) {
         CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
     }
+}
 
     public Command resetClimbPose(){
         return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
