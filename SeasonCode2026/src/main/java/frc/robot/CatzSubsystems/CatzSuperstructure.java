@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -24,6 +25,7 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
@@ -34,6 +36,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
@@ -50,6 +53,13 @@ public class CatzSuperstructure {
 
     private boolean initialShootReady = false;
     private RegressionMode activeRegressionMode = RegressionMode.HUB;
+
+    private boolean climbManual = false;
+    private boolean hoodManual = false;
+    private boolean turretManual = false;
+    private boolean deployManual = false;
+
+
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
@@ -421,9 +431,9 @@ public class CatzSuperstructure {
     // }
 
     public void UpdateSim() {
-        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzIntakeRoller.Instance.getPosition());
-        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getPosition());
-        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getPosition());
+        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition());
+        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getLatencyCompensatedPosition());
+        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition());
 
         visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
     }
@@ -482,19 +492,126 @@ public class CatzSuperstructure {
     public Command cmdClimbStow() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
     }
-    public Command manualExtendClimb() {
-        return CatzClimb.Instance.followSetpointCommand(() -> {
-            if(Math.abs(RobotContainer.xboxTest.getLeftY()) < 0.07){
-                return Setpoint.withVoltageSetpoint(0.0);
+
+    public Command toggleManualExtendClimb() {
+        return Commands.runOnce(() -> {
+            if (climbManual == false) {
+                //disableManuals();
+                CatzClimb.Instance.followSetpointCommand(() -> {
+                if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
+                    return Setpoint.withVoltageSetpoint(0.0);
+                }
+                double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                Logger.recordOutput("Climb Xbox Voltage Input", input);
+                climbManual = true;
+                return Setpoint.withVoltageSetpoint(input);});
+            } else {
+                CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
+                climbManual = false;
             }
-            double input = -(RobotContainer.xboxTest.getLeftY()) * 12;
+        });
+    }
+
+    public Command toggleManualHood() {
+        return Commands.runOnce(() -> {
+            if (hoodManual == false) {
+                //disableManuals();
+                CatzHood.Instance.followSetpointCommand(() -> {
+                if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
+                    return Setpoint.withVoltageSetpoint(0.0);
+                }
+                double input = -(RobotContainer.xboxFunctional.getLeftY()) * 2;
+                Logger.recordOutput("Climb Xbox Voltage Input", input);
+                hoodManual = true;
+                return Setpoint.withVoltageSetpoint(input);});
+            } else {
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT);
+                hoodManual = false;
+            }
+        });
+    }
+
+
+    public Command toggleManualTurret() {
+        return Commands.runOnce(() -> {
+            if (turretManual == false) {
+                //disableManuals();
+                CatzTurret.Instance.followSetpointCommand(() -> {
+                if(Math.abs(RobotContainer.xboxFunctional.getLeftX()) < 0.07){
+                    return Setpoint.withVoltageSetpoint(0.0);
+                }
+                double input = -(RobotContainer.xboxFunctional.getLeftX()) * 2;
+                Logger.recordOutput("Climb Xbox Voltage Input", input);
+                turretManual = true;
+                return Setpoint.withVoltageSetpoint(input);});
+            } else {
+                CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT);
+                turretManual = false;
+            }
+        });
+    }
+
+    public Command manualDeploy() {
+                return CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+            double input = (RobotContainer.xboxDrv.getLeftY()) * 2;
             Logger.recordOutput("Climb Xbox Voltage Input", input);
             return Setpoint.withVoltageSetpoint(input);
         });
     }
 
+    public Command toggleManualDeploy() {
+        return Commands.runOnce(() -> {
+            if (deployManual == false) {
+                //disableManuals();
+                CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+                if(Math.abs(RobotContainer.xboxFunctional.getLeftY()) < 0.07){
+                    return Setpoint.withVoltageSetpoint(0.0);
+                }
+                double input = -(RobotContainer.xboxFunctional.getLeftY()) * 2;
+                Logger.recordOutput("Climb Xbox Voltage Input", input);
+                deployManual = true;
+                return Setpoint.withVoltageSetpoint(input);});
+            } else {
+                CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW);
+                deployManual = false;
+            }
+        });
+    }
+
+
+    private ParallelCommandGroup disableManuals() {
+        return new ParallelCommandGroup(
+            CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT),
+            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
+            CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT),
+            CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW),
+            Commands.runOnce(() -> climbManual = false),
+            Commands.runOnce(() -> hoodManual = false),
+            Commands.runOnce(() -> turretManual = false),
+            Commands.runOnce(() -> deployManual = false)
+
+
+        );
+    }
+
+
     public Command resetClimbPose(){
         return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+
+    public Command resetHoodPose(){
+        return CatzHood.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+
+    public Command resetTurretPose(){
+        return CatzTurret.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+
+    public Command resetDeployPose(){
+        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
     }
 
     public Command enableClimbSoftLimit(){
