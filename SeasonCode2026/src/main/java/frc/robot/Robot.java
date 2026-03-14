@@ -223,6 +223,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    SmartDashboard.putBoolean("Auton Won?", false);
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     autonStartTime = Timer.getFPGATimestamp();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
@@ -249,24 +250,6 @@ public class Robot extends LoggedRobot {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
 
-    System.out.println("\n\n\n\n\""+DriverStation.getGameSpecificMessage()+"\"\n\n\n");
-    if ((DriverStation.getGameSpecificMessage()      == "B" 
-          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Red))
-          || (DriverStation.getGameSpecificMessage() == "R" 
-          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Blue))
-       ) 
-    {
-      SmartDashboard.putBoolean("Auton Won?", true);
-    }
-    if((DriverStation.getGameSpecificMessage()      == "B" 
-          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Red))
-          || (DriverStation.getGameSpecificMessage() == "R" 
-          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Blue))
-      ) 
-    {
-      SmartDashboard.putBoolean("Auton Won?", false);
-    }
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -274,6 +257,15 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
+    System.out.println("\n\n\n\n\""+DriverStation.getGameSpecificMessage()+"\"\n\n\n");
+    if ((DriverStation.getGameSpecificMessage()      == "B" 
+          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Blue))
+          || (DriverStation.getGameSpecificMessage() == "R" 
+          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Red))
+       ) 
+    {
+      SmartDashboard.putBoolean("Auton Won?", true);
+    }
   }
 
   @Override
