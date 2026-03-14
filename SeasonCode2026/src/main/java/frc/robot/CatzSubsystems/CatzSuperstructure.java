@@ -2,7 +2,6 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -493,7 +491,7 @@ public class CatzSuperstructure {
                 climbManual = true;
 
                 CatzClimb.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    double input = -(RobotContainer.xboxTest.getLeftY()) * 12;
                     if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
