@@ -3,6 +3,7 @@ package frc.robot.CatzAbstractions.Bases;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.google.common.base.Supplier;
 
 import edu.wpi.first.units.Units;
@@ -18,11 +19,15 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	protected final String name;
 	protected Setpoint setpoint = Setpoint.withBrakeSetpoint();
 
+	private final String TARGET_SETPOINT_STR;
+	private final double TO_ROT = 1 / (2*Math.PI);
+
 	public GenericMotorSubsystem(S io, I inputs, String name) {
 		super(name);
 		this.io = io;
 		this.inputs = inputs;
 		this.name = name;
+		this.TARGET_SETPOINT_STR = this.name + "Target Setpoint Rot";
 	}
 
 	@Override
@@ -34,6 +39,9 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
 		setpoint.apply(io);
+		if(setpoint.mode.isVelocityControl() || setpoint.mode.isPositionControl()){
+			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits * TO_ROT);
+		}
 	}
 
 	/**
@@ -48,11 +56,20 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	}
 
 	public Command setpointCommand(Setpoint setpoint){
+		// System.out.println("settt:: " + setpoint.mode);
 		return runOnce(() -> applySetpoint(setpoint));
 	}
 
 	public Command setpointCommand(Supplier<Setpoint> supplier){
 		return runOnce(() -> applySetpoint(supplier.get()));
+	}
+
+	public void setGainsPV(double p, double v){
+		io.setGainsSlot0(p, 0.0, 0.0, 0.0, v, 0.0, 0.0);
+	}
+
+	public BaseStatusSignal[] getSignals(){
+		return io.getSignals();
 	}
 
 	public Setpoint getSetpoint() {
@@ -63,7 +80,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return Units.RotationsPerSecond.of(inputs.velocityRPS);
 	}
 
-	public double getPosition() {
+	public double getLatencyCompensatedPosition() {
 		return inputs.position;
 	}
 
@@ -71,7 +88,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		return inputs.supplyCurrentAmps;
 	}
 
-	public double getAcceleration() { // TODO make this an array as well
+	public double getAcceleration() {
 		return inputs.accelerationRPS;
 	}
 

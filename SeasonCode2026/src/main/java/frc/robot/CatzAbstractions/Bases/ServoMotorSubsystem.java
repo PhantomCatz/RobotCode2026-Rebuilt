@@ -6,15 +6,17 @@ import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
+
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends GenericMotorSubsystem<S, I>  {
+public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs>
+		extends GenericMotorSubsystem<S, I> {
 
 	protected final String name;
-	protected final Angle epsilonThreshold;
+	protected Angle epsilonThreshold;
 
 	private double manualSpeed = 0.0;
 	protected boolean isFullManual = false;
@@ -34,16 +36,25 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 		}
 	}
 
+	@Override
+	public void applySetpoint(Setpoint setpoint){
+		super.applySetpoint(setpoint);
+	}
+
 	public void runFullManual(double speed) {
 		if (Math.abs(speed) < 0.1) {
-			io.setMotionMagicSetpoint(getPosition());
+			io.setMotionMagicSetpoint(getLatencyCompensatedPosition());
 		} else {
 			io.setDutyCycleSetpoint(speed);
 		}
 	}
 
-	public void useSoftLimits(boolean enable) {
-		io.useSoftLimits(enable);
+	public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
+		io.setSoftLimitsEnabled(forward, reverse);
+	}
+
+	public void setDegThreshold(Angle threshold) {
+		this.epsilonThreshold = threshold;
 	}
 
 	/**
@@ -53,22 +64,23 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 *         in position control.
 	 */
 	public boolean nearPositionSetpoint() {
-		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Rotations.of(getPosition()));
+		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Radians.of(setpoint.baseUnits));
 	}
 
-	public void setPDSVGains(double p, double d, double s, double v){
-		io.setGainsSlot0(p, 0.0, d, s, v, 0.0, 0.0);
+	public void setPDSVGGains(double p, double d, double s, double v, double g) {
+		io.setGainsSlot0(p, 0.0, d, s, v, 0.0, g);
 	}
 
 	/**
-	 * Creates a Command that goes to a setpoint and then waits until the mechanism is the setpoint's position.
+	 * Creates a Command that goes to a setpoint and then waits until the mechanism
+	 * is the setpoint's position.
 	 *
 	 * @param mechanismPosition Position to evaluate proximity to.
 	 * @return A new Command to apply setpoint and wait.
 	 */
 	public Command setpointCommandWithWait(Setpoint setpoint) {
-		return waitForPositionCommand(Units.Rotations.of(setpoint.baseUnits))
-				.deadlineFor(followSetpointCommand(()->setpoint));
+		return waitForPositionCommand(Units.Radians.of(setpoint.baseUnits))
+				.deadlineFor(followSetpointCommand(() -> setpoint));
 	}
 
 	/**
@@ -91,7 +103,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	 */
 	public boolean nearPosition(Angle mechanismPosition) {
 		return EqualsUtil.epsilonEquals(
-				getPosition(),
+				getLatencyCompensatedPosition(),
 				mechanismPosition.in(Units.Rotations),
 				epsilonThreshold.in(Units.Rotations));
 	}
@@ -100,7 +112,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 		io.setCurrentPosition(position.in(Units.Rotations));
 	}
 
-	public Command setCurrentPositionCommand(Angle position){
+	public Command setCurrentPositionCommand(Angle position) {
 		return runOnce(() -> setCurrentPosition(position));
 	}
 

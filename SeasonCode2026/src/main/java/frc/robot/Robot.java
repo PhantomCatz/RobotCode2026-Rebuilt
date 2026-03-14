@@ -1,8 +1,8 @@
 package frc.robot;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -12,25 +12,49 @@ import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.Utilities.Setpoint;
+import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
-  private CatzDrivetrain drivetrain = CatzDrivetrain.Instance;
-
   private RobotContainer m_robotContainer;
 
   private Command m_autonomousCommand;
+
+  private BaseStatusSignal[] allSignals;
+  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
+
+  public static double autonStartTime = 0.0;
 
   public Robot() {
   }
@@ -42,7 +66,7 @@ public class Robot extends LoggedRobot {
     switch (CatzConstants.hardwareMode) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
-        Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
+        Logger.addDataReceiver(new WPILOGWriter("/U/logs")); ///"home/lvuser/logs"
         Logger.addDataReceiver(new RLOGServer());
         Logger.addDataReceiver(new WPILOGWriter("/Logs"));
 
@@ -65,33 +89,38 @@ public class Robot extends LoggedRobot {
         break;
     }
 
+    CatzIntakeDeploy.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        CatzIntakeDeploy.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.intakeSetpoint));
+      }, CatzIntakeDeploy.Instance)
+  );
     Logger.start();
 
     // Log active commands
-    Map<String, Integer> commandCounts = new HashMap<>();
-    BiConsumer<Command, Boolean> logCommandFunction = (Command command, Boolean active) -> {
-      String name = command.getName();
-      int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
-      commandCounts.put(name, count);
-      Logger.recordOutput(
-          "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
-      Logger.recordOutput("CommandsAll/" + name, count > 0);
-    };
-    CommandScheduler.getInstance()
-        .onCommandInitialize(
-            (Command command) -> {
-              logCommandFunction.accept(command, true);
-            });
-    CommandScheduler.getInstance()
-        .onCommandFinish(
-            (Command command) -> {
-              logCommandFunction.accept(command, false);
-            });
-    CommandScheduler.getInstance()
-        .onCommandInterrupt(
-            (Command command) -> {
-              logCommandFunction.accept(command, false);
-            });
+    // Map<String, Integer> commandCounts = new HashMap<>();
+    // BiConsumer<Command, Boolean> logCommandFunction = (Command command, Boolean active) -> {
+    //   String name = command.getName();
+    //   int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
+    //   commandCounts.put(name, count);
+    //   Logger.recordOutput(
+    //       "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
+    //   Logger.recordOutput("CommandsAll/" + name, count > 0);
+    // };
+    // CommandScheduler.getInstance()
+    //     .onCommandInitialize(
+    //         (Command command) -> {
+    //           logCommandFunction.accept(command, true);
+    //         });
+    // CommandScheduler.getInstance()
+    //     .onCommandFinish(
+    //         (Command command) -> {
+    //           logCommandFunction.accept(command, false);
+    //         });
+    // CommandScheduler.getInstance()
+    //     .onCommandInterrupt(
+    //         (Command command) -> {
+    //           logCommandFunction.accept(command, false);
+    //         });
 
     // Set Brownout Voltage to WPILIB recommendations
     RobotController.setBrownoutVoltage(6.3);
@@ -100,6 +129,7 @@ public class Robot extends LoggedRobot {
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());
     System.out.println("Mode: " + CatzConstants.hardwareMode.toString());
     System.out.println("Type: " + CatzConstants.getRobotType().toString());
+    SignalLogger.enableAutoLogging(false);
 
     // Run hardware mode check
     if (Robot.isReal()) { // REAL ROBOT
@@ -126,29 +156,64 @@ public class Robot extends LoggedRobot {
         }
       }
     }
+    allSubsystems[0] = CatzClimb.Instance;
+    allSubsystems[1] = CatzSpindexer.Instance;
+    allSubsystems[2] = CatzYdexer.Instance;
+    allSubsystems[3] = CatzIntakeDeploy.Instance;
+    allSubsystems[4] = CatzIntakeRoller.Instance;
+    allSubsystems[5] = CatzFlywheels.Instance;
+    allSubsystems[6] = CatzHood.Instance;
+    allSubsystems[7] = CatzTurret.Instance;
+
     m_robotContainer = new RobotContainer();
 
     CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.Instance::getEstimatedPose,
-                                                  CatzRobotTracker.Instance::resetPose,
-                                                  CatzDrivetrain.Instance::followChoreoTrajectoryExecute,
+                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
+                                                  CatzRobotTracker.getInstance()::resetPose,
+                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
                                                   true,
-                                                  CatzDrivetrain.Instance
+                                                  CatzDrivetrain.getInstance()
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+    System.out.println(AutoRoutineSelector.Instance);
 
       DriverStation.silenceJoystickConnectionWarning(true);
 
+      if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
+        CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
+        List<BaseStatusSignal> signalList = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem : allSubsystems){
+          if(subsystem == null){
+            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+          }
+          Collections.addAll(signalList, subsystem.getSignals());
+        }
+        allSignals = signalList.toArray(new BaseStatusSignal[0]);
+      }else{
+        allSignals = new BaseStatusSignal[0];
+      }
+
+      System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+
+      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      // Notifier.setHALThreadPriority(false, 0);
+      // System.out.println("Starting deteciton threaadf==================");
+      // coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override
   public void robotPeriodic() {
     CatzSuperstructure.Instance.UpdateSim();
     // VirtualSubsystem.periodicAll();
+    VirtualSubsystem.periodicAll();
+    if(allSignals.length > 0) {
+      BaseStatusSignal.refreshAll(allSignals);
+    }
     CommandScheduler.getInstance().run();
   }
 
   @Override
   public void disabledInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(200);
   }
 
   @Override
@@ -161,8 +226,13 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+    autonStartTime = Timer.getFPGATimestamp();
+    CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
+    CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
+    System.out.println("auton: " + m_autonomousCommand);
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
@@ -178,6 +248,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+    CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+    CatzSuperstructure.Instance.isIntakeDeployed = true;
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

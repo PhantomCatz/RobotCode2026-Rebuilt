@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.CatzConstants;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.LoggedTunableNumber;
+import frc.robot.Utilities.ModuleLimits;
 import lombok.Builder;
 
 public class DriveConstants {
@@ -29,30 +30,22 @@ public class DriveConstants {
   public static final int INDEX_BL = 2;
   public static final int INDEX_FL = 3;
 
-  public static final int TRAJ_INDEX_FL = 0;
-  public static final int TRAJ_INDEX_FR = 1;
-  public static final int TRAJ_INDEX_BL = 2;
-  public static final int TRAJ_INDEX_BR = 3;
-
   public static final int GYRO_ID = 10;
-
-
-  public static final double PREDICT_DISTANCE_SCORE = 0.1;
-  public static final double PREDICT_DISTANCE_INTAKE = 1.0;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info
   // ---------------------------------------------------------------------------------------------------------------
 
+
   public static final DriveConfig DRIVE_CONFIG =
     DriveConfig.builder()
-        .wheelRadius(Units.inchesToMeters(1.948))
-        .robotLengthX(Units.inchesToMeters(24.2))
-        .robotWidthY(Units.inchesToMeters(24.2))
+        .wheelRadius(Units.inchesToMeters(1.7))
+        .robotLengthX(Units.inchesToMeters(28))
+        .robotWidthY(Units.inchesToMeters(28))
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
         .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(120)
+        .maxLinearAcceleration(30)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
@@ -64,10 +57,23 @@ public class DriveConstants {
       .maxAngularVelocity(Units.degreesToRadians(540))
       .maxAngularAcceleration(Units.degreesToRadians(720))
       .build();
+  private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
+
+  public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
+        DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+        accLimit.get(),
+        DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+
+  public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
+
+  public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
+    DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+    DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
+    DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
-        case SN1, SN2, SN_MANTA ->
+        case SN1, SN2, BUBBLES, SN_MANTA ->
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,
@@ -109,7 +115,7 @@ public class DriveConstants {
   public static final double GYRO_UPDATE_FREQUENCY =
       switch (CatzConstants.getRobotType()) {
         case SN_TEST -> 50.0;
-        case SN2, SN1 -> 100.0;
+        case SN2, SN1, BUBBLES -> 100.0;
         //case SN2 -> 250.0;
         default -> 100.0;
       };
@@ -128,31 +134,24 @@ public class DriveConstants {
   static{
     switch(CatzConstants.getRobotType()){
         case SN_MANTA:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.900146484375+1, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.022705078125+1, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.844482421875, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.89990234375, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.416016, false);
         break;
 
         case SN1:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.6604 + 0.5, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.06396, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.3889 + 0.5, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.80566, false);
-        break;
-
-        case SN1_OLD:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.15454+0.5, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.138183, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.020507, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.2780761+0.5, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.3125, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0896, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.4382 + 0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.1447 + 0.5, false);
         break;
 
         case SN2:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.0, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.0, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.0, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.4145 + 0.5, false); //this one is changing?  0.811035 shifted by 7 degrees?
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.401855, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.273926, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.3394, false);
         break;
 
         case SN_TEST:
@@ -160,6 +159,13 @@ public class DriveConstants {
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 8, 0.0, false);
             MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 7, 0.0, false);
             MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 6, 0.0, false);
+        break;
+
+        case BUBBLES:
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 9.115966796875 - 9.0, false);//-0.539306640625, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 8.167724609375 - 8.0, false);//0.083251953125, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 9.37939453125 - 9.0, false);//0.85107421875, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 8.743896484375 - 9.0, false);//-0.05224609375, false);
         break;
     }
   }
@@ -190,10 +196,10 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(7.0, 0.0, 0.3),
-      new PIDController(7.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.3),
       new ProfiledPIDController(
-        5.5,
+        17.0,
         0.0,
         0.3,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)

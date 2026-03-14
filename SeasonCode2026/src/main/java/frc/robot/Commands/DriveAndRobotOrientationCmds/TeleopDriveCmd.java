@@ -1,11 +1,15 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
+
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,11 +29,17 @@ public class TeleopDriveCmd extends Command {
   private final Supplier<Double> m_angVelocityPctOutput;
 
   // drive variables
-  private double m_headingAndVelocity_X;
-  private double m_headingAndVelocity_Y;
+  private double joyX;
+  private double joyY;
   private double turningVelocity;
 
   private ChassisSpeeds chassisSpeeds;
+
+  private double lockedDriveDirectionX = 0.0;
+  private double lockedDriveDirectionY = 0.0;
+  private double lockedSpeed = 0.0;
+  private boolean wasScoring = false;
+  private static final double SHOOTING_JOYSTICK_DEADBAND = 0.4;
 
   // --------------------------------------------------------------------------------------
   //
@@ -48,6 +58,7 @@ public class TeleopDriveCmd extends Command {
 
     // subsystem assignment
     this.m_drivetrain = drivetrain;
+    System.out.println("TeleopDriveCmd drivetrain = " + drivetrain);
 
     addRequirements(this.m_drivetrain);
   }
@@ -58,7 +69,8 @@ public class TeleopDriveCmd extends Command {
   //
   // --------------------------------------------------------------------------------------
   @Override
-public void initialize() {}
+  public void initialize() {
+  }
 
   // --------------------------------------------------------------------------------------
   //
@@ -68,45 +80,77 @@ public void initialize() {}
   @Override
   public void execute() {
     // Obtain realtime joystick inputs with supplier methods
-    m_headingAndVelocity_X = -m_headingPctOutput_Y.get(); //Raw accel
-    m_headingAndVelocity_Y = -m_headingPctOutput_X.get();
-    turningVelocity        = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching alliances
+    joyX = -m_headingPctOutput_Y.get(); // Raw accel
+    joyY = -m_headingPctOutput_X.get();
+    turningVelocity = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching
+                                                     // alliances
 
-    // Flip Directions for left joystick if alliance is red\[]
+    // Flip Directions for left joystick if alliance is red
+    if (DriverStation.getAlliance().get() == Alliance.Red) {
+      joyX = -joyX;
+      joyY = -joyY;
+    }
 
-    // if (AllianceFlipUtil.shouldFlipToRed()) {
-    //   m_headingAndVelocity_X = -m_headingAndVelocity_X;
-    //   m_headingAndVelocity_Y = -m_headingAndVelocity_Y;
-    // }
+    boolean isScoring = CatzSuperstructure.Instance.getIsScoring();
+    double currentMagnitude = Math.hypot(joyX, joyY);
 
-    // Apply deadbands to prevent modules from receiving unintentional pwr due to joysticks having offset
-    m_headingAndVelocity_X =
-        Math.abs(m_headingAndVelocity_X) > XboxInterfaceConstants.kDeadband
-            ? m_headingAndVelocity_X * DriveConstants.DRIVE_CONFIG.maxLinearVelocity()
-            : 0.0;
-    m_headingAndVelocity_Y =
-        Math.abs(m_headingAndVelocity_Y) > XboxInterfaceConstants.kDeadband
-            ? m_headingAndVelocity_Y * DriveConstants.DRIVE_CONFIG.maxLinearVelocity()
-            : 0.0;
-    turningVelocity =
-        Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
-            ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
-            : 0.0;
+    double finalVelX = 0.0;
+    double finalVelY = 0.0;
 
-    // if(CatzSuperstructure.isClimbEnabled()) {
-    //   m_headingAndVelocity_X *= 0.4;
-    //   m_headingAndVelocity_Y *= 0.4;
-    //   turningVelocity *= 0.4;
-    //   //System.out.println("low speed");
-    // }
+    if (isScoring) {
+      if (!wasScoring) {
+        // Button was just pressed
+        // Lock in the exact speed and direction you are currently driving
+        if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+          lockedDriveDirectionX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+          lockedDriveDirectionY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+
+          // Calculate and save the absolute speed
+          lockedSpeed = Math.hypot(lockedDriveDirectionX, lockedDriveDirectionY);
+        } else {
+          lockedDriveDirectionX = 0.0;
+          lockedDriveDirectionY = 0.0;
+          lockedSpeed = 0.0;
+        }
+      } else if (currentMagnitude > SHOOTING_JOYSTICK_DEADBAND) {
+        // Button is being held and driver pushed stick hard to change direction
+        // Normalize the joystick vector and multiply by our saved lockedSpeed
+        lockedDriveDirectionX = (joyX / currentMagnitude) * lockedSpeed;
+        lockedDriveDirectionY = (joyY / currentMagnitude) * lockedSpeed;
+      }
+
+      // Apply the locked speeds
+      finalVelX = lockedDriveDirectionX;
+      finalVelY = lockedDriveDirectionY;
+    } else {
+      // Normal teleop driving logic
+      if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      }
+
+      // Reset locks
+      lockedDriveDirectionX = 0.0;
+      lockedDriveDirectionY = 0.0;
+      lockedSpeed = 0.0;
+    }
+    if (currentMagnitude > XboxInterfaceConstants.kDeadband) {
+        finalVelX = joyX * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+        finalVelY = joyY * DriveConstants.DRIVE_CONFIG.maxLinearVelocity();
+      }
+
+    // Save the current state for the next loop
+    wasScoring = isScoring;
+
+    turningVelocity = Math.abs(turningVelocity) > XboxInterfaceConstants.kDeadband
+        ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
+        : 0.0;
 
     // Construct desired chassis speeds
-
-    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(m_headingAndVelocity_X,
-                                                          m_headingAndVelocity_Y,
-                                                          turningVelocity,
-                                                          CatzRobotTracker.Instance.getEstimatedPose().getRotation());
-
+    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(finalVelX,
+        finalVelY,
+        turningVelocity,
+        CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
     // Send new chassisspeeds object to the drivetrain
     m_drivetrain.drive(chassisSpeeds);
     debugLogsDrive();
@@ -129,7 +173,8 @@ public void initialize() {}
   //
   // --------------------------------------------------------------------------------------
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // --------------------------------------------------------------------------------------
   //
