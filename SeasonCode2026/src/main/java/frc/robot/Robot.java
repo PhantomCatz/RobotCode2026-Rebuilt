@@ -258,10 +258,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
     System.out.println("\n\n\n\n\""+DriverStation.getGameSpecificMessage()+"\"\n\n\n");
-    if ((DriverStation.getGameSpecificMessage()      == "B" 
-          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Blue))
-          || (DriverStation.getGameSpecificMessage() == "R" 
-          && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Red))
+    if ((DriverStation.getGameSpecificMessage().equals("B") 
+      && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Blue))
+      || (DriverStation.getGameSpecificMessage().equals("R")
+      && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Red))
        ) 
     {
       SmartDashboard.putBoolean("Auton Won?", true);
