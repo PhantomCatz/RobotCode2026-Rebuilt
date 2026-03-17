@@ -3,7 +3,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -19,6 +18,7 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -54,6 +54,7 @@ public class Robot extends LoggedRobot {
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
 
   public static double autonStartTime = 0.0;
+  public Alliance alliance;
 
   public Robot() {
   }
@@ -249,6 +250,16 @@ public class Robot extends LoggedRobot {
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
+    alliance = DriverStation.getAlliance().get();
+
+    if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
+      && alliance == DriverStation.Alliance.Blue)
+      ||(DriverStation.getGameSpecificMessage().charAt(0) == 'R'
+      && alliance == DriverStation.Alliance.Red)
+       )
+    {
+      SmartDashboard.putBoolean("Won Auton?", true);
+    }
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
@@ -257,15 +268,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    System.out.println("\n\n\n\n\""+DriverStation.getGameSpecificMessage()+"\"\n\n\n");
-    if ((DriverStation.getGameSpecificMessage().equals("B") 
-      && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Blue))
-      || (DriverStation.getGameSpecificMessage().equals("R")
-      && DriverStation.getAlliance() == Optional.of(DriverStation.Alliance.Red))
-       ) 
-    {
-      SmartDashboard.putBoolean("Auton Won?", true);
-    }
+
   }
 
   @Override
