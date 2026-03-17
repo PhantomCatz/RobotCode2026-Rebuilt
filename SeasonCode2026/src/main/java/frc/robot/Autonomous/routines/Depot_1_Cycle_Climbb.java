@@ -6,13 +6,13 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_1_Cycle_Disrupt extends AutoRoutineBase{
-    public Depot_1_Cycle_Disrupt(){
-        super("Depot_1_Cycle_Disrupt");
-        AutoTrajectory traj1 = getTrajectory("Depot_1_Cycle_Disrupt",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_1_Cycle_Disrupt",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_1_Cycle_Disrupt",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_1_Cycle_Disrupt",3);
+public class Depot_1_Cycle_Climbb extends AutoRoutineBase{
+    public Depot_1_Cycle_Climbb(){
+        super("Depot_1_Cycle_Climbb");
+        AutoTrajectory traj1 = getTrajectory("Depot_1_Cycle_Climbb",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_1_Cycle_Climbb",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_1_Cycle_Climbb",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_1_Cycle_Climbb",3);
 
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());

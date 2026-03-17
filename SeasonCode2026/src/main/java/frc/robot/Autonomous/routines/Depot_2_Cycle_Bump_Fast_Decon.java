@@ -43,7 +43,7 @@ public class Depot_2_Cycle_Bump_Fast_Decon extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-                
+
 
             Commands.deadline(
                 Commands.sequence(

@@ -11,14 +11,14 @@ public class AutoRoutineSelector {
     private AutoChooser autoSelector = new AutoChooser();
 
     private AutoRoutineSelector(){
-        
+
         autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
         autoSelector.addRoutine("Decon_Depot_2_Cycle", () -> new Decon_Depot_2_Cycle().getRoutine());
         // autoSelector.addRoutine("Decon_Outpost_2_Cycle_Climb", () -> new Decon_Outpost_2_Cycle_Climb().getRoutine());
         autoSelector.addRoutine("Decon_Outpost_2_Cycle_Outpost", () -> new Decon_Outpost_2_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Decon_Outpost_Climb", () -> new Decon_Outpost_Climb().getRoutine());
         autoSelector.addRoutine("Decon_PNZO", () -> new Decon_PNZO().getRoutine());
-        autoSelector.addRoutine("Depot_1_Cycle_Disrupt", () -> new Depot_1_Cycle_Disrupt().getRoutine());
+        autoSelector.addRoutine("Depot_1_Cycle_Climbb", () -> new Depot_1_Cycle_Climbb().getRoutine());
         autoSelector.addRoutine("Depot_1_Cycle", () -> new Depot_1_Cycle().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle_Bump", () -> new Depot_2_Cycle_Bump().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle_Bump_Fast_Decon", () -> new Depot_2_Cycle_Bump_Fast_Decon().getRoutine());
@@ -34,7 +34,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Outpost_3_Cycle", () -> new Outpost_3_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_Hammerhead_2_Cycle_Outpost", () -> new Outpost_Hammerhead_2_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
-        
+
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
 
 
