@@ -57,11 +57,11 @@ public class DriveConstants {
       .maxAngularVelocity(Units.degreesToRadians(540))
       .maxAngularAcceleration(Units.degreesToRadians(720))
       .build();
-  private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
+  // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
 
   public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
         DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-        accLimit.get(),
+        22.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
@@ -125,12 +125,12 @@ public class DriveConstants {
   // ---------------------------------------------------------------------------------------------------------------------
   // Logged Tunable PIDF values for swerve modules
   // ---------------------------------------------------------------------------------------------------------------------
-  public static final LoggedTunableNumber drivekP = new LoggedTunableNumber("Drive/Module/DrivekP", MODULE_GAINS_AND_RATIOS.drivekP());
-  public static final LoggedTunableNumber drivekD = new LoggedTunableNumber("Drive/Module/DrivekD", MODULE_GAINS_AND_RATIOS.drivekD());
-  public static final LoggedTunableNumber drivekS = new LoggedTunableNumber("Drive/Module/DrivekS", MODULE_GAINS_AND_RATIOS.driveFFkS());
-  public static final LoggedTunableNumber drivekV = new LoggedTunableNumber("Drive/Module/DrivekV", MODULE_GAINS_AND_RATIOS.driveFFkV());
-  public static final LoggedTunableNumber steerkP = new LoggedTunableNumber("Drive/Module/steerkP", MODULE_GAINS_AND_RATIOS.steerkP());
-  public static final LoggedTunableNumber steerkD = new LoggedTunableNumber("Drive/Module/steerkD", MODULE_GAINS_AND_RATIOS.steerkD());
+  // public static final LoggedTunableNumber drivekP = new LoggedTunableNumber("Drive/Module/DrivekP", MODULE_GAINS_AND_RATIOS.drivekP());
+  // public static final LoggedTunableNumber drivekD = new LoggedTunableNumber("Drive/Module/DrivekD", MODULE_GAINS_AND_RATIOS.drivekD());
+  // public static final LoggedTunableNumber drivekS = new LoggedTunableNumber("Drive/Module/DrivekS", MODULE_GAINS_AND_RATIOS.driveFFkS());
+  // public static final LoggedTunableNumber drivekV = new LoggedTunableNumber("Drive/Module/DrivekV", MODULE_GAINS_AND_RATIOS.driveFFkV());
+  // public static final LoggedTunableNumber steerkP = new LoggedTunableNumber("Drive/Module/steerkP", MODULE_GAINS_AND_RATIOS.steerkP());
+  // public static final LoggedTunableNumber steerkD = new LoggedTunableNumber("Drive/Module/steerkD", MODULE_GAINS_AND_RATIOS.steerkD());
 
   public static final ModuleIDs[] MODULE_CONFIGS = new ModuleIDs[4];
   static{

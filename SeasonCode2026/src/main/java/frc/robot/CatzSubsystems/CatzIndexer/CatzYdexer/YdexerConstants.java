@@ -11,7 +11,6 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
@@ -29,7 +28,7 @@ public class YdexerConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("YDexer/Applied Volts", ON_VOLTS.in(Units.Volts));
+	// public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("YDexer/Applied Volts", ON_VOLTS.in(Units.Volts));
 
     private static final int YDEXER_MOTOR_ID = 50;
 

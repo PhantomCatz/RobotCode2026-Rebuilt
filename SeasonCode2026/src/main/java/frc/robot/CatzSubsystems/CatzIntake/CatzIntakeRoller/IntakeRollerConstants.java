@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
@@ -20,8 +19,10 @@ public class IntakeRollerConstants {
 	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(7.0);
 	public static final Setpoint S_SETPOINT = Setpoint.withDutyCycleSetpoint(0.7);
 	public static final Setpoint JIGGLE_SETPOINT = Setpoint.withVoltageSetpoint(3.0);
-	public static final LoggedTunableNumber ON_SETPOINT_LOG = new LoggedTunableNumber("IntakeRollers/Voltage", ON_SETPOINT.baseUnits);
-	public static final LoggedTunableNumber JIGGLE_SETPOINT_LOG = new LoggedTunableNumber("IntakeRollers/Jiggle Volts", JIGGLE_SETPOINT.baseUnits);
+
+	// public static final LoggedTunableNumber ON_SETPOINT_LOG = new LoggedTunableNumber("IntakeRollers/Voltage", ON_SETPOINT.baseUnits);
+	// public static final LoggedTunableNumber JIGGLE_SETPOINT_LOG = new LoggedTunableNumber("IntakeRollers/Jiggle Volts", JIGGLE_SETPOINT.baseUnits);
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
         case SN2 -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

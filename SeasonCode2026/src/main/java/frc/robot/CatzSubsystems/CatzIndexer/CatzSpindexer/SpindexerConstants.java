@@ -31,14 +31,7 @@ public class SpindexerConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    // private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    // private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-    // private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-    // private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-    // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-
-	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("Spindexer/Applied Volts", ON_VOLTS.in(Units.Volts));
+	// public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("Spindexer/Applied Volts", ON_VOLTS.in(Units.Volts));
 
     private static final int SPINDEXER_MOTOR_ID = 40;
 

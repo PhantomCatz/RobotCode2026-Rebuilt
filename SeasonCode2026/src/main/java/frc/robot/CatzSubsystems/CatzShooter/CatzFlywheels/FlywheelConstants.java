@@ -25,11 +25,11 @@ public class FlywheelConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
+    // public static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
     // private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
     // private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
     // private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
+    // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
     public static final LoggedTunableNumber SHOOTING_RPS_TUNABLE = new LoggedTunableNumber("Flywheels/EjectingRps", 30.0);
 

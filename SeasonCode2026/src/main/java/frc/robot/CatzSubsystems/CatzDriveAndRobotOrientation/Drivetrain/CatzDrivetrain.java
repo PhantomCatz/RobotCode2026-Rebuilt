@@ -29,7 +29,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.Od
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
@@ -376,7 +375,6 @@ public class CatzDrivetrain extends SubsystemBase {
     hoController = DriveConstants.getNewHolController();
   }
 
-  LoggedTunableNumber aff = new LoggedTunableNumber("aff", 2.5);
 
   /**
    * This function only runs the "execute" portion of a command. Initialization

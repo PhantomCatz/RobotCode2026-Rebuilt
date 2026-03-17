@@ -26,7 +26,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
     private static final double phaseDelay = 0.0;
-    private static final LoggedTunableNumber delayy = new LoggedTunableNumber("phase delay", phaseDelay);
 
     public enum HoardTargetType {
         RELATIVE_CLOSE,
@@ -195,9 +194,9 @@ public class AimCalculations {
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * delayy.get(),
-                robotVelocity.vyMetersPerSecond * delayy.get(),
-                robotVelocity.omegaRadiansPerSecond * delayy.get());
+                robotVelocity.vxMetersPerSecond * phaseDelay,
+                robotVelocity.vyMetersPerSecond * phaseDelay,
+                robotVelocity.omegaRadiansPerSecond * phaseDelay);
 
         return currentPose.exp(twist);
     }

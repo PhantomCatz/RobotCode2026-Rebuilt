@@ -33,21 +33,21 @@ public class HoodConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP", gains.kP());
-    public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI", gains.kI());
-    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD", gains.kD());
-    public static final LoggedTunableNumber kS = new LoggedTunableNumber("Hood/kS", gains.kS());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Hood/kV", gains.kV());
-    public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
-	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG", gains.kG());
+    // public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP", gains.kP());
+    // public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI", gains.kI());
+    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD", gains.kD());
+    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Hood/kS", gains.kS());
+    // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Hood/kV", gains.kV());
+    // public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
+	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG", gains.kG());
 
 	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodAngle", HOOD_ZERO_POS.in(Units.Degrees));
 
     private static final int HOOD_MOTOR_ID = 22;
 	public static final double HOOD_GRAVITY_FF = 0.4;
 	public static final double HOOD_GRAVITY_FF_PHASE_SHIFT = Units.Degrees.of(-10.0).in(Units.Radians);
-	public static final LoggedTunableNumber hoodPhaseShift = new LoggedTunableNumber("Hood/Gravity Phase Shift Deg", Math.toDegrees(HOOD_GRAVITY_FF_PHASE_SHIFT));
-	public static final LoggedTunableNumber hoodGravityFF = new LoggedTunableNumber("Hood/Gravity FF", HOOD_GRAVITY_FF);
+	// public static final LoggedTunableNumber hoodPhaseShift = new LoggedTunableNumber("Hood/Gravity Phase Shift Deg", Math.toDegrees(HOOD_GRAVITY_FF_PHASE_SHIFT));
+	// public static final LoggedTunableNumber hoodGravityFF = new LoggedTunableNumber("Hood/Gravity FF", HOOD_GRAVITY_FF);
 
 	public static final Angle HOOD_THRESHOLD = Units.Degrees.of(3.0);
 

@@ -114,7 +114,7 @@ public class CatzSuperstructure {
             if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { // check for turret because turret
                                                                                    // can wrap.
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
-                CatzYdexer.Instance.applySetpoint(Setpoint.withVoltageSetpoint(YdexerConstants.SPEED.get()));
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
             } else {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
@@ -254,8 +254,8 @@ public class CatzSuperstructure {
     public Command jiggleIntakeCommand() {
         Command jiggleCmd = Commands.run(() -> {
             double time = Timer.getFPGATimestamp();
-            double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY_LOG.get() * (2 * Math.PI)) > 0
-                    ? IntakeDeployConstants.JIGGLE_POSITION_LOG.get()
+            double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY * (2 * Math.PI)) > 0
+                    ? IntakeDeployConstants.UP_POSITION.in(Units.Rotations)
                     : IntakeDeployConstants.DEPLOY_POSITION.in(Units.Rotations);
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
@@ -275,7 +275,7 @@ public class CatzSuperstructure {
                 RobotContainer.rumbleDrv(0.0);
             } else {
                 isIntakeOn = true;
-                CatzIntakeRoller.Instance.applySetpoint(Setpoint.withVoltageSetpoint(IntakeRollerConstants.ON_SETPOINT_LOG.get()));
+                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
                 RobotContainer.rumbleDrv(0.05);
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
