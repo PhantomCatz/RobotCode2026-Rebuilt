@@ -66,14 +66,14 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         //     v = TurretConstants.kV.get();
         // }
 
-        Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
-                Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
-                        .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
-                        .plus(TurretConstants.TURRET_ROTATION_OFFSET));
-        Logger.recordOutput("Shooter Location", turretPose);
+        // Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
+        //         Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
+        //                 .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+        //                 .plus(TurretConstants.TURRET_ROTATION_OFFSET));
+        // Logger.recordOutput("Shooter Location", turretPose);
 
-        double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
-        Logger.recordOutput("Distance from Hub", distFromHub);
+        // double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
+        // Logger.recordOutput("Distance from Hub", distFromHub);
         // Logger.recordOutput("Distance from Close Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
         // Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 

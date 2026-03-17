@@ -100,22 +100,20 @@ public class CatzSwerveModule {
   }
 
   double prevCur = 0.0;
+  int logCount = 0;
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
-    Logger.processInputs(motorOutputs, inputs);
 
-    // Update ff and controllers
-    LoggedTunableNumber.ifChanged(
-        hashCode(), () -> io.setDrivePID(drivekP.get(), 0, drivekD.get()), drivekP, drivekD);
-    LoggedTunableNumber.ifChanged(
-        hashCode(), () -> io.setSteerPID(steerkP.get(), 0, steerkD.get()), steerkP, steerkD);
+    if(logCount >= 5){
+      Logger.processInputs(motorOutputs, inputs);
+      logCount = 0;
+    }
+    logCount++;
 
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
-
-
 
   }
 
