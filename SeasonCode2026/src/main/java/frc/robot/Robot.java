@@ -199,7 +199,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    VirtualSubsystem.periodicAll();
+    // VirtualSubsystem.periodicAll();
     if(allSignals.length > 0) {
       BaseStatusSignal.refreshAll(allSignals);
     }

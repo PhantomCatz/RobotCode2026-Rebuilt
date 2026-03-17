@@ -203,9 +203,9 @@ public class AimCalculations {
     }
 
     public static boolean readyToShoot() {
-        Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
-        Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
-        Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
+        // Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
+        // Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
+        // Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
         return CatzTurret.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
     }
 }

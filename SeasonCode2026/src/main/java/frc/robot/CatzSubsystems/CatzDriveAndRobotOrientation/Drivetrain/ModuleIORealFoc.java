@@ -225,7 +225,7 @@ public class ModuleIORealFoc implements ModuleIO {
           steerFeedback.calculate(currentAngleRads, targetAngleRads))
     );
 
-    Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);
+    // Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);
   }
 
   @Override

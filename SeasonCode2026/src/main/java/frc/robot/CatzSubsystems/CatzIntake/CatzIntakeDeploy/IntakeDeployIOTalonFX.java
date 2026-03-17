@@ -20,7 +20,7 @@ public class IntakeDeployIOTalonFX extends GenericTalonFXIOReal<IntakeDeployIO.I
         }else{
             feedforward = -IntakeDeployConstants.kG.get() * Math.sin(CatzIntakeDeploy.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
         }
-        Logger.recordOutput("Intake Deploy Setpoint", target);
+        // Logger.recordOutput("Intake Deploy Setpoint", target);
         setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
     }
 
