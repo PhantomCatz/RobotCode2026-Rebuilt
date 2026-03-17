@@ -178,10 +178,12 @@ public class CatzDrivetrain extends SubsystemBase {
         getModuleStates(),
         gyroAngle2d,
         Timer.getFPGATimestamp());
-    CatzRobotTracker.Instance.addOdometryObservation(observation);
+    CatzRobotTracker.Instance.addOdometryObservation(observation); //TODO odometry should be calculated after applying velocity?
+
+
     double currentTime = Timer.getFPGATimestamp();
     // find the last element with time before or equal the current time
-    while (!futureSwerveSetpoints.isEmpty() && futureSwerveSetpoints.peek().getFirst() <= currentTime) {
+    while (!futureSwerveSetpoints.isEmpty() && futureSwerveSetpoints.peek().getFirst() <= currentTime) { //TODO why a while loop?
       currentSetpoint = futureSwerveSetpoints.poll().getSecond();
     }
     // now the first element in the queue is the first one with time after the current time
@@ -197,7 +199,7 @@ public class CatzDrivetrain extends SubsystemBase {
       curElement = it.next();
       double driveTime;
       ChassisSpeeds speeds = lastElement.getSecond().chassisSpeeds();
-      ChassisSpeeds fieldRelativeSpeed = speeds.fromRobotRelativeSpeeds(speeds, curPose.getRotation());
+      ChassisSpeeds fieldRelativeSpeed = ChassisSpeeds.fromRobotRelativeSpeeds(speeds, curPose.getRotation());
       // this movement starts in 0.1 second window, so completely finish previous movement
       if (curElement.getFirst() < currentTime+getDelay()) {
         driveTime = curElement.getFirst() - lastElement.getFirst();
