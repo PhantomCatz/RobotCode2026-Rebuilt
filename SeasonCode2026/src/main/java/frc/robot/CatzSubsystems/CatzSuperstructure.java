@@ -82,7 +82,7 @@ public class CatzSuperstructure {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
 
-        Pose2d predictedRobotPose = AimCalculations.getPredictedRobotPose();
+        Pose2d predictedRobotPose = CatzRobotTracker.Instance.getFuturePose();
         Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
 
         Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode,

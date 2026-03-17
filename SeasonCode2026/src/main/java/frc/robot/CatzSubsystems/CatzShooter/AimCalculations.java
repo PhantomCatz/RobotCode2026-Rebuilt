@@ -155,6 +155,9 @@ public class AimCalculations {
     private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity,
             Translation2d targetPos,
             RegressionMode mode) {
+
+        if(targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0) return 0.0;
+
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
         double distToTarget = targetToTurret.getNorm();
 
