@@ -166,7 +166,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		if(requiresFastUpdate){
 			BaseStatusSignal.setUpdateFrequencyForAll(100.0, internalPositionRotations, velocityRps);
 		}else{
-			BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
+			BaseStatusSignal.setUpdateFrequencyForAll(4.0, allSignals);
 		}
 		connectedBuffer = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
 
