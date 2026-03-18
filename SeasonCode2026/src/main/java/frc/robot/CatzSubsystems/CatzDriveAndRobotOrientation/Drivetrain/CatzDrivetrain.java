@@ -165,7 +165,7 @@ public class CatzDrivetrain extends SubsystemBase {
     // ----------------------------------------------------------------------------------------------------
     // Swerve drive Odometry and Velocity updates
     // ----------------------------------------------------------------------------------------------------
-    
+
     double currentTime = Timer.getFPGATimestamp();
     // find the last element with time before or equal the current time
     while (!futureSwerveSetpoints.isEmpty() && futureSwerveSetpoints.peek().getFirst() <= currentTime) {
@@ -187,7 +187,7 @@ public class CatzDrivetrain extends SubsystemBase {
         getModuleStates(),
         gyroAngle2d,
         Timer.getFPGATimestamp());
-    CatzRobotTracker.Instance.addOdometryObservation(observation); 
+    CatzRobotTracker.Instance.addOdometryObservation(observation);
 
     // calculate robot state 0.1 seconds in the future
     Iterator<Pair<Double, SwerveSetpoint>> it = futureSwerveSetpoints.iterator();
@@ -212,7 +212,7 @@ public class CatzDrivetrain extends SubsystemBase {
       lastElement = curElement;
     }
     CatzRobotTracker.Instance.setFuturePose(curPose);
-    
+
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------

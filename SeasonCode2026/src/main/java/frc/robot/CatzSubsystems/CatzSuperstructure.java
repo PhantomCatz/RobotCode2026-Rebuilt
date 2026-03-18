@@ -93,7 +93,7 @@ public class CatzSuperstructure {
             initialShootReady = false;
             activeRegressionMode = currentMode;
         }
-        
+
         CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
 
         if (isShooting) {
@@ -275,7 +275,7 @@ public class CatzSuperstructure {
                 RobotContainer.rumbleDrv(0.0);
             } else {
                 isIntakeOn = true;
-                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
+                CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.getOnSetpoint());
                 RobotContainer.rumbleDrv(0.05);
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
@@ -283,7 +283,7 @@ public class CatzSuperstructure {
     }
 
     public Command intakeON() {
-        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
+        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.getOnSetpoint())
                 .alongWith(Commands.runOnce(() -> isIntakeOn = true));
     }
 

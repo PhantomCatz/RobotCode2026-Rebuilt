@@ -6,9 +6,11 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.MotorUtil.Gains;
 
@@ -31,6 +33,8 @@ public class IntakeRollerConstants {
     };
 
 	private static final int INTAKE_MOTOR_ID = 31;
+	private static final double NO_MOVE_INTAKE_SPEED = 5.0; // TODO make this right
+	private static final double INTAKE_SPEED_SLOPE = 0.3; // TODO make this right
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -77,5 +81,14 @@ public class IntakeRollerConstants {
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
+	}
+
+	public static Setpoint getOnSetpoint() {
+		ChassisSpeeds speeds = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
+		double vx = speeds.vxMetersPerSecond;
+		double vy = speeds.vyMetersPerSecond;
+		double robotSpeed = Math.sqrt(vx*vx + vy*vy);
+		double volts = NO_MOVE_INTAKE_SPEED + robotSpeed*INTAKE_SPEED_SLOPE;
+		return Setpoint.withVoltageSetpoint(volts);
 	}
 }
