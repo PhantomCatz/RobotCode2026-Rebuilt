@@ -1,6 +1,5 @@
 package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
 
-import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;

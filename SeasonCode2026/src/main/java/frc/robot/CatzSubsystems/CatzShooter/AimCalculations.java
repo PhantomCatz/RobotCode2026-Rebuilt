@@ -11,18 +11,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.EpsilonRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
 
-import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
     private static final double phaseDelay = 0.0;
@@ -139,6 +136,7 @@ public class AimCalculations {
     }
 
     private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
+
         ChassisSpeeds currentVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))

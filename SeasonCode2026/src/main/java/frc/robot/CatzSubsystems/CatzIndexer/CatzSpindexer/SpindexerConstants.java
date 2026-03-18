@@ -12,7 +12,6 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 

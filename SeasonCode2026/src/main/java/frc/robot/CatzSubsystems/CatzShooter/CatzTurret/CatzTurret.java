@@ -5,14 +5,12 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
-import frc.robot.FieldConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;

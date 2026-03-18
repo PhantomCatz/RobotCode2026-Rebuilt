@@ -93,7 +93,7 @@ public class CatzSuperstructure {
             initialShootReady = false;
             activeRegressionMode = currentMode;
         }
-
+        
         CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
 
         if (isShooting) {

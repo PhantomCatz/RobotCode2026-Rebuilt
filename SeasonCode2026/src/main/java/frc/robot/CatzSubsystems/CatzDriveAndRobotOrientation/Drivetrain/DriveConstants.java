@@ -10,7 +10,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.CatzConstants;
 import frc.robot.Utilities.HolonomicDriveController;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
 import lombok.Builder;
 
