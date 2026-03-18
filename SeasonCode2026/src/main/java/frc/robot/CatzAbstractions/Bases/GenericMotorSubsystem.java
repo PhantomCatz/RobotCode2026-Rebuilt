@@ -33,7 +33,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	@Override
 	public void periodic() {
 		io.updateInputs(inputs);
-		Logger.processInputs(name, (LoggableInputs) inputs);
+		Logger.processInputs(name, (LoggableInputs) inputs); //TODO update these very 5 loops or smth
 	}
 
 	public void applySetpoint(Setpoint setpoint) {
