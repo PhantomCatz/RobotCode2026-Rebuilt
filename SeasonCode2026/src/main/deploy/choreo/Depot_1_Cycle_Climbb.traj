@@ -3,7 +3,7 @@
  "version":3,
  "snapshot":{
   "waypoints":[
-    {"x":3.328627586364746, "y":5.78722620010376, "heading":0.0, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":3.328627586364746, "y":5.78722620010376, "heading":0.0, "intervals":35, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":4.690598964691162, "y":5.7343339920043945, "heading":1.2242574869760563, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.105463027954102, "y":5.78722620010376, "heading":0.0, "intervals":36, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.163304328918457, "y":4.636822700500488, "heading":-1.0158004431671757, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
