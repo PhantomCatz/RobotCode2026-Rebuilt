@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -87,7 +88,13 @@ public class IntakeRollerConstants {
 		ChassisSpeeds speeds = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 		double vx = speeds.vxMetersPerSecond;
 		double vy = speeds.vyMetersPerSecond;
-		double robotSpeed = Math.sqrt(vx*vx + vy*vy);
+		double driveDirection = Math.atan2(vy, vx);
+		double intakeDirection = CatzRobotTracker.Instance.getEstimatedPose().getRotation().getRadians();
+		double angleBetween = Math.abs(MathUtil.angleModulus(intakeDirection-driveDirection));
+		if (angleBetween > Math.PI/2.0) {
+			return Setpoint.withVoltageSetpoint(NO_MOVE_INTAKE_SPEED);
+		}
+		double robotSpeed = Math.hypot(vx, vy);
 		double volts = NO_MOVE_INTAKE_SPEED + robotSpeed*INTAKE_SPEED_SLOPE;
 		return Setpoint.withVoltageSetpoint(volts);
 	}
