@@ -75,6 +75,34 @@
      "val":3.141592653589793
     }
    },
+   "StartBot":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"0.6 m",
+     "val":0.6
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "StartBotBump":{
+    "x":{
+     "exp":"3.6 m",
+     "val":3.6
+    },
+    "y":{
+     "exp":"2.5 m",
+     "val":2.5
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
    "StartTop":{
     "x":{
      "exp":"4.4 m",
@@ -87,6 +115,34 @@
     "heading":{
      "exp":"180 deg",
      "val":3.141592653589793
+    }
+   },
+   "StartTop1":{
+    "x":{
+     "exp":"StartTop.x",
+     "val":4.4
+    },
+    "y":{
+     "exp":"StartTop.y",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "StartTopBump":{
+    "x":{
+     "exp":"3.6 m",
+     "val":3.6
+    },
+    "y":{
+     "exp":"5.5 m",
+     "val":5.5
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
     }
    },
    "TestOut":{
