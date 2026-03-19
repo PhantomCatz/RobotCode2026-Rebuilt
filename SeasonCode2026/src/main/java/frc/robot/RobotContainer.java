@@ -29,8 +29,7 @@ public class RobotContainer {
   private final CatzDrivetrain drivetrain = CatzDrivetrain.getInstance();
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
-  public static final CommandXboxController xboxTest = new CommandXboxController(1);
-  public static final CommandXboxController xboxFunctional = new CommandXboxController(4);
+  public static final CommandXboxController xboxFunctional = new CommandXboxController(1);
 
   public RobotContainer() {
     configureBindings();
@@ -112,42 +111,6 @@ public class RobotContainer {
 
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
-    // ---------------------Testing Controls--------------------
-    // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
-    // xboxTest.a().onTrue(superstructure.hoodManualCommand());
-    xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
-    xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
-    // xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
-    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
-
-    xboxTest.y().onTrue(superstructure.manualExtendClimb());
-    xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
-    xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
-    xboxTest.povRight().onTrue(superstructure.resetClimbPose());
-
-    xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
-
-    // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
-
-    // xboxTest.leftBumper().onTrue(superstructure.turret30Deg());
-    // xboxTest.rightBumper().onTrue(superstructure.turretMinus30Deg());
-
-    // xboxTest.povDown().onTrue(CatzIntakeDeploy.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.0)));
-    // xboxTest.povUp().onTrue(CatzIntakeDeploy.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.5)));
-
-    // xboxTest.povRight().onTrue(CatzIntakeDeploy.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0)));
-    // xboxTest.leftBumper().onTrue(CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT));
-    // //     .alongWith(superstructure.turretTrackHubCommand()));
-    // // xboxTest.b().onTrue(superstructure.interpolateHoodAngle().alongWith(superstructure.interpolateFlywheelSpeed()));
-    // // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
-    // // .alongWith(superstructure.interpolateShooterSpeed()).alongWPith(superstructure.turretTrackCommand()));
-
-    // // xboxTest.leftBumper().onTrue(superstructur][\e.turret90Degrees());
-    // // xboxTest.rightBumper().onTrue(superstructure.turret90DegreesMinus());
-
-    // xboxTest.a().onTrue(superstructure.startIndexers());
-    // xboxTest.x().onTrue(superstructure.stopAllShooting());
-
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS
     // -------------------------------------------------------------------------
@@ -161,6 +124,17 @@ public class RobotContainer {
     xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    // back, up, down, left, right, up right, up left, down right, down left, right trigger, left trigger
+
+    xboxFunctional.povUp().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
+    xboxFunctional.povDown().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualHood());
+    xboxFunctional.povLeft().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
+    xboxFunctional.povRight().multiPress(2, 1).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
+
+    xboxFunctional.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());
+    xboxFunctional.povDownLeft().onTrue(CatzSuperstructure.Instance.resetHoodPose());
+    xboxFunctional.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
+    xboxFunctional.povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
 
 
   }

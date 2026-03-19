@@ -5,6 +5,7 @@ import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -23,6 +25,7 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
@@ -33,6 +36,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.FlywheelConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
@@ -48,7 +52,15 @@ public class CatzSuperstructure {
     private boolean initialShootReady = false;
     private RegressionMode activeRegressionMode = RegressionMode.HUB;
 
+    private boolean climbManual = false;
+    private boolean hoodManual = false;
+    private boolean turretManual = false;
+    private boolean deployManual = false;
+
+   private final SubsystemVisualizer visualizer;
+
     private CatzSuperstructure() {
+        this.visualizer = new SubsystemVisualizer("SuperstructureViz");
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -470,20 +482,141 @@ public class CatzSuperstructure {
     public Command cmdClimbStow() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
     }
-    public Command manualExtendClimb() {
-        return CatzClimb.Instance.followSetpointCommand(() -> {
-            if(Math.abs(RobotContainer.xboxTest.getLeftY()) < 0.07){
-                return Setpoint.withVoltageSetpoint(0.0);
+
+    public Command toggleManualExtendClimb() {
+        return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current climbManual is: " + climbManual);
+
+            if (climbManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
+                disableManuals(CatzClimb.Instance);
+                climbManual = true;
+
+                CatzClimb.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
+            } else {
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+                climbManual = false;
             }
-            double input = -(RobotContainer.xboxTest.getLeftY()) * 12;
-            Logger.recordOutput("Climb Xbox Voltage Input", input);
-            return Setpoint.withVoltageSetpoint(input);
         });
     }
+
+    public Command toggleManualHood() {
+        return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current hoodManual is: " + hoodManual);
+
+            if (hoodManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
+                disableManuals(CatzHood.Instance);
+                hoodManual = true;
+
+                CatzHood.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
+            } else {
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT).schedule();
+                hoodManual = false;
+            }
+        });
+    }
+
+    public Command toggleManualTurret() {
+        return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current turretManual is: " + turretManual);
+
+            if (turretManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
+                disableManuals(CatzTurret.Instance);
+                turretManual = true;
+
+                CatzTurret.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
+            } else {
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+                turretManual = false;
+            }
+        });
+    }
+
+    public Command toggleManualDeploy() {
+        return Commands.runOnce(() -> {
+            //System.out.println("Toggle Button Pressed! Current deployManual is: " + deployManual);
+
+            if (deployManual == false) {
+                //System.out.println("Attempting to turn ON manual mode");
+                disableManuals(CatzIntakeDeploy.Instance);
+                deployManual = true;
+
+                CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
+            } else {
+                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+                deployManual = false;
+            }
+        });
+    }
+
+    private void disableManuals(Object excludedSubsystem) {
+    // Reset flags
+    climbManual = false;
+    hoodManual = false;
+    turretManual = false;
+    deployManual = false;
+
+    // Only schedule stow if it's NOT the one we are about to manually control
+    if (excludedSubsystem != CatzClimb.Instance) {
+        CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+    }
+    if (excludedSubsystem != CatzHood.Instance) {
+        CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
+    }
+    if (excludedSubsystem != CatzTurret.Instance) {
+        CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+    }
+    if (excludedSubsystem != CatzIntakeDeploy.Instance) {
+        CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+    }
+}
 
     public Command resetClimbPose(){
         return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
     }
+
+    public Command resetHoodPose(){
+        return CatzHood.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+    public Command resetTurretPose(){
+        return CatzTurret.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
+    public Command resetDeployPose(){
+        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+    }
+
 
     public Command enableClimbSoftLimit(){
         return Commands.runOnce(() -> {
@@ -495,5 +628,13 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             CatzClimb.Instance.setSoftLimitsEnabled(false, false);
         });
+    }
+
+    public void UpdateSim() {
+        Rotation2d IntakeAngle = Rotation2d.fromDegrees(CatzClimb.Instance.getLatencyCompensatedPosition());
+        Rotation2d HoodAngle = Rotation2d.fromDegrees(CatzHood.Instance.getLatencyCompensatedPosition());
+        Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition());
+
+        visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
     }
 }
