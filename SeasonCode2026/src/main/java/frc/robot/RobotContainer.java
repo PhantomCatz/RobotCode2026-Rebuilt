@@ -121,6 +121,10 @@ public class RobotContainer {
     xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
     // back, up, down, left, right, up right, up left, down right, down left, right trigger, left trigger
 
+    // -------------------------------------------------------------------------
+    // MANUAL OVERRIDE
+    // -------------------------------------------------------------------------
+
     xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
     xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());

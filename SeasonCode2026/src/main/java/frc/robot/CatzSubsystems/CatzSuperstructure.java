@@ -57,7 +57,7 @@ public class CatzSuperstructure {
     private boolean turretManual = false;
     private boolean deployManual = false;
 
-   private final SubsystemVisualizer visualizer;
+    private final SubsystemVisualizer visualizer;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
@@ -79,16 +79,18 @@ public class CatzSuperstructure {
 
     private double getRumbleStrength() {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        if (currentPose.getY() > FieldConstants.BOTTOM_TRENCH_MAX_Y && currentPose.getY() < FieldConstants.TOP_TRENCH_MIN_Y) {
+        if (currentPose.getY() > FieldConstants.BOTTOM_TRENCH_MAX_Y
+                && currentPose.getY() < FieldConstants.TOP_TRENCH_MIN_Y) {
             return 0.0;
         }
-        double distFromTrench = Math.min(Math.abs(currentPose.getX() - FieldConstants.LEFT_TRENCH_X), Math.abs(currentPose.getX() - FieldConstants.RIGHT_TRENCH_X));
-        if (distFromTrench > FieldConstants.MIN_RUMBLE_DIST) return 0.0;
+        double distFromTrench = Math.min(Math.abs(currentPose.getX() - FieldConstants.LEFT_TRENCH_X),
+                Math.abs(currentPose.getX() - FieldConstants.RIGHT_TRENCH_X));
+        if (distFromTrench > FieldConstants.MIN_RUMBLE_DIST)
+            return 0.0;
         return 1.0 - distFromTrench / FieldConstants.MIN_RUMBLE_DIST;
     }
 
     private boolean isIntakeOn = false;
-
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
@@ -110,7 +112,8 @@ public class CatzSuperstructure {
 
         if (isShooting) {
             CatzTurret.Instance
-                    .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose, predictedTurretPose, dist.in(Units.Meters)));
+                    .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose,
+                            predictedTurretPose, dist.in(Units.Meters)));
 
             if (isHub) {
                 CatzHood.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(
@@ -132,7 +135,7 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
             RobotContainer.rumbleDrv(getRumbleStrength());
-            if(isIntakeOn){
+            if (isIntakeOn) {
                 RobotContainer.rumbleDrv(0.05);
             }
         } else {
@@ -215,8 +218,9 @@ public class CatzSuperstructure {
         this.currentHoardType = type;
     }
 
-    public Command reverseIndexers(){
-        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.REVERSE).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.REVERSE));
+    public Command reverseIndexers() {
+        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.REVERSE)
+                .alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.REVERSE));
     }
 
     /* --- INTAKE --- */
@@ -461,10 +465,8 @@ public class CatzSuperstructure {
                         alignToBackUpClimb(),
                         alignToCloseClimb(),
                         stowIntake(),
-                        cmdClimbStow()
-                ),
-                trackTower()
-        ).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+                        cmdClimbStow()),
+                trackTower()).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
     public Command manualClimbUpCommand() {
@@ -485,22 +487,24 @@ public class CatzSuperstructure {
 
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
-            //System.out.println("Toggle Button Pressed! Current climbManual is: " + climbManual);
+            // System.out.println("Toggle Button Pressed! Current climbManual is: " +
+            // climbManual);
 
             if (climbManual == false) {
-                //System.out.println("Attempting to turn ON manual mode");
+                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzClimb.Instance);
                 climbManual = true;
 
                 CatzClimb.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
-                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
                 }).schedule();
 
             } else {
-                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
                 climbManual = false;
             }
@@ -509,22 +513,24 @@ public class CatzSuperstructure {
 
     public Command toggleManualHood() {
         return Commands.runOnce(() -> {
-            //System.out.println("Toggle Button Pressed! Current hoodManual is: " + hoodManual);
+            // System.out.println("Toggle Button Pressed! Current hoodManual is: " +
+            // hoodManual);
 
             if (hoodManual == false) {
-                //System.out.println("Attempting to turn ON manual mode");
+                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzHood.Instance);
                 hoodManual = true;
 
                 CatzHood.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
-                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
                 }).schedule();
 
             } else {
-                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT).schedule();
                 hoodManual = false;
             }
@@ -533,22 +539,24 @@ public class CatzSuperstructure {
 
     public Command toggleManualTurret() {
         return Commands.runOnce(() -> {
-            //System.out.println("Toggle Button Pressed! Current turretManual is: " + turretManual);
+            // System.out.println("Toggle Button Pressed! Current turretManual is: " +
+            // turretManual);
 
             if (turretManual == false) {
-                //System.out.println("Attempting to turn ON manual mode");
+                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzTurret.Instance);
                 turretManual = true;
 
                 CatzTurret.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
-                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
                 }).schedule();
 
             } else {
-                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
                 turretManual = false;
             }
@@ -557,22 +565,24 @@ public class CatzSuperstructure {
 
     public Command toggleManualDeploy() {
         return Commands.runOnce(() -> {
-            //System.out.println("Toggle Button Pressed! Current deployManual is: " + deployManual);
+            // System.out.println("Toggle Button Pressed! Current deployManual is: " +
+            // deployManual);
 
             if (deployManual == false) {
-                //System.out.println("Attempting to turn ON manual mode");
+                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzIntakeDeploy.Instance);
                 deployManual = true;
 
                 CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
-                    if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
                 }).schedule();
 
             } else {
-                //System.out.println("Attempting to turn OFF manual mode and STOW");
+                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
                 deployManual = false;
             }
@@ -580,51 +590,51 @@ public class CatzSuperstructure {
     }
 
     private void disableManuals(Object excludedSubsystem) {
-    // Reset flags
-    climbManual = false;
-    hoodManual = false;
-    turretManual = false;
-    deployManual = false;
+        // Reset flags
+        climbManual = false;
+        hoodManual = false;
+        turretManual = false;
+        deployManual = false;
 
-    // Only schedule stow if it's NOT the one we are about to manually control
-    if (excludedSubsystem != CatzClimb.Instance) {
-        CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+        // Only schedule stow if it's NOT the one we are about to manually control
+        if (excludedSubsystem != CatzClimb.Instance) {
+            CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+        }
+        if (excludedSubsystem != CatzHood.Instance) {
+            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
+        }
+        if (excludedSubsystem != CatzTurret.Instance) {
+            CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+        }
+        if (excludedSubsystem != CatzIntakeDeploy.Instance) {
+            CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+        }
     }
-    if (excludedSubsystem != CatzHood.Instance) {
-        CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
-    }
-    if (excludedSubsystem != CatzTurret.Instance) {
-        CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
-    }
-    if (excludedSubsystem != CatzIntakeDeploy.Instance) {
-        CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
-    }
-}
 
-    public Command resetClimbPose(){
+    public Command resetClimbPose() {
         return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
     }
 
-    public Command resetHoodPose(){
+    public Command resetHoodPose() {
         return CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS);
     }
 
-    public Command resetTurretPose(){
-        return CatzTurret.Instance.setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
+    public Command resetTurretPose() {
+        return CatzTurret.Instance
+                .setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     }
 
-    public Command resetDeployPose(){
+    public Command resetDeployPose() {
         return CatzIntakeDeploy.Instance.setCurrentPositionCommand(IntakeDeployConstants.STOW_POSITION);
     }
 
-
-    public Command enableClimbSoftLimit(){
+    public Command enableClimbSoftLimit() {
         return Commands.runOnce(() -> {
             CatzClimb.Instance.setSoftLimitsEnabled(false, true);
         });
     }
 
-    public Command disableClimbSoftLimit(){
+    public Command disableClimbSoftLimit() {
         return Commands.runOnce(() -> {
             CatzClimb.Instance.setSoftLimitsEnabled(false, false);
         });
