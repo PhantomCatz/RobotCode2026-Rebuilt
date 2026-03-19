@@ -493,7 +493,7 @@ public class CatzSuperstructure {
                 climbManual = true;
 
                 CatzClimb.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
@@ -517,7 +517,7 @@ public class CatzSuperstructure {
                 hoodManual = true;
 
                 CatzHood.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
@@ -541,7 +541,7 @@ public class CatzSuperstructure {
                 turretManual = true;
 
                 CatzTurret.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
@@ -565,7 +565,7 @@ public class CatzSuperstructure {
                 deployManual = true;
 
                 CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxFunctional.getLeftY()) * 12;
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if(Math.abs(input) < 0.84) return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
@@ -606,15 +606,15 @@ public class CatzSuperstructure {
     }
 
     public Command resetHoodPose(){
-        return CatzHood.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+        return CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS);
     }
 
     public Command resetTurretPose(){
-        return CatzTurret.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+        return CatzTurret.Instance.setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     }
 
     public Command resetDeployPose(){
-        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(IntakeDeployConstants.STOW_POSITION);
     }
 
 
