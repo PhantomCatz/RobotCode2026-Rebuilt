@@ -125,11 +125,14 @@ public class RobotContainer {
     // MANUAL OVERRIDE
     // -------------------------------------------------------------------------
 
+
     xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
     xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
     xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
+
+    xboxAux.back().multiPress(2, 0.4).onTrue(Commands.runOnce(()-> CatzSuperstructure.Instance.canResetPose = ! CatzSuperstructure.Instance.canResetPose));
     xboxAux.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());
     xboxAux.povDownLeft().onTrue(CatzSuperstructure.Instance.resetHoodPose());
     xboxAux.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());

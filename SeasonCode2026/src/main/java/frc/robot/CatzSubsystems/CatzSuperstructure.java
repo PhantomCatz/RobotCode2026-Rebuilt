@@ -469,13 +469,6 @@ public class CatzSuperstructure {
                 trackTower()).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
-    public Command manualClimbUpCommand() {
-        return cmdClimbReach().onlyIf(() -> isClimbMode);
-    }
-
-    public Command manualClimbDownCommand() {
-        return cmdClimbStow().onlyIf(() -> isClimbMode);
-    }
 
     public Command cmdClimbReach() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.REACH_SETPOINT);
@@ -611,21 +604,23 @@ public class CatzSuperstructure {
         }
     }
 
+    public boolean canResetPose = false;
+
     public Command resetClimbPose() {
-        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));
+        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0)).onlyIf(()->canResetPose);
     }
 
     public Command resetHoodPose() {
-        return CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS);
+        return CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS).onlyIf(()->canResetPose);
     }
 
     public Command resetTurretPose() {
         return CatzTurret.Instance
-                .setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
+                .setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos())).onlyIf(()->canResetPose);
     }
 
     public Command resetDeployPose() {
-        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(IntakeDeployConstants.STOW_POSITION);
+        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(IntakeDeployConstants.STOW_POSITION).onlyIf(()->canResetPose);
     }
 
     public Command enableClimbSoftLimit() {
