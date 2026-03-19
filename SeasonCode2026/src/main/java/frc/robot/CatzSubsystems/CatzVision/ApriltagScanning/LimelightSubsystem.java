@@ -13,6 +13,8 @@ public class LimelightSubsystem extends SubsystemBase {
 
 	public static LimelightSubsystem Instance = new LimelightSubsystem();
 
+	private int lastZone = -1;
+
 	private final ApriltagScanningIO[] ios;
 
 	private LimelightSubsystem() {
@@ -70,9 +72,13 @@ public class LimelightSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		for(int i = 0; i < ios.length; i++){
-			ios[i].update();
-			ios[i].setPipelineIndex(getZone());
+		int curZone = getZone();
+		if (curZone != lastZone) {
+			for(int i = 0; i < ios.length; i++){
+				ios[i].update();
+				ios[i].setPipelineIndex(curZone);
+			}
+			lastZone = curZone;
 		}
 	}
 

@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -11,10 +12,6 @@ import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -113,19 +110,16 @@ public class RobotContainer {
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
     // ---------------------Testing Controls--------------------
-    // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
-    // xboxTest.a().onTrue(superstructure.hoodManualCommand());
-    xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
-    xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
-    // xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
-    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
-    xboxTest.y().onTrue(superstructure.manualExtendClimb());
-    xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
-    xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
-    xboxTest.povRight().onTrue(superstructure.resetClimbPose());
+    xboxTest.a().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(2.0, 6.0), new Rotation2d())))); // top left 0
+    xboxTest.b().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(6.0, 6.0), new Rotation2d())))); // mid top left 1
+    xboxTest.x().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(10.0, 6.0), new Rotation2d())))); // mid top right 2
+    xboxTest.y().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(14.0, 6.0), new Rotation2d())))); // top right 3
+    xboxTest.povUp().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(2.0, 2.0), new Rotation2d())))); // bot left 4
+    xboxTest.povRight().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(6.0, 2.0), new Rotation2d())))); // mid bot left 5
+    xboxTest.povDown().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(10.0, 2.0), new Rotation2d())))); // mid bot right 6
+    xboxTest.povLeft().onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(new Translation2d(14.0, 2.0), new Rotation2d())))); // bot right 7
 
-    xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
 
     // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
 
