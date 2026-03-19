@@ -496,7 +496,7 @@
   "splits":[0,0,116,149,181,229,264,313,348,376]
  },
  "events":[
-   {"name":"Intake2", "from":{"target":1, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"IntakeStop5", "from":{"target":4, "targetTimestamp":3.31625, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp6", "from":{"target":5, "targetTimestamp":3.96984, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score7", "from":{"target":6, "targetTimestamp":5.36469, "offset":{"exp":"0 s", "val":0.0}}, "event":null},

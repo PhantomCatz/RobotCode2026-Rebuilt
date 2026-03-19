@@ -787,5 +787,6 @@
    {"name":"Intake10", "from":{"target":9, "targetTimestamp":7.12777, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp16", "from":{"target":15, "targetTimestamp":11.31896, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StartShootWhileMove+StopIntake17", "from":{"target":16, "targetTimestamp":12.35616, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"EndShootWhileMove+StartScore20", "from":{"target":19, "targetTimestamp":15.83845, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"EndShootWhileMove+StartScore20", "from":{"target":19, "targetTimestamp":15.83845, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"DeployIntake2", "from":{"target":1, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

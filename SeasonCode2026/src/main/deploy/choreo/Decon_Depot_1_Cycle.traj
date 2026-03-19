@@ -309,7 +309,7 @@
  },
  "events":[
    {"name":"StopIntake6", "from":{"target":5, "targetTimestamp":4.00683, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Intake2", "from":{"target":1, "targetTimestamp":0.99058, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake1"}}},
+   {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":0.99058, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake1"}}},
    {"name":"Score+StowIntake+TrackTower8", "from":{"target":7, "targetTimestamp":5.84913, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":""}}},
    {"name":"RampUp7", "from":{"target":6, "targetTimestamp":4.6097, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

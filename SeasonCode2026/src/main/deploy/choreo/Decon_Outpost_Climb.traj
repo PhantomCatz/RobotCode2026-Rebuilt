@@ -345,7 +345,7 @@
   "splits":[0,60,216,248]
  },
  "events":[
-   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.37882, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
+   {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":1.37882, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
    {"name":"Score+StowIntake+TrackTower8", "from":{"target":7, "targetTimestamp":5.94085, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score3"}}},
    {"name":"Climb9", "from":{"target":9, "targetTimestamp":8.18375, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Climb5"}}},
    {"name":"IntakeStop6", "from":{"target":5, "targetTimestamp":3.7746, "offset":{"exp":"0 s", "val":0.0}}, "event":null},

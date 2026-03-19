@@ -288,7 +288,7 @@
   "splits":[0,28,184]
  },
  "events":[
-   {"name":"Intake2", "from":{"target":1, "targetTimestamp":1.05293, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
+   {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":1.05293, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Intake2"}}},
    {"name":"Score8", "from":{"target":7, "targetTimestamp":5.75615, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Score3"}}},
    {"name":"IntakeStop6", "from":{"target":5, "targetTimestamp":4.04318, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp7", "from":{"target":6, "targetTimestamp":4.79027, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
