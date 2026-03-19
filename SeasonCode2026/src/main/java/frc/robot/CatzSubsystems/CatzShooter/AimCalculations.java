@@ -143,7 +143,7 @@ public class AimCalculations {
             Pose2d predictedRobotPose, Translation2d predictedTurretPose) {
         Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose);
         double futureAirtime = getFutureShootAirtime(predictedTurretPose, targetVelocity, baseTarget, mode);
-        return baseTarget.plus(targetVelocity.times(futureAirtime));    
+        return baseTarget.plus(targetVelocity.times(futureAirtime));
     }
 
     private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
@@ -163,7 +163,7 @@ public class AimCalculations {
     private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity,
             Translation2d targetPos,
             RegressionMode mode) {
-        
+
         if(targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0) return 0.0;
 
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);

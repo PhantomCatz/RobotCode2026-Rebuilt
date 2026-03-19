@@ -41,7 +41,6 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.Setpoint;
-import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
