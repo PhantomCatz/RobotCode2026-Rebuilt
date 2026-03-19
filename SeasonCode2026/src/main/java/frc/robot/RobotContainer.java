@@ -29,8 +29,7 @@ public class RobotContainer {
   private final CatzDrivetrain drivetrain = CatzDrivetrain.getInstance();
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
-  public static final CommandXboxController xboxTest = new CommandXboxController(1);
-  public static final CommandXboxController xboxFunctional = new CommandXboxController(4);
+  public static final CommandXboxController xboxFunctional = new CommandXboxController(1);
 
   public RobotContainer() {
     configureBindings();
@@ -111,42 +110,6 @@ public class RobotContainer {
     xboxDrv.y().onFalse(CatzSuperstructure.Instance.deployIntake().alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
 
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
-
-    // ---------------------Testing Controls--------------------
-    // xboxTest.b().onTrue(superstructure.flywheelManualCommand());
-    // xboxTest.a().onTrue(superstructure.hoodManualCommand());
-    xboxTest.x().onTrue(superstructure.applyFlywheelTuningSetpoint());
-    xboxTest.b().onTrue(superstructure.applyHoodTuningSetpoint());
-    // xboxTest.y().onTrue(superstructure.applyHoodInterpolatedSetpoint());
-    xboxTest.start().onTrue(superstructure.applyHoodBisectorSetpoint().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
-
-    xboxTest.y().onTrue(superstructure.toggleManualExtendClimb());
-    xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
-    xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
-    xboxTest.povRight().onTrue(superstructure.resetClimbPose());
-
-    xboxTest.a().onTrue(CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON).alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON)));
-
-    // xboxTest.b().onTrue(CatzYdexer.Instance.setpointCommand(YdexerConstants.ON));
-
-    // xboxTest.leftBumper().onTrue(superstructure.turret30Deg());
-    // xboxTest.rightBumper().onTrue(superstructure.turretMinus30Deg());
-
-    // xboxTest.povDown().onTrue(CatzIntakeDeploy.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.0)));
-    // xboxTest.povUp().onTrue(CatzIntakeDeploy.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.5)));
-
-    // xboxTest.povRight().onTrue(CatzIntakeDeploy.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0)));
-    // xboxTest.leftBumper().onTrue(CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT));
-    // //     .alongWith(superstructure.turretTrackHubCommand()));
-    // // xboxTest.b().onTrue(superstructure.interpolateHoodAngle().alongWith(superstructure.interpolateFlywheelSpeed()));
-    // // xboxTest.b().onTrue(superstructure.interpolateHoodAngle()
-    // // .alongWith(superstructure.interpolateShooterSpeed()).alongWPith(superstructure.turretTrackCommand()));
-
-    // // xboxTest.leftBumper().onTrue(superstructur][\e.turret90Degrees());
-    // // xboxTest.rightBumper().onTrue(superstructure.turret90DegreesMinus());
-
-    // xboxTest.a().onTrue(superstructure.startIndexers());
-    // xboxTest.x().onTrue(superstructure.stopAllShooting());
 
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS
