@@ -138,6 +138,8 @@ public class RobotContainer {
     xboxAux.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
     xboxAux.povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
 
+    xboxFunctional.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    xboxFunctional.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
   }
 
