@@ -17,7 +17,7 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class SpindexerConstants {
-	private static final Voltage ON_VOLTS = Units.Volts.of(9.0);
+	private static final Voltage ON_VOLTS = Units.Volts.of(7.0);
 	private static final AngularVelocity ON_SPEED = Units.RotationsPerSecond.of(12.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);

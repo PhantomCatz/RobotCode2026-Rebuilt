@@ -160,7 +160,7 @@ public class RobotContainer {
     xboxFunctional.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxFunctional.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxFunctional.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    // xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxFunctional.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     xboxFunctional.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     xboxFunctional.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
