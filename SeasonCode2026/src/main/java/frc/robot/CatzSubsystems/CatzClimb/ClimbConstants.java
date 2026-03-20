@@ -13,6 +13,7 @@ import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
 import frc.robot.Utilities.MotorUtil.Gains;
+import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.Util;
 
@@ -20,15 +21,16 @@ public class ClimbConstants {
 	private static final double SPOOL_DIAMETER_INCH = 1.5;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 
-	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(5.0));
+	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(8.5));
 	private static final Angle STOW_POSITION = converter.toAngle(Units.Inches.of(0.0));
+	public static final LoggedTunableNumber REACH_POSITION_LOG = new LoggedTunableNumber("CatzClimb/Reach Inch", 5.0);
 
 	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(REACH_POSITION.in(Units.Rotations));
 	public static final Setpoint STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(STOW_POSITION.in(Units.Rotations));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN2 -> new Gains(100.0, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
 		case BUBBLES -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
 		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -54,8 +56,8 @@ public class ClimbConstants {
 		FXConfig.Slot0.kS = gains.kS();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 28.75 / (2*Math.PI*SPOOL_DIAMETER_INCH/2.0);
-        FXConfig.MotionMagic.MotionMagicAcceleration = 64.3 / (2*Math.PI*SPOOL_DIAMETER_INCH/2.0);
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 40.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 1000.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
@@ -63,15 +65,14 @@ public class ClimbConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		FXConfig.CurrentLimits.StatorCurrentLimit = 300.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
-		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-
+		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		FXConfig.Feedback.SensorToMechanismRatio = 27.0; //TODO dont use magic number
 
