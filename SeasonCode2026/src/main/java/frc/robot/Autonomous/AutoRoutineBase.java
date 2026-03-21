@@ -35,7 +35,7 @@ public class AutoRoutineBase {
     protected Command shootAllBalls(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
+            CatzSuperstructure.Instance.toggleCmdHubShoot().withTimeout(time),
             CatzSuperstructure.Instance.cmdShooterStop()
         ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
         .andThen(CatzSuperstructure.Instance.intakeOFF()
@@ -45,7 +45,7 @@ public class AutoRoutineBase {
     protected Command shootAllBallsNoJiggle(double time){
         return Commands.sequence(
             Commands.print("shootAllBalls w/out jiggle command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
+            CatzSuperstructure.Instance.toggleCmdHubShoot().withTimeout(time),
             CatzSuperstructure.Instance.cmdShooterStop()
         )
         .andThen(CatzSuperstructure.Instance.intakeOFF());

@@ -57,7 +57,7 @@ public class Half_Hoard_Climb_Outpost extends AutoRoutineBase{
                     followTrajectory(traj5),
                     followTrajectory(traj6)
                 ),
-                CatzSuperstructure.Instance.cmdHoardShoot()
+                CatzSuperstructure.Instance.toggleCmdHoardShoot()
             ),
             CatzSuperstructure.Instance.cmdShooterStop(),
             Commands.deadline(

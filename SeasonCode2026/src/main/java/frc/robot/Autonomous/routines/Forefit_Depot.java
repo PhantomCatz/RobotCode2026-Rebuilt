@@ -29,7 +29,7 @@ public class Forefit_Depot extends AutoRoutineBase{
             ),
             Commands.deadline(
                 followTrajectory(traj2),
-                CatzSuperstructure.Instance.cmdHoardShoot()
+                CatzSuperstructure.Instance.toggleCmdHoardShoot()
             ),
             CatzSuperstructure.Instance.cmdShooterStop()
                 .alongWith(CatzSuperstructure.Instance.intakeOFF()),

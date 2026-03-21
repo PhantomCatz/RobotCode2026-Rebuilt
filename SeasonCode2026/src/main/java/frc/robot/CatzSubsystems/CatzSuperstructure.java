@@ -44,6 +44,7 @@ public class CatzSuperstructure {
     public boolean isClimbMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
     private boolean isScoring = false;
+    private boolean isHoarding = false;
 
     private boolean initialShootReady = false;
     private RegressionMode activeRegressionMode = RegressionMode.HUB;
@@ -161,10 +162,18 @@ public class CatzSuperstructure {
 
     /* --- HOARDING --- */
 
-    public Command cmdHoardShoot() {
-        return Commands.run(() -> {
-            updateAndApplyShooterState(false, true);
-        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
+    public Command toggleCmdHoardShoot() {
+        if(isHoarding == true) {
+            return Commands.run(() -> {
+                updateAndApplyShooterState(false, false);
+            }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+                .beforeStarting(() -> isHoarding = false);
+        } else {
+            return Commands.run(() -> {
+                updateAndApplyShooterState(false, true);
+            }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+                .beforeStarting(() -> isHoarding = true);
+        }
     }
 
     public Command cmdHoardStandby() {
@@ -175,11 +184,18 @@ public class CatzSuperstructure {
 
     /* --- HUB SCORING --- */
 
-    public Command cmdHubShoot() {
-        return Commands.run(() -> {
-            updateAndApplyShooterState(true, true);
-        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-                .beforeStarting(() -> isScoring = true);
+    public Command toggleCmdHubShoot() {
+        if(isScoring == true) {
+            return Commands.run(() -> {
+            updateAndApplyShooterState(false, false);
+            }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+                .beforeStarting(() -> isScoring = false);
+        } else {
+            return Commands.run(() -> {
+                updateAndApplyShooterState(true, true);
+            }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+                    .beforeStarting(() -> isScoring = true);
+        }
     }
 
     public Command cmdHubStandby() {
