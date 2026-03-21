@@ -50,8 +50,8 @@ public class YdexerConstants {
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 25.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 20.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 50.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
