@@ -45,6 +45,9 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
 		setpoint.apply(io);
+		if (setpoint.mode.isVelocityControl() || setpoint.mode.isPositionControl()) {
+			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits);
+		}
 	}
 
 	/**

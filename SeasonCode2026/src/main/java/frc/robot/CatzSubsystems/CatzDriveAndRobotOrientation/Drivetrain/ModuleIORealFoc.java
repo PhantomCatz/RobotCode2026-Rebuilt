@@ -5,6 +5,7 @@ import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.D
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -80,10 +81,15 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
 
     // Config Motors Current Limits assume FOC is included with motors
-    driveTalonConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
-    driveTalonConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
-    driveTalonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
-    driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
+    CurrentLimitsConfigs con = new CurrentLimitsConfigs();
+    con.SupplyCurrentLowerTime = 0.0;
+    con.StatorCurrentLimit = 80.0;
+    con.StatorCurrentLimitEnable = true;
+    con.SupplyCurrentLimit = 20.0;
+    con.SupplyCurrentLimitEnable = true;
+    driveTalonConfig.withCurrentLimits(con);
+    driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.0;
+
     driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Gain Setting

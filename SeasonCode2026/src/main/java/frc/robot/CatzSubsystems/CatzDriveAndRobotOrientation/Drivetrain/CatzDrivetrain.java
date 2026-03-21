@@ -71,6 +71,7 @@ public class CatzDrivetrain extends SubsystemBase {
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
 
   private Queue<Pair<Double, SwerveSetpoint>> futureSwerveSetpoints = new LinkedList<>();
+  public ChassisSpeeds futureChassisSpeeds = new ChassisSpeeds();
 
   private final Field2d field;
 
@@ -210,6 +211,7 @@ public class CatzDrivetrain extends SubsystemBase {
                                                                 speeds.vyMetersPerSecond*driveTime),
                                             new Rotation2d(speeds.omegaRadiansPerSecond*driveTime)));
       lastElement = curElement;
+      Logger.recordOutput("Future speed", Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
     }
     CatzRobotTracker.Instance.setFuturePose(curPose);
 
@@ -481,7 +483,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   public double getDelay() {
     if (CatzSuperstructure.Instance.getIsScoring()) {
-      return DriveConstants.DRIVE_DELAY_TIME;
+      return DriveConstants.DRIVE_DELAY_TIME.get();
     }
     else {
       return 0.0;

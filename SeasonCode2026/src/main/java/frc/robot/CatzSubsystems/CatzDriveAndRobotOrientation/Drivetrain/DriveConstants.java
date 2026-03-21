@@ -10,6 +10,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.CatzConstants;
 import frc.robot.Utilities.HolonomicDriveController;
+import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
 import lombok.Builder;
 
@@ -43,8 +44,8 @@ public class DriveConstants {
         .robotWidthY(Units.inchesToMeters(28))
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
-        .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(30)
+        .maxLinearVelocity(1.0)
+        .maxLinearAcceleration(5.0)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
@@ -60,12 +61,14 @@ public class DriveConstants {
 
   public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
         DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-        22.0,
+        5.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 
-  public static double DRIVE_DELAY_TIME = 0.1;
+  public static final LoggedTunableNumber DRIVE_DELAY_TIME = new LoggedTunableNumber("drive delay", 0.1);
+
+  // public static double DRIVE_DELAY_TIME = ;
 
   public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),

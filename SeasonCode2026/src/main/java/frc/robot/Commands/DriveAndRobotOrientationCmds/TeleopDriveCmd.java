@@ -128,6 +128,8 @@ public class TeleopDriveCmd extends Command {
 
     // Send new chassisspeeds object to the drivetrain queue to use later
     m_drivetrain.pushToQueue(Timer.getFPGATimestamp()+CatzDrivetrain.getInstance().getDelay(), currentSetpoint);
+    CatzDrivetrain.getInstance().futureChassisSpeeds = currentSetpoint.chassisSpeeds();
+    Logger.recordOutput("cur controller input", Math.hypot(currentSetpoint.chassisSpeeds().vxMetersPerSecond, currentSetpoint.chassisSpeeds().vyMetersPerSecond));
     // debugLogsDrive();
   } // end of execute()
 
