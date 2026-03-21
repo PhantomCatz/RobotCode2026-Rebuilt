@@ -27,50 +27,54 @@ public class Depot_2cycle_BumpFullHopper extends AutoRoutineBase{
         prepRoutine(
             traj1,
 
-            CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj1),
-            CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj2),
+            Commands.deadline(
+                Commands.sequence(
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj1).alongWith(Commands.print("traj1 Running...")),
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj2).alongWith(Commands.print("traj2 Running..."))
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
+
+            Commands.deadline(
+                Commands.sequence(
+                    CatzSuperstructure.Instance.cmdHubShoot(),
+                    followTrajectory(traj3).alongWith(Commands.print("traj3 Running..."))
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+
+            followTrajectory(traj4).alongWith(Commands.print("traj4 Running...")),
+            //shootAllBalls(3),
+            Commands.waitSeconds(3),
 
 
             Commands.deadline(
                 Commands.sequence(
-                    //shootWhileMove(3),
-                    followTrajectory(traj3)
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj5).alongWith(Commands.print("traj5 Running...")),
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj6).alongWith(Commands.print("traj6 Running..."))
                 ),
-                Commands.parallel(
-                    CatzSuperstructure.Instance.trackStaticHub(),
-                    CatzSuperstructure.Instance.cmdHubStandby()
-                )
+                CatzSuperstructure.Instance.cmdHubStandby()
             ),
-
-            followTrajectory(traj4),
-            shootAllBalls(3),
-            Commands.waitSeconds(3),
-
-            CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj5),
-            CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj6),
 
             Commands.deadline(
                 Commands.sequence(
                     //shootWhileMove(3),
-                    followTrajectory(traj7)
+                    followTrajectory(traj7).alongWith(Commands.print("traj7 Running..."))
                 ),
-                Commands.parallel(
-                    CatzSuperstructure.Instance.trackStaticHub(),
-                    CatzSuperstructure.Instance.cmdHubStandby()
-                )
+                CatzSuperstructure.Instance.trackStaticHub()
             ),
 
             Commands.waitSeconds(3),
-            followTrajectory(traj8),
+            followTrajectory(traj8).alongWith(Commands.print("traj8 Running...")),
 
             CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj9),
+            followTrajectory(traj9).alongWith(Commands.print("traj9 Running...")),
             CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectory(traj10),
+            followTrajectory(traj10).alongWith(Commands.print("traj10 Running...")),
 
 
             /*

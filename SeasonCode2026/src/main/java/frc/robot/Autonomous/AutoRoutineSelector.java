@@ -34,6 +34,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Outpost_3_Cycle", () -> new Outpost_3_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_Hammerhead_2_Cycle_Outpost", () -> new Outpost_Hammerhead_2_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
+        autoSelector.addRoutine("Depot_2cycle_BumpFullHopper", () -> new Depot_2cycle_BumpFullHopper().getRoutine());
 
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
 
