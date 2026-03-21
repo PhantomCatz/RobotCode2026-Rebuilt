@@ -6,20 +6,20 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_2cycle_BumpFullHopper extends AutoRoutineBase {
-    public Depot_2cycle_BumpFullHopper(){
-        super("Depot_2cycle_BumpFullHopper");
+public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
+    public Depot_2_Cycle_Bump_Full_Hopper(){
+        super("Depot_2_Cycle_Bump_Full_Hopper");
 
-        AutoTrajectory traj1 = getTrajectory("Depot_2cycle_BumpFullHopper",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_2cycle_BumpFullHopper",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_2cycle_BumpFullHopper",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_2cycle_BumpFullHopper",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_2cycle_BumpFullHopper",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_2cycle_BumpFullHopper",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_2cycle_BumpFullHopper",6);
-        AutoTrajectory traj8 = getTrajectory("Depot_2cycle_BumpFullHopper",7);
-        AutoTrajectory traj9 = getTrajectory("Depot_2cycle_BumpFullHopper",8);
-        AutoTrajectory traj10 = getTrajectory("Depot_2cycle_BumpFullHopper",9);
+        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",3);
+        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",4);
+        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",5);
+        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",6);
+        AutoTrajectory traj8 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",7);
+        AutoTrajectory traj9 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",8);
+        AutoTrajectory traj10 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",9);
 
         prepRoutine(
             traj1,
