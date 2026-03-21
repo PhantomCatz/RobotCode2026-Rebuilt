@@ -13,6 +13,7 @@ public class AutoRoutineSelector {
     private AutoRoutineSelector(){
 
         autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
+        autoSelector.addRoutine("Decon_Depot_2_Cycle_Bump_Fast", () -> new Better_Outpost_2_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Decon_Depot_2_Cycle", () -> new Decon_Depot_2_Cycle().getRoutine());
         // autoSelector.addRoutine("Decon_Outpost_2_Cycle_Climb", () -> new Decon_Outpost_2_Cycle_Climb().getRoutine());
         autoSelector.addRoutine("Decon_Outpost_2_Cycle_Outpost", () -> new Decon_Outpost_2_Cycle_Outpost().getRoutine());
@@ -21,7 +22,6 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Depot_1_Cycle_Climbb", () -> new Depot_1_Cycle_Climbb().getRoutine());
         autoSelector.addRoutine("Depot_1_Cycle", () -> new Depot_1_Cycle().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle_Bump", () -> new Depot_2_Cycle_Bump().getRoutine());
-        autoSelector.addRoutine("Depot_2_Cycle_Bump_Fast_Decon", () -> new Depot_2_Cycle_Bump_Fast_Decon().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle_Bump_Full_Hopper", () -> new Depot_2_Cycle_Bump_Full_Hopper().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle", () -> new Depot_2_Cycle().getRoutine());
         autoSelector.addRoutine("Depot_3_Cycle", () -> new Depot_3_Cycle().getRoutine());
@@ -38,7 +38,7 @@ public class AutoRoutineSelector {
 
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
 
-
+//I am Skibidi
 
         // autoSelector.addRoutine("Half_Hoard_Climb_Depot", () -> new Half_Hoard_Climb_Depot().getRoutine());
         // autoSelector.addRoutine("Half_Hoard_Climb_Outpost", () -> new Half_Hoard_Climb_Outpost().getRoutine());

@@ -6,10 +6,12 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_2_Cycle_Bump_Fast_Decon extends AutoRoutineBase {
-    public Depot_2_Cycle_Bump_Fast_Decon(){
+public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
+    public Decon_Depot_2_Cycle_Bump_Fast(){
         super("Depot_2_Cycle_Bump_Fast_Decon");
-
+        /*
+         * WIP
+         */
         AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",0);
         AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",1);
         AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",2);
@@ -29,9 +31,8 @@ public class Depot_2_Cycle_Bump_Fast_Decon extends AutoRoutineBase {
             traj1,
             Commands.deadline(
                 Commands.sequence(
-                    CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
+                    CatzSuperstructure.Instance.deployIntake(),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
@@ -44,7 +45,6 @@ public class Depot_2_Cycle_Bump_Fast_Decon extends AutoRoutineBase {
             ),
             shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
-
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),
@@ -54,9 +54,7 @@ public class Depot_2_Cycle_Bump_Fast_Decon extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6)
-                ),
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
