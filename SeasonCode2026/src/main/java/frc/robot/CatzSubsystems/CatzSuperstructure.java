@@ -4,6 +4,9 @@ import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.Orchestra;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
@@ -48,7 +51,20 @@ public class CatzSuperstructure {
     private boolean initialShootReady = false;
     private RegressionMode activeRegressionMode = RegressionMode.HUB;
 
+    private final Orchestra orchestra = new Orchestra();
+
     private CatzSuperstructure() {
+        orchestra.loadMusic("happyBday.chrp");
+    }
+
+    public void addMotorToOrchestra(TalonFX motor) {
+        orchestra.addInstrument(motor);
+    }
+
+    public Command music() {
+        return Commands.runOnce(() -> {
+            orchestra.play();
+        }).ignoringDisable(true);
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {

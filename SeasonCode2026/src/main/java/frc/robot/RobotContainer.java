@@ -30,6 +30,7 @@ public class RobotContainer {
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
   public static final CommandXboxController xboxTest = new CommandXboxController(1);
+  public static final CommandXboxController instrument = new CommandXboxController(3);
   public static final CommandXboxController xboxFunctional = new CommandXboxController(4);
 
   public RobotContainer() {
@@ -84,6 +85,14 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // Held: Shoot
     xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
+
+    instrument.a().onTrue(Music.Instance.playSongCommand("happyBday.chrp"));
+    instrument.b().onTrue(Music.Instance.playSongCommand("goodSong.chrp"));
+    instrument.y().onTrue(Music.Instance.playSongCommand("ringtone.chrp"));
+    instrument.x().onTrue(Music.Instance.playSongCommand("pvz.chrp"));
+    instrument.rightBumper().onTrue(Music.Instance.stopMusicCommand());
+
+
 
 
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
