@@ -38,13 +38,17 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),
                     CatzSuperstructure.Instance.cmdShooterStop(),
-                    Commands.waitSeconds(3),
-                    shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+                    Commands.waitSeconds(3)
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            Commands.deadline(
+                Commands.sequence(
                     followTrajectory(traj5),
                     CatzSuperstructure.Instance.intakeON()
                 ),
@@ -53,18 +57,24 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     followTrajectoryWithAccuracy(traj6),
-                    CatzSuperstructure.Instance.intakeOFF()
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj7)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectory(traj7),
             shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj8),
                     CatzSuperstructure.Instance.cmdShooterStop(),
-                    Commands.waitSeconds(3),
-                    shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+                    Commands.waitSeconds(3)
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+
+            Commands.deadline(
+                Commands.sequence(
                     followTrajectory(traj9),
                     CatzSuperstructure.Instance.intakeON()
                 ),

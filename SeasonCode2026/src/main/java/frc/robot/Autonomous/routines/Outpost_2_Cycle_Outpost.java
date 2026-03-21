@@ -16,15 +16,6 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Outpost",3);
         AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Outpost",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Outpost",5);
-        // AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Outpost",6);
-
-        // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-
-        // traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
-        // traj11.atTime("IntakeStop+RampUp11").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        // traj13.atTime("Score+StowIntake+TrackTower13")
 
         prepRoutine(
             traj1,
