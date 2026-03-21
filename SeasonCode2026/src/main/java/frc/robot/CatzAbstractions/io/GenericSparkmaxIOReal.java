@@ -153,11 +153,11 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     }
 
     @Override
-    public void useSoftLimits(boolean enable) {
+    public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
         // Modify local config and re-apply
         applyConfigChange(config -> {
-            config.softLimit.forwardSoftLimitEnabled(enable);
-            config.softLimit.reverseSoftLimitEnabled(enable);
+            config.softLimit.forwardSoftLimitEnabled(forward);
+            config.softLimit.reverseSoftLimitEnabled(reverse);
         });
     }
 

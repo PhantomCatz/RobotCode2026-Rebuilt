@@ -83,6 +83,7 @@ public class ModuleIORealFoc implements ModuleIO {
     // Config Motors Current Limits assume FOC is included with motors
     driveTalonConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
     driveTalonConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
+    driveTalonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
     driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -122,6 +123,7 @@ public class ModuleIORealFoc implements ModuleIO {
     // Config Motors Current Limits assume FOC is included with motors
     steerTalonConfig.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
     steerTalonConfig.TorqueCurrent.PeakReverseTorqueCurrent = -40.0;
+    steerTalonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
     steerTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
 
     steerTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast; // TODO Change back to break
@@ -168,7 +170,8 @@ public class ModuleIORealFoc implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.isAbsEncoderConnected = encoder.isConnected();
-
+    inputs.isDriveMotorConnected = drivePosition.getStatus().isOK();
+    inputs.isSteerMotorConnected = steerPosition.getStatus().isOK();
     // Refresh drive motor valuesp
     inputs.drivePositionUnits     = drivePosition.getValueAsDouble();
     inputs.driveVelocityRPS       = driveVelocity.getValueAsDouble();
@@ -178,7 +181,11 @@ public class ModuleIORealFoc implements ModuleIO {
 
     // Refresh steer Motor Values
     inputs.rawAbsEncValueRotation = encoder.getPosition().getValueAsDouble();
-    inputs.steerAbsPosition       = Rotation2d.fromRotations(inputs.rawAbsEncValueRotation - absoluteEncoderOffset.getRotations());
+    if(inputs.isAbsEncoderConnected){
+      inputs.steerAbsPosition = Rotation2d.fromRotations(inputs.rawAbsEncValueRotation - absoluteEncoderOffset.getRotations());
+    }else{
+      inputs.steerAbsPosition = Rotation2d.fromRotations(steerPosition.getValueAsDouble() / MODULE_GAINS_AND_RATIOS.steerReduction());
+    }
 
     inputs.steerVelocityRadsPerSec = Units.rotationsToRadians(steerVelocity.getValueAsDouble());
     inputs.steerSupplyCurrentAmps  = steerSupplyCurrent.getValueAsDouble();

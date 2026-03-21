@@ -54,7 +54,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	public void update() {
 		updateGyro();
 
-		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotChassisSpeeds().omegaRadiansPerSecond);
+		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds().omegaRadiansPerSecond);
 		if (Math.abs(robotOmegaDegPerSec) > 300.0) {
             return; // Reject vision update if spinning too fast
         }

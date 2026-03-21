@@ -217,10 +217,10 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
 
     @Override
-	public void useSoftLimits(boolean enable) {
+	public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
 		UnaryOperator<TalonFXSConfiguration> configChanger = (config) -> {
-			config.SoftwareLimitSwitch.ForwardSoftLimitEnable = enable;
-			config.SoftwareLimitSwitch.ReverseSoftLimitEnable = enable;
+			config.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
+			config.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
 			return config;
 		};
 

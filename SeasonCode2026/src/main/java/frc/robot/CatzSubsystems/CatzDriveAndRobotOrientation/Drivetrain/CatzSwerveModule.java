@@ -15,7 +15,6 @@ import frc.robot.CatzConstants;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.CatzMathUtils;
 import frc.robot.Utilities.CatzMathUtils.Conversions;
-import frc.robot.Utilities.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class CatzSwerveModule {
@@ -103,19 +102,11 @@ public class CatzSwerveModule {
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
-    Logger.processInputs(motorOutputs, inputs);
-
-    // Update ff and controllers
-    LoggedTunableNumber.ifChanged(
-        hashCode(), () -> io.setDrivePID(drivekP.get(), 0, drivekD.get()), drivekP, drivekD);
-    LoggedTunableNumber.ifChanged(
-        hashCode(), () -> io.setSteerPID(steerkP.get(), 0, steerkD.get()), steerkP, steerkD);
+    Logger.processInputs(motorOutputs, inputs); //TODO only update these once every 5 loops or smth
 
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
-
-
 
   }
 

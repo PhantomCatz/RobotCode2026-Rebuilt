@@ -1,5 +1,5 @@
 {
- "name":"Pt1 Auton Paths",
+ "name":"autoPaths",
  "version":2,
  "type":"Swerve",
  "variables":{
@@ -111,12 +111,12 @@
    "val":5.9
   },
   "radius":{
-   "exp":"2 in",
-   "val":0.0508
+   "exp":"1.7 in",
+   "val":0.04318
   },
   "vmax":{
-   "exp":"4000 RPM",
-   "val":418.87902047863906
+   "exp":"5000 RPM",
+   "val":523.5987755982989
   },
   "tmax":{
    "exp":"0.57 N * m",

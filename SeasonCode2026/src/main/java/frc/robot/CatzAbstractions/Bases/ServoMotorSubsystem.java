@@ -6,7 +6,6 @@ import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -32,11 +31,14 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	public void periodic() {
 		super.periodic();
 
-		Logger.recordOutput(name+"/Target Setpoint Rot", setpoint.baseUnits / (2*Math.PI));
-
 		if (isFullManual) {
 			runFullManual(manualSpeed);
 		}
+	}
+
+	@Override
+	public void applySetpoint(Setpoint setpoint){
+		super.applySetpoint(setpoint);
 	}
 
 	public void runFullManual(double speed) {
@@ -47,8 +49,8 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 		}
 	}
 
-	public void useSoftLimits(boolean enable) {
-		io.useSoftLimits(enable);
+	public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
+		io.setSoftLimitsEnabled(forward, reverse);
 	}
 
 	public void setDegThreshold(Angle threshold) {

@@ -18,27 +18,29 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
-import frc.robot.Utilities.VirtualSubsystem;
+import frc.robot.Utilities.Setpoint;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
@@ -60,7 +62,7 @@ public class Robot extends LoggedRobot {
     switch (CatzConstants.hardwareMode) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
-        Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
+        Logger.addDataReceiver(new WPILOGWriter("/U/logs")); ///"home/lvuser/logs"
         Logger.addDataReceiver(new RLOGServer());
         Logger.addDataReceiver(new WPILOGWriter("/Logs"));
 
@@ -83,6 +85,11 @@ public class Robot extends LoggedRobot {
         break;
     }
 
+    CatzIntakeDeploy.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        CatzIntakeDeploy.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.intakeSetpoint));
+      }, CatzIntakeDeploy.Instance)
+  );
     Logger.start();
 
     // Log active commands
@@ -183,15 +190,15 @@ public class Robot extends LoggedRobot {
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
 
-      Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
-      Notifier.setHALThreadPriority(false, 0);
-      System.out.println("Starting deteciton threaadf==================");
-      coralDetectionThread.startPeriodic(0.1);
+      // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
+      // Notifier.setHALThreadPriority(false, 0);
+      // System.out.println("Starting deteciton threaadf==================");
+      // coralDetectionThread.startPeriodic(0.1);
   }
 
   @Override
   public void robotPeriodic() {
-    VirtualSubsystem.periodicAll();
+    // VirtualSubsystem.periodicAll();
     if(allSignals.length > 0) {
       BaseStatusSignal.refreshAll(allSignals);
     }
@@ -200,6 +207,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(200);
   }
 
   @Override
@@ -212,9 +220,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     autonStartTime = Timer.getFPGATimestamp();
-    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
+    CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
+    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     System.out.println("auton: " + m_autonomousCommand);
     if (m_autonomousCommand != null) {
@@ -232,6 +242,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+    CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+    CatzSuperstructure.Instance.isIntakeDeployed = true;
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

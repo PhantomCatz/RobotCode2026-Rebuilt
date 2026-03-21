@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzClimb;
 
+import edu.wpi.first.units.Units;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
@@ -30,6 +31,8 @@ public class CatzClimb extends ServoMotorSubsystem<ClimbIO, ClimbIO.ClimbIOInput
 
     private CatzClimb() {
         super(io, inputs, "CatzClimb", ClimbConstants.converter.toAngle(ClimbConstants.CLIMB_THRESHOLD));
+
+        setCurrentPosition(Units.Rotations.of(0.0));
     }
 
 }

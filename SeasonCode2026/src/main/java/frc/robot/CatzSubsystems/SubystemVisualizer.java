@@ -64,7 +64,7 @@ public class SubystemVisualizer {
                 Logger.recordOutput("Visualization/FinalComponentPoses", simMechanismPoses);
         }
 
-
+// RRRRRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH
         // TODO Possible depreciated code
         public static Pose3d getSimPose(int index) {
                 return simMechanismPoses[index];
