@@ -44,7 +44,7 @@ public class DriveConstants {
         .robotWidthY(Units.inchesToMeters(28))
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
-        .maxLinearVelocity(1.0)
+        .maxLinearVelocity(1.12)
         .maxLinearAcceleration(5.0)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
@@ -66,7 +66,7 @@ public class DriveConstants {
 
   public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 
-  public static final LoggedTunableNumber DRIVE_DELAY_TIME = new LoggedTunableNumber("drive delay", 0.1);
+  public static final LoggedTunableNumber DRIVE_DELAY_TIME = new LoggedTunableNumber("drive delay", 0.03);
 
   // public static double DRIVE_DELAY_TIME = ;
 

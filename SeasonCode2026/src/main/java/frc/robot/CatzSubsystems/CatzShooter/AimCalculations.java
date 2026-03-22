@@ -138,10 +138,11 @@ public class AimCalculations {
 
     private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
 
-        ChassisSpeeds currentVelocity = CatzDrivetrain.getInstance().futureChassisSpeeds;
+        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(CatzDrivetrain.getInstance().futureChassisSpeeds, predictedRobotPose.getRotation());
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
                 .getRadians();
+
 
         double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
                 * currentVelocity.omegaRadiansPerSecond + currentVelocity.vxMetersPerSecond;

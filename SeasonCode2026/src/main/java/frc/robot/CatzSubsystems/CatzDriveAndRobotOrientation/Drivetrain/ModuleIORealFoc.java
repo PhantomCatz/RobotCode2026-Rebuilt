@@ -85,7 +85,7 @@ public class ModuleIORealFoc implements ModuleIO {
     con.SupplyCurrentLowerTime = 0.0;
     con.StatorCurrentLimit = 80.0;
     con.StatorCurrentLimitEnable = true;
-    con.SupplyCurrentLimit = 20.0;
+    con.SupplyCurrentLimit = 15.0;
     con.SupplyCurrentLimitEnable = true;
     driveTalonConfig.withCurrentLimits(con);
     driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.0;

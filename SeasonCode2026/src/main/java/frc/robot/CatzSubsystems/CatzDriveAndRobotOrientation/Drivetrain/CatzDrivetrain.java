@@ -166,7 +166,10 @@ public class CatzDrivetrain extends SubsystemBase {
     // ----------------------------------------------------------------------------------------------------
     // Swerve drive Odometry and Velocity updates
     // ----------------------------------------------------------------------------------------------------
+    Iterator<Pair<Double, SwerveSetpoint>> itt = futureSwerveSetpoints.iterator();
+    // while (it.hasNext()) {
 
+    // }
     double currentTime = Timer.getFPGATimestamp();
     // find the last element with time before or equal the current time
     while (!futureSwerveSetpoints.isEmpty() && futureSwerveSetpoints.peek().getFirst() <= currentTime) {
