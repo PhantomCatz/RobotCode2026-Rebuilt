@@ -68,9 +68,9 @@ public class AimCalculations {
         double targetRads = hubDirection.getAngle().minus(predictedRobotPose.getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
-        if(distFromHub < 2.0){
-            targetRads += Math.toRadians(10.0);
-        }
+        // if(distFromHub < 2.0){
+        //     targetRads += Math.toRadians(10.0);
+        // }
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
