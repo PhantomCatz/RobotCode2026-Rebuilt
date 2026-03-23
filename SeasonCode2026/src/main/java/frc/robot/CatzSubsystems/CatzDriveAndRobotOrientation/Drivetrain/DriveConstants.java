@@ -44,7 +44,7 @@ public class DriveConstants {
         .robotWidthY(Units.inchesToMeters(28))
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
-        .maxLinearVelocity(1.12)
+        .maxLinearVelocity(1.6)
         .maxLinearAcceleration(5.0)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
