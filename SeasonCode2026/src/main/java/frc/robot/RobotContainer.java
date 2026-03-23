@@ -110,15 +110,20 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
-    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodTuningSetpoint());
-    xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
+    // xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodTuningSetpoint());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
 
-    xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
+    // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
     xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
+
+    xboxTest.y().onTrue(superstructure.manualExtendClimb());
+    xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
+    xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
+    xboxTest.povRight().onTrue(superstructure.resetClimbPose());
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
