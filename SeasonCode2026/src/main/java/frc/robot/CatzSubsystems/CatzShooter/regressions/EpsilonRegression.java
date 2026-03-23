@@ -17,8 +17,8 @@ public class EpsilonRegression {
                         // { 2.877, 32.5 },
                         // { 5.256, 39.0 }
                         { 1.279, 28.5 }, // distance meters, flywheel rps
-                        { 3.167, 33.0 },
-                        { 4.873, 38.5 }
+                        { 3.167, 32.0 },
+                        { 4.873, 37.5 }
         };
 
         public static double[][] airtimeHub = {
