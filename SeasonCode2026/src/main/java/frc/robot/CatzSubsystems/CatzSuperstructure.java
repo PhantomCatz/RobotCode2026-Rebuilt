@@ -459,12 +459,13 @@ public class CatzSuperstructure {
     public Command autoClimbCommand() {
         return Commands.deadline(
                 Commands.sequence(
-                        cmdClimbReach(),
+                        // cmdClimbReach(),
+                        deployIntake(),
                         alignToBackUpClimb(),
                         alignToCloseClimb(),
-                        stowIntake(),
-                        cmdClimbStow()),
-                trackTower()).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+                        stowIntake()),
+                        // cmdClimbStow()),
+                trackTower());//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
 

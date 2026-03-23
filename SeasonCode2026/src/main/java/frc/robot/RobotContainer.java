@@ -94,10 +94,8 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // CLIMB (D pad Left and Right)
     // -------------------------------------------------------------------------
-    DoublePressTracker.createTrigger(xboxDrv.start()).onTrue(Commands.runOnce(() -> superstructure.isClimbMode = !superstructure.isClimbMode)
-                                                              .alongWith(superstructure.trackTower()));
 
-    // xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.autoClimbCommand());
+    xboxDrv.start().multiPress(3, 0.4).onTrue(CatzSuperstructure.Instance.autoClimbCommand());
     // INTAKE
     // -------------------------------------------------------------------------
     xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
@@ -118,6 +116,9 @@ public class RobotContainer {
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
 
     xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
+
+    xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
