@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -446,25 +445,25 @@ public class CatzSuperstructure {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             return new PIDDriveCmd(FieldConstants.getClimbAwayPosition(currentTranslation), true);
-        }, Set.of(CatzDrivetrain.getInstance())).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+        }, Set.of(CatzDrivetrain.getInstance()));//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
     public Command alignToCloseClimb() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             return new PIDDriveCmd(FieldConstants.getClimbClosePosition(currentTranslation), true);
-        }, Set.of(CatzDrivetrain.getInstance())).onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+        }, Set.of(CatzDrivetrain.getInstance()));//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
     public Command autoClimbCommand() {
         return Commands.deadline(
                 Commands.sequence(
-                        // cmdClimbReach(),
+                        cmdClimbReach(),
                         deployIntake(),
                         alignToBackUpClimb(),
                         alignToCloseClimb(),
-                        stowIntake()),
-                        // cmdClimbStow()),
+                        stowIntake(),
+                        cmdClimbStow()),
                 trackTower());//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
@@ -606,7 +605,7 @@ public class CatzSuperstructure {
     public boolean canResetPose = false;
 
     public Command resetClimbPose() {
-        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0)).onlyIf(()->canResetPose);
+        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));//.onlyIf(()->canResetPose);
     }
 
     public Command resetHoodPose() {

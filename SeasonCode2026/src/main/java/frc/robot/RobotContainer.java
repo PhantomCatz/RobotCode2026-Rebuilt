@@ -13,14 +13,12 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.DoublePressTracker;
-import frc.robot.Utilities.Setpoint;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
@@ -120,10 +118,11 @@ public class RobotContainer {
     xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    xboxTest.y().onTrue(superstructure.manualExtendClimb());
-    xboxTest.povUp().onTrue(superstructure.enableClimbSoftLimit());
-    xboxTest.povDown().onTrue(superstructure.disableClimbSoftLimit());
-    xboxTest.povRight().onTrue(superstructure.resetClimbPose());
+    xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+
+    xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
+    xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
+    xboxAux.x().onTrue(superstructure.resetClimbPose());
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
