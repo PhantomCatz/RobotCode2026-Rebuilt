@@ -108,29 +108,29 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
-    // xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodTuningSetpoint());
     // xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
     // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
 
     // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
-    xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
-    xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
+    // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+    // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
-    xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
-    xboxAux.x().onTrue(superstructure.resetClimbPose());
+    // xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
+    // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
+    // xboxAux.x().onTrue(superstructure.resetClimbPose());
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
-    // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
-    // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
-    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    // xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+    xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    // xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE
