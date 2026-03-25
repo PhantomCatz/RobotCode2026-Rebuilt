@@ -40,6 +40,9 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     private CatzTurret() {
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
 
+        // CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+        // encoderConfig.MagnetSensor.MagnetOffset = -0.592041;
+
         setCurrentPosition(Units.Rotations.of(getCANCoderAbsPos()));
         // setCurrentPosition(Units.Rotations.of(0.0));
 

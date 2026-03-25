@@ -21,7 +21,7 @@ public class ClimbConstants {
 	private static final double SPOOL_DIAMETER_INCH = 1.5;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 
-	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(8.5));
+	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(9.3));
 	private static final Angle STOW_POSITION = converter.toAngle(Units.Inches.of(0.0));
 	public static final LoggedTunableNumber REACH_POSITION_LOG = new LoggedTunableNumber("CatzClimb/Reach Inch", 5.0);
 

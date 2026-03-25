@@ -35,7 +35,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	public void periodic() {
 		io.updateInputs(inputs);
 
-		if(logCount >= 1){
+		if(logCount >= 5){
 			Logger.processInputs(name, (LoggableInputs) inputs);
 			logCount = 0;
 		}
