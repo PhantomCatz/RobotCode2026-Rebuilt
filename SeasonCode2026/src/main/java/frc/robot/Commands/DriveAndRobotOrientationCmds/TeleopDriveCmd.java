@@ -7,12 +7,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
+
+import frc.robot.Utilities.ModuleLimits;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
 
@@ -119,9 +122,15 @@ public class TeleopDriveCmd extends Command {
         finalVelY,
         turningVelocity,
         CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
+    ModuleLimits limits;
+    if(CatzSuperstructure.Instance.getIsScoring()) {
+      limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
+    }else{
+      limits = DriveConstants.DRIVE_LIMITS;
+    }
 
     currentSetpoint = swerveSetpointGenerator.generateSetpoint(
-      DriveConstants.DRIVE_LIMITS,
+      limits,
       currentSetpoint,
       chassisSpeeds,
       0.02);

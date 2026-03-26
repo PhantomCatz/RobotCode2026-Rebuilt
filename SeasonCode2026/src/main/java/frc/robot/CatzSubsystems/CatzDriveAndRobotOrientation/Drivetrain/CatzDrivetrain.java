@@ -500,7 +500,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   public double getDelay() {
     if (CatzSuperstructure.Instance.getIsScoring()) {
-      return DriveConstants.DRIVE_DELAY_TIME.get();
+      return DriveConstants.DRIVE_DELAY_TIME;
     }
     else {
       return 0.0;
