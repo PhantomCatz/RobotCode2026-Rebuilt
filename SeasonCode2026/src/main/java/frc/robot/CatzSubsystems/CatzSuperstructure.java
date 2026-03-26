@@ -106,7 +106,7 @@ public class CatzSuperstructure {
         }
 
         CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
-
+        CatzDrivetrain.getInstance().setShootWhileMoveConfig();
         if (isShooting) {
             CatzTurret.Instance
                     .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose,
@@ -159,6 +159,7 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
                 Commands.runOnce(() -> initialShootReady = false),
                 Commands.runOnce(() -> isScoring = false),
+                Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()),
                 Commands.runOnce(() -> RobotContainer.rumbleDrv(0.0)));
     }
 

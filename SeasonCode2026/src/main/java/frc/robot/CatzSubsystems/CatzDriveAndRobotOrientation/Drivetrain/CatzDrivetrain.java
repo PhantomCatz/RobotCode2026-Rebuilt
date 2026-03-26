@@ -360,6 +360,20 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
+  /** Set current limits for shoot while move */
+  public void setShootWhileMoveConfig() {
+    for (CatzSwerveModule module : m_swerveModules) {
+      module.setShootWhileMoveConfig();
+    }
+  }
+
+  /** Set current limits for normal driving*/
+  public void setNormalConfig() {
+    for (CatzSwerveModule module : m_swerveModules) {
+      module.setNormalConfig();
+    }
+  }
+
   /** command to cancel running auto trajectories */
   public Command cancelTrajectory() {
     Command cancel = new InstantCommand();

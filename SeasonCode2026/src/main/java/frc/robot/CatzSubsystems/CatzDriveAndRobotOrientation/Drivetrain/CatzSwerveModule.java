@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.CatzConstants;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.CatzMathUtils;
 import frc.robot.Utilities.CatzMathUtils.Conversions;
@@ -160,6 +161,14 @@ public class CatzSwerveModule {
 
   public void setNeutralModeSteer(NeutralModeValue type) {
     io.setSteerNeutralModeIO(type);
+  }
+
+  public void setShootWhileMoveConfig() {
+    io.setShootWhileMoveConfig();
+  }
+
+  public void setNormalConfig() {
+    io.setNormalConfig();
   }
 
   public void resetDriveEncs() {
