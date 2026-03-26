@@ -68,6 +68,8 @@ public class ModuleIORealFoc implements ModuleIO {
   public CANBus driveTalonCANBus = new CANBus("*");
   public CANBus steerTalonCANBus = new CANBus("*");
 
+  private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
@@ -81,16 +83,21 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
 
     // Config Motors Current Limits assume FOC is included with motors
-    CurrentLimitsConfigs con = new CurrentLimitsConfigs();
     con.SupplyCurrentLowerTime = 0.0;
     con.StatorCurrentLimit = 80.0;
     con.StatorCurrentLimitEnable = true;
-    con.SupplyCurrentLimit = 15.0;
+    con.SupplyCurrentLimit = 40.0;
     con.SupplyCurrentLimitEnable = true;
     driveTalonConfig.withCurrentLimits(con);
     driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.0;
 
     driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+    shootWhileMoveCon.SupplyCurrentLowerTime = 0.0;
+    shootWhileMoveCon.StatorCurrentLimit = 80.0;
+    shootWhileMoveCon.StatorCurrentLimitEnable = true;
+    shootWhileMoveCon.SupplyCurrentLimit = 15.0;
+    shootWhileMoveCon.SupplyCurrentLimitEnable = true;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -256,5 +263,17 @@ public class ModuleIORealFoc implements ModuleIO {
   public void setSteerNeutralModeIO(NeutralModeValue type) {
     steerTalonConfig.MotorOutput.NeutralMode = type;
     steerTalon.getConfigurator().apply(steerTalonConfig);
+  }
+
+  @Override
+  public void setShootWhileMoveConfig() {
+    driveTalonConfig.withCurrentLimits(shootWhileMoveCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setNormalConfig() {
+    driveTalonConfig.withCurrentLimits(con);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
   }
 }
