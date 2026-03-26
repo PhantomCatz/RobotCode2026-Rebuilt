@@ -59,12 +59,12 @@ public class DriveConstants {
   // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
 
   public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
-        DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+        1.6,
         5.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
 
-  public static final double DRIVE_DELAY_TIME = 0.03;
+  public static final double DRIVE_DELAY_TIME = 0.02;
   // public static double DRIVE_DELAY_TIME = ;
 
   public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(

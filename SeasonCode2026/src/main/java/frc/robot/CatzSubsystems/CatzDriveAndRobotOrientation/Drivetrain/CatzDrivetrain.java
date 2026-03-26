@@ -29,7 +29,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.Od
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
-import frc.robot.Utilities.ModuleLimits;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
 import edu.wpi.first.math.Pair;
@@ -262,33 +261,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
       // Set module states to each of the swerve modules
       m_swerveModules[i].setModuleAngleAndVelocity(optimizedDesiredStates[i]);
-    }
-  }
-
-  public void moveWhileShootAccControl(ChassisSpeeds desiredSpeeds) {
-
-    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(desiredSpeeds, 0.02);
-    ModuleLimits limits;
-
-    if(CatzSuperstructure.Instance.getIsScoring()){
-      limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
-    }else{
-      limits = DriveConstants.DRIVE_LIMITS;
-    }
-    currentSetpoint = swerveSetpointGenerator.generateSetpoint(
-        limits,
-        currentSetpoint,
-        discreteSpeeds,
-        0.02);
-
-    SwerveModuleState[] setpointStates = currentSetpoint.moduleStates();
-
-    for (int i = 0; i < 4; i++) {
-      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
-
-      m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
-
-      optimizedDesiredStates[i] = optimizedState;
     }
   }
 

@@ -106,7 +106,6 @@ public class CatzSuperstructure {
         }
 
         CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
-        CatzDrivetrain.getInstance().setShootWhileMoveConfig();
         if (isShooting) {
             CatzTurret.Instance
                     .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose,
@@ -192,7 +191,8 @@ public class CatzSuperstructure {
         return Commands.run(() -> {
             updateAndApplyShooterState(true, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-                .beforeStarting(() -> isScoring = true);
+                .beforeStarting(() -> {isScoring = true;
+                                       CatzDrivetrain.getInstance().setShootWhileMoveConfig();});
     }
 
     public Command cmdHubStandby() {
