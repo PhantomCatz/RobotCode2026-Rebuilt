@@ -6,16 +6,12 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_Climb extends AutoRoutineBase{
-    public Depot_Climb(){
-        super("Depot_Climb");
-        AutoTrajectory traj1 = getTrajectory("Depot_Climb",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_Climb",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_Climb",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_Climb",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_Climb",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_Climb",5);
-
+public class Decon_Depot_1_Cycle extends AutoRoutineBase{
+    public Decon_Depot_1_Cycle(){
+        super("Decon_Depot_1_Cycle");
+        AutoTrajectory traj1 = getTrajectory("Decon_Depot_1_Cycle",0);
+        AutoTrajectory traj2 = getTrajectory("Decon_Depot_1_Cycle",1);
+        AutoTrajectory traj3 = getTrajectory("Decon_Depot_1_Cycle",2);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -32,20 +28,15 @@ public class Depot_Climb extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4),
-                    followTrajectory(traj5)
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj6),
-                CatzSuperstructure.Instance.cmdHubStandby(),
-                CatzSuperstructure.Instance.intakeOFF()
+                followTrajectoryWithAccuracy(traj3),
+                CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.autoClimbCommand(),
-            Commands.print("Climb"),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
             Commands.print("done")
         );
     }

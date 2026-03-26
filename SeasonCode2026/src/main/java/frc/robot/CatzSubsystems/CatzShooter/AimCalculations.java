@@ -10,23 +10,20 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.EpsilonRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
 
-import org.littletonrobotics.junction.Logger;
 
 public class AimCalculations {
     private static final double phaseDelay = 0.0;
-    private static final LoggedTunableNumber delayy = new LoggedTunableNumber("phase delay", phaseDelay);
 
     public enum HoardTargetType {
         RELATIVE_CLOSE,
@@ -66,21 +63,14 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose) {
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose, Translation2d predictedTurretPose, double distFromHub) {
         Translation2d hubDirection = target.minus(predictedTurretPose);
-        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
-                .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
-        return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
-    }
-
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Translation2d predictedTurretPose, double distFromHub) {
-        Translation2d hubDirection = target.minus(predictedTurretPose);
-        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+        double targetRads = hubDirection.getAngle().minus(predictedRobotPose.getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
-        if(distFromHub < 2.0){
-            targetRads += Math.toRadians(10.0);
-        }
+        // if(distFromHub < 2.0){
+        //     targetRads += Math.toRadians(10.0);
+        // }
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
@@ -147,10 +137,12 @@ public class AimCalculations {
     }
 
     private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
-        ChassisSpeeds currentVelocity = CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds();
+
+        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(CatzDrivetrain.getInstance().futureChassisSpeeds, predictedRobotPose.getRotation());
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
                 .getRadians();
+
 
         double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
                 * currentVelocity.omegaRadiansPerSecond + currentVelocity.vxMetersPerSecond;
@@ -163,6 +155,9 @@ public class AimCalculations {
     private static double getFutureShootAirtime(Translation2d fieldToTurret, Translation2d targetVelocity,
             Translation2d targetPos,
             RegressionMode mode) {
+
+        if(targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0) return 0.0;
+
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
         double distToTarget = targetToTurret.getNorm();
 
@@ -202,17 +197,17 @@ public class AimCalculations {
         ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vxMetersPerSecond * delayy.get(),
-                robotVelocity.vyMetersPerSecond * delayy.get(),
-                robotVelocity.omegaRadiansPerSecond * delayy.get());
+                robotVelocity.vxMetersPerSecond * phaseDelay,
+                robotVelocity.vyMetersPerSecond * phaseDelay,
+                robotVelocity.omegaRadiansPerSecond * phaseDelay);
 
         return currentPose.exp(twist);
     }
 
     public static boolean readyToShoot() {
-        Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
-        Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
-        Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
+        // Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
+        // Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
+        // Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
         return CatzTurret.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();
     }
 }

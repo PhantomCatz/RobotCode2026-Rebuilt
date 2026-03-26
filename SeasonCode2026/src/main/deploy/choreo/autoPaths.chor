@@ -1,5 +1,5 @@
 {
- "name":"Pt1 Auton Paths",
+ "name":"autoPaths",
  "version":2,
  "type":"Swerve",
  "variables":{

@@ -44,8 +44,8 @@ public class DriveConstants {
         .robotWidthY(Units.inchesToMeters(28))
         .bumperWidthX(Units.inchesToMeters(32))
         .bumperWidthY(Units.inchesToMeters(32))
-        .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(30)
+        .maxLinearVelocity(1.6)
+        .maxLinearAcceleration(5.0)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
@@ -57,14 +57,18 @@ public class DriveConstants {
       .maxAngularVelocity(Units.degreesToRadians(540))
       .maxAngularAcceleration(Units.degreesToRadians(720))
       .build();
-  private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
+  // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
 
   public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
         DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-        accLimit.get(),
+        5.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
+
+  public static final LoggedTunableNumber DRIVE_DELAY_TIME = new LoggedTunableNumber("drive delay", 0.03);
+
+  // public static double DRIVE_DELAY_TIME = ;
 
   public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
@@ -123,12 +127,12 @@ public class DriveConstants {
   // ---------------------------------------------------------------------------------------------------------------------
   // Logged Tunable PIDF values for swerve modules
   // ---------------------------------------------------------------------------------------------------------------------
-  public static final LoggedTunableNumber drivekP = new LoggedTunableNumber("Drive/Module/DrivekP", MODULE_GAINS_AND_RATIOS.drivekP());
-  public static final LoggedTunableNumber drivekD = new LoggedTunableNumber("Drive/Module/DrivekD", MODULE_GAINS_AND_RATIOS.drivekD());
-  public static final LoggedTunableNumber drivekS = new LoggedTunableNumber("Drive/Module/DrivekS", MODULE_GAINS_AND_RATIOS.driveFFkS());
-  public static final LoggedTunableNumber drivekV = new LoggedTunableNumber("Drive/Module/DrivekV", MODULE_GAINS_AND_RATIOS.driveFFkV());
-  public static final LoggedTunableNumber steerkP = new LoggedTunableNumber("Drive/Module/steerkP", MODULE_GAINS_AND_RATIOS.steerkP());
-  public static final LoggedTunableNumber steerkD = new LoggedTunableNumber("Drive/Module/steerkD", MODULE_GAINS_AND_RATIOS.steerkD());
+  // public static final LoggedTunableNumber drivekP = new LoggedTunableNumber("Drive/Module/DrivekP", MODULE_GAINS_AND_RATIOS.drivekP());
+  // public static final LoggedTunableNumber drivekD = new LoggedTunableNumber("Drive/Module/DrivekD", MODULE_GAINS_AND_RATIOS.drivekD());
+  // public static final LoggedTunableNumber drivekS = new LoggedTunableNumber("Drive/Module/DrivekS", MODULE_GAINS_AND_RATIOS.driveFFkS());
+  // public static final LoggedTunableNumber drivekV = new LoggedTunableNumber("Drive/Module/DrivekV", MODULE_GAINS_AND_RATIOS.driveFFkV());
+  // public static final LoggedTunableNumber steerkP = new LoggedTunableNumber("Drive/Module/steerkP", MODULE_GAINS_AND_RATIOS.steerkP());
+  // public static final LoggedTunableNumber steerkD = new LoggedTunableNumber("Drive/Module/steerkD", MODULE_GAINS_AND_RATIOS.steerkD());
 
   public static final ModuleIDs[] MODULE_CONFIGS = new ModuleIDs[4];
   static{
@@ -150,7 +154,7 @@ public class DriveConstants {
         case SN2:
             MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.4145 + 0.5, false); //this one is changing?  0.811035 shifted by 7 degrees?
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.401855, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.273926, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -1.060303, false);
             MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.3394, false);
         break;
 
@@ -199,7 +203,7 @@ public class DriveConstants {
       new PIDController(10.0, 0.0, 0.3),
       new PIDController(10.0, 0.0, 0.3),
       new ProfiledPIDController(
-        13.0,
+        17.0,
         0.0,
         0.3,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)

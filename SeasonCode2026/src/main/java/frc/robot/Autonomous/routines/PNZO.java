@@ -13,9 +13,6 @@ public class PNZO extends AutoRoutineBase{
         AutoTrajectory traj1 = getTrajectory("PNZO",0);
         AutoTrajectory traj2 = getTrajectory("PNZO",1);
         AutoTrajectory traj3 = getTrajectory("PNZO",2);
-        AutoTrajectory traj4 = getTrajectory("PNZO",3);
-        AutoTrajectory traj5 = getTrajectory("PNZO",4);
-        AutoTrajectory traj6 = getTrajectory("PNZO",5);
 
         // traj2.atTime("Intake2").onTrue();
         // traj5.atTime("RampUp+StopIntake5").onTrue(CatzSuperstructure.Instance.cmdHubStandby()
@@ -27,35 +24,23 @@ public class PNZO extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
+            CatzSuperstructure.Instance.deployIntake(),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.deadline(
                 Commands.sequence(
-                    CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2)
+                    followTrajectory(traj2),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj3),
-            followTrajectory(traj4),
             Commands.deadline(
-                Commands.sequence(
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj5)
-                ),
+                followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            Commands.deadline(
-                Commands.sequence(
-                    CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj6)
-                ),
-                CatzSuperstructure.Instance.cmdHubStandby()
-            ),
-            CatzSuperstructure.Instance.intakeOFF(),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
 
         );

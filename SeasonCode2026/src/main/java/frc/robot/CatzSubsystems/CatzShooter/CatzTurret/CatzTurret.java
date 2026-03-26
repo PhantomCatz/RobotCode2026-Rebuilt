@@ -5,18 +5,18 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
-import frc.robot.FieldConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.FieldConstants;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs> {
 
@@ -39,6 +39,9 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
 
     private CatzTurret() {
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
+
+        // CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+        // encoderConfig.MagnetSensor.MagnetOffset = -0.592041;
 
         setCurrentPosition(Units.Rotations.of(getCANCoderAbsPos()));
         // setCurrentPosition(Units.Rotations.of(0.0));

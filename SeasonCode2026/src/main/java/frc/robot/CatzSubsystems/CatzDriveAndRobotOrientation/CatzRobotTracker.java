@@ -57,6 +57,9 @@ public class CatzRobotTracker {
   @Getter
   private Pose2d estimatedPose = new Pose2d(8.0, 4.0, new Rotation2d());
 
+  @Getter
+  @Setter
+  private Pose2d futurePose = new Pose2d();
 
   @Getter @Setter
   @AutoLogOutput(key = "CatzRobotTracker/ReachedGoal")
@@ -141,9 +144,11 @@ public class CatzRobotTracker {
 
     m_lastChassisSpeeds = chassisSpeeds;
     lastTimestamp = observation.timestamp;
+    Logger.recordOutput("CatzRobotTracker/ChassisSpeeds", Math.hypot(m_lastChassisSpeeds.vxMetersPerSecond, m_lastChassisSpeeds.vyMetersPerSecond));
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
+    Logger.recordOutput("CatzRobotTracker/FutrePose", futurePose);
   } // end of addOdometryObservation
 
   /** Add Vision Observation */
@@ -245,7 +250,6 @@ public class CatzRobotTracker {
   }
 
 
-  @AutoLogOutput(key = "CatzRobotTracker/RecordedChassisSpeeds")
   public ChassisSpeeds getRobotRelativeChassisSpeeds() {
     return m_lastChassisSpeeds;
   }

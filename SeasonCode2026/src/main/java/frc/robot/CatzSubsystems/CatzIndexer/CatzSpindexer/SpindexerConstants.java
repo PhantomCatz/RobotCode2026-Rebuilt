@@ -12,15 +12,15 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class SpindexerConstants {
-	private static final Voltage ON_VOLTS = Units.Volts.of(12.0);
+	private static final Voltage ON_VOLTS = Units.Volts.of(6);
 	private static final AngularVelocity ON_SPEED = Units.RotationsPerSecond.of(12.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
+	public static final Setpoint REVERSE = Setpoint.withVoltageSetpoint(ON_VOLTS.times(-1.0));
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
@@ -30,14 +30,7 @@ public class SpindexerConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    // private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-    // private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-    // private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-    // private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-    // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-    // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
-
-	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("Spindexer/Applied Volts", ON_VOLTS.in(Units.Volts));
+	// public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("Spindexer/Applied Volts", ON_VOLTS.in(Units.Volts));
 
     private static final int SPINDEXER_MOTOR_ID = 40;
 
@@ -53,12 +46,12 @@ public class SpindexerConstants {
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 50.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 15.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 25.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.0;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 240.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
@@ -66,7 +59,7 @@ public class SpindexerConstants {
 		FXConfig.Feedback.SensorToMechanismRatio = 8.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 
 		return FXConfig;

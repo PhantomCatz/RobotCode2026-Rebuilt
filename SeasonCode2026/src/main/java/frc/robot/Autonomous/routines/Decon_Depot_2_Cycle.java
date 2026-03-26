@@ -6,22 +6,18 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class R1_IAS extends AutoRoutineBase{
-    public R1_IAS(){
-        super("R1_IAS");
+public class Decon_Depot_2_Cycle extends AutoRoutineBase{
+    public Decon_Depot_2_Cycle(){
+        super("Decon_Depot_2_Cycle");
 
-        AutoTrajectory traj1 = getTrajectory("R1_IAS",0);
-        AutoTrajectory traj2 = getTrajectory("R1_IAS",1);
-        AutoTrajectory traj3 = getTrajectory("R1_IAS",2);
-        AutoTrajectory traj4 = getTrajectory("R1_IAS",3);
-        AutoTrajectory traj5 = getTrajectory("R1_IAS",4);
-        AutoTrajectory traj6 = getTrajectory("R1_IAS",5);
-        AutoTrajectory traj7 = getTrajectory("R1_IAS",6);
-        AutoTrajectory traj8 = getTrajectory("R1_IAS",7);
-        AutoTrajectory traj9 = getTrajectory("R1_IAS",8);
-        AutoTrajectory traj10 = getTrajectory("R1_IAS",9);
-        AutoTrajectory traj11 = getTrajectory("R1_IAS",10);
-        AutoTrajectory traj12 = getTrajectory("R1_IAS",11);
+        AutoTrajectory traj1 = getTrajectory("Decon_Depot_2_Cycle",0);
+        AutoTrajectory traj2 = getTrajectory("Decon_Depot_2_Cycle",1);
+        AutoTrajectory traj5 = getTrajectory("Decon_Depot_2_Cycle",2);
+        AutoTrajectory traj6 = getTrajectory("Decon_Depot_2_Cycle",3);
+        AutoTrajectory traj7 = getTrajectory("Decon_Depot_2_Cycle",4);
+        AutoTrajectory traj9 = getTrajectory("Decon_Depot_2_Cycle",5);
+        AutoTrajectory traj10 = getTrajectory("Decon_Depot_2_Cycle",6);
+        AutoTrajectory traj11 = getTrajectory("Decon_Depot_2_Cycle",7);
 
         // traj1.atTime("Intake1").onTrue();
         // traj5.atTime("StopIntake+RampUp5").onTrue(
@@ -43,41 +39,33 @@ public class R1_IAS extends AutoRoutineBase{
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    followTrajectory(traj3),
-                    followTrajectory(traj4)
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj5)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            CatzSuperstructure.Instance.intakeOFF(),
             Commands.deadline(
-                Commands.sequence(
-                followTrajectory(traj5)
-                ),
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj6),
-                    followTrajectory(traj7),
-                    CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj8)
-                ),
-                CatzSuperstructure.Instance.trackStaticHub()
-            ),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
             Commands.deadline(
                 Commands.sequence(
+                    followTrajectory(traj7),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj9),
                     CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj9)
+                    followTrajectory(traj10)
                 ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            Commands.deadline(
+                followTrajectoryWithAccuracy(traj11),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectory(traj10),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-            CatzSuperstructure.Instance.autoClimbCommand(),
-            // followTrajectory(traj11),
-            // followTrajectory(traj12),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT),
+            // CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );
     }

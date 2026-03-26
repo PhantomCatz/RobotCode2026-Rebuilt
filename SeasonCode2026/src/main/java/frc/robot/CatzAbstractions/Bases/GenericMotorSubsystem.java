@@ -30,17 +30,23 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		this.TARGET_SETPOINT_STR = this.name + "Target Setpoint Rot";
 	}
 
+	int logCount = 0;
 	@Override
 	public void periodic() {
 		io.updateInputs(inputs);
-		Logger.processInputs(name, (LoggableInputs) inputs);
+
+		if(logCount >= 5){
+			Logger.processInputs(name, (LoggableInputs) inputs);
+			logCount = 0;
+		}
+		logCount++;
 	}
 
 	public void applySetpoint(Setpoint setpoint) {
 		this.setpoint = setpoint;
 		setpoint.apply(io);
-		if(setpoint.mode.isVelocityControl() || setpoint.mode.isPositionControl()){
-			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits * TO_ROT);
+		if (setpoint.mode.isVelocityControl() || setpoint.mode.isPositionControl()) {
+			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits);
 		}
 	}
 

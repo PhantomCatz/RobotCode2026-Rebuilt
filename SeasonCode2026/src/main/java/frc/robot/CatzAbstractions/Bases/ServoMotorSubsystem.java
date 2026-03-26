@@ -49,8 +49,8 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 		}
 	}
 
-	public void useSoftLimits(boolean enable) {
-		io.useSoftLimits(enable);
+	public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
+		io.setSoftLimitsEnabled(forward, reverse);
 	}
 
 	public void setDegThreshold(Angle threshold) {

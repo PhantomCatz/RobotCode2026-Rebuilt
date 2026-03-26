@@ -11,7 +11,6 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
@@ -19,17 +18,17 @@ public class IntakeDeployConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
 	public static final Angle STOW_POSITION = Units.Rotations.of(-0.1);
 	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.30);
-	public static final Angle UP_POSITION = Units.Rotations.of(0.10);
+	public static final Angle UP_POSITION = Units.Rotations.of(0.05);
 
 	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
 	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
 	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
 
 	//STOW POSITION: -60.0
-	public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
-	public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
-	public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Pos Deg", JIGGLE_POSITION.in(Units.Degrees));
-	public static final LoggedTunableNumber JIGGLE_AMPLITUDE_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Amplitude Deg", JIGGLE_AMPLITUDE.in(Units.Degrees));
+	// public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
+	// public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
+	// public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Pos Rot", UP_POSITION.in(Units.Rotations));
+	// public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Frequency", JIGGLE_FREQUENCY);
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
@@ -45,16 +44,16 @@ public class IntakeDeployConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
-    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Deploy/kD", gains.kD());
-    public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
+    // public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
+    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Deploy/kD", gains.kD());
+    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
+    // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
-	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
+	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -64,7 +63,7 @@ public class IntakeDeployConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 1.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 5.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
 

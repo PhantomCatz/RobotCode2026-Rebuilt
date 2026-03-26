@@ -44,9 +44,9 @@ public class FieldConstants {
   private static final double RIGHT_X_OFFSET = Units.inchesToMeters(0.0);
 
   private static final double LEFT_Y_OFFSET = Units.inchesToMeters(0.0);
-  private static final double RIGHT_Y_OFFSET = Units.inchesToMeters(2.5);
+  private static final double RIGHT_Y_OFFSET = Units.inchesToMeters(0.0);
 
-  public static final Translation2d ROBOT_CLIMB_OFFSET = new Translation2d(0, Units.inchesToMeters(35.0/2));
+  public static final Translation2d ROBOT_CLIMB_OFFSET = new Translation2d(Units.inchesToMeters(-3.75), Units.inchesToMeters(35.0/2 - 4.0));
 
   private static final double CLIMB_CLOSE_BASE_X = Units.inchesToMeters(40.0 + 3.51/2.0);
 
