@@ -17,8 +17,9 @@ import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
-import com.ctre.phoenix6.controls.LarsonAnimation;
+import com.ctre.phoenix6.controls.EmptyAnimation;
 import com.ctre.phoenix6.controls.RainbowAnimation;
+import com.ctre.phoenix6.controls.SingleFadeAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
@@ -34,6 +35,7 @@ public class CatzLED extends VirtualSubsystem {
   // ----------------------------------------------------------------------------------------------
   @Getter @Setter @AutoLogOutput (key = "CatzLED/ElevatorLEDState")
   public LEDState curLEDState = LEDState.OFF;
+  private LEDState lastLEDState = LEDState.CLIMB;
 
   public enum LEDState {
     ON,
@@ -78,8 +80,8 @@ public class CatzLED extends VirtualSubsystem {
   private static final double bubbleDuration = 0.25;
   private static final double strobeDuration = 0.25;
 
-  private final LarsonAnimation disabledRed;
-  private final LarsonAnimation disabledBlue;
+  private final SingleFadeAnimation disabledRed;
+  private final SingleFadeAnimation disabledBlue;
 
   private final StrobeAnimation stow;
   private final StrobeAnimation on;
@@ -104,10 +106,11 @@ public class CatzLED extends VirtualSubsystem {
     );
     loadingNotifier.startPeriodic(0.02);
 
-    disabledRed = new LarsonAnimation(START, END);
-    disabledBlue = new LarsonAnimation(START, END);
+    disabledRed = new SingleFadeAnimation(START, END);
+    disabledBlue = new SingleFadeAnimation(START, END);
 
     stow = new StrobeAnimation(START, END);
+    stow.FrameRate = 6.7;
     on = new StrobeAnimation(START, END);
     off = new SolidColor(START, END);
 
@@ -130,6 +133,7 @@ public class CatzLED extends VirtualSubsystem {
       else {
         curLEDState = LEDState.DISABLED_RED;
       }
+      return;
     }
     if (CatzSuperstructure.Instance.isClimbMode) {
       curLEDState = LEDState.CLIMB;
@@ -182,23 +186,32 @@ public class CatzLED extends VirtualSubsystem {
     loadingNotifier.stop();
 
     updateControllerState();
-    System.out.println("candle led state "+curLEDState);
+    // System.out.println("candle led state "+curLEDState);
     // Update LEDs
-    switch (curLEDState) {
-      case ON:
-        candle.setControl(on);
-      case OFF:
-        candle.setControl(off);
-      case STOW:
-        candle.setControl(stow);
-      case DISABLED_BLUE:
-        candle.setControl(disabledBlue);
-      case DISABLED_RED:
-        candle.setControl(disabledRed);
-      case CLIMB:
-        candle.setControl(climb);
+    if (curLEDState != lastLEDState) {
+      candle.setControl(new EmptyAnimation(0));
+      switch (curLEDState) {
+        case ON:
+          candle.setControl(on);
+          break;
+        case OFF:
+          candle.setControl(off);
+          break;
+        case STOW:
+          candle.setControl(stow);
+          break;
+        case DISABLED_BLUE:
+          candle.setControl(disabledBlue);
+          break;
+        case DISABLED_RED:
+          candle.setControl(disabledRed);
+          break;
+        case CLIMB:
+          candle.setControl(climb);
+          break;
+      }
     }
-
+    lastLEDState = curLEDState;
     ledStrip.setData(buffer);
   } // end of periodic()
 
