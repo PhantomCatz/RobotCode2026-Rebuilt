@@ -6,48 +6,53 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
-    public Outpost_2_Cycle_Outpost(){
-        super("Outpost_2_Cycle_Outpost");
+public class Better_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
+    public Better_Outpost_2_Cycle_Outpost(){
+        super("Better_Outpost_2_Cycle_Outpost");
 
-        AutoTrajectory traj1 = getTrajectory("Outpost_2_Cycle_Outpost",0);
-        AutoTrajectory traj2 = getTrajectory("Outpost_2_Cycle_Outpost",1);
-        AutoTrajectory traj3 = getTrajectory("Outpost_2_Cycle_Outpost",2);
-        AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Outpost",3);
-        AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Outpost",4);
-        AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Outpost",5);
+        AutoTrajectory traj1 = getTrajectory("Better_Outpost_2_Cycle_Outpost",0);
+        AutoTrajectory traj2 = getTrajectory("Better_Outpost_2_Cycle_Outpost",1);
+        AutoTrajectory traj3 = getTrajectory("Better_Outpost_2_Cycle_Outpost",2);
+        AutoTrajectory traj4 = getTrajectory("Better_Outpost_2_Cycle_Outpost",3);
+        AutoTrajectory traj5 = getTrajectory("Better_Outpost_2_Cycle_Outpost",4);
+        AutoTrajectory traj6 = getTrajectory("Better_Outpost_2_Cycle_Outpost",5);
+        AutoTrajectory traj7 = getTrajectory("Better_Outpost_2_Cycle_Outpost",6);
+        AutoTrajectory traj8 = getTrajectory("Better_Outpost_2_Cycle_Outpost",7);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
+                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2).alongWith(Commands.print("traj2")),
-                    CatzSuperstructure.Instance.intakeOFF()
-                ),
-                    CatzSuperstructure.Instance.trackStaticHub()
-            ),
-            Commands.deadline(
-                followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("traj3")),
-                CatzSuperstructure.Instance.cmdHubStandby()
-            ),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj4).alongWith(Commands.print("traj4")),
-                    CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj5).alongWith(Commands.print("traj5")),
+                    followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6).alongWith(Commands.print("traj6"))
+                    followTrajectory(traj3),
+                    followTrajectory(traj4)
+                ),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj5),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj6),
+                    CatzSuperstructure.Instance.intakeOFF()
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj7),
+                    followTrajectory(traj8)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),

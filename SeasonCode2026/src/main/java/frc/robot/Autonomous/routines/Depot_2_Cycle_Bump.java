@@ -6,16 +6,24 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
-    public Outpost_2_Cycle_Outpost(){
-        super("Outpost_2_Cycle_Outpost");
+public class Depot_2_Cycle_Bump extends AutoRoutineBase {
+    public Depot_2_Cycle_Bump(){
+        super("Depot_2_Cycle_Bump");
 
-        AutoTrajectory traj1 = getTrajectory("Outpost_2_Cycle_Outpost",0);
-        AutoTrajectory traj2 = getTrajectory("Outpost_2_Cycle_Outpost",1);
-        AutoTrajectory traj3 = getTrajectory("Outpost_2_Cycle_Outpost",2);
-        AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Outpost",3);
-        AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Outpost",4);
-        AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Outpost",5);
+        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Bump",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Bump",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Bump",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Bump",3);
+        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Bump",4);
+        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Bump",5);
+
+        // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
+
+        // traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
+        // traj11.atTime("IntakeStop+RampUp11").onTrue(CatzSuperstructure.Instance.intakeOFF());
+        // traj13.atTime("Score+StowIntake+TrackTower13")
 
         prepRoutine(
             traj1,
@@ -23,31 +31,31 @@ public class Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
+                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2).alongWith(Commands.print("traj2")),
-                    CatzSuperstructure.Instance.intakeOFF()
-                ),
-                    CatzSuperstructure.Instance.trackStaticHub()
-            ),
-            Commands.deadline(
-                followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("traj3")),
-                CatzSuperstructure.Instance.cmdHubStandby()
-            ),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj4).alongWith(Commands.print("traj4")),
-                    CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj5).alongWith(Commands.print("traj5")),
+                    followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
+                followTrajectory(traj3),
+                CatzSuperstructure.Instance.cmdHubStandby()
+            ),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+
+
+            Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6).alongWith(Commands.print("traj6"))
+                    followTrajectory(traj4),
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj5)
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj6)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),

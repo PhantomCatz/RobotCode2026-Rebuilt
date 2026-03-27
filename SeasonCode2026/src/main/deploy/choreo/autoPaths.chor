@@ -61,6 +61,90 @@
      "val":0.0
     }
    },
+   "Start top":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"7.5 m",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "StartBot":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"0.6 m",
+     "val":0.6
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "StartBotBump":{
+    "x":{
+     "exp":"3.6 m",
+     "val":3.6
+    },
+    "y":{
+     "exp":"2.5 m",
+     "val":2.5
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "StartTop":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"7.5 m",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "StartTop1":{
+    "x":{
+     "exp":"StartTop.x",
+     "val":4.4
+    },
+    "y":{
+     "exp":"StartTop.y",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "StartTopBump":{
+    "x":{
+     "exp":"3.6 m",
+     "val":3.6
+    },
+    "y":{
+     "exp":"5.5 m",
+     "val":5.5
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
    "TestOut":{
     "x":{
      "exp":"RightShoot.x",
@@ -115,8 +199,8 @@
    "val":0.04318
   },
   "vmax":{
-   "exp":"5000 RPM",
-   "val":523.5987755982989
+   "exp":"7000 RPM",
+   "val":733.0382858376183
   },
   "tmax":{
    "exp":"0.57 N * m",
