@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Utilities.VirtualSubsystem;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,21 +33,15 @@ public class CatzLED extends VirtualSubsystem {
   // Robot state LED tracking
   // ----------------------------------------------------------------------------------------------
   @Getter @Setter @AutoLogOutput (key = "CatzLED/ElevatorLEDState")
-  public ShooterLEDState shooterLEDState = ShooterLEDState.nuhthing;
-  public IntakeLEDState intakeLEDState = IntakeLEDState.OFF;
+  public LEDState curLEDState = LEDState.OFF;
 
-  public enum ShooterLEDState {
-    FUNCTIONAL,
-    AUTO,
-    INTAKE_STOW,
-    FLYWHEELS,
-    endgameAlert,
-    nuhthing
-  }
-
-  public enum IntakeLEDState {
+  public enum LEDState {
     ON,
-    OFF
+    OFF,
+    STOW,
+    DISABLED_BLUE,
+    DISABLED_RED,
+    CLIMB
   }
   // MISC
 
@@ -73,12 +66,8 @@ public class CatzLED extends VirtualSubsystem {
   private static final int minLoopCycleCount = 10;
   private static final int length = 61;
 
-  private static final int SHOOTER_START = 0;
-  private static final int SHOOTER_END = 38;
-  private static final int INTAKE_START = 39;
-  private static final int INTAKE_END = 54;
-  private static final int AURAFARM_START = 55;
-  private static final int AURAFARM_END = 60;
+  private static final int START = 0;
+  private static final int END = 52;
 
   private static final double breathDuration = 1.0;
   private static final double waveExponent = 0.4;
@@ -89,20 +78,14 @@ public class CatzLED extends VirtualSubsystem {
   private static final double bubbleDuration = 0.25;
   private static final double strobeDuration = 0.25;
 
-  private static final LarsonAnimation functionalRed = new LarsonAnimation(SHOOTER_START, SHOOTER_END);
-  private static final LarsonAnimation functionalBlue = new LarsonAnimation(SHOOTER_START, SHOOTER_END);
-  private static final LarsonAnimation functionalGreen = new LarsonAnimation(SHOOTER_START, SHOOTER_END);
+  private final LarsonAnimation disabledRed;
+  private final LarsonAnimation disabledBlue;
 
-  private static final LarsonAnimation auto = new LarsonAnimation(SHOOTER_START, SHOOTER_END);
+  private final StrobeAnimation stow;
+  private final StrobeAnimation on;
+  private final SolidColor off;
 
-  private static final StrobeAnimation shooting = new StrobeAnimation(SHOOTER_START, SHOOTER_END);
-  private static final StrobeAnimation intakeStow = new StrobeAnimation(SHOOTER_START, SHOOTER_END);
-  private static final StrobeAnimation endgameAlert = new StrobeAnimation(SHOOTER_START, SHOOTER_END);
-  private static final RainbowAnimation nuhthing = new RainbowAnimation(SHOOTER_START, SHOOTER_END);
-  private static final SolidColor intakeOn = new SolidColor(INTAKE_START, INTAKE_END);
-  private static final SolidColor intakeOff = new SolidColor(INTAKE_START, INTAKE_END);
-
-  private static final RainbowAnimation aurafarm = new RainbowAnimation(AURAFARM_START, AURAFARM_END);
+  private final RainbowAnimation climb;
 
   private CatzLED() {
     ledStrip = new AddressableLED(LEADER_LED_PWM_PORT);
@@ -121,57 +104,47 @@ public class CatzLED extends VirtualSubsystem {
     );
     loadingNotifier.startPeriodic(0.02);
 
-    functionalRed.Color = new RGBWColor(Color.kRed);
-    functionalBlue.Color = new RGBWColor(Color.kBlue);
-    functionalGreen.Color = new RGBWColor(Color.kGreen);
+    disabledRed = new LarsonAnimation(START, END);
+    disabledBlue = new LarsonAnimation(START, END);
 
-    auto.Color = new RGBWColor(Color.kAqua);
+    stow = new StrobeAnimation(START, END);
+    on = new StrobeAnimation(START, END);
+    off = new SolidColor(START, END);
 
-    shooting.Color = new RGBWColor(Color.kGreen);
-    intakeStow.Color = new RGBWColor(Color.kRed);
-    endgameAlert.Color = new RGBWColor(Color.kPurple);
+    climb = new RainbowAnimation(START, END);
 
-    intakeOn.Color = new RGBWColor(Color.kGreen);
-    intakeOff.Color = new RGBWColor(Color.kRed);
+    disabledRed.Color = new RGBWColor(Color.kRed);
+    disabledBlue.Color = new RGBWColor(Color.kBlue);
 
-    candle.setControl(aurafarm);
+    stow.Color = new RGBWColor(Color.kRed);
+    on.Color = new RGBWColor(Color.kGreen);
+    off.Color = new RGBWColor(Color.kRed);
+
   }
 
   private void updateControllerState() {
-    if (CatzSuperstructure.Instance.isIntakeOn) {
-      intakeLEDState = IntakeLEDState.ON;
-    }
-    else {
-      intakeLEDState = IntakeLEDState.OFF;
-    }
-
-    if (DriverStation.isJoystickConnected(4)) {
-      shooterLEDState = ShooterLEDState.FUNCTIONAL;
-      return;
-    }
-    if (DriverStation.isAutonomous()) {
-      if (!CatzSuperstructure.Instance.isIntakeDeployed) {
-        shooterLEDState = ShooterLEDState.INTAKE_STOW;
+    if (DriverStation.isDisabled()) {
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+        curLEDState = LEDState.DISABLED_BLUE;
       }
       else {
-        shooterLEDState = ShooterLEDState.AUTO;
+        curLEDState = LEDState.DISABLED_RED;
       }
-      return;
     }
-    if (DriverStation.isTeleop() && DriverStation.getMatchTime() < 30.0) {
-      shooterLEDState = ShooterLEDState.endgameAlert;
+    if (CatzSuperstructure.Instance.isClimbMode) {
+      curLEDState = LEDState.CLIMB;
       return;
     }
     if (!CatzSuperstructure.Instance.isIntakeDeployed) {
-      shooterLEDState = ShooterLEDState.INTAKE_STOW;
+      curLEDState = LEDState.STOW;
       return;
     }
-    if (CatzSuperstructure.Instance.getIsScoring()) {
-      shooterLEDState = ShooterLEDState.FLYWHEELS;
-      return;
+    if (CatzSuperstructure.Instance.isIntakeOn) {
+      curLEDState = LEDState.ON;
     }
-    shooterLEDState = ShooterLEDState.nuhthing;
-    return;
+    else {
+      curLEDState = LEDState.OFF;
+    }
   }
 
   @Override
@@ -209,37 +182,21 @@ public class CatzLED extends VirtualSubsystem {
     loadingNotifier.stop();
 
     updateControllerState();
-
+    System.out.println("candle led state "+curLEDState);
     // Update LEDs
-    switch (intakeLEDState) {
+    switch (curLEDState) {
       case ON:
-        candle.setControl(intakeOn);
+        candle.setControl(on);
       case OFF:
-        candle.setControl(intakeOff);
-    }
-    switch (shooterLEDState) {
-      case FUNCTIONAL:
-        if (LimelightSubsystem.Instance.isSeeingApriltag()) {
-          candle.setControl(functionalGreen);
-        }
-        else {
-          if (alliance.get() == Alliance.Blue) {
-            candle.setControl(functionalBlue);
-          }
-          else {
-            candle.setControl(functionalRed);
-          }
-        }
-      case AUTO:
-        candle.setControl(auto);
-      case INTAKE_STOW:
-        candle.setControl(intakeStow);
-      case FLYWHEELS:
-        candle.setControl(shooting);
-      case endgameAlert:
-        candle.setControl(endgameAlert);
-      case nuhthing:
-        candle.setControl(nuhthing);
+        candle.setControl(off);
+      case STOW:
+        candle.setControl(stow);
+      case DISABLED_BLUE:
+        candle.setControl(disabledBlue);
+      case DISABLED_RED:
+        candle.setControl(disabledRed);
+      case CLIMB:
+        candle.setControl(climb);
     }
 
     ledStrip.setData(buffer);
