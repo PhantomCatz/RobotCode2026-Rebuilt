@@ -11,7 +11,7 @@ public class AutoRoutineSelector {
     private AutoChooser autoSelector = new AutoChooser();
 
     private AutoRoutineSelector(){
-        
+
         autoSelector.addRoutine("Better_Outpost_2_Cycle_Outpost", () -> new Better_Outpost_2_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
         autoSelector.addRoutine("Decon_Depot_2_Cycle_Bump_Fast", () -> new Better_Outpost_2_Cycle_Outpost().getRoutine());

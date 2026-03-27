@@ -39,8 +39,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // Default driving command
     CatzDrivetrain.getInstance().setDefaultCommand(new TeleopDriveCmd(() -> xboxDrv.getLeftX(), () -> xboxDrv.getLeftY(),
         () -> xboxDrv.getRightX(), CatzDrivetrain.getInstance()));
+
+    // reset robot heading based on the current alliance color
     DoublePressTracker.createTrigger(xboxDrv.back()).onTrue(new InstantCommand(() -> {
       if (AllianceFlipUtil.shouldFlip()) {
         CatzRobotTracker.Instance
@@ -50,49 +53,44 @@ public class RobotContainer {
             .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
       }
     }));
-    // );
 
     // -------------------------------------------------------------------------
-    // HOARDING (Left Bumper)
+    // HOARDING CONTROLS
     // -------------------------------------------------------------------------
-    // Held: Shoot
+
     xboxDrv.leftBumper().whileTrue(superstructure.cmdHoardShoot());
-
-    // Released: Go to Standby (Keep Flywheel, Stow Hood)
     xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
-    // Toggle Location
+    // Hoard Toggle
     xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
 
-    // xboxDrv.rightTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY += 1.0));
-    // xboxDrv.leftTrigger().onTrue(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY -= 1.0));
-    // xboxDrv.rightTrigger().onTrue(CatzSuperstructure.Instance.deployIntake());
-    // xboxDrv.leftTrigger().onTrue(CatzSuperstructure.Instance.stowIntake());
+    // Robot Position Reset
+    // Right field Corner
     xboxDrv.rightTrigger().multiPress(3, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(true), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
+    // Left Field Corner
     xboxDrv.leftTrigger().multiPress(3, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
 
     // -------------------------------------------------------------------------
-    // HUB SCORING (Right Bumper)
+    // HUB SCORING CONTROLS
     // -------------------------------------------------------------------------
-    // Held: Shoot
+
     xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
-
-
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
 
-    // xboxDrv.a().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    // xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
     // -------------------------------------------------------------------------
-    // GLOBAL STOP (X Button)
+    // GLOBAL STOP CONTROL
     // -------------------------------------------------------------------------
+
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
 
     // -------------------------------------------------------------------------
-    // CLIMB (D pad Left and Right)
+    // CLIMBING CONTROL
     // -------------------------------------------------------------------------
 
     xboxDrv.start().multiPress(3, 0.4).onTrue(CatzSuperstructure.Instance.autoClimbCommand());
+
+    //--------------------------------------------------------------------------
     // INTAKE
     // -------------------------------------------------------------------------
     xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
@@ -104,7 +102,7 @@ public class RobotContainer {
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
     // -------------------------------------------------------------------------
-    // FUNCTIONAL CONTROLS
+    // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
@@ -123,13 +121,14 @@ public class RobotContainer {
     // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
     // xboxAux.x().onTrue(superstructure.resetClimbPose());
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+
+    // // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
     xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-    // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    // // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    // xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE

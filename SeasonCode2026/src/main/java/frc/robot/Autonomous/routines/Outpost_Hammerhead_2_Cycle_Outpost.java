@@ -60,7 +60,7 @@ public class Outpost_Hammerhead_2_Cycle_Outpost extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
+            // shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
     }

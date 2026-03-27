@@ -442,6 +442,16 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
+    // public Command towerSwipe() {
+    //     return Commands.deadline(Commands.sequence(
+    //         deployIntake(),
+    //         intakeON(),
+    //         new PIDDriveCmd(),
+    //         followTrajectory()
+    //     ),
+    //     trackTower());
+    // }
+
     public Command alignToBackUpClimb() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
