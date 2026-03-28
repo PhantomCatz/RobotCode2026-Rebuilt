@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -90,14 +91,17 @@ public class CatzSuperstructure {
     public boolean isIntakeOn = false;
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
+        shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(), CatzDrivetrain.getInstance().futureChassisSpeeds);
+    }
+
+    public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeeds) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
 
-        Pose2d predictedRobotPose = CatzRobotTracker.Instance.getFuturePose();
         Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
 
         Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode,
-                predictedRobotPose, predictedTurretPose);
+                predictedRobotPose, predictedTurretPose, predictedChassisSpeeds);
         Distance dist = Units.Meters.of(targetLoc.getDistance(predictedTurretPose));
 
         if (activeRegressionMode != currentMode) {

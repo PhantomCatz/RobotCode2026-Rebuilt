@@ -16,6 +16,12 @@ import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 
 public class AutoRoutineBase {
     private AutoRoutine routine;
@@ -65,6 +71,25 @@ public class AutoRoutineBase {
                     choreoCommand::end,
                     () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
         }, Set.of(CatzDrivetrain.getInstance()));
+    }
+
+    protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {
+        return Commands.defer(() -> {
+            final Command choreoCommand = traj.cmd();
+            return new FunctionalCommand(
+                    () -> {
+                        CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
+                        choreoCommand.initialize();
+                        pathStartTime = Timer.getFPGATimestamp();
+                    },
+                    () -> {
+                        choreoCommand.execute();
+                        var sample = traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, false).get();
+                        CatzSuperstructure.Instance.shootWhileMove(true, true, sample.getPose(), sample.getChassisSpeeds());
+                    },
+                    choreoCommand::end,
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
+        }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance));
     }
 
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
