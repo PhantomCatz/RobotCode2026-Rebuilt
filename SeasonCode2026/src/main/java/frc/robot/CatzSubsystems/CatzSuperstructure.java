@@ -170,6 +170,10 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
+    public Command trackHoardLocation() {
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(AimCalculations.getCornerHoardingTarget(currentHoardType)));
+    }
+
     public Command trackTower() {
         return CatzTurret.Instance.followSetpointCommand(
                 () -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbApriltagLocation()));
@@ -408,8 +412,8 @@ public class CatzSuperstructure {
     public Command applyHoodInterpolatedSetpoint() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Distance dist = Units.Meters
-                    .of(CatzTurret.Instance.getFieldToTurret().getDistance(FieldConstants.getHubLocation()));
-            return ShooterRegression.getHoodSetpoint(dist, RegressionMode.HUB);
+                    .of(CatzTurret.Instance.getFieldToTurret().getDistance(AimCalculations.getCornerHoardingTarget(currentHoardType)));
+            return ShooterRegression.getHoodSetpoint(dist, RegressionMode.OVER_TRENCH_HOARD);
         });
     }
 

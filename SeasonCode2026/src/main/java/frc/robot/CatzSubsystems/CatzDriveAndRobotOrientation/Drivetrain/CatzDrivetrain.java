@@ -26,6 +26,8 @@ import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
@@ -213,6 +215,7 @@ public class CatzDrivetrain extends SubsystemBase {
     }
     CatzRobotTracker.Instance.setFuturePose(curPose);
 
+    Logger.recordOutput("Dist from hoard", curPose.getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------

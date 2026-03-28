@@ -41,7 +41,7 @@ public class HoodConstants {
     // public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
 	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG", gains.kG());
 
-	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodAngle", HOOD_ZERO_POS.in(Units.Degrees));
+	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodelAngle", HOOD_ZERO_POS.in(Units.Degrees));
 
     private static final int HOOD_MOTOR_ID = 22;
 	public static final double HOOD_GRAVITY_FF = 0.4;

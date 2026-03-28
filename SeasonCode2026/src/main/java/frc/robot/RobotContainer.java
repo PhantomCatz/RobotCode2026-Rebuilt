@@ -120,9 +120,11 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodTuningSetpoint());
+    xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
+    xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
+
     // xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
+    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
 
     // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
@@ -137,12 +139,13 @@ public class RobotContainer {
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
 
     // // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
-    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-    xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    // xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+    // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    // xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE

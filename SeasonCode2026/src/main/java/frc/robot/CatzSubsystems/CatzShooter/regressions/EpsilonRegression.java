@@ -57,13 +57,13 @@ public class EpsilonRegression {
          */
 
         // Closest Corner Hoarding
-        public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 5.029, 45.0 };
-        public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 9.314, 45.0 };
+        public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 5.609, 30.0 };
+        public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {13.644, 41.0 }; // 6.952 hood 41 flywheel 35
 
         public static double[][] flywheelOverTrenchHoardRPS = {
-                        { 5.768, 33.0 },
-                        { 7.6, 38.0 },
-                        { 8.0, 40.0 }
+                        { 5.609, 29.0 },
+                        { 7.681, 37.0 },
+                        { 13.644, 58.0 }
         };
 
         public static double[][] airtimeOverTrenchHoard = {
