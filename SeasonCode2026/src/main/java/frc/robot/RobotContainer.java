@@ -86,7 +86,7 @@ public class RobotContainer {
     xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.toggleCmdHubShoot());
 
 
-    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
+    //xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
     // xboxDrv.a().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
     // xboxDrv.a().onFalse(CatzSuperstructure.Instance.deployIntake());
