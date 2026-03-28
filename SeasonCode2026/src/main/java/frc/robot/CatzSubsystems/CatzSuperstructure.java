@@ -175,9 +175,36 @@ public class CatzSuperstructure {
 
     /* --- HUB SCORING --- */
 
+    boolean toggleShooter = false;
+    Command activateShooterCommand;
+
+    public Command toggleCmdHubShoot() {
+        return Commands.runOnce(() -> {
+            if (toggleShooter) {
+                cmdHubShoot();
+                activateShooterCommand.schedule();
+            }
+            else {
+                if (activateShooterCommand != null) {
+                    activateShooterCommand.cancel();
+                }
+            } 
+            toggleShooter = !toggleShooter;
+        });
+    }
+
     public Command cmdHubShoot() {
         return Commands.run(() -> {
-            updateAndApplyShooterState(true, true);
+            System.out.println("Running Shooter...");
+            if (toggleShooter) {
+                updateAndApplyShooterState(true, true);
+                System.out.println("Shooting...");
+            }
+            else {
+                System.out.println("Caneceling...");
+            }
+            toggleShooter = !toggleShooter;
+            System.out.println("Switching...");
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> isScoring = true);
     }

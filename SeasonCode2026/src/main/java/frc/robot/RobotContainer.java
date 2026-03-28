@@ -83,7 +83,7 @@ public class RobotContainer {
     // HUB SCORING (Right Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
+    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.toggleCmdHubShoot());
 
 
     xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
