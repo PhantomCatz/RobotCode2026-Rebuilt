@@ -13,6 +13,7 @@ public class Outpost_1_Cycle extends AutoRoutineBase {
         AutoTrajectory traj1 = getTrajectory("Outpost_1_Cycle",0);
         AutoTrajectory traj2 = getTrajectory("Outpost_1_Cycle",1);
         AutoTrajectory traj3 = getTrajectory("Outpost_1_Cycle",2);
+        AutoTrajectory traj4 = getTrajectory("Outpost_1_Cycle",3);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -31,12 +32,13 @@ public class Outpost_1_Cycle extends AutoRoutineBase {
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
-                    CatzSuperstructure.Instance.intakeOFF()
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj3)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj3),
+                followTrajectoryWithAccuracy(traj4),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),

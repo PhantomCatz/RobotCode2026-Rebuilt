@@ -31,8 +31,9 @@ public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
             traj1,
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
