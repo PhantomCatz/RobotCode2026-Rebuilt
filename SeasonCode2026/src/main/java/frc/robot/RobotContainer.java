@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -65,7 +64,7 @@ public class RobotContainer {
     // HOARDING (Left Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    
+
     xboxDrv.leftBumper().whileTrue(superstructure.cmdHoardShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)

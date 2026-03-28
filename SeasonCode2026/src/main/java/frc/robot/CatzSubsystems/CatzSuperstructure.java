@@ -181,7 +181,7 @@ public class CatzSuperstructure {
         return Commands.sequence(
             Commands.runOnce(() -> {
                 toggleShooter = !toggleShooter;
-                
+
                 if (toggleShooter) {
                     System.out.println("cmdHubShooting..."); // Debug
                 } else {
@@ -189,7 +189,7 @@ public class CatzSuperstructure {
                 }
             }),
             Commands.either(
-                cmdHubShoot(),
+                cmdHubShoot()sch,
                 cmdShooterStop(),
                 () -> toggleShooter
             )
