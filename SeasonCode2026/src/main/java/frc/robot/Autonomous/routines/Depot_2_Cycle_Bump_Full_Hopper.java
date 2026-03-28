@@ -35,9 +35,9 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
             ),
             Commands.deadline(
                 followTrajectory(traj3),
-                CatzSuperstructure.Instance.cmdHubStandby()
+                shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT)
+
             ),
-            // shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Set;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -10,8 +12,12 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
+import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
+import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -75,8 +81,18 @@ public class RobotContainer {
     // HUB SCORING CONTROLS
     // -------------------------------------------------------------------------
 
-    xboxDrv.rightBumper().whileTrue(CatzSuperstructure.Instance.cmdHubShoot());
-    xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
+    xboxDrv.rightBumper().onTrue(Commands.defer(
+      () -> {
+        if(CatzSuperstructure.Instance.getIsScoring()){
+          return CatzSuperstructure.Instance.cmdHubShoot();
+        }else{
+          return CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub());
+        }
+      },
+      Set.of(CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)));
+
+    // xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.cmdHubShoot());
+    // xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
 
     // -------------------------------------------------------------------------
     // GLOBAL STOP CONTROL
@@ -93,7 +109,7 @@ public class RobotContainer {
     //--------------------------------------------------------------------------
     // INTAKE
     // -------------------------------------------------------------------------
-    xboxDrv.povRight().onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
+    xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     xboxDrv.y().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
@@ -127,8 +143,8 @@ public class RobotContainer {
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
     xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-    // // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    // xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE
