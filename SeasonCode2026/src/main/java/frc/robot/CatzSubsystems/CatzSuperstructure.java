@@ -94,14 +94,13 @@ public class CatzSuperstructure {
         shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(), CatzDrivetrain.getInstance().futureChassisSpeeds);
     }
 
-    public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeeds) {
+    public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeedsRobot) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
-
         Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
 
         Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode,
-                predictedRobotPose, predictedTurretPose, predictedChassisSpeeds);
+                predictedRobotPose, predictedTurretPose, predictedChassisSpeedsRobot);
         Distance dist = Units.Meters.of(targetLoc.getDistance(predictedTurretPose));
 
         if (activeRegressionMode != currentMode) {
