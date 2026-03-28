@@ -3,7 +3,6 @@ package frc.robot.Autonomous.routines;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
-import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
@@ -33,13 +32,15 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj3),
             Commands.deadline(
-                followTrajectory(traj4),
-                CatzSuperstructure.Instance.cmdHubShoot()
+                followTrajectory(traj3),
+                CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            CatzSuperstructure.Instance.cmdShooterStop(),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            followTrajectoryWhileShooting(traj4),
+            Commands.deadline(
+                CatzSuperstructure.Instance.cmdShooterStop(),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj5),
@@ -55,17 +56,11 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            // shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
+            followTrajectoryWhileShooting(traj8),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj8),
-                    CatzSuperstructure.Instance.cmdShooterStop(),
-                    Commands.waitSeconds(3)
-                ),
+                CatzSuperstructure.Instance.cmdShooterStop(),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
-
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj9),

@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -87,17 +88,20 @@ public class CatzSuperstructure {
         return 1.0 - distFromTrench / FieldConstants.MIN_RUMBLE_DIST;
     }
 
-    private boolean isIntakeOn = false;
+    public boolean isIntakeOn = false;
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
+        shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(), CatzDrivetrain.getInstance().futureChassisSpeeds);
+    }
+
+    public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeeds) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
 
-        Pose2d predictedRobotPose = CatzRobotTracker.Instance.getFuturePose();
         Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
 
         Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode,
-                predictedRobotPose, predictedTurretPose);
+                predictedRobotPose, predictedTurretPose, predictedChassisSpeeds);
         Distance dist = Units.Meters.of(targetLoc.getDistance(predictedTurretPose));
 
         if (activeRegressionMode != currentMode) {
@@ -146,51 +150,10 @@ public class CatzSuperstructure {
         }
     }
 
-    public void shootWhileMoveAuto(boolean isHub, Pose2d predictedRobotPose) {
-        RegressionMode currentMode = calculateDynamicMode(isHub);
-        Translation2d baseTarget = getBaseTargetLocation(isHub);
-
-        Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
-
-        Translation2d targetLoc = AimCalculations.calculateAndGetPredictedTargetLocation(baseTarget, currentMode,
-                predictedRobotPose, predictedTurretPose);
-        Distance dist = Units.Meters.of(targetLoc.getDistance(predictedTurretPose));
-
-        if (activeRegressionMode != currentMode) {
-            initialShootReady = false;
-            activeRegressionMode = currentMode;
-        }
-
-        CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
-        CatzTurret.Instance
-                .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose,
-                        predictedTurretPose, dist.in(Units.Meters)));
-
-        if (isHub) {
-            CatzHood.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(
-                    AimCalculations.calculateHoodBisectorAngle(dist.in(Units.Meters)) / (2 * Math.PI)));
-        } else {
-            CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
-        }
-
-        if (!initialShootReady && AimCalculations.readyToShoot()) {
-            initialShootReady = true;
-        }
-
-        if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { // check for turret because turret
-                                                                                // can wrap.
-            CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
-            CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
-        } else {
-            CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
-            CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
-        }
-    }
-
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
-
+    public boolean okBruh = false;
     public Command cmdShooterStop() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
@@ -303,6 +266,7 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
             isIntakeDeployed = false;
+
         });
     }
 
@@ -516,7 +480,7 @@ public class CatzSuperstructure {
                         alignToCloseClimb(),
                         stowIntake(),
                         cmdClimbStow()),
-                trackTower());//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+                trackTower()).beforeStarting(() -> isClimbMode = true);//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
 

@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -130,15 +129,15 @@ public class AimCalculations {
     }
 
     public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode,
-            Pose2d predictedRobotPose, Translation2d predictedTurretPose) {
-        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose);
+            Pose2d predictedRobotPose, Translation2d predictedTurretPose, ChassisSpeeds predictedChassisSpeeds) {
+        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose, predictedChassisSpeeds);
         double futureAirtime = getFutureShootAirtime(predictedTurretPose, targetVelocity, baseTarget, mode);
         return baseTarget.plus(targetVelocity.times(futureAirtime));
     }
 
-    private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose) {
+    private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeeds) {
 
-        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(CatzDrivetrain.getInstance().futureChassisSpeeds, predictedRobotPose.getRotation());
+        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(predictedChassisSpeeds, predictedRobotPose.getRotation());
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
                 .getRadians();

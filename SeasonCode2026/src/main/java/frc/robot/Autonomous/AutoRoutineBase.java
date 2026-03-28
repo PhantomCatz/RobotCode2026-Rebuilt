@@ -16,6 +16,7 @@ import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -83,8 +84,8 @@ public class AutoRoutineBase {
                     },
                     () -> {
                         choreoCommand.execute();
-
-                        // CatzSuperstructure.Instance.shootWhileMoveAuto(true, traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, false));
+                        var sample = traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, false).get();
+                        CatzSuperstructure.Instance.shootWhileMove(true, true, sample.getPose(), sample.getChassisSpeeds());
                     },
                     choreoCommand::end,
                     () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());

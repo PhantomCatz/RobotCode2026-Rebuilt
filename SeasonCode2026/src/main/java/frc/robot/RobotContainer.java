@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.util.Set;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,12 +11,8 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -64,11 +59,11 @@ public class RobotContainer {
     // HOARDING CONTROLS
     // -------------------------------------------------------------------------
 
-    xboxDrv.leftBumper().whileTrue(superstructure.cmdHoardShoot());
-    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
+    xboxDrv.leftBumper().onTrue(superstructure.cmdHoardShoot());
+    // xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
     // Hoard Toggle
-    xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
+    xboxDrv.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
 
     // Robot Position Reset
     // Right field Corner
@@ -81,17 +76,20 @@ public class RobotContainer {
     // HUB SCORING CONTROLS
     // -------------------------------------------------------------------------
 
-    xboxDrv.rightBumper().onTrue(Commands.defer(
-      () -> {
-        if(CatzSuperstructure.Instance.getIsScoring()){
-          return CatzSuperstructure.Instance.cmdHubShoot();
-        }else{
-          return CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub());
-        }
-      },
-      Set.of(CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)));
+    // xboxDrv.rightBumper().onTrue(Commands.defer(
+    //   () -> {
+    //     if(!CatzSuperstructure.Instance.okBruh){
+    //       CatzSuperstructure.Instance.okBruh = true;
+    //       return CatzSuperstructure.Instance.cmdHubShoot();
+    //     }else{
+    //       CatzSuperstructure.Instance.okBruh = false;
 
-    // xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.cmdHubShoot());
+    //       return CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub());
+    //     }
+    //   },
+    //   Set.of(CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)));
+
+    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.cmdHubShoot());
     // xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
 
     // -------------------------------------------------------------------------
