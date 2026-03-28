@@ -5,7 +5,6 @@ import java.util.Set;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-import choreo.trajectory.TrajectorySample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
@@ -23,7 +22,6 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
-import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 
 public class AutoRoutineBase {
     private AutoRoutine routine;
@@ -86,8 +84,8 @@ public class AutoRoutineBase {
                     },
                     () -> {
                         choreoCommand.execute();
-                        
-                        CatzSuperstructure.Instance.shootWhileMoveAuto(true, traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, false));
+                        var sample = traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, false).get();
+                        CatzSuperstructure.Instance.shootWhileMove(true, true, sample.getPose(), sample.getChassisSpeeds());
                     },
                     choreoCommand::end,
                     () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
