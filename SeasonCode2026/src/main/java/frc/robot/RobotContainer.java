@@ -10,7 +10,6 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -65,10 +64,10 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     // Held: Shoot
 
-    xboxDrv.leftBumper().whileTrue(superstructure.cmdHoardShoot());
+    xboxDrv.leftBumper().toggleOnTrue(CatzSuperstructure.Instance.cmdHoardShoot());
 
     // Released: Go to Standby (Keep Flywheel, Stow Hood)
-    xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
+    //xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
 
     // Toggle Location
     xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
@@ -85,7 +84,14 @@ public class RobotContainer {
     // HUB SCORING (Right Bumper)
     // -------------------------------------------------------------------------
     // Held: Shoot
-    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.toggleCmdHubShoot());
+
+    // In RobotContainer.java constructor or a configureDefaultCommands() method
+
+    // Turret stays in a standby tracking mode when not actively shooting
+
+    // When nothing else is running, the turret aims at the Hub
+    CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
+    xboxDrv.rightBumper().toggleOnTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
 
     //xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));

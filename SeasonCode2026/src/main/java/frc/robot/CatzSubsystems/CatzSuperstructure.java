@@ -145,13 +145,17 @@ public class CatzSuperstructure {
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
                 CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
-                Commands.runOnce(() -> initialShootReady = false),
-                Commands.runOnce(() -> isScoring = false),
-                Commands.runOnce(() -> RobotContainer.rumbleDrv(0.0)));
+                Commands.runOnce(() -> {
+                    initialShootReady = false;
+                    isScoring = false;
+                    RobotContainer.rumbleDrv(0.0);
+                })
+        );
     }
 
     public Command trackStaticHub() {
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
+        System.out.println("Tracking hub...");
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Default State: Tracking Hub"));
     }
 
     public Command trackTower() {
@@ -163,6 +167,7 @@ public class CatzSuperstructure {
 
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
+            System.out.println("Hoarding...");
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
@@ -175,27 +180,6 @@ public class CatzSuperstructure {
 
     /* --- HUB SCORING --- */
 
-    boolean toggleShooter = false;
-
-    public Command toggleCmdHubShoot() {
-        return Commands.sequence(
-            Commands.runOnce(() -> {
-                toggleShooter = !toggleShooter;
-
-                if (toggleShooter) {
-                    System.out.println("cmdHubShooting..."); // Debug
-                } else {
-                    System.out.println("Canceling..."); // Debug
-                }
-            }),
-            Commands.either(
-                cmdHubShoot()sch,
-                cmdShooterStop(),
-                () -> toggleShooter
-            )
-        );
-    }
-
     public Command cmdHubShoot() {
         return Commands.run(() -> {
                 System.out.println("Applying updateAndApplyShooterState..."); // Debug
@@ -203,7 +187,7 @@ public class CatzSuperstructure {
                 System.out.println("Shooting..."); // Debug
 
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-                .beforeStarting(() -> isScoring = true).alongWith(Commands.print("Shooting...")); // alongWith... is Debug
+                .beforeStarting(() -> isScoring = true);
     }
 
     public Command cmdHubStandby() {
