@@ -7,15 +7,15 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class TowerSwipe extends AutoRoutineBase{
+public class DepotSwipe extends AutoRoutineBase{
 
     private final AutoTrajectory traj1;
     private final AutoTrajectory traj2;
 
-    public TowerSwipe() {
-        super("TowerSwipe");
-        traj1 = getTrajectory("TowerSwipe",0);
-        traj2 = getTrajectory("TowerSwipe",1);
+    public DepotSwipe() {
+        super("DepotSwipe");
+        traj1 = getTrajectory("DepotSwipe",0);
+        traj2 = getTrajectory("DepotSwipe",1);
     }
 
     public Command getPathCommand() {
@@ -23,8 +23,8 @@ public class TowerSwipe extends AutoRoutineBase{
             Commands.sequence(
                 CatzSuperstructure.Instance.deployIntake(),
                 Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                followTrajectory(traj1),
                 CatzSuperstructure.Instance.intakeON(),
+                followTrajectory(traj1),
                 followTrajectory(traj2),
                 CatzSuperstructure.Instance.intakeOFF()
             ),

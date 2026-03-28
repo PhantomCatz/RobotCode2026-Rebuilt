@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
+import frc.robot.Autonomous.routines.DepotSwipe;
 import frc.robot.Autonomous.routines.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
@@ -62,7 +63,7 @@ public class CatzSuperstructure {
 
 
     private final TowerSwipe towerSwipeRoutine;
-
+    private final DepotSwipe depotSwipeRoutine;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
@@ -76,6 +77,7 @@ public class CatzSuperstructure {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
 
         towerSwipeRoutine = new TowerSwipe();
+        depotSwipeRoutine = new DepotSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -685,7 +687,22 @@ public class CatzSuperstructure {
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
-    public Command TowerSwipeRun() {
+    public Command swipe() {
+        return Commands.defer(() -> {
+            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            if (FieldConstants.getCloserSwipe(currentTranslation)) {
+                return depotSwipeRun();
+            } else {
+                return towerSwipeRun();
+            }
+        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance)); // Add any required subsystems to the Set here
+    }
+
+    public Command towerSwipeRun() {
         return towerSwipeRoutine.getPathCommand();
+    }
+
+    public Command depotSwipeRun() {
+        return depotSwipeRoutine.getPathCommand();
     }
 }

@@ -39,7 +39,6 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
 
         autoSelector.addRoutine("Test", () -> new Test().getRoutine());
-        autoSelector.addRoutine("TowerSwipe", () -> new TowerSwipe().getRoutine());
 
 //I am Skibidi
 
