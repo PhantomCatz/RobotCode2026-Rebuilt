@@ -122,6 +122,49 @@ public class FieldConstants {
 
     return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
   }
+
+  private static final Pose2d TowerSwipe_RIGHT = new Pose2d(
+      new Translation2d(
+        2.4216079,
+        1.4081799
+      ),
+      Rotation2d.k180deg
+  );
+
+  private static final Pose2d TowerSwipe_LEFT = new Pose2d(
+      new Translation2d(
+        2.4216079,
+        1.4081799
+      ),
+      new Rotation2d()
+  );
+
+  public static Pose2d getTowerSwipePosition(Translation2d robotPose) {
+    Pose2d closePose = getTowerPosition(robotPose);
+
+    double awayY = (closePose.getY() < TOWER_Y_CENTER) ? -CLIMB_DISTANCE_AWAY : CLIMB_DISTANCE_AWAY;
+    Translation2d awayTranslation = new Translation2d(0.0, awayY);
+
+    return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
+  }
+
+  public static Pose2d getTowerPosition(Translation2d robotPose) {
+    Pose2d flippedRight = AllianceFlipUtil.apply(TowerSwipe_RIGHT);
+    Pose2d flippedLeft = AllianceFlipUtil.apply(TowerSwipe_LEFT);
+
+    double distRight = robotPose.getDistance(flippedRight.getTranslation());
+    double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
+
+    Pose2d closerPose = (distLeft < distRight) ? flippedLeft : flippedRight;
+
+    double xVariationOffset = AllianceFlipUtil.shouldFlip() ? RED_CLIMB_X_OFFSET : BLUE_CLIMB_X_OFFSET;
+    Translation2d variationTranslation = new Translation2d(xVariationOffset, 0.0);
+
+    return new Pose2d(closerPose.getTranslation().plus(variationTranslation), closerPose.getRotation());
+  }
+
+
+
   /**
    * Returns the position of the hub in the correct alliance.
    */

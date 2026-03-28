@@ -55,6 +55,32 @@ public class PIDDriveCmd extends Command {
 
     }
 
+    public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy, double positionToleranceMeters) {
+        addRequirements(CatzDrivetrain.getInstance());
+        this.goalPos = goal;
+
+        this.REQUIRES_ACCURACY = requiresAccuracy;
+        this.POSITION_TOLERANCE_METERS = positionToleranceMeters;
+        this.VELOCITY_TOLERANCE_MPS = 0.1;
+        this.ANGLE_TOLERANCE_DEGREES = 3.0;
+        this.ALLOWABLE_VISION_ADJUST = 4e-3;
+        this.GOAL_VELOCITY = 0.0;
+
+        // Configure the translation controller
+        var translationConstraints = new TrapezoidProfile.Constraints(
+                4.0,
+                4.0);
+                this.translationController = new ProfiledPIDController(3.0, 0.0, 0.0, translationConstraints);
+
+        // Configure the rotation controller
+        var rotationConstraints = new TrapezoidProfile.Constraints(
+                360.0,
+                720.0);
+        this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
+        this.rotationController.enableContinuousInput(-180.0, 180.0);
+
+    }
+
     public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy) {
         addRequirements(CatzDrivetrain.getInstance());
         this.goalPos = goal;
