@@ -87,7 +87,7 @@ public class CatzSuperstructure {
         return 1.0 - distFromTrench / FieldConstants.MIN_RUMBLE_DIST;
     }
 
-    private boolean isIntakeOn = false;
+    public boolean isIntakeOn = false;
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
@@ -262,6 +262,7 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
             isIntakeDeployed = false;
+
         });
     }
 
@@ -475,7 +476,7 @@ public class CatzSuperstructure {
                         alignToCloseClimb(),
                         stowIntake(),
                         cmdClimbStow()),
-                trackTower());//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+                trackTower()).beforeStarting(() -> isClimbMode = true);//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
 

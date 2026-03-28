@@ -8,65 +8,43 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.Utilities.VirtualSubsystem;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
+import com.ctre.phoenix6.controls.EmptyAnimation;
+import com.ctre.phoenix6.controls.RainbowAnimation;
+import com.ctre.phoenix6.controls.SingleFadeAnimation;
+import com.ctre.phoenix6.controls.SolidColor;
+import com.ctre.phoenix6.controls.StrobeAnimation;
+import com.ctre.phoenix6.hardware.CANdle;
+import com.ctre.phoenix6.signals.RGBWColor;
+
 public class CatzLED extends VirtualSubsystem {
   public static final CatzLED Instance = new CatzLED();
+
+  private CANdle candle = new CANdle(10);
 
   // ----------------------------------------------------------------------------------------------
   // Robot state LED tracking
   // ----------------------------------------------------------------------------------------------
   @Getter @Setter @AutoLogOutput (key = "CatzLED/ElevatorLEDState")
-  public ControllerLEDState controllerState = ControllerLEDState.nuhthing;
+  public LEDState curLEDState = LEDState.OFF;
+  private LEDState lastLEDState = LEDState.CLIMB;
 
-  @Getter @Setter @AutoLogOutput (key = "CatzLED/QueueState")
-  public QueueLEDState queueLEDState = QueueLEDState.EMPTY;
-
-  @Getter @Setter @AutoLogOutput(key = "CatzSuperstructure/isClimbExtendingOut")
-  private WinchingState climbDirection = WinchingState.IDLE;
-
-  public enum QueueLEDState {
-    EMPTY,
-    ONE_CORAL,
-    TWO_CORAL,
-    THREE_CORAL,
-    FOUR_CORAL
+  public enum LEDState {
+    ON,
+    OFF,
+    STOW,
+    DISABLED_BLUE,
+    DISABLED_RED,
+    CLIMB
   }
-
-  public enum ControllerLEDState {
-    FULL_MANUAL,
-    AQUA,
-    AQUA_CLEARED,
-    NBA,
-    BALLS,
-    CLIMB,
-    REMOVE_ALGAE,
-    endgameAlert,
-    sameBattery,
-    lowBatteryAlert,
-    ledChecked,
-    nuhthing
-  }
-
-  public enum WinchingState {
-    EXTENDING(Color.kGreen),
-    RETRACTING(Color.kRed),
-    IDLE(Color.kBlack);
-
-    private final Color color;
-    private WinchingState(Color color) {
-        this.color = color;
-    }
-}
-
-  public double autoFinishedTime = 0.0;
   // MISC
 
   public int loopCycleCount = 0;
@@ -87,32 +65,29 @@ public class CatzLED extends VirtualSubsystem {
   private final int LEADER_LED_PWM_PORT = 0;
 
   // Constants
-  private static final boolean paradeLeds = false;
   private static final int minLoopCycleCount = 10;
-  private static final int length = 54;
-  //24 7 23
-  private static final int LED_Sidebar_Start_RT = 0;
-  private static final int LED_Sidebar_End_RT   = 23;
-  private static final int LED_Crossbar_Start   = 24;
-  private static final int LED_Crossbar_End     = 30;
-  private static final int LED_Sidebar_Start_LT = 31;
-  private static final int LED_Sidebar_End_LT   = 53;
+  private static final int length = 61;
 
-  private static final double strobeDuration = 0.1;
+  private static final int START = 0;
+  private static final int END = 52;
+
   private static final double breathDuration = 1.0;
-  private static final double rainbowCycleLength = 25.0;
-  private static final double rainbowDuration = 0.25;
   private static final double waveExponent = 0.4;
   private static final double waveFastCycleLength = 25.0;
   private static final double waveFastDuration = 0.25;
-  private static final double waveAllianceCycleLength = 15.0;
-  private static final double waveAllianceDuration = 2.0;
-  private static final double bubbleTime = 2.5;
-  private static final double autoFadeTime = 1.3; // 3s nominal
-  private static final double autoFadeMaxTime = 5.0; // Return to normal
-  private static final double coralThrowTime = 0.5; // tune
+  private static final double rainbowCycleLength = 25.0;
+  private static final double rainbowDuration = 0.25;
+  private static final double bubbleDuration = 0.25;
+  private static final double strobeDuration = 0.25;
 
-  private static final Color[] autonCountdownColors = {Color.kGreen, Color.kYellow, Color.kRed, Color.kWhite};
+  private final SingleFadeAnimation disabledRed;
+  private final SingleFadeAnimation disabledBlue;
+
+  private final StrobeAnimation stow;
+  private final StrobeAnimation on;
+  private final SolidColor off;
+
+  private final RainbowAnimation climb;
 
   private CatzLED() {
     ledStrip = new AddressableLED(LEADER_LED_PWM_PORT);
@@ -130,6 +105,50 @@ public class CatzLED extends VirtualSubsystem {
                             }
     );
     loadingNotifier.startPeriodic(0.02);
+
+    disabledRed = new SingleFadeAnimation(START, END);
+    disabledBlue = new SingleFadeAnimation(START, END);
+
+    stow = new StrobeAnimation(START, END);
+    stow.FrameRate = 6.7;
+    on = new StrobeAnimation(START, END);
+    off = new SolidColor(START, END);
+
+    climb = new RainbowAnimation(START, END);
+
+    disabledRed.Color = new RGBWColor(Color.kRed);
+    disabledBlue.Color = new RGBWColor(Color.kBlue);
+
+    stow.Color = new RGBWColor(Color.kRed);
+    on.Color = new RGBWColor(Color.kGreen);
+    off.Color = new RGBWColor(Color.kRed);
+
+  }
+
+  private void updateControllerState() {
+    if (DriverStation.isDisabled()) {
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+        curLEDState = LEDState.DISABLED_BLUE;
+      }
+      else {
+        curLEDState = LEDState.DISABLED_RED;
+      }
+      return;
+    }
+    if (CatzSuperstructure.Instance.isClimbMode) {
+      curLEDState = LEDState.CLIMB;
+      return;
+    }
+    if (!CatzSuperstructure.Instance.isIntakeDeployed) {
+      curLEDState = LEDState.STOW;
+      return;
+    }
+    if (CatzSuperstructure.Instance.isIntakeOn) {
+      curLEDState = LEDState.ON;
+    }
+    else {
+      curLEDState = LEDState.OFF;
+    }
   }
 
   @Override
@@ -166,7 +185,33 @@ public class CatzLED extends VirtualSubsystem {
     // Stop loading notifier if running
     loadingNotifier.stop();
 
+    updateControllerState();
+    // System.out.println("candle led state "+curLEDState);
     // Update LEDs
+    if (curLEDState != lastLEDState) {
+      candle.setControl(new EmptyAnimation(0));
+      switch (curLEDState) {
+        case ON:
+          candle.setControl(on);
+          break;
+        case OFF:
+          candle.setControl(off);
+          break;
+        case STOW:
+          candle.setControl(stow);
+          break;
+        case DISABLED_BLUE:
+          candle.setControl(disabledBlue);
+          break;
+        case DISABLED_RED:
+          candle.setControl(disabledRed);
+          break;
+        case CLIMB:
+          candle.setControl(climb);
+          break;
+      }
+    }
+    lastLEDState = curLEDState;
     ledStrip.setData(buffer);
   } // end of periodic()
 
@@ -176,148 +221,24 @@ public class CatzLED extends VirtualSubsystem {
   //    LED factory methods
   //
   //-------------------------------------------------------------------------------------------------------
-  // LED SOLID
-  private void setSolidElevatorColor(Color color) {
-    if (color != null) {
-      for (int i = LED_Sidebar_Start_RT; i <= LED_Sidebar_End_LT; i++) {
-        if(!(LED_Sidebar_End_RT<i && i<LED_Sidebar_Start_LT)) {
-          buffer.setLED(i, color);
-        }
-      }
-    }
-  }
-
-  private void setWaveElevatorColor(Color c1, Color c2, double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration)) * 2.0 * Math.PI;
-    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
-    for (int i = 0; i < length; i++) {
-      if(!(LED_Sidebar_End_RT<i && i<LED_Sidebar_Start_LT)) {
-        x += xDiffPerLed;
-        double ratio = (Math.pow(Math.sin(x), waveExponent) + 1.0) / 2.0;
-        if (Double.isNaN(ratio)) {
-          ratio = (-Math.pow(Math.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
-        }
-        if (Double.isNaN(ratio)) {
-          ratio = 0.5;
-        }
-        double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-        double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-        double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-        buffer.setLED(i, new Color(red, green, blue));      }
-    }
-  }
-
-  private void setSolidCrossbarColor(Color color) {
-    if (color != null) {
-      for (int i = LED_Crossbar_Start; i < LED_Crossbar_End; i++) {
-        buffer.setLED(i, color);
-      }
-    }
-  }
-
-  private void solid(Color color) {
-    solid(1, color);
-  }
-
-  private void solid(double percent, Color color) {
-    for (int i = 0; i < MathUtil.clamp(length * percent, 0, length); i++) {
-      buffer.setLED(i, color);
-    }
-    for (int i = (int) Math.ceil(MathUtil.clamp(length * percent, 0, length)); i<length; i++) {
-      buffer.setLED(i, Color.kBlack);
-    }
-  }
-
-  private void bigBubble(int colored, int bubbleLength, int bubbleInterval, Color color) {
-    //System.out.println("big bubble" + colored);
-    for (int i=0; i<LED_Crossbar_Start; i++) {
-      if (i <= colored && ((i - colored % bubbleInterval) + bubbleInterval) % bubbleInterval < bubbleLength) {
-        buffer.setLED(i, color);
-        buffer.setLED(LED_Sidebar_End_LT-i, color);
-      }
-      else {
-        buffer.setLED(i, Color.kBlack);
-        buffer.setLED(LED_Sidebar_End_LT-i, Color.kBlack);
-      }
-    }
-    // buffer.setLED(47, Color.kBlack);
-    // buffer.setLED(48, Color.kBlack);
-
-  }
-
-  private void bubble(int colored, Color color) {
-    // System.out.println("bubble light"+colored);
-    for (int i=0; i<LED_Crossbar_Start; i++) {
-      if (i <= colored && i % 3 == colored % 3) {
-        buffer.setLED(i, color);
-        buffer.setLED(LED_Sidebar_End_LT-i, color);
-      }
-      else {
-        buffer.setLED(i, Color.kBlack);
-        buffer.setLED(LED_Sidebar_End_LT-i, Color.kBlack);
-      }
-    }
-  }
-
 
   // LED STROBE
-  private void strobe(Color c1, Color c2, double duration) {
-    boolean c1On = ((Timer.getFPGATimestamp() % duration) / duration) > 0.5;
-    solid(c1On ? c1 : c2);
-  }
-
-  private void strobe(Color color, double duration) {
-    strobe(color, Color.kBlack, duration);
-  }
-
-  private void strobeElevator(Color c1, Color c2, double duration) {
-    //System.out.println("strobe");
-    boolean c1On = ((Timer.getFPGATimestamp() % duration) / duration) > 0.5;
-    setSolidElevatorColor(c1On ? c1 : c2);
-  }
-
-  private void strobeCrossbar(Color c1, Color c2, double duration) {
-    boolean c1On = ((Timer.getFPGATimestamp() % duration) / duration) > 0.5;
-    setSolidCrossbarColor(c1On ? c1 : c2);
-  }
-
-  //LED Build
-  private void buildElevator(Color c1, Color c2, Color c3, Color c4) {
-
-  }
-
-  // LED BREATH
-  private void breath(Color c1, Color c2) {
-    breath(c1, c2, System.currentTimeMillis() / 1000.0);
-  }
-
-  private void breath(Color c1, Color c2, double timestamp) {
-    double x = ((timestamp % breathDuration) / breathDuration) * 2.0 * Math.PI;
-    double ratio = (Math.sin(x) + 1.0) / 2.0;
-    double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-    double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-    double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-    solid(new Color(red, green, blue));
-  }
-
-
-  // LED Rainbow
-  private void rainbowElevator(double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() / duration) % 1.0)) * 180.0;
-    double xDiffPerLed = 180.0 / cycleLength;
-    for (int i = 0; i < length; i++) {
-      if(!(LED_Sidebar_End_RT<i && i< LED_Sidebar_Start_LT)) {
-        x += xDiffPerLed;
-        x %= 180.0;
-        buffer.setHSV(i, (int) x, 255, 255);
+  private void strobe(Color c1, Color c2, double duration) { // duration is the length of one color HUNTER IDEA
+    if(Timer.getFPGATimestamp() % duration == 0){
+      if(buffer.getLED(0) == c1){
+        solid(c2);
+      }
+      else {
+        solid(c1);
       }
     }
   }
 
-  private void rainbowCrossbar(double cycleLength, double duration) {
+  // LED Rainbow
+  private void rainbow(double cycleLength, double duration) {
     double x = (1 - ((Timer.getFPGATimestamp() / duration) % 1.0)) * 180.0;
     double xDiffPerLed = 180.0 / cycleLength;
-    for (int i = LED_Crossbar_Start; i < LED_Crossbar_End; i++) {
+    for (int i = 0; i < length; i++) {
         x += xDiffPerLed;
         x %= 180.0;
         buffer.setHSV(i, (int) x, 255, 255);
@@ -325,7 +246,6 @@ public class CatzLED extends VirtualSubsystem {
   }
 
   private void wave(Color c1, Color c2, double cycleLength, double duration) {
-    //System.out.println("wave");
     double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration)) * 2.0 * Math.PI;
     double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < length; i++) {
@@ -344,14 +264,38 @@ public class CatzLED extends VirtualSubsystem {
     }
   }
 
-  private void stripes(List<Color> colors, int stripeLength, double duration) {
-    int offset =
-        (int) (Timer.getFPGATimestamp() % duration / duration * stripeLength * colors.size());
-    for (int i = 0; i < length; i++) {
-      int colorIndex =
-          (int) (Math.floor((double) (i - offset) / stripeLength) + colors.size()) % colors.size();
-      colorIndex = colors.size() - 1 - colorIndex;
-      buffer.setLED(i, colors.get(colorIndex));
+  private void bubble(Color color, double duration) {
+    double numCycles = Timer.getFPGATimestamp() / duration;
+    int numFullCycles = (int) Math.floor(numCycles);
+    for (int i=0; i<length; i++) {
+      if (i % 3 == numFullCycles%3) {
+        buffer.setLED(i, color);
+      }
+      else {
+        buffer.setLED(i, Color.kBlack);
+      }
     }
+  }
+
+  private void solid(double percent, Color color) {
+    for (int i = 0; i < MathUtil.clamp(length * percent, 0, length); i++) {
+      buffer.setLED(i, color);
+    }
+    for (int i = (int) Math.ceil(MathUtil.clamp(length * percent, 0, length)); i<length; i++) {
+      buffer.setLED(i, Color.kBlack);
+    }
+  }
+
+  private void solid(Color color) {
+    solid(1, color);
+  }
+
+  private void breath(Color c1, Color c2, double timestamp) {
+    double x = ((timestamp % breathDuration) / breathDuration) * 2.0 * Math.PI;
+    double ratio = (Math.sin(x) + 1.0) / 2.0;
+    double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
+    double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
+    double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
+    solid(new Color(red, green, blue));
   }
 }

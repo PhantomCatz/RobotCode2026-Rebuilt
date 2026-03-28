@@ -36,10 +36,12 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.Setpoint;
+import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
@@ -188,6 +190,7 @@ public class Robot extends LoggedRobot {
       }
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+      System.out.println("Led "+CatzLED.Instance);
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);
@@ -197,7 +200,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    // VirtualSubsystem.periodicAll();
+    VirtualSubsystem.periodicAll();
     if(allSignals.length > 0) {
       BaseStatusSignal.refreshAll(allSignals);
     }
