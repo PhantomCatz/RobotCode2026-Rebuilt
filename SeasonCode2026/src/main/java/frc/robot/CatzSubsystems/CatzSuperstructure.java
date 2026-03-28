@@ -163,6 +163,15 @@ public class CatzSuperstructure {
     }
 
     /* --- HOARDING --- */
+    boolean toggleHoard = false;
+
+    public Command toggleCmdHoardShoot() {
+        return Commands.either(
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleHoard = false),
+            cmdHoardShoot().finallyDo(() -> toggleHoard = true),
+            () -> toggleHoard
+        );
+    }
 
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
@@ -178,12 +187,20 @@ public class CatzSuperstructure {
     }
 
     /* --- HUB SCORING --- */
+    boolean toggleShooter = false;
+
+    public Command toggleCmdHubShoot() {
+    return Commands.either(
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleShooter = false),
+            cmdHubShoot().finallyDo(() -> toggleShooter = true),
+            () -> toggleShooter
+        );
+    }
 
     public Command cmdHubShoot() {
         return Commands.run(() -> {
                 updateAndApplyShooterState(true, true);
                 System.out.println("Shooting..."); // Debug
-
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> isScoring = true);
     }
