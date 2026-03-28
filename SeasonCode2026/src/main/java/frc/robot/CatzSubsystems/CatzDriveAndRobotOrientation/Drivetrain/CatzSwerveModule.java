@@ -115,6 +115,8 @@ public class CatzSwerveModule {
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
 
+    // debugLogsSwerve();
+
   }
 
   public void debugLogsSwerve() {
