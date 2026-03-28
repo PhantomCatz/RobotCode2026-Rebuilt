@@ -154,8 +154,7 @@ public class CatzSuperstructure {
     }
 
     public Command trackStaticHub() {
-        System.out.println("Tracking hub...");
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Default State: Tracking Hub"));
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Tracking Hub..."));
     }
 
     public Command trackTower() {
@@ -164,6 +163,15 @@ public class CatzSuperstructure {
     }
 
     /* --- HOARDING --- */
+    boolean toggleHoard = false;
+
+    public Command toggleCmdHoardShoot() {
+        return Commands.either(
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleHoard = false),
+            cmdHoardShoot().finallyDo(() -> toggleHoard = true),
+            () -> toggleHoard
+        );
+    }
 
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
@@ -179,13 +187,21 @@ public class CatzSuperstructure {
     }
 
     /* --- HUB SCORING --- */
+    boolean toggleShooter = false;
+
+    public Command toggleCmdHubShoot() {
+    return Commands.either(
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleShooter = false),
+            cmdHubShoot().finallyDo(() -> toggleShooter = true),
+            () -> toggleShooter
+        );
+    }
 
     public Command cmdHubShoot() {
         return Commands.run(() -> {
                 System.out.println("Applying updateAndApplyShooterState..."); // Debug
                 updateAndApplyShooterState(true, true);
                 System.out.println("Shooting..."); // Debug
-
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> isScoring = true);
     }

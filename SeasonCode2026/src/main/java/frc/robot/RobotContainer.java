@@ -1,11 +1,14 @@
 package frc.robot;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -90,7 +93,16 @@ public class RobotContainer {
     // Turret stays in a standby tracking mode when not actively shooting
 
     // When nothing else is running, the turret aims at the Hub
-    CatzTurret.Instance.setDefaultCommand(CatzSuperstructure.Instance.trackStaticHub());
+    new Trigger(
+      () -> {
+        return Timer.getFPGATimestamp() % 3.0 < 0.3;
+      }
+    ).toggleOnTrue(CatzSuperstructure.Instance.toggleCmdHubShoot());
+    new Trigger(
+      () -> {
+        return Timer.getFPGATimestamp() % 2.0 < 0.3;
+      }
+    ).toggleOnTrue(CatzSuperstructure.Instance.toggleCmdHoardShoot());
     xboxDrv.rightBumper().toggleOnTrue(CatzSuperstructure.Instance.cmdHubShoot());
 
 
