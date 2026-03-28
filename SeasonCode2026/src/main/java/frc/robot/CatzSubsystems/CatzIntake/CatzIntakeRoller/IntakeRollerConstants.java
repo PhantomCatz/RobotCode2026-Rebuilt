@@ -19,7 +19,7 @@ public class IntakeRollerConstants {
 
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
 	// public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(6.7);
-	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(7.0);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(9.0);
 	public static final Setpoint S_SETPOINT = Setpoint.withDutyCycleSetpoint(0.7);
 	public static final Setpoint JIGGLE_SETPOINT = Setpoint.withVoltageSetpoint(3.0);
 
@@ -55,7 +55,7 @@ public class IntakeRollerConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 400.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

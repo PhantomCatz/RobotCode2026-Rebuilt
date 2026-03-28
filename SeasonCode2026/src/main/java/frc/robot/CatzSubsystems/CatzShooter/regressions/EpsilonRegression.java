@@ -17,8 +17,8 @@ public class EpsilonRegression {
                         // { 2.877, 32.5 },
                         // { 5.256, 39.0 }
                         { 1.279, 27.5 }, // distance meters, flywheel rps
-                        { 3.167, 31.0 },
-                        { 4.873, 36.5 }
+                        { 3.167, 32.0 },
+                        { 4.873, 37.5 }
         };
 
         public static double[][] airtimeHub = {
@@ -61,9 +61,9 @@ public class EpsilonRegression {
         public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 9.314, 45.0 };
 
         public static double[][] flywheelOverTrenchHoardRPS = {
-                        { 5.768, 30.0 },
-                        { 7.6, 40.0 },
-                        { 8.0, 42.0 }
+                        { 5.768, 33.0 },
+                        { 7.6, 38.0 },
+                        { 8.0, 40.0 }
         };
 
         public static double[][] airtimeOverTrenchHoard = {

@@ -149,7 +149,7 @@ public class CatzSuperstructure {
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
-
+    public boolean okBruh = false;
     public Command cmdShooterStop() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
