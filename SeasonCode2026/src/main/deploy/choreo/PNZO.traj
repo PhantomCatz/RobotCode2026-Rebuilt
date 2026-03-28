@@ -320,6 +320,6 @@
    {"name":"Shoot1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":0.91219, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp+IntakeStop5", "from":{"target":4, "targetTimestamp":5.06771, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score6", "from":{"target":5, "targetTimestamp":6.07829, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score7", "from":{"target":7, "targetTimestamp":7.22474, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"StartSOTM6", "from":{"target":5, "targetTimestamp":6.07829, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StopSOTM+Score8", "from":{"target":7, "targetTimestamp":7.22474, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

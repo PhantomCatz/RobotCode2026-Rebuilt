@@ -7,15 +7,15 @@
     {"x":6.029831886291504, "y":0.7106841802597046, "heading":1.5707963267948966, "intervals":34, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.660400390625, "y":1.9372179508209229, "heading":1.8925481401347568, "intervals":42, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.862357139587402, "y":4.107296466827393, "heading":1.9576718732081813, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.39057731628418, "y":2.1825246810913086, "heading":1.512040504079174, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.39057731628418, "y":2.1825246810913086, "heading":1.512040504079174, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":5.510358810424805, "y":0.5375264883041382, "heading":0.0, "intervals":27, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":3.5623347759246826, "y":0.5952457189559937, "heading":0.0, "intervals":30, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.035961151123047, "y":0.5740763545036316, "heading":0.0, "intervals":36, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":7.262886047363281, "y":1.076282620429993, "heading":1.3617721660768882, "intervals":43, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":7.759596824645996, "y":3.928823947906494, "heading":1.5707963267948966, "intervals":51, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.035961151123047, "y":0.5740763545036316, "heading":0.0, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":7.262886047363281, "y":1.076282620429993, "heading":1.3617721660768882, "intervals":43, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":7.759596824645996, "y":3.928823947906494, "heading":1.5707963267948966, "intervals":51, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.324120044708252, "y":0.5740767121315002, "heading":3.141592653589793, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":3.5767645835876465, "y":0.5952457189559937, "heading":-3.1159572505871043, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":1.7008894681930542, "y":0.9992803931236268, "heading":-2.422762709719722, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":1.7008894681930542, "y":0.9992803931236268, "heading":-2.422762709719722, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":0.32312116026878357, "y":1.0620908737182615, "heading":-1.5886515702608954, "intervals":17, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -42,15 +42,15 @@
     {"x":{"exp":"6.029831886291504 m", "val":6.029831886291504}, "y":{"exp":"0.7106841802597046 m", "val":0.7106841802597046}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":34, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.660400390625 m", "val":7.660400390625}, "y":{"exp":"1.9372179508209229 m", "val":1.9372179508209229}, "heading":{"exp":"1.8925481401347568 rad", "val":1.8925481401347568}, "intervals":42, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.862357139587402 m", "val":6.862357139587402}, "y":{"exp":"4.107296466827393 m", "val":4.107296466827393}, "heading":{"exp":"1.9576718732081813 rad", "val":1.9576718732081813}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.39057731628418 m", "val":6.39057731628418}, "y":{"exp":"2.1825246810913086 m", "val":2.1825246810913086}, "heading":{"exp":"1.512040504079174 rad", "val":1.512040504079174}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.39057731628418 m", "val":6.39057731628418}, "y":{"exp":"2.1825246810913086 m", "val":2.1825246810913086}, "heading":{"exp":"1.512040504079174 rad", "val":1.512040504079174}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"5.510358810424805 m", "val":5.510358810424805}, "y":{"exp":"0.5375264883041382 m", "val":0.5375264883041382}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":27, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.5623347759246826 m", "val":3.5623347759246826}, "y":{"exp":"0.5952457189559937 m", "val":0.5952457189559937}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":30, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.035961151123047 m", "val":6.035961151123047}, "y":{"exp":"0.5740763545036316 m", "val":0.5740763545036316}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":36, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"7.262886047363281 m", "val":7.262886047363281}, "y":{"exp":"1.0762826204299927 m", "val":1.076282620429993}, "heading":{"exp":"1.3617721660768882 rad", "val":1.3617721660768882}, "intervals":43, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"7.759596824645996 m", "val":7.759596824645996}, "y":{"exp":"3.928823947906494 m", "val":3.928823947906494}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":51, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.035961151123047 m", "val":6.035961151123047}, "y":{"exp":"0.5740763545036316 m", "val":0.5740763545036316}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"7.262886047363281 m", "val":7.262886047363281}, "y":{"exp":"1.0762826204299927 m", "val":1.076282620429993}, "heading":{"exp":"1.3617721660768882 rad", "val":1.3617721660768882}, "intervals":43, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"7.759596824645996 m", "val":7.759596824645996}, "y":{"exp":"3.928823947906494 m", "val":3.928823947906494}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":51, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.324120044708252 m", "val":6.324120044708252}, "y":{"exp":"0.5740767121315002 m", "val":0.5740767121315002}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.5767645835876465 m", "val":3.5767645835876465}, "y":{"exp":"0.5952457189559937 m", "val":0.5952457189559937}, "heading":{"exp":"-3.1159572505871043 rad", "val":-3.1159572505871043}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"1.7008894681930542 m", "val":1.7008894681930542}, "y":{"exp":"0.9992803931236267 m", "val":0.9992803931236268}, "heading":{"exp":"-2.4227627097197226 rad", "val":-2.422762709719722}, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"1.7008894681930542 m", "val":1.7008894681930542}, "y":{"exp":"0.9992803931236267 m", "val":0.9992803931236268}, "heading":{"exp":"-2.4227627097197226 rad", "val":-2.422762709719722}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"0.32312116026878357 m", "val":0.32312116026878357}, "y":{"exp":"1.0620908737182617 m", "val":1.0620908737182615}, "heading":{"exp":"-1.5886515702608954 rad", "val":-1.5886515702608954}, "intervals":17, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -566,7 +566,7 @@
     {"t":12.05961, "x":0.32821, "y":1.06287, "heading":-1.59384, "vx":-0.2122, "vy":-0.03172, "omega":0.14411, "ax":4.42992, "ay":0.6353, "alpha":-2.99761, "fx":[77.55515,77.67138,74.85471,71.32568], "fy":[-4.89776,-3.86513,21.10309,30.88512]},
     {"t":12.08358, "x":0.32439, "y":1.06229, "heading":-1.59038, "vx":-0.106, "vy":-0.01649, "omega":0.07224, "ax":4.42122, "ay":0.68794, "alpha":-3.0131, "fx":[77.6142,77.70763,74.6234,70.86961], "fy":[-3.91996,-3.11804,21.91702,31.92751]},
     {"t":12.10756, "x":0.32312, "y":1.06209, "heading":-1.58865, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,24,175,202,232,362]
+  "splits":[0,24,135,175,202,268,311,362,431]
  },
  "events":[
    {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":0.85528, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
@@ -576,5 +576,6 @@
    {"name":"Intake9", "from":{"target":8, "targetTimestamp":7.12109, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"IntakeStop10", "from":{"target":9, "targetTimestamp":8.45192, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp11", "from":{"target":10, "targetTimestamp":10.18264, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Score13", "from":{"target":12, "targetTimestamp":11.31639, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"StartSOTM13", "from":{"target":12, "targetTimestamp":11.31639, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StopSOTM+Score14", "from":{"target":13, "targetTimestamp":12.10756, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
