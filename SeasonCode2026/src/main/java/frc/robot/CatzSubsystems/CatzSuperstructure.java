@@ -178,19 +178,18 @@ public class CatzSuperstructure {
     boolean toggleShooter = false;
 
     public Command toggleCmdHubShoot() {
-        return Commands.runOnce(() -> {
+        return Commands.defer(() -> {
+            toggleShooter = !toggleShooter;
+            
             if (toggleShooter) {
-                System.out.println("cmdHubShoot Start..."); // Debug
-                cmdHubShoot().schedule();
-                System.out.println("cmdHubShoot End..."); // Debug
+                System.out.println("cmdHubShooting..."); // Debug
+                return cmdHubShoot();
             }
             else {
                 System.out.println("Canceling..."); // Debug
-                cmdShooterStop().schedule();
-                System.out.println("Canceled..."); // Debug
+                return cmdShooterStop();
             }
-            toggleShooter = !toggleShooter;
-        });
+        }, Set.of(CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance));
     }
 
     public Command cmdHubShoot() {
