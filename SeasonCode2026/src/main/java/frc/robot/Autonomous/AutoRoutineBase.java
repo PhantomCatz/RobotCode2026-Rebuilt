@@ -51,7 +51,7 @@ public class AutoRoutineBase {
         .andThen(CatzSuperstructure.Instance.intakeOFF());
     }
 
-    protected Command shootWhileMove(double time){
+    protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {
         return Commands.sequence(
             Commands.print("shootWhileMove command")
         );
