@@ -178,18 +178,22 @@ public class CatzSuperstructure {
     boolean toggleShooter = false;
 
     public Command toggleCmdHubShoot() {
-        return Commands.defer(() -> {
-            toggleShooter = !toggleShooter;
-            
-            if (toggleShooter) {
-                System.out.println("cmdHubShooting..."); // Debug
-                return cmdHubShoot();
-            }
-            else {
-                System.out.println("Canceling..."); // Debug
-                return cmdShooterStop();
-            }
-        }, Set.of(CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance));
+        return Commands.sequence(
+            Commands.runOnce(() -> {
+                toggleShooter = !toggleShooter;
+                
+                if (toggleShooter) {
+                    System.out.println("cmdHubShooting..."); // Debug
+                } else {
+                    System.out.println("Canceling..."); // Debug
+                }
+            }),
+            Commands.either(
+                cmdHubShoot(),
+                cmdShooterStop(),
+                () -> toggleShooter
+            )
+        );
     }
 
     public Command cmdHubShoot() {
