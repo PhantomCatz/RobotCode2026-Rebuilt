@@ -146,7 +146,7 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
                 Commands.runOnce(() -> {
-                    initialShootReady = false;
+                    initialShootReady = !initialShootReady;
                     isScoring = false;
                     RobotContainer.rumbleDrv(0.0);
                 })
@@ -154,8 +154,7 @@ public class CatzSuperstructure {
     }
 
     public Command trackStaticHub() {
-        System.out.println("Tracking hub...");
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Default State: Tracking Hub"));
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Tracking Hub..."));
     }
 
     public Command trackTower() {
@@ -182,7 +181,6 @@ public class CatzSuperstructure {
 
     public Command cmdHubShoot() {
         return Commands.run(() -> {
-                System.out.println("Applying updateAndApplyShooterState..."); // Debug
                 updateAndApplyShooterState(true, true);
                 System.out.println("Shooting..."); // Debug
 
