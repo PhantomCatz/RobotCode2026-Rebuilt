@@ -56,7 +56,7 @@ public class AutoRoutineBase {
         )
         .andThen(CatzSuperstructure.Instance.intakeOFF());
     }
-
+    
     private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {

@@ -62,10 +62,9 @@ public class DriveConstants {
         1.6,
         5.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
-
-
+  
   public static final double DRIVE_DELAY_TIME = 0.02;
-  // public static double DRIVE_DELAY_TIME = ;
+  public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 
   public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
     DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
@@ -148,10 +147,10 @@ public class DriveConstants {
         break;
 
         case SN1:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.562988, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.8400, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.4797, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.1118, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.103+0.5, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.437+0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.159+0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.4628+0.5, false);
         break;
 
         case SN2:

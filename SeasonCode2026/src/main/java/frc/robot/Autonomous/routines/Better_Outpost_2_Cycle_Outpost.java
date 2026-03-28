@@ -18,6 +18,7 @@ public class Better_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj6 = getTrajectory("Better_Outpost_2_Cycle_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Better_Outpost_2_Cycle_Outpost",6);
         AutoTrajectory traj8 = getTrajectory("Better_Outpost_2_Cycle_Outpost",7);
+        AutoTrajectory traj9 = getTrajectory("Better_Outpost_2_Cycle_Outpost",7);
 
         prepRoutine(
             traj1,
@@ -56,7 +57,8 @@ public class Better_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
+            followTrajectoryWhileShooting(traj9),
+            shootAllBalls(AutonConstants.RETURN_TIME_BUFFER),
             Commands.print("done")
         );
     }
