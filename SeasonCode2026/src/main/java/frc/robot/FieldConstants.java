@@ -123,14 +123,15 @@ public class FieldConstants {
     return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
   }
 
-  private static final Pose2d TowerSwipe_RIGHT = new Pose2d(
+  // Depot swipe, needs 1st pos coords
+  private static final Pose2d TowerSwipe_RIGHT = new Pose2d( 
       new Translation2d(
         2.63448,
         7.084878
       ),
       Rotation2d.k180deg
   );
-
+  // Tower swipe, needs 1st pos coords
   private static final Pose2d TowerSwipe_LEFT = new Pose2d(
       new Translation2d(
         2.4216079,
@@ -142,7 +143,7 @@ public class FieldConstants {
   public static Pose2d getTowerSwipePosition(Translation2d robotPose) {
     Pose2d closePose = getTowerPosition(robotPose);
 
-    double awayY = (closePose.getY() < TOWER_Y_CENTER) ? -CLIMB_DISTANCE_AWAY : CLIMB_DISTANCE_AWAY;
+    double awayY = (closePose.getY() < TOWER_Y_CENTER) ? -CLIMB_DISTANCE_AWAY : CLIMB_DISTANCE_AWAY; //Climb is nice and centered, so uses that
     Translation2d awayTranslation = new Translation2d(0.0, awayY);
 
     return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
