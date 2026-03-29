@@ -17,7 +17,7 @@ public class Solo_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj5 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",4);
         AutoTrajectory traj6 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",6);
-        AutoTrajectory traj8 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",6);
+        AutoTrajectory traj8 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",7);
 
         prepRoutine(
             traj1,
