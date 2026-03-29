@@ -130,24 +130,24 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
-    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
+    // xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
 
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
     // xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
 
     // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
     // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+    xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    // xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
-    // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
-    // xboxAux.x().onTrue(superstructure.resetClimbPose());
-    // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+    xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
+    xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
+    xboxAux.x().onTrue(superstructure.resetClimbPose());
+    xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
 
     // // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
 

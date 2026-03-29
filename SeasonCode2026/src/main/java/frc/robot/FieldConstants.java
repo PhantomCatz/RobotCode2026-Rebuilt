@@ -124,7 +124,7 @@ public class FieldConstants {
   }
 
   // Depot swipe, needs 1st pos coords
-  private static final Pose2d TowerSwipe_RIGHT = new Pose2d( 
+  private static final Pose2d TowerSwipe_RIGHT = new Pose2d(
       new Translation2d(
         2.63448,
         7.084878

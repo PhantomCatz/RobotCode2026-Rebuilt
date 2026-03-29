@@ -16,7 +16,7 @@ public class LimelightConstants {
     public static final int kDisabledPipeline = 1;
 
     private static final double limelightCrosshairCompensationPitch = 0.0;
-    private static final double limelightCrosshairCompensationYaw = 0.0; // -2.0 for sushi
+    private static final double limelightCrosshairCompensationYaw = -1.0; // -2.0 for sushi
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
@@ -38,11 +38,17 @@ public class LimelightConstants {
     // public static LoggedTunableNumber forward = new LoggedTunableNumber("Limelight/forward", -5.0);
     // public static LoggedTunableNumber leftward = new LoggedTunableNumber("Limelight/leftward", -1.25);
     // public static LoggedTunableNumber upward = new LoggedTunableNumber("Limelight/upward", 19.75);
-    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limpelight/pPitch", 18.0);
     // public static LoggedTunableNumber turretcenterx = new LoggedTunableNumber("Limelight/turretcenterx", -5.0);
     // public static LoggedTunableNumber turretcentery = new LoggedTunableNumber("Limelight/turretcentery", 5.0);
     // public static LoggedTunableNumber limelightx = new LoggedTunableNumber("Limelight/limelightx", 0.25);
     // public static LoggedTunableNumber limelighty = new LoggedTunableNumber("Limelight/limelighty", -6.5); //-13??
+
+    // public static LoggedTunableNumber pitch = new LoggedTunableNumber("Limpelight/pitch", 21.0);
+    // public static LoggedTunableNumber yaw = new LoggedTunableNumber("Limpelight/yaw", 0.0);
+    // public static LoggedTunableNumber roll = new LoggedTunableNumber("Limpelight/roll", 0.0);
+
+
+
 
     public static class LimelightConfig {
         public String name = "no-name-assigned";
