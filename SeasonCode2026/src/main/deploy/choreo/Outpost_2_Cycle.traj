@@ -12,7 +12,7 @@
     {"x":2.9495887756347656, "y":0.643027126789093, "heading":0.0, "intervals":35, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.434184551239014, "y":0.6167726516723633, "heading":0.0, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.319652557373047, "y":1.2607753276824951, "heading":1.5707963267948966, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":7.808374404907227, "y":4.225793838500977, "heading":1.5707963267948966, "intervals":52, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":7.808374404907227, "y":4.225793838500977, "heading":1.5707963267948966, "intervals":52, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.288895606994629, "y":0.7051246762275696, "heading":3.141592653589793, "intervals":35, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":2.9341795444488525, "y":0.6561506986618042, "heading":3.141592653589793, "intervals":28, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -46,7 +46,7 @@
     {"x":{"exp":"2.9495887756347656 m", "val":2.9495887756347656}, "y":{"exp":"0.643027126789093 m", "val":0.643027126789093}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":35, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.434184551239014 m", "val":6.434184551239014}, "y":{"exp":"0.6167726516723633 m", "val":0.6167726516723633}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.319652557373047 m", "val":7.319652557373047}, "y":{"exp":"1.2607753276824951 m", "val":1.2607753276824951}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"7.808374404907227 m", "val":7.808374404907227}, "y":{"exp":"4.225793838500977 m", "val":4.225793838500977}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":52, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"7.808374404907227 m", "val":7.808374404907227}, "y":{"exp":"4.225793838500977 m", "val":4.225793838500977}, "heading":{"exp":"90 deg", "val":1.5707963267948966}, "intervals":52, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.288895606994629 m", "val":6.288895606994629}, "y":{"exp":"0.7051246762275696 m", "val":0.7051246762275696}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":35, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"2.9341795444488525 m", "val":2.9341795444488525}, "y":{"exp":"0.6561506986618042 m", "val":0.6561506986618042}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":28, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
@@ -494,7 +494,7 @@
     {"t":12.13839, "x":2.9473, "y":0.65635, "heading":-3.14147, "vx":-0.34638, "vy":-0.00513, "omega":-0.00213, "ax":4.5731, "ay":0.06746, "alpha":0.02499, "fx":[77.78925,77.78531,77.78494,77.7889], "fy":[1.01185,1.27931,1.28369,1.0153]},
     {"t":12.17627, "x":2.93746, "y":0.6562, "heading":-3.14155, "vx":-0.1732, "vy":-0.00257, "omega":-0.00119, "ax":4.5733, "ay":0.0679, "alpha":0.03137, "fx":[77.79325,77.78828,77.78782,77.79283], "fy":[0.98459,1.32026,1.32596,0.98884]},
     {"t":12.21414, "x":2.93418, "y":0.65615, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,28,130,169,204,274,359]
+  "splits":[0,28,130,169,204,274,307,359]
  },
  "events":[
    {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":0.99993, "offset":{"exp":"0 s", "val":0.0}}, "event":null},

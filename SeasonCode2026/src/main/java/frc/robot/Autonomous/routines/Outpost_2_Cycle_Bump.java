@@ -17,7 +17,6 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
         AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Bump",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Bump",5);
         AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Bump",6);
-        AutoTrajectory traj8 = getTrajectory("Outpost_2_Cycle_Bump",7);
 
 
         prepRoutine(
@@ -27,14 +26,13 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1).alongWith(Commands.print("traj1")),
-                    followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj3)
+                    followTrajectory(traj2)
                 ),
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj4),
+                followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),
@@ -42,18 +40,18 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
 
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj5),
+                    followTrajectory(traj4),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj6)
+                    followTrajectory(traj5)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj7),
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectoryWhileShooting(traj8),
+            followTrajectoryWhileShooting(traj7),
             shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
             // shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")

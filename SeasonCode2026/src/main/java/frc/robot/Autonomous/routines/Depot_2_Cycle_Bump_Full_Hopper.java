@@ -24,7 +24,7 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
             traj2,
             Commands.deadline(
                 Commands.sequence(
-                    // followTrajectory(traj1),
+                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.deployIntake(),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),

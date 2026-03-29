@@ -2,7 +2,6 @@ package frc.robot.Autonomous;
 
 import java.util.Set;
 
-import org.littletonrobotics.junction.Logger;
 
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;

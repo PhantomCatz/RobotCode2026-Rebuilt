@@ -33,7 +33,7 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
-                    followTrajectory(traj1),
+                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2).alongWith(Commands.print("traj2")),
                     CatzSuperstructure.Instance.intakeOFF(),
@@ -42,22 +42,23 @@ public class Decon_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj4),
+                followTrajectory(traj4).alongWith(Commands.print("traj4")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj5).alongWith(Commands.print("traj4")),
+                    followTrajectory(traj5).alongWith(Commands.print("traj5")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj6).alongWith(Commands.print("traj5")),
-                    CatzSuperstructure.Instance.intakeOFF()
+                    followTrajectory(traj6).alongWith(Commands.print("traj6")),
+                    CatzSuperstructure.Instance.intakeOFF(),
+                    followTrajectory(traj7)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj8).alongWith(Commands.print("traj8")),
+                followTrajectory(traj8).alongWith(Commands.print("traj8")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             followTrajectoryWhileShooting(traj9),

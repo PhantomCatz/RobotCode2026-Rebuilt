@@ -14,7 +14,7 @@
     {"x":7.643019199371338, "y":3.321831464767456, "heading":0.2984992598472469, "intervals":38, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.720703125, "y":3.816505670547486, "heading":2.455865013944649, "intervals":31, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.678353309631348, "y":4.434848785400391, "heading":-3.112189104023092, "intervals":30, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.6871418952941895, "y":3.454338550567627, "heading":-2.6690957814799963, "intervals":29, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.6871418952941895, "y":3.454338550567627, "heading":-2.6690957814799963, "intervals":29, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":5.734989643096924, "y":2.7388224601745605, "heading":3.141592653589793, "intervals":43, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":3.6, "y":2.5, "heading":4.71238898038469, "intervals":55, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":0.34657272696495056, "y":0.9544614553451538, "heading":4.71238898038469, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
@@ -43,7 +43,7 @@
     {"x":{"exp":"7.643019199371338 m", "val":7.643019199371338}, "y":{"exp":"3.321831464767456 m", "val":3.321831464767456}, "heading":{"exp":"0.2984992598472469 rad", "val":0.2984992598472469}, "intervals":38, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.720703125 m", "val":8.720703125}, "y":{"exp":"3.8165056705474854 m", "val":3.816505670547486}, "heading":{"exp":"2.455865013944649 rad", "val":2.455865013944649}, "intervals":31, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.678353309631348 m", "val":7.678353309631348}, "y":{"exp":"4.434848785400391 m", "val":4.434848785400391}, "heading":{"exp":"-3.1121891040230922 rad", "val":-3.112189104023092}, "intervals":30, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.6871418952941895 m", "val":6.6871418952941895}, "y":{"exp":"3.454338550567627 m", "val":3.454338550567627}, "heading":{"exp":"-2.6690957814799963 rad", "val":-2.6690957814799963}, "intervals":29, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.6871418952941895 m", "val":6.6871418952941895}, "y":{"exp":"3.454338550567627 m", "val":3.454338550567627}, "heading":{"exp":"-2.6690957814799963 rad", "val":-2.6690957814799963}, "intervals":29, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"5.734989643096924 m", "val":5.734989643096924}, "y":{"exp":"2.7388224601745605 m", "val":2.7388224601745605}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":43, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"StartBotBump.x", "val":3.6}, "y":{"exp":"StartBotBump.y", "val":2.5}, "heading":{"exp":"StartBotBump.heading", "val":4.71238898038469}, "intervals":55, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"0.34657272696495056 m", "val":0.34657272696495056}, "y":{"exp":"0.9544614553451538 m", "val":0.9544614553451538}, "heading":{"exp":"270 deg", "val":4.71238898038469}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
@@ -609,7 +609,7 @@
     {"t":12.47502, "x":0.36696, "y":0.96414, "heading":-1.5708, "vx":-0.41041, "vy":-0.19496, "omega":0.0, "ax":4.13144, "ay":1.96264, "alpha":0.0, "fx":[70.27462,70.27462,70.27462,70.27462], "fy":[33.38391,33.38391,33.38391,33.38391]},
     {"t":12.52468, "x":0.35167, "y":0.95688, "heading":-1.5708, "vx":-0.20522, "vy":-0.09749, "omega":0.0, "ax":4.13217, "ay":1.96298, "alpha":0.0, "fx":[70.28697,70.28697,70.28697,70.28697], "fy":[33.38978,33.38978,33.38978,33.38978]},
     {"t":12.57435, "x":0.34657, "y":0.95446, "heading":-1.5708, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,49,167,214,263,392,421,464]
+  "splits":[0,49,167,214,263,421,464]
  },
  "events":[
    {"name":"DeployIntake+Intake2", "from":{"target":1, "targetTimestamp":1.23504, "offset":{"exp":"0 s", "val":0.0}}, "event":null},

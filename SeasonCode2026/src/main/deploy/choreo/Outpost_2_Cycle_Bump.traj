@@ -4,7 +4,7 @@
  "snapshot":{
   "waypoints":[
     {"x":4.4, "y":0.6, "heading":3.141592653589793, "intervals":29, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.664278984069824, "y":0.6574572920799255, "heading":3.141592653589793, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.664278984069824, "y":0.6574572920799255, "heading":3.141592653589793, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.07175350189209, "y":0.933148205280304, "heading":1.0995985952194334, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.666665077209473, "y":2.5147430896759033, "heading":1.5707984469594638, "intervals":34, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.652155876159668, "y":3.64652681350708, "heading":2.9718144968946465, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
@@ -46,7 +46,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"StartBot.x", "val":4.4}, "y":{"exp":"StartBot.y", "val":0.6}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":29, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.664278984069824 m", "val":6.664278984069824}, "y":{"exp":"0.6574572920799255 m", "val":0.6574572920799255}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.664278984069824 m", "val":6.664278984069824}, "y":{"exp":"0.6574572920799255 m", "val":0.6574572920799255}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.07175350189209 m", "val":8.07175350189209}, "y":{"exp":"0.933148205280304 m", "val":0.933148205280304}, "heading":{"exp":"1.0995985952194334 rad", "val":1.0995985952194334}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.666665077209473 m", "val":8.666665077209473}, "y":{"exp":"2.5147430896759033 m", "val":2.5147430896759033}, "heading":{"exp":"1.5707984469594638 rad", "val":1.5707984469594638}, "intervals":34, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.652155876159668 m", "val":8.652155876159668}, "y":{"exp":"3.64652681350708 m", "val":3.64652681350708}, "heading":{"exp":"2.9718144968946465 rad", "val":2.9718144968946465}, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
@@ -791,7 +791,7 @@
     {"t":16.04747, "x":0.36043, "y":1.01085, "heading":-1.57085, "vx":-0.28339, "vy":-0.02908, "omega":0.00113, "ax":4.54784, "ay":0.46671, "alpha":-0.0191, "fx":[77.36663,77.36902,77.34831,77.34581], "fy":[7.84759,7.82707,8.02946,8.0505]},
     {"t":16.07862, "x":0.35381, "y":1.01017, "heading":-1.57081, "vx":-0.14171, "vy":-0.01454, "omega":0.00054, "ax":4.54885, "ay":0.46682, "alpha":-0.0173, "fx":[77.38293,77.38507,77.3663,77.36408], "fy":[7.85793,7.83933,8.02268,8.04171]},
     {"t":16.10977, "x":0.35161, "y":1.00995, "heading":-1.5708, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,29,69,236,272,301,505,549]
+  "splits":[0,69,236,272,301,505,549]
  },
  "events":[
    {"name":"Intake3", "from":{"target":2, "targetTimestamp":1.59485, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
@@ -800,6 +800,5 @@
    {"name":"Intake10", "from":{"target":9, "targetTimestamp":7.2054, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp16", "from":{"target":15, "targetTimestamp":11.3966, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StartSOTM+StopIntake17", "from":{"target":16, "targetTimestamp":12.4338, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StopSOTM+Score20", "from":{"target":19, "targetTimestamp":16.10977, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"DeployIntake2", "from":{"target":1, "targetTimestamp":1.02363, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"StopSOTM+Score20", "from":{"target":19, "targetTimestamp":16.10977, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

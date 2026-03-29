@@ -16,8 +16,6 @@ public class Outpost_Hammerhead_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj4 = getTrajectory("Outpost_Hammerhead_2_Cycle_Outpost",3);
         AutoTrajectory traj5 = getTrajectory("Outpost_Hammerhead_2_Cycle_Outpost",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_Hammerhead_2_Cycle_Outpost",5);
-        AutoTrajectory traj7 = getTrajectory("Outpost_Hammerhead_2_Cycle_Outpost",6);
-        AutoTrajectory traj8 = getTrajectory("Outpost_Hammerhead_2_Cycle_Outpost",7);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -32,7 +30,6 @@ public class Outpost_Hammerhead_2_Cycle_Outpost extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2).alongWith(Commands.print("traj2")),
@@ -55,14 +52,7 @@ public class Outpost_Hammerhead_2_Cycle_Outpost extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj6),
-            Commands.deadline(
-                Commands.sequence(
-                    followTrajectoryWithAccuracy(traj7).alongWith(Commands.print("traj7"))
-                ),
-                CatzSuperstructure.Instance.cmdHubStandby()
-            ),
-            followTrajectoryWhileShooting(traj8),
+            followTrajectoryWhileShooting(traj6).alongWith(Commands.print("traj6")),
             Commands.print("done")
         );
     }
