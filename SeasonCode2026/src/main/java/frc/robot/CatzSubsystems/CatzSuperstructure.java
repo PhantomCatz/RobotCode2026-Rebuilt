@@ -692,7 +692,7 @@ public class CatzSuperstructure {
                 case(1): return outpostSwipeRun();
                 case(2): return depotMiddleSwipeRun();
                 case(3): return depotCornerSwipeRun();
-                default: return outpostSwipeRun();
+                default: return Commands.none();
             }
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance)); // Add any required subsystems to the Set here
     }
