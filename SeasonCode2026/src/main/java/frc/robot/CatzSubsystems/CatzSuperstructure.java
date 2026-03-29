@@ -145,18 +145,19 @@ public class CatzSuperstructure {
                 initialShootReady = true;
             }
 
-            if (initialShootReady && CatzTurret.Instance.nearPositionSetpoint()) { // check for turret because turret
-                                                                                   // can wrap.
-                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
-                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+            if (initialShootReady) { 
+                if(isHub && CatzTurret.Instance.nearPositionSetpoint() || !isHub){
+                    CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+                    CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+                }
             } else {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
             RobotContainer.rumbleDrv(getRumbleStrength());
-            if (isIntakeOn) {
-                RobotContainer.rumbleDrv(0.05);
-            }
+            // if (isIntakeOn) {
+            //     RobotContainer.rumbleDrv(0.05);
+            // }
         } else {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
@@ -189,7 +190,7 @@ public class CatzSuperstructure {
     }
 
     public Command trackStaticHub() {
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Tracking Hub..."));
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
     public Command trackHoardLocation() {
@@ -214,7 +215,6 @@ public class CatzSuperstructure {
 
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
-            System.out.println("Hoarding...");
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
@@ -228,18 +228,9 @@ public class CatzSuperstructure {
     /* --- HUB SCORING --- */
     boolean toggleShooter = false;
 
-    public Command toggleCmdHubShoot() {
-    return Commands.either(
-            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleShooter = false),
-            cmdHubShoot().finallyDo(() -> toggleShooter = true),
-            () -> toggleShooter
-        );
-    }
-
     public Command cmdHubShoot() {
         return Commands.run(() -> {
                 updateAndApplyShooterState(true, true);
-                System.out.println("Shooting..."); // Debug
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> {isScoring = true;
                                        CatzDrivetrain.getInstance().setShootWhileMoveConfig();});
@@ -526,7 +517,7 @@ public class CatzSuperstructure {
                         alignToCloseClimb(),
                         stowIntake(),
                         cmdClimbStow()),
-                trackTower()).beforeStarting(() -> isClimbMode = true);//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
+                trackTower()).beforeStarting(() -> isClimbMode = true);
     }
 
 
@@ -540,11 +531,7 @@ public class CatzSuperstructure {
 
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
-            // System.out.println("Toggle Button Pressed! Current climbManual is: " +
-            // climbManual);
-
             if (climbManual == false) {
-                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzClimb.Instance);
                 climbManual = true;
 
@@ -557,7 +544,6 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
                 climbManual = false;
             }
@@ -566,11 +552,8 @@ public class CatzSuperstructure {
 
     public Command toggleManualHood() {
         return Commands.runOnce(() -> {
-            // System.out.println("Toggle Button Pressed! Current hoodManual is: " +
-            // hoodManual);
 
             if (hoodManual == false) {
-                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzHood.Instance);
                 hoodManual = true;
 
@@ -583,7 +566,6 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT).schedule();
                 hoodManual = false;
             }
@@ -592,11 +574,8 @@ public class CatzSuperstructure {
 
     public Command toggleManualTurret() {
         return Commands.runOnce(() -> {
-            // System.out.println("Toggle Button Pressed! Current turretManual is: " +
-            // turretManual);
 
             if (turretManual == false) {
-                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzTurret.Instance);
                 turretManual = true;
 
@@ -609,7 +588,6 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
                 turretManual = false;
             }
@@ -618,11 +596,8 @@ public class CatzSuperstructure {
 
     public Command toggleManualDeploy() {
         return Commands.runOnce(() -> {
-            // System.out.println("Toggle Button Pressed! Current deployManual is: " +
-            // deployManual);
 
             if (deployManual == false) {
-                // System.out.println("Attempting to turn ON manual mode");
                 disableManuals(CatzIntakeDeploy.Instance);
                 deployManual = true;
 
@@ -635,7 +610,6 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                // System.out.println("Attempting to turn OFF manual mode and STOW");
                 CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
                 deployManual = false;
             }

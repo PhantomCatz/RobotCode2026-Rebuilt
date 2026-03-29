@@ -101,8 +101,6 @@ public class RobotContainer {
             .alongWith(CatzSuperstructure.Instance.trackStaticHub())
     );
 
-    //xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()).alongWith(Commands.runOnce(() -> DriveConstants.MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0)));
-
     // -------------------------------------------------------------------------
     // GLOBAL STOP CONTROL
     // -------------------------------------------------------------------------
