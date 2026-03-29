@@ -161,9 +161,9 @@ public class FieldConstants {
     Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
     Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
 
-    double distOutpost = robotPose.getDistance(flippedDepot_Corner.getTranslation());
+    double distOutpost = robotPose.getDistance(flippedOutpost.getTranslation());
     double distDepotMiddle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
-    double distDepotCorner = robotPose.getDistance(flippedOutpost.getTranslation());
+    double distDepotCorner = robotPose.getDistance(flippedDepot_Corner.getTranslation());
 
     Pose2d closerPose = (distOutpost <= distDepotMiddle && distOutpost <= distDepotCorner) ? flippedOutpost
     : (distDepotMiddle <= distDepotCorner ? flippedDepot_Middle : flippedDepot_Corner);
@@ -180,14 +180,19 @@ public class FieldConstants {
     double distOutpost = robotPose.getDistance(flippedOutpost.getTranslation());
     double distDepot_Middle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
     double distDepot_Corner = robotPose.getDistance(flippedDepot_Corner.getTranslation());
-
+    // System.out.println("Dist outpost: " + distOutpost);
+    // System.out.println("Dist depotMid: " + distDepot_Middle);
+    // System.out.println("Dist depot: " + distDepot_Corner);
     if (distOutpost < distDepot_Corner) {
       if(distOutpost < distDepot_Middle) {
+        System.out.println(1);
         return 1; // outpost
+      } else {
+        return 2; // middle depot
       }
-      return 2; // middle depot
+    } else {
+      return 3; // outpost
     }
-    return 3; // depot
   }
 
 
