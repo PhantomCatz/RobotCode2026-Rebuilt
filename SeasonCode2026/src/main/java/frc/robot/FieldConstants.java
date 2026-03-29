@@ -38,7 +38,7 @@ public class FieldConstants {
   private static final double CLIMB_DISTANCE_AWAY = 0.3; //meters, distance from the tower we want to be when climbing
 
   public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(1.5);
-  public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(1.5);
+  public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(0.0); //1.5 at home 0.0 for Da Vinci
 
   private static final double LEFT_X_OFFSET = Units.inchesToMeters(1.5);
   private static final double RIGHT_X_OFFSET = Units.inchesToMeters(0.0);
