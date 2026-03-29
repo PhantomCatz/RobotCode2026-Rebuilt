@@ -62,7 +62,7 @@ public class DriveConstants {
         1.6,
         5.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
-  
+
   public static final double DRIVE_DELAY_TIME = 0.02;
   public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 

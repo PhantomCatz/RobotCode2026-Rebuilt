@@ -122,6 +122,63 @@ public class FieldConstants {
 
     return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
   }
+
+  // Depot swipe, needs 1st pos coords
+  private static final Pose2d TowerSwipe_RIGHT = new Pose2d( 
+      new Translation2d(
+        2.63448,
+        7.084878
+      ),
+      Rotation2d.k180deg
+  );
+  // Tower swipe, needs 1st pos coords
+  private static final Pose2d TowerSwipe_LEFT = new Pose2d(
+      new Translation2d(
+        2.4216079,
+        1.4081799
+      ),
+      Rotation2d.k180deg
+  );
+
+  public static Pose2d getTowerSwipePosition(Translation2d robotPose) {
+    Pose2d closePose = getTowerPosition(robotPose);
+
+    double awayY = (closePose.getY() < TOWER_Y_CENTER) ? -CLIMB_DISTANCE_AWAY : CLIMB_DISTANCE_AWAY; //Climb is nice and centered, so uses that
+    Translation2d awayTranslation = new Translation2d(0.0, awayY);
+
+    return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
+  }
+
+  public static Pose2d getTowerPosition(Translation2d robotPose) {
+    Pose2d flippedRight = AllianceFlipUtil.apply(TowerSwipe_RIGHT);
+    Pose2d flippedLeft = AllianceFlipUtil.apply(TowerSwipe_LEFT);
+
+    double distRight = robotPose.getDistance(flippedRight.getTranslation());
+    double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
+
+    Pose2d closerPose = (distLeft < distRight) ? flippedLeft : flippedRight;
+
+    double xVariationOffset = AllianceFlipUtil.shouldFlip() ? RED_CLIMB_X_OFFSET : BLUE_CLIMB_X_OFFSET;
+    Translation2d variationTranslation = new Translation2d(xVariationOffset, 0.0);
+
+    return new Pose2d(closerPose.getTranslation().plus(variationTranslation), closerPose.getRotation());
+  }
+
+  public static boolean getCloserSwipe(Translation2d robotPose) {
+    Pose2d flippedRight = AllianceFlipUtil.apply(TowerSwipe_RIGHT);
+    Pose2d flippedLeft = AllianceFlipUtil.apply(TowerSwipe_LEFT);
+
+    double distRight = robotPose.getDistance(flippedRight.getTranslation());
+    double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
+
+    if (distLeft < distRight) {
+      return false; //closser to left (tower) side
+    }
+    return true; //closer to right (depot) side
+  }
+
+
+
   /**
    * Returns the position of the hub in the correct alliance.
    */

@@ -2,7 +2,7 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
-
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,8 +13,11 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
+import frc.robot.Autonomous.routines.DepotSwipe;
+import frc.robot.Autonomous.routines.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -57,8 +60,24 @@ public class CatzSuperstructure {
 
     private final SubsystemVisualizer visualizer;
 
+
+
+    private final TowerSwipe towerSwipeRoutine;
+    private final DepotSwipe depotSwipeRoutine;
+
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
+
+        CatzConstants.autoFactory = new AutoFactory(
+                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
+                                                  CatzRobotTracker.getInstance()::resetPose,
+                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
+                                                  true,
+                                                  CatzDrivetrain.getInstance()
+                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+
+        towerSwipeRoutine = new TowerSwipe();
+        depotSwipeRoutine = new DepotSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -682,5 +701,31 @@ public class CatzSuperstructure {
         Rotation2d TurretAngle = Rotation2d.fromDegrees(CatzTurret.Instance.getLatencyCompensatedPosition());
 
         visualizer.update(IntakeAngle, HoodAngle, TurretAngle);
+    }
+
+    public Command TowerSwipePosition() {
+        return Commands.defer(() -> {
+            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false);
+        }, Set.of(CatzDrivetrain.getInstance()));
+    }
+
+    public Command swipe() {
+        return Commands.defer(() -> {
+            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            if (FieldConstants.getCloserSwipe(currentTranslation)) {
+                return depotSwipeRun();
+            } else {
+                return towerSwipeRun();
+            }
+        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance)); // Add any required subsystems to the Set here
+    }
+
+    public Command towerSwipeRun() {
+        return towerSwipeRoutine.getPathCommand();
+    }
+
+    public Command depotSwipeRun() {
+        return depotSwipeRoutine.getPathCommand();
     }
 }

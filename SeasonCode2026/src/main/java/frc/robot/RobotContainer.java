@@ -68,7 +68,7 @@ public class RobotContainer {
     // Left Field Corner
     xboxDrv.leftTrigger().multiPress(3, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
-
+    xboxDrv.povUp().onTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()));
     // -------------------------------------------------------------------------
     // HUB SCORING CONTROLS
     // -------------------------------------------------------------------------
