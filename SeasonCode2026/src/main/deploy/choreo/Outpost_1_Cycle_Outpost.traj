@@ -30,7 +30,7 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"StartBot.x", "val":4.4}, "y":{"exp":"StartBot.y", "val":0.6}, "heading":{"exp":"StartBot.heading", "val":3.141592653589793}, "intervals":25, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"StartBot.x", "val":4.4}, "y":{"exp":"StartBot.y", "val":0.6}, "heading":{"exp":"StartBot.heading", "val":1.5707963267948966}, "intervals":25, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.068152904510498 m", "val":6.068152904510498}, "y":{"exp":"0.6618497967720032 m", "val":0.6618497967720032}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.784482479095459 m", "val":6.784482479095459}, "y":{"exp":"0.7733859419822693 m", "val":0.7733859419822693}, "heading":{"exp":"1.190290485242031 rad", "val":1.190290485242031}, "intervals":28, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.585760116577148 m", "val":7.585760116577148}, "y":{"exp":"1.6233148574829102 m", "val":1.6233148574829102}, "heading":{"exp":"1.5707963267948966 rad", "val":1.5707963267948966}, "intervals":27, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
