@@ -222,61 +222,6 @@ public class CatzLED extends VirtualSubsystem {
   //
   //-------------------------------------------------------------------------------------------------------
 
-  // LED STROBE
-  private void strobe(Color c1, Color c2, double duration) { // duration is the length of one color HUNTER IDEA
-    if(Timer.getFPGATimestamp() % duration == 0){
-      if(buffer.getLED(0) == c1){
-        solid(c2);
-      }
-      else {
-        solid(c1);
-      }
-    }
-  }
-
-  // LED Rainbow
-  private void rainbow(double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() / duration) % 1.0)) * 180.0;
-    double xDiffPerLed = 180.0 / cycleLength;
-    for (int i = 0; i < length; i++) {
-        x += xDiffPerLed;
-        x %= 180.0;
-        buffer.setHSV(i, (int) x, 255, 255);
-    }
-  }
-
-  private void wave(Color c1, Color c2, double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration)) * 2.0 * Math.PI;
-    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
-    for (int i = 0; i < length; i++) {
-      x += xDiffPerLed;
-      double ratio = (Math.pow(Math.sin(x), waveExponent) + 1.0) / 2.0;
-      if (Double.isNaN(ratio)) {
-        ratio = (-Math.pow(Math.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
-      }
-      if (Double.isNaN(ratio)) {
-        ratio = 0.5;
-      }
-      double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-      double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-      double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-      buffer.setLED(i, new Color(red, green, blue));
-    }
-  }
-
-  private void bubble(Color color, double duration) {
-    double numCycles = Timer.getFPGATimestamp() / duration;
-    int numFullCycles = (int) Math.floor(numCycles);
-    for (int i=0; i<length; i++) {
-      if (i % 3 == numFullCycles%3) {
-        buffer.setLED(i, color);
-      }
-      else {
-        buffer.setLED(i, Color.kBlack);
-      }
-    }
-  }
-
   private void solid(double percent, Color color) {
     for (int i = 0; i < MathUtil.clamp(length * percent, 0, length); i++) {
       buffer.setLED(i, color);

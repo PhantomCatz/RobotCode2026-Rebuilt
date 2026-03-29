@@ -126,8 +126,8 @@ public class FieldConstants {
   // Depot swipe, needs 1st pos coords
   private static final Pose2d TowerSwipe_RIGHT = new Pose2d(
       new Translation2d(
-        2.63448,
-        7.084878
+        0.4915303587913513 ,
+        4.885158061981201
       ),
       Rotation2d.k180deg
   );
@@ -158,10 +158,8 @@ public class FieldConstants {
 
     Pose2d closerPose = (distLeft < distRight) ? flippedLeft : flippedRight;
 
-    double xVariationOffset = AllianceFlipUtil.shouldFlip() ? RED_CLIMB_X_OFFSET : BLUE_CLIMB_X_OFFSET;
-    Translation2d variationTranslation = new Translation2d(xVariationOffset, 0.0);
 
-    return new Pose2d(closerPose.getTranslation().plus(variationTranslation), closerPose.getRotation());
+    return new Pose2d(closerPose.getTranslation(), closerPose.getRotation());
   }
 
   public static boolean getCloserSwipe(Translation2d robotPose) {

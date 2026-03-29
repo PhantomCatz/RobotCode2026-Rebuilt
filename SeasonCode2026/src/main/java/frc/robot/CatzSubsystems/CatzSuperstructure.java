@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.Autonomous.routines.DepotSwipe;
-import frc.robot.Autonomous.routines.TowerSwipe;
+import frc.robot.Autonomous.autoSequence.DepotSwipe;
+import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -144,7 +144,7 @@ public class CatzSuperstructure {
                 initialShootReady = true;
             }
 
-            if (initialShootReady) { 
+            if (initialShootReady) {
                 if(isHub && CatzTurret.Instance.nearPositionSetpoint() || !isHub){
                     CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
                     CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
@@ -182,7 +182,6 @@ public class CatzSuperstructure {
                 Commands.runOnce(() -> {
                     initialShootReady = !initialShootReady;
                     isScoring = false;
-                    RobotContainer.rumbleDrv(0.0);
                     CatzDrivetrain.getInstance().setNormalConfig();
                 })
         );

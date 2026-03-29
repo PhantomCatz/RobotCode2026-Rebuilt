@@ -68,7 +68,7 @@ public class RobotContainer {
     // Left Field Corner
     xboxDrv.leftTrigger().multiPress(3, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
-    xboxDrv.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()));
+    xboxDrv.povUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()));
     // -------------------------------------------------------------------------
     // HUB SCORING CONTROLS
     // -------------------------------------------------------------------------
@@ -128,7 +128,7 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
-    // xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
     // xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
 
@@ -140,21 +140,21 @@ public class RobotContainer {
     // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+    // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
-    xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
-    xboxAux.x().onTrue(superstructure.resetClimbPose());
-    xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+    // xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
+    // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
+    // xboxAux.x().onTrue(superstructure.resetClimbPose());
+    // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
 
     // // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
 
-    // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
-    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    // xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-    // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    // xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+    xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE

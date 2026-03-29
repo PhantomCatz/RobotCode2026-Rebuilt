@@ -21,7 +21,7 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
         AutoTrajectory traj10 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",9);
 
         prepRoutine(
-            traj2,
+            traj1,
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj1),
