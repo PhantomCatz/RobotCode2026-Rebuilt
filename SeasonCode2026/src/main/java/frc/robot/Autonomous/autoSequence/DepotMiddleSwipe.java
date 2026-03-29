@@ -6,15 +6,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class DepotSwipe extends AutoRoutineBase{
+public class DepotMiddleSwipe extends AutoRoutineBase{
 
     private final AutoTrajectory traj1;
-    private final AutoTrajectory traj2;
+    // private final AutoTrajectory traj2;
 
-    public DepotSwipe() {
-        super("DepotSwipe");
-        traj1 = getTrajectory("DepotSwipe",0);
-        traj2 = getTrajectory("DepotSwipe",1);
+    public DepotMiddleSwipe() {
+        super("DepotMiddleSwipe");
+        traj1 = getTrajectory("DepotMiddleSwipe",0);
+        // traj2 = getTrajectory("DepotSwipe",1);
     }
 
     public Command getPathCommand() {
@@ -23,7 +23,7 @@ public class DepotSwipe extends AutoRoutineBase{
                 CatzSuperstructure.Instance.deployIntake(),
                 CatzSuperstructure.Instance.intakeON(),
                 followTrajectory(traj1),
-                followTrajectory(traj2),
+                // followTrajectory(traj2),
                 CatzSuperstructure.Instance.intakeOFF()
             ),
             CatzSuperstructure.Instance.trackTower()

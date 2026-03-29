@@ -124,15 +124,22 @@ public class FieldConstants {
   }
 
   // Depot swipe, needs 1st pos coords
-  private static final Pose2d TowerSwipe_RIGHT = new Pose2d(
+  private static final Pose2d TowerSwipe_Depot_Corner = new Pose2d(
       new Translation2d(
-        0.4915303587913513 ,
-        4.885158061981201
+        2.63 ,
+        7.08
+      ),
+      Rotation2d.k180deg
+  );
+  private static final Pose2d TowerSwipe_Depot_Middle = new Pose2d(
+      new Translation2d(
+        0.836 ,
+        4.778
       ),
       Rotation2d.k180deg
   );
   // Tower swipe, needs 1st pos coords
-  private static final Pose2d TowerSwipe_LEFT = new Pose2d(
+  private static final Pose2d TowerSwipe_Outpost = new Pose2d(
       new Translation2d(
         2.4216079,
         1.4081799
@@ -150,29 +157,37 @@ public class FieldConstants {
   }
 
   public static Pose2d getTowerPosition(Translation2d robotPose) {
-    Pose2d flippedRight = AllianceFlipUtil.apply(TowerSwipe_RIGHT);
-    Pose2d flippedLeft = AllianceFlipUtil.apply(TowerSwipe_LEFT);
+    Pose2d flippedOutpost = AllianceFlipUtil.apply(TowerSwipe_Outpost);
+    Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
+    Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
 
-    double distRight = robotPose.getDistance(flippedRight.getTranslation());
-    double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
+    double distOutpost = robotPose.getDistance(flippedDepot_Corner.getTranslation());
+    double distDepotMiddle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
+    double distDepotCorner = robotPose.getDistance(flippedOutpost.getTranslation());
 
-    Pose2d closerPose = (distLeft < distRight) ? flippedLeft : flippedRight;
-
+    Pose2d closerPose = (distOutpost <= distDepotMiddle && distOutpost <= distDepotCorner) ? flippedOutpost
+    : (distDepotMiddle <= distDepotCorner ? flippedDepot_Middle : flippedDepot_Corner);
+    // takes the lowest distancce and inputs its pose
 
     return new Pose2d(closerPose.getTranslation(), closerPose.getRotation());
   }
 
-  public static boolean getCloserSwipe(Translation2d robotPose) {
-    Pose2d flippedRight = AllianceFlipUtil.apply(TowerSwipe_RIGHT);
-    Pose2d flippedLeft = AllianceFlipUtil.apply(TowerSwipe_LEFT);
+  public static int getCloserSwipe(Translation2d robotPose) {
+    Pose2d flippedOutpost = AllianceFlipUtil.apply(TowerSwipe_Outpost);
+    Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
+    Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
 
-    double distRight = robotPose.getDistance(flippedRight.getTranslation());
-    double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
+    double distOutpost = robotPose.getDistance(flippedOutpost.getTranslation());
+    double distDepot_Middle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
+    double distDepot_Corner = robotPose.getDistance(flippedDepot_Corner.getTranslation());
 
-    if (distLeft < distRight) {
-      return false; //closser to left (tower) side
+    if (distOutpost < distDepot_Corner) {
+      if(distOutpost < distDepot_Middle) {
+        return 1; // outpost
+      }
+      return 2; // middle depot
     }
-    return true; //closer to right (depot) side
+    return 3; // depot
   }
 
 
