@@ -8,16 +8,14 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
     public Decon_Depot_2_Cycle_Bump_Fast(){
-        super("Depot_2_Cycle_Bump_Fast_Decon");
-        /*
-         * WIP
-         */
-        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Bump_Fast_Decon",5);
+        super("Decon_Depot_2_Cycle_Bump_Fast");
+
+        AutoTrajectory traj1 = getTrajectory("Decon_Depot_2_Cycle_Bump_Fast",0);
+        AutoTrajectory traj2 = getTrajectory("Decon_Depot_2_Cycle_Bump_Fast",1);
+        AutoTrajectory traj3 = getTrajectory("Decon_Depot_2_Cycle_Bump_Fast",2);
+        AutoTrajectory traj4 = getTrajectory("Decon_Depot_2_Cycle_Bump_Fast",3);
+        AutoTrajectory traj5 = getTrajectory("Decon_Depot_2_Cycle_Bump_Fast",4);
+        AutoTrajectory traj6 = getTrajectory("Decon_Depot_2_Cycle_Bump_Fast",5);
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
@@ -31,8 +29,9 @@ public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
             traj1,
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeOFF()

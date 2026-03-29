@@ -41,16 +41,18 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),
-                    CatzSuperstructure.Instance.intakeON()
+                    CatzSuperstructure.Instance.intakeON(),
+                    followTrajectory(traj5)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            followTrajectory(traj5),
             Commands.deadline(
                 followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),
+            followTrajectoryWhileShooting(traj7),
+            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
             // shootWhileMove(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );

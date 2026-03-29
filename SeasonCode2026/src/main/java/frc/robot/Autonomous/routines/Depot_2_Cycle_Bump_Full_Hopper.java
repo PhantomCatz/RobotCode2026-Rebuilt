@@ -21,7 +21,7 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
         AutoTrajectory traj10 = getTrajectory("Depot_2_Cycle_Bump_Full_Hopper",9);
 
         prepRoutine(
-            traj1,
+            traj2,
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj1),
@@ -33,17 +33,11 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj3),
+                followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             followTrajectoryWhileShooting(traj4),
-            Commands.deadline(
-                Commands.sequence(
-                    CatzSuperstructure.Instance.cmdShooterStop(),
-                    Commands.waitSeconds(3)
-                ),
-                CatzSuperstructure.Instance.trackStaticHub()
-            ),
+            shootAllBallsNoJiggle(3),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj5),
@@ -53,20 +47,14 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
             ),
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6),
+                    followTrajectory(traj6),
                     CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj7)
+                    followTrajectoryWithAccuracy(traj7)
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             followTrajectoryWhileShooting(traj8),
-            Commands.deadline(
-                Commands.sequence(
-                    CatzSuperstructure.Instance.cmdShooterStop(),
-                    Commands.waitSeconds(3)
-                ),
-                CatzSuperstructure.Instance.trackStaticHub()
-            ),
+            shootAllBallsNoJiggle(3),
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj9),
