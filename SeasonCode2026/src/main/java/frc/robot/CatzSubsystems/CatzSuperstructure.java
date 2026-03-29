@@ -160,14 +160,17 @@ public class CatzSuperstructure {
                 CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT),
                 CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
                 CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
-                Commands.runOnce(() -> initialShootReady = false),
-                Commands.runOnce(() -> isScoring = false),
-                Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()),
-                Commands.runOnce(() -> RobotContainer.rumbleDrv(0.0)));
+                Commands.runOnce(() -> {
+                    initialShootReady = !initialShootReady;
+                    isScoring = false;
+                    RobotContainer.rumbleDrv(0.0);
+                    CatzDrivetrain.getInstance().setNormalConfig();
+                })
+        );
     }
 
     public Command trackStaticHub() {
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint()).beforeStarting(() -> System.out.println("Tracking Hub..."));
     }
 
     public Command trackHoardLocation() {
@@ -180,9 +183,19 @@ public class CatzSuperstructure {
     }
 
     /* --- HOARDING --- */
+    boolean toggleHoard = false;
+
+    public Command toggleCmdHoardShoot() {
+        return Commands.either(
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleHoard = false),
+            cmdHoardShoot().finallyDo(() -> toggleHoard = true),
+            () -> toggleHoard
+        );
+    }
 
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
+            System.out.println("Hoarding...");
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
     }
@@ -194,10 +207,20 @@ public class CatzSuperstructure {
     }
 
     /* --- HUB SCORING --- */
+    boolean toggleShooter = false;
+
+    public Command toggleCmdHubShoot() {
+    return Commands.either(
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleShooter = false),
+            cmdHubShoot().finallyDo(() -> toggleShooter = true),
+            () -> toggleShooter
+        );
+    }
 
     public Command cmdHubShoot() {
         return Commands.run(() -> {
-            updateAndApplyShooterState(true, true);
+                updateAndApplyShooterState(true, true);
+                System.out.println("Shooting..."); // Debug
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> {isScoring = true;
                                        CatzDrivetrain.getInstance().setShootWhileMoveConfig();});
