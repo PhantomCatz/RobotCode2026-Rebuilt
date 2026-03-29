@@ -2,6 +2,8 @@ package frc.robot.CatzSubsystems;
 
 import java.util.Set;
 
+import org.littletonrobotics.junction.Logger;
+
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -142,7 +144,7 @@ public class CatzSuperstructure {
             } else {
                 CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
             }
-
+            Logger.recordOutput("Ready to SHOOT!", AimCalculations.readyToShoot());
             if (!initialShootReady && AimCalculations.readyToShoot()) {
                 initialShootReady = true;
             }

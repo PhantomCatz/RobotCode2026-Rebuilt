@@ -83,7 +83,7 @@ public class AutoRoutineBase {
                         CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
                         pathStartTime = Timer.getFPGATimestamp();
-                        CatzDrivetrain.getInstance().setShootWhileMoveConfig();
+                        // CatzDrivetrain.getInstance().setShootWhileMoveConfig();
                     },
                     () -> {
                         choreoCommand.execute();
