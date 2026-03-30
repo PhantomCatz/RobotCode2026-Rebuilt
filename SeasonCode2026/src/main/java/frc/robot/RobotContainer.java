@@ -4,9 +4,11 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -57,11 +59,6 @@ public class RobotContainer {
 
     // -------------------------------------------------------------------------
     // HOARDING CONTROLS
-    // -------------------------------------------------------------------------
-
-    xboxDrv.leftBumper().onTrue(superstructure.cmdHoardShoot());
-    // xboxDrv.leftBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
-
     // Hoard Toggle
     xboxDrv.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
 
@@ -71,32 +68,44 @@ public class RobotContainer {
     // Left Field Corner
     xboxDrv.leftTrigger().multiPress(3, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
-
+    xboxDrv.povUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()));
     // -------------------------------------------------------------------------
     // HUB SCORING CONTROLS
     // -------------------------------------------------------------------------
+    // Held: Shoot
 
-    // xboxDrv.rightBumper().onTrue(Commands.defer(
-    //   () -> {
-    //     if(!CatzSuperstructure.Instance.okBruh){
-    //       CatzSuperstructure.Instance.okBruh = true;
-    //       return CatzSuperstructure.Instance.cmdHubShoot();
-    //     }else{
-    //       CatzSuperstructure.Instance.okBruh = false;
+    // In RobotContainer.java constructor or a configureDefaultCommands() method
 
-    //       return CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub());
-    //     }
-    //   },
-    //   Set.of(CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)));
+    // Turret stays in a standby tracking mode when not actively shooting
 
-    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.cmdHubShoot());
-    // xboxDrv.rightBumper().onFalse(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
+    // When nothing else is running, the turret aims at the Hub
+// HOARDING (Left Bumper)
+    // store the shooting commands so we can check their active state
+// store the shooting commands so we can check their active state
+    Command hoardShootCmd = CatzSuperstructure.Instance.cmdHoardShoot();
+    Command hubShootCmd = CatzSuperstructure.Instance.cmdHubShoot();
+
+    // bind the bumpers to toggle their respective commands
+    xboxDrv.leftBumper().toggleOnTrue(hoardShootCmd);
+    xboxDrv.rightBumper().toggleOnTrue(hubShootCmd);
+
+    // Toggle Location
+    xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
+
+    // create a master trigger that is true if EITHER shooting mode is running
+    Trigger isShooterActive = new Trigger(() -> hoardShootCmd.isScheduled() || hubShootCmd.isScheduled());
+
+    // ONLY run the stop and track command when both modes turn off
+    isShooterActive.onFalse(
+        CatzSuperstructure.Instance.cmdShooterStop()
+            .alongWith(CatzSuperstructure.Instance.trackStaticHub())
+    );
 
     // -------------------------------------------------------------------------
     // GLOBAL STOP CONTROL
     // -------------------------------------------------------------------------
 
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(superstructure.trackStaticHub()));
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
 
     // -------------------------------------------------------------------------
     // CLIMBING CONTROL
@@ -120,22 +129,22 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
 
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
     // xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
 
     // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
     // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+    xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    // xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
-    // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
-    // xboxAux.x().onTrue(superstructure.resetClimbPose());
+    xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
+    xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
+    xboxAux.x().onTrue(superstructure.resetClimbPose());
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
 
     // // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());

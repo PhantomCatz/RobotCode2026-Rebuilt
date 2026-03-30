@@ -18,14 +18,15 @@ public class Better_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj6 = getTrajectory("Better_Outpost_2_Cycle_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Better_Outpost_2_Cycle_Outpost",6);
         AutoTrajectory traj8 = getTrajectory("Better_Outpost_2_Cycle_Outpost",7);
-        AutoTrajectory traj9 = getTrajectory("Better_Outpost_2_Cycle_Outpost",7);
+        AutoTrajectory traj9 = getTrajectory("Better_Outpost_2_Cycle_Outpost",8);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
-                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeOFF()

@@ -38,7 +38,7 @@ public class FieldConstants {
   private static final double CLIMB_DISTANCE_AWAY = 0.3; //meters, distance from the tower we want to be when climbing
 
   public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(1.5);
-  public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(1.5);
+  public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(0.0); //1.5 at home 0.0 for Da Vinci
 
   private static final double LEFT_X_OFFSET = Units.inchesToMeters(1.5);
   private static final double RIGHT_X_OFFSET = Units.inchesToMeters(0.0);
@@ -122,6 +122,81 @@ public class FieldConstants {
 
     return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
   }
+
+  // Depot swipe, needs 1st pos coords
+  private static final Pose2d TowerSwipe_Depot_Corner = new Pose2d(
+      new Translation2d(
+        2.63 ,
+        7.08
+      ),
+      Rotation2d.k180deg
+  );
+  private static final Pose2d TowerSwipe_Depot_Middle = new Pose2d(
+      new Translation2d(
+        0.836 ,
+        4.778
+      ),
+      Rotation2d.k180deg
+  );
+  // Tower swipe, needs 1st pos coords
+  private static final Pose2d TowerSwipe_Outpost = new Pose2d(
+      new Translation2d(
+        2.4216079,
+        1.4081799
+      ),
+      Rotation2d.k180deg
+  );
+
+  public static Pose2d getTowerSwipePosition(Translation2d robotPose) {
+    Pose2d closePose = getTowerPosition(robotPose);
+
+    double awayY = (closePose.getY() < TOWER_Y_CENTER) ? -CLIMB_DISTANCE_AWAY : CLIMB_DISTANCE_AWAY; //Climb is nice and centered, so uses that
+    Translation2d awayTranslation = new Translation2d(0.0, awayY);
+
+    return new Pose2d(closePose.getTranslation().plus(awayTranslation), closePose.getRotation());
+  }
+
+  public static Pose2d getTowerPosition(Translation2d robotPose) {
+    Pose2d flippedOutpost = AllianceFlipUtil.apply(TowerSwipe_Outpost);
+    Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
+    Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
+
+    double distOutpost = robotPose.getDistance(flippedOutpost.getTranslation());
+    double distDepotMiddle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
+    double distDepotCorner = robotPose.getDistance(flippedDepot_Corner.getTranslation());
+
+    Pose2d closerPose = (distOutpost <= distDepotMiddle && distOutpost <= distDepotCorner) ? flippedOutpost
+    : (distDepotMiddle <= distDepotCorner ? flippedDepot_Middle : flippedDepot_Corner);
+    // takes the lowest distancce and inputs its pose
+
+    return new Pose2d(closerPose.getTranslation(), closerPose.getRotation());
+  }
+
+  public static int getCloserSwipe(Translation2d robotPose) {
+    Pose2d flippedOutpost = AllianceFlipUtil.apply(TowerSwipe_Outpost);
+    Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
+    Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
+
+    double distOutpost = robotPose.getDistance(flippedOutpost.getTranslation());
+    double distDepot_Middle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
+    double distDepot_Corner = robotPose.getDistance(flippedDepot_Corner.getTranslation());
+    // System.out.println("Dist outpost: " + distOutpost);
+    // System.out.println("Dist depotMid: " + distDepot_Middle);
+    // System.out.println("Dist depot: " + distDepot_Corner);
+    if (distOutpost < distDepot_Corner) {
+      if(distOutpost < distDepot_Middle) {
+        System.out.println(1);
+        return 1; // outpost
+      } else {
+        return 2; // middle depot
+      }
+    } else {
+      return 3; // outpost
+    }
+  }
+
+
+
   /**
    * Returns the position of the hub in the correct alliance.
    */

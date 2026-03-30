@@ -44,7 +44,6 @@ public class Depot_2_Cycle_Bump extends AutoRoutineBase {
             ),
             shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
-
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj4),
@@ -54,9 +53,7 @@ public class Depot_2_Cycle_Bump extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectoryWithAccuracy(traj6)
-                ),
+                followTrajectoryWithAccuracy(traj6),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),

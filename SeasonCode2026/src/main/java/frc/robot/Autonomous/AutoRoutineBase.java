@@ -2,11 +2,13 @@ package frc.robot.Autonomous;
 
 import java.util.Set;
 
+
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -56,7 +58,7 @@ public class AutoRoutineBase {
         )
         .andThen(CatzSuperstructure.Instance.intakeOFF());
     }
-    
+
     private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {
@@ -81,12 +83,12 @@ public class AutoRoutineBase {
                         CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
                         pathStartTime = Timer.getFPGATimestamp();
-                        CatzDrivetrain.getInstance().setShootWhileMoveConfig();
+                        // CatzDrivetrain.getInstance().setShootWhileMoveConfig();
                     },
                     () -> {
                         choreoCommand.execute();
-                        var sample = traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, false).get();
-                        CatzSuperstructure.Instance.shootWhileMove(true, true, sample.getPose(), sample.getChassisSpeeds());
+                        var sample = traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, true).get();
+                        CatzSuperstructure.Instance.shootWhileMove(true, true, sample.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(sample.getChassisSpeeds(), sample.getPose().getRotation()));
                     },
                     choreoCommand::end,
                     () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
