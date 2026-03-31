@@ -268,7 +268,7 @@ public class CatzSuperstructure {
     }
 
     /* --- INTAKE --- */
-    public Angle intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
+    public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     public boolean isIntakeDeployed = false;
 
     // public Command toggleIntakeDeploy() {
