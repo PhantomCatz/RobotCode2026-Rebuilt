@@ -150,10 +150,8 @@ public class CatzSuperstructure {
             }
 
             if (initialShootReady) {
-                if(isHub && CatzTurret.Instance.nearPositionSetpoint() || !isHub){
-                    CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
-                    CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
-                }
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
             } else {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
