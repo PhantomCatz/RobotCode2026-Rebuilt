@@ -127,11 +127,15 @@ public class CatzLED extends VirtualSubsystem {
 
   private void updateControllerState() {
     if (DriverStation.isDisabled()) {
-      if (DriverStation.getAlliance().get() == Alliance.Blue) {
-        curLEDState = LEDState.DISABLED_BLUE;
-      }
-      else {
-        curLEDState = LEDState.DISABLED_RED;
+      if(DriverStation.isDSAttached()){
+        if (DriverStation.getAlliance().orElseThrow() == Alliance.Blue) {
+          curLEDState = LEDState.DISABLED_BLUE;
+        }
+        else {
+          curLEDState = LEDState.DISABLED_RED;
+        }
+      }else{
+        curLEDState = LEDState.CLIMB;
       }
       return;
     }
@@ -154,27 +158,27 @@ public class CatzLED extends VirtualSubsystem {
   @Override
   public void periodic() {
     // Update alliance color
-    if (DriverStation.isDSAttached()) {
-      alliance = DriverStation.getAlliance();
-      allianceColor =
-          alliance
-              .map(alliance -> alliance == Alliance.Blue ? Color.kAqua : Color.kOrangeRed)
-              .orElse(Color.kPurple);
-      secondaryDisabledColor = alliance.isPresent() ? Color.kYellow : Color.kBlack;
-    }
+    // if (DriverStation.isDSAttached()) {
+    //   alliance = DriverStation.getAlliance();
+    //   allianceColor =
+    //       alliance
+    //           .map(alliance -> alliance == Alliance.Blue ? Color.kAqua : Color.kOrangeRed)
+    //           .orElse(Color.kPurple);
+    //   secondaryDisabledColor = alliance.isPresent() ? Color.kYellow : Color.kBlack;
+    // }
 
     // Update auto state
-    if (DriverStation.isDisabled()) {
+    // if (DriverStation.isDisabled()) {
 
-    } else {
-      lastEnabledAuto = DriverStation.isAutonomous();
-      lastEnabledTime = Timer.getFPGATimestamp();
-    }
+    // } else {
+    //   lastEnabledAuto = DriverStation.isAutonomous();
+    //   lastEnabledTime = Timer.getFPGATimestamp();
+    // }
 
     // Update estop state
-    if (DriverStation.isEStopped()) {
-      estopped = true;
-    }
+    // if (DriverStation.isEStopped()) {
+    //   estopped = true;
+    // }
 
     // Exit during initial cycles
     loopCycleCount += 1;
