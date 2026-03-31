@@ -56,13 +56,6 @@ public class CatzLED extends VirtualSubsystem {
   private double lastEnabledTime = 0.0;
   private boolean estopped = false;
 
-  // LED IO
-  private final AddressableLED ledStrip;
-  private final AddressableLEDBuffer buffer;
-  private final Notifier loadingNotifier;
-
-  // LED PWM IDs
-  private final int LEADER_LED_PWM_PORT = 0;
 
   // Constants
   private static final int minLoopCycleCount = 10;
@@ -90,22 +83,6 @@ public class CatzLED extends VirtualSubsystem {
   private final RainbowAnimation climb;
 
   private CatzLED() {
-    ledStrip = new AddressableLED(LEADER_LED_PWM_PORT);
-    buffer = new AddressableLEDBuffer(length); // NOTE -WPILIB doesn't support creation of 2 led objects
-    ledStrip.setLength(length);
-    ledStrip.setData(buffer);
-    ledStrip.start();
-
-    loadingNotifier = new Notifier(
-                            () -> {
-                              synchronized (this) {
-                                breath(Color.kBlack, Color.kWhiteSmoke, System.currentTimeMillis() / 1000.0);
-                                ledStrip.setData(buffer);
-                              }
-                            }
-    );
-    loadingNotifier.startPeriodic(0.02);
-
     disabledRed = new SingleFadeAnimation(START, END);
     disabledBlue = new SingleFadeAnimation(START, END);
 
@@ -186,9 +163,6 @@ public class CatzLED extends VirtualSubsystem {
       return;
     }
 
-    // Stop loading notifier if running
-    loadingNotifier.stop();
-
     updateControllerState();
     // System.out.println("candle led state "+curLEDState);
     // Update LEDs
@@ -216,7 +190,6 @@ public class CatzLED extends VirtualSubsystem {
       }
     }
     lastLEDState = curLEDState;
-    ledStrip.setData(buffer);
   } // end of periodic()
 
 
@@ -226,25 +199,5 @@ public class CatzLED extends VirtualSubsystem {
   //
   //-------------------------------------------------------------------------------------------------------
 
-  private void solid(double percent, Color color) {
-    for (int i = 0; i < MathUtil.clamp(length * percent, 0, length); i++) {
-      buffer.setLED(i, color);
-    }
-    for (int i = (int) Math.ceil(MathUtil.clamp(length * percent, 0, length)); i<length; i++) {
-      buffer.setLED(i, Color.kBlack);
-    }
-  }
 
-  private void solid(Color color) {
-    solid(1, color);
-  }
-
-  private void breath(Color c1, Color c2, double timestamp) {
-    double x = ((timestamp % breathDuration) / breathDuration) * 2.0 * Math.PI;
-    double ratio = (Math.sin(x) + 1.0) / 2.0;
-    double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-    double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-    double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-    solid(new Color(red, green, blue));
-  }
 }
