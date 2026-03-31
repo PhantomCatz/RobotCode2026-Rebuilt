@@ -1,14 +1,19 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.FieldConstants;
 import frc.robot.Robot;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
 
 	public static LimelightSubsystem Instance = new LimelightSubsystem();
+
+	private int lastZone = -1;
 
 	private final ApriltagScanningIO[] ios;
 
@@ -34,10 +39,46 @@ public class LimelightSubsystem extends SubsystemBase {
 		}
 	}
 
+	// These are the zones. Red alliance on left. Seperated by middle line and trench bar.
+	// 0 1 2 3
+	// 4 5 6 7
+	private int getZone() {
+		Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
+		if (pose.getY() > FieldConstants.fieldYHalf) {
+			if (pose.getX() < FieldConstants.fieldTrenchX) {
+				return 0;
+			}
+			if (pose.getX() < FieldConstants.fieldXHalf) {
+				return 1;
+			}
+			if (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX) {
+				return 2;
+			}
+			return 3;
+		}
+		else {
+			if (pose.getX() < FieldConstants.fieldTrenchX) {
+				return 4;
+			}
+			if (pose.getX() < FieldConstants.fieldXHalf) {
+				return 5;
+			}
+			if (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX) {
+				return 6;
+			}
+			return 7;
+		}
+	}
+
 	@Override
 	public void periodic() {
-		for(int i = 0; i < ios.length; i++){
-			ios[i].update();
+		int curZone = getZone();
+		if (curZone != lastZone) {
+			for(int i = 0; i < ios.length; i++){
+				ios[i].update();
+				ios[i].setPipelineIndex(curZone);
+			}
+			lastZone = curZone;
 		}
 	}
 
