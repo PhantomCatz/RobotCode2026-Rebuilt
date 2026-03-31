@@ -88,9 +88,9 @@
    "tmax":0.57,
    "cof":0.5,
    "bumper":{
-    "front":0.4318,
-    "side":0.4318,
-    "back":0.4318
+    "front":0.5841999999999999,
+    "side":0.4064,
+    "back":0.4064
    },
    "differentialTrackWidth":0.5588
   },
@@ -606,7 +606,7 @@
    {"name":"IntakeStop5", "from":{"target":4, "targetTimestamp":5.09705, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp6", "from":{"target":5, "targetTimestamp":5.78174, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score7", "from":{"target":6, "targetTimestamp":7.19336, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Intake8", "from":{"target":7, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Intake8", "from":{"target":7, "targetTimestamp":8.80363, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"IntakeStop9", "from":{"target":8, "targetTimestamp":10.08278, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp11", "from":{"target":10, "targetTimestamp":12.9725, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score+StowIntake12", "from":{"target":11, "targetTimestamp":14.30753, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
