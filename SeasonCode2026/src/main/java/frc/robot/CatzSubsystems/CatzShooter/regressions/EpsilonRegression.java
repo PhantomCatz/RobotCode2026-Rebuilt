@@ -67,9 +67,9 @@ public class EpsilonRegression {
         };
 
         public static double[][] airtimeOverTrenchHoard = {
-                        { 9.314, 1.50 },
-                        { 7.528, 1.30 },
-                        { 5.768, 1.10 }
+                        { 5.609, 1.212 },
+                        { 7.681, 1.46 },
+                        { 13.644, 1.826 }
         };
 
         // Far Corner Hoarding

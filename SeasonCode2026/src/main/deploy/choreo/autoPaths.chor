@@ -212,16 +212,16 @@
   },
   "bumper":{
    "front":{
-    "exp":"17 in",
-    "val":0.4318
+    "exp":"23 in",
+    "val":0.5841999999999999
    },
    "side":{
-    "exp":"17 in",
-    "val":0.4318
+    "exp":"16 in",
+    "val":0.4064
    },
    "back":{
-    "exp":"17 in",
-    "val":0.4318
+    "exp":"16 in",
+    "val":0.4064
    }
   },
   "differentialTrackWidth":{
@@ -231,9 +231,9 @@
  },
  "generationFeatures":[],
  "codegen":{
-  "root":null,
-  "genVars":true,
-  "genTrajData":true,
-  "useChoreoLib":true
+  "root":"..\\..\\..\\..\\..\\..\\..\\..\\Downloads\\bingbong",
+  "genVars":false,
+  "genTrajData":false,
+  "useChoreoLib":false
  }
 }
