@@ -18,8 +18,10 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -244,6 +246,24 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+    CatzSuperstructure.Instance.isIntakeDeployed = true;
+    Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+
+    try{
+      if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
+        && alliance == DriverStation.Alliance.Blue)
+        ||(DriverStation.getGameSpecificMessage().charAt(0) == 'R'
+        && alliance == DriverStation.Alliance.Red)
+         )
+      {
+        SmartDashboard.putBoolean("Won Auton?", true);
+      }
+    } catch(Exception e){
+      e.printStackTrace();
+    }
+
+
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;

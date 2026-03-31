@@ -97,7 +97,7 @@ public class TeleopDriveCmd extends Command {
                                                      // alliances
 
     // Flip Directions for left joystick if alliance is red
-    if (DriverStation.getAlliance().get() == Alliance.Red) {
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
       joyX = -joyX;
       joyY = -joyY;
     }

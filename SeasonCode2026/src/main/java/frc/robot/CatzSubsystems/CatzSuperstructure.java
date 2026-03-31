@@ -217,7 +217,8 @@ public class CatzSuperstructure {
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
             updateAndApplyShooterState(false, true);
-        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
+        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+        .finallyDo(() -> RobotContainer.rumbleDrv(0.0));
     }
 
     public Command cmdHoardStandby() {
@@ -234,7 +235,8 @@ public class CatzSuperstructure {
                 updateAndApplyShooterState(true, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> {isScoring = true;
-                                       CatzDrivetrain.getInstance().setShootWhileMoveConfig();});
+                                       CatzDrivetrain.getInstance().setShootWhileMoveConfig();})
+                .finallyDo(()-> RobotContainer.rumbleDrv(0.0));
     }
 
     public Command cmdHubStandby() {
@@ -264,7 +266,7 @@ public class CatzSuperstructure {
     }
 
     /* --- INTAKE --- */
-    public Angle intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
+    public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     public boolean isIntakeDeployed = false;
 
     // public Command toggleIntakeDeploy() {
@@ -329,11 +331,9 @@ public class CatzSuperstructure {
             if (isIntakeOn) {
                 isIntakeOn = false;
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
-                RobotContainer.rumbleDrv(0.0);
             } else {
                 isIntakeOn = true;
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.getOnSetpoint());
-                RobotContainer.rumbleDrv(0.05);
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.S_SETPOINT);
             }
         }, CatzIntakeRoller.Instance);
