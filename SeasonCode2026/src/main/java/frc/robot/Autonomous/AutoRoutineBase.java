@@ -87,8 +87,7 @@ public class AutoRoutineBase {
                     },
                     () -> {
                         choreoCommand.execute();
-                        var sample = traj.getRawTrajectory().sampleAt(Timer.getFPGATimestamp()-pathStartTime+DriveConstants.DRIVE_DELAY_TIME, true).get();
-                        CatzSuperstructure.Instance.shootWhileMove(true, true, sample.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(sample.getChassisSpeeds(), sample.getPose().getRotation()));
+                        CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds());
                     },
                     choreoCommand::end,
                     () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
