@@ -130,7 +130,6 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
 
 	@Override
 	public void setPipelineIndex(int index) {
-		System.out.println("change "+config.name+" to "+index);
 		LimelightHelpers.setPipelineIndex(config.name, index);
 	}
 }

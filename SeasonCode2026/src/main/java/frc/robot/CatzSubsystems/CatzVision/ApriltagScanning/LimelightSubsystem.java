@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
 		ios = LimelightConstants.LIMELIGHT_ARRAY;
 
 		if (Robot.isReal()) {
-			for(ApriltagScanningIO limelight : LimelightConstants.LIMELIGHT_ARRAY){
+			for (ApriltagScanningIO limelight : LimelightConstants.LIMELIGHT_ARRAY) {
 				LimelightConfig config = limelight.getConfig();
 
 				LimelightHelpers.setCameraPose_RobotSpace(
@@ -39,7 +39,8 @@ public class LimelightSubsystem extends SubsystemBase {
 		}
 	}
 
-	// These are the zones. Red alliance on left. Seperated by middle line and trench bar.
+	// These are the zones. Red alliance on left. Seperated by middle line and
+	// trench bar.
 	// 0 1 2 3
 	// 4 5 6 7
 	private int getZone() {
@@ -55,8 +56,7 @@ public class LimelightSubsystem extends SubsystemBase {
 				return 2;
 			}
 			return 3;
-		}
-		else {
+		} else {
 			if (pose.getX() < FieldConstants.fieldTrenchX) {
 				return 4;
 			}
@@ -73,17 +73,19 @@ public class LimelightSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		int curZone = getZone();
-		if (curZone != lastZone) {
-			for(int i = 0; i < ios.length; i++){
-				ios[i].update();
+		for (int i = 0; i < ios.length; i++) {
+			if (curZone != lastZone) {
 				ios[i].setPipelineIndex(curZone);
 			}
-			lastZone = curZone;
+
+			ios[i].update();
 		}
+		lastZone = curZone;
+
 	}
 
-	public boolean isSeeingApriltag(){
-		for(ApriltagScanningIO io : ios){
+	public boolean isSeeingApriltag() {
+		for (ApriltagScanningIO io : ios) {
 			return io.getNumTags() > 0;
 		}
 		return false;
