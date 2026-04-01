@@ -58,6 +58,7 @@ public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
             ),
             CatzSuperstructure.Instance.intakeOFF(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
+            CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );
     }
