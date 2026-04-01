@@ -8,7 +8,6 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -18,7 +17,6 @@ import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -71,7 +69,7 @@ public class AutoRoutineBase {
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
-                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
@@ -90,7 +88,7 @@ public class AutoRoutineBase {
                         CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getFieldRelativeChassisSpeeds());
                     },
                     choreoCommand::end,
-                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
         }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance));
     }
 
@@ -128,7 +126,7 @@ public class AutoRoutineBase {
 
                         () -> isAtPose(traj),
 
-                        CatzDrivetrain.getInstance())).withTimeout(traj.getRawTrajectory().getTotalTime() + 2.0);
+                        CatzDrivetrain.getInstance())).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
     }
 
     private boolean isAtPose(AutoTrajectory trajectory) {

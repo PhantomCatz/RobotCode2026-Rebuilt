@@ -17,7 +17,6 @@ public class Solo_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
         AutoTrajectory traj5 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",4);
         AutoTrajectory traj6 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",5);
         AutoTrajectory traj7 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",6);
-        AutoTrajectory traj8 = getTrajectory("Solo_Outpost_2_Cycle_Outpost",7);
 
         prepRoutine(
             traj1,
@@ -47,18 +46,15 @@ public class Solo_Outpost_2_Cycle_Outpost extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj5).alongWith(Commands.print("traj5")),
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectory(traj6)
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectoryWithAccuracy(traj7).alongWith(Commands.print("traj6"))
-                ),
+                followTrajectoryWithAccuracy(traj6).alongWith(Commands.print("traj6")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            followTrajectoryWhileShooting(traj8),
+            followTrajectoryWhileShooting(traj7).alongWith(Commands.print("traj7 w/ acc")),
             shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
