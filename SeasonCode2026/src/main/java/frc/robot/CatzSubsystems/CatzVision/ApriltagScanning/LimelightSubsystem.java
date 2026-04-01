@@ -39,7 +39,7 @@ public class LimelightSubsystem extends SubsystemBase {
 		}
 	}
 
-	// These are the zones. Red alliance on left. Seperated by middle line and
+	// These are the zones. Blue alliance on left. Seperated by middle line and
 	// trench bar.
 	// 0 1 2 3
 	// 4 5 6 7
