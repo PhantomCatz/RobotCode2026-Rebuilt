@@ -69,7 +69,7 @@ public class AutoRoutineBase {
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
-                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
@@ -104,7 +104,8 @@ public class AutoRoutineBase {
                     },
                     choreoCommand::end,
                     () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
-        }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance));
+        }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance))
+        .andThen(CatzSuperstructure.Instance.cmdShooterStop());
     }
 
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
