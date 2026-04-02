@@ -31,6 +31,7 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Outpost_2_Cycle", () -> new Outpost_2_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_3_Cycle", () -> new Outpost_3_Cycle().getRoutine());
         autoSelector.addRoutine("PNZO", () -> new PNZO().getRoutine());
+        autoSelector.addRoutine("dihton", () -> new nothid().getRoutine());
 
 
 
