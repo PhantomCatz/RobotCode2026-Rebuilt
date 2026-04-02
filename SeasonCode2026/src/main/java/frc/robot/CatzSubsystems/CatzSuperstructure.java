@@ -165,9 +165,8 @@ public class CatzSuperstructure {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
             CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
-            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));// don't aim
-                                                                                                           // at future
-                                                                                                           // pose
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));// don't aim at future pose
+            
             initialShootReady = false;
             RobotContainer.rumbleDrv(0.0);
         }
