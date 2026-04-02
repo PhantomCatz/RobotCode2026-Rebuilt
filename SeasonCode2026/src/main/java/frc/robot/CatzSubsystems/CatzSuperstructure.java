@@ -340,7 +340,7 @@ public class CatzSuperstructure {
     }
 
     public Command intakeON() {
-        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.getOnSetpoint())
+        return CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
                 .alongWith(Commands.runOnce(() -> isIntakeOn = true));
     }
 

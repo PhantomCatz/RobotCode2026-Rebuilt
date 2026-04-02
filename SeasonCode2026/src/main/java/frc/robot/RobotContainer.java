@@ -89,8 +89,6 @@ public class RobotContainer {
     xboxDrv.leftBumper().toggleOnTrue(hoardShootCmd);
     xboxDrv.rightBumper().toggleOnTrue(hubShootCmd);
 
-    // Toggle Location
-    xboxDrv.rightStick().onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
 
     // create a master trigger that is true if EITHER shooting mode is running
     Trigger isShooterActive = new Trigger(() -> hoardShootCmd.isScheduled() || hubShootCmd.isScheduled());
