@@ -32,7 +32,7 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj3),
+                followTrajectory(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),

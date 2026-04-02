@@ -73,6 +73,21 @@ public class AutoRoutineBase {
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
+    protected Command followTrajectoryWithoutTimeout(AutoTrajectory traj) {
+        return Commands.defer(() -> {
+            final Command choreoCommand = traj.cmd();
+            return new FunctionalCommand(
+                    () -> {
+                        CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
+                        choreoCommand.initialize();
+                        pathStartTime = Timer.getFPGATimestamp();
+                    },
+                    choreoCommand::execute,
+                    choreoCommand::end,
+                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
+        }, Set.of(CatzDrivetrain.getInstance()));
+    }
+
     protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {
         return Commands.defer(() -> {
             final Command choreoCommand = traj.cmd();

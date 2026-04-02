@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -145,7 +146,7 @@ public class CatzSuperstructure {
                 CatzHood.Instance.applySetpoint(ShooterRegression.getHoodSetpoint(dist, currentMode));
             }
             Logger.recordOutput("Ready to SHOOT!", AimCalculations.readyToShoot());
-            if (!initialShootReady && AimCalculations.readyToShoot()) {
+            if (!initialShootReady && AimCalculations.readyToShoot() || DriverStation.isAutonomous()) {
                 initialShootReady = true;
             }
 
