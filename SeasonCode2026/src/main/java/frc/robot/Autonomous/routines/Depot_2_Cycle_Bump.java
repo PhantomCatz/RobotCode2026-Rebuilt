@@ -59,7 +59,7 @@ public class Depot_2_Cycle_Bump extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
-            CatzSuperstructure.Instance.autoClimbCommand(),
+            // CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );
     }
