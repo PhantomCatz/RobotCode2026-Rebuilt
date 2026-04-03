@@ -173,7 +173,11 @@ public class CatzSuperstructure {
             CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));// don't aim at future pose
 
             initialShootReady = false;
-            RobotContainer.rumbleDrv(0.0);
+            double intakePower = 0.0;
+            if (isIntakeOn) {
+                intakePower = 0.05;
+            }
+            RobotContainer.rumbleDrv(intakePower);
         }
     }
 
@@ -224,7 +228,13 @@ public class CatzSuperstructure {
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
         .beforeStarting(() -> {CatzDrivetrain.getInstance().setShootWhileMoveConfig();})
-        .finallyDo(() -> RobotContainer.rumbleDrv(0.0));
+        .finallyDo(() -> {
+            double intakePower = 0.0;
+            if (isIntakeOn) {
+                intakePower = 0.05;
+            }
+            RobotContainer.rumbleDrv(intakePower);
+        });
     }
 
     public Command cmdHoardStandby() {
@@ -242,7 +252,13 @@ public class CatzSuperstructure {
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
                 .beforeStarting(() -> {isScoring = true;
                                        CatzDrivetrain.getInstance().setShootWhileMoveConfig();})
-                .finallyDo(()-> RobotContainer.rumbleDrv(0.0));
+                .finallyDo(()-> {
+                    double intakePower = 0.0;
+                    if (isIntakeOn) {
+                        intakePower = 0.05;
+                    }
+                    RobotContainer.rumbleDrv(intakePower);
+                });
     }
 
     public Command cmdHubStandby() {
