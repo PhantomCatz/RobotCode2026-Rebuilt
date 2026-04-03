@@ -6,18 +6,18 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Depot_2_Cycle_Bump_NoSOTM extends AutoRoutineBase {
-    public Depot_2_Cycle_Bump_NoSOTM(){
-        super("Depot_2_Cycle_Bump_NoSOTM");
+public class Depot_2_Cycle_NoSOTM extends AutoRoutineBase {
+    public Depot_2_Cycle_NoSOTM(){
+        super("Depot_2_Cycle_NoSOTM");
 
-        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",0);
-        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",1);
-        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",2);
-        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",3);
-        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",4);
-        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",5);
-        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",6);
-        AutoTrajectory traj8 = getTrajectory("Depot_2_Cycle_Bump_NoSOTM",7);
+        AutoTrajectory traj1 = getTrajectory("Depot_2_Cycle_NoSOTM",0);
+        AutoTrajectory traj2 = getTrajectory("Depot_2_Cycle_NoSOTM",1);
+        AutoTrajectory traj3 = getTrajectory("Depot_2_Cycle_NoSOTM",2);
+        AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_NoSOTM",3);
+        AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_NoSOTM",4);
+        AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_NoSOTM",5);
+        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_NoSOTM",6);
+        AutoTrajectory traj8 = getTrajectory("Depot_2_Cycle_NoSOTM",7);
 
 
         prepRoutine(
