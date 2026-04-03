@@ -116,7 +116,11 @@ public class CatzSuperstructure {
     public boolean isIntakeOn = false;
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
-        shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(), CatzDrivetrain.getInstance().futureChassisSpeeds);
+        if(isHub){
+            shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(), CatzDrivetrain.getInstance().futureChassisSpeeds);
+        }else{
+            shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds());
+        }
     }
 
     public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeedsRobot) {
@@ -157,10 +161,11 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
-            RobotContainer.rumbleDrv(getRumbleStrength());
-            // if (isIntakeOn) {
-            //     RobotContainer.rumbleDrv(0.05);
-            // }
+            double intakePower = 0.0;
+            if (isIntakeOn) {
+                intakePower = 0.05;
+            }
+            RobotContainer.rumbleDrv(getRumbleStrength() + intakePower);
         } else {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
@@ -218,6 +223,7 @@ public class CatzSuperstructure {
         return Commands.run(() -> {
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+        .beforeStarting(() -> {CatzDrivetrain.getInstance().setShootWhileMoveConfig();})
         .finallyDo(() -> RobotContainer.rumbleDrv(0.0));
     }
 

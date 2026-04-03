@@ -144,7 +144,7 @@ public class CatzRobotTracker {
 
     m_lastChassisSpeeds = chassisSpeeds;
     lastTimestamp = observation.timestamp;
-    // Logger.recordOutput("CatzRobotTracker/ChassisSpeeds", Math.hypot(m_lastChassisSpeeds.vxMetersPerSecond, m_lastChassisSpeeds.vyMetersPerSecond));
+    Logger.recordOutput("CatzRobotTracker/ChassisSpeeds", Math.hypot(m_lastChassisSpeeds.vxMetersPerSecond, m_lastChassisSpeeds.vyMetersPerSecond));
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
