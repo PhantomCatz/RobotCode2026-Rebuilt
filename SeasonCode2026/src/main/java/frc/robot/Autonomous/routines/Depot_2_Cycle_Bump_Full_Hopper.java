@@ -30,7 +30,6 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                     followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectory(traj2).alongWith(Commands.print("traj2")),
-                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
@@ -38,6 +37,7 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                 followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("traj3")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
+            CatzSuperstructure.Instance.intakeOFF(),
             followTrajectoryWhileShooting(traj4).alongWith(Commands.print("traj4")),
             Commands.deadline(
                 Commands.sequence(
@@ -49,11 +49,11 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     followTrajectory(traj6).alongWith(Commands.print("traj6")),
-                    CatzSuperstructure.Instance.intakeOFF(),
                     followTrajectoryWithAccuracy(traj7).alongWith(Commands.print("traj7"))
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
+            CatzSuperstructure.Instance.intakeOFF(),
             followTrajectoryWhileShooting(traj8).alongWith(Commands.print("traj8")),
             Commands.deadline(
                 Commands.sequence(

@@ -828,8 +828,8 @@
  },
  "events":[
    {"name":"StartIntake2", "from":{"target":1, "targetTimestamp":1.19205, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StopIntake+RampUp6", "from":{"target":5, "targetTimestamp":4.24837, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StartSOTM7", "from":{"target":6, "targetTimestamp":5.50097, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"RampUp6", "from":{"target":5, "targetTimestamp":4.24837, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StartSOTM+StopIntake7", "from":{"target":6, "targetTimestamp":5.50097, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StopSOTM+StartScore+Delay9", "from":{"target":8, "targetTimestamp":8.17481, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StartIntake10", "from":{"target":9, "targetTimestamp":9.36843, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StopIntake+RampUp15", "from":{"target":14, "targetTimestamp":13.05379, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
