@@ -157,10 +157,11 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             }
-            RobotContainer.rumbleDrv(getRumbleStrength());
-            // if (isIntakeOn) {
-            //     RobotContainer.rumbleDrv(0.05);
-            // }
+            double intakePower = 0.0;
+            if (isIntakeOn) {
+                intakePower = 0.05;
+            }
+            RobotContainer.rumbleDrv(getRumbleStrength() + intakePower);
         } else {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
