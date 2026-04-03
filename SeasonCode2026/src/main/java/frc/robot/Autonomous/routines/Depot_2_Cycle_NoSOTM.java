@@ -48,9 +48,7 @@ public class Depot_2_Cycle_NoSOTM extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                Commands.sequence(
-                    followTrajectory(traj6).alongWith(Commands.print("traj6"))
-                ),
+                followTrajectory(traj6).alongWith(Commands.print("traj6")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),

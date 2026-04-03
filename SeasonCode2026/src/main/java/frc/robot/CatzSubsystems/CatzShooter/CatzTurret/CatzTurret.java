@@ -6,7 +6,6 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -16,7 +15,6 @@ import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
-import frc.robot.FieldConstants;
 
 public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOInputs> {
 

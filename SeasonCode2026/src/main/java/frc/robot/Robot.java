@@ -55,6 +55,8 @@ public class Robot extends LoggedRobot {
 
   public static double autonStartTime = 0.0;
 
+  private int iterations = 0;
+
   public Robot() {
   }
 
@@ -198,6 +200,7 @@ public class Robot extends LoggedRobot {
       // Notifier.setHALThreadPriority(false, 0);
       // System.out.println("Starting deteciton threaadf==================");
       // coralDetectionThread.startPeriodic(0.1);
+      SmartDashboard.putBoolean("Won Auton?", false);
   }
 
   @Override
@@ -248,26 +251,9 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
-    Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
-    System.out.println("hello world! /n/n/n " + "\"" + DriverStation.getGameSpecificMessage() + "\"" + " /n/n/n boom it");
-    try{
-      if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
-        && alliance == DriverStation.Alliance.Blue)
-        ||(DriverStation.getGameSpecificMessage().charAt(0) == 'R'
-        && alliance == DriverStation.Alliance.Red)
-         )
-      {
-        SmartDashboard.putBoolean("Won Auton?", true);
-      }
-    } catch(Exception e){
-      e.printStackTrace();
-    }
 
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
-    CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
-    CatzSuperstructure.Instance.isIntakeDeployed = true;
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -275,6 +261,24 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
+    if(iterations < 20) {
+      Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+      System.out.println("hello world!\n" + "\"" + DriverStation.getGameSpecificMessage() + "\"" + " \n boom it");
+      try{
+        if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
+          && alliance == DriverStation.Alliance.Blue)
+          ||(DriverStation.getGameSpecificMessage().charAt(0) == 'R'
+          && alliance == DriverStation.Alliance.Red)
+          )
+        {
+          SmartDashboard.putBoolean("Won Auton?", true);
+          iterations = 21;
+        }
+      } catch(Exception e){
+        e.printStackTrace();
+      }
+      iterations++;
+    }
   }
 
   @Override

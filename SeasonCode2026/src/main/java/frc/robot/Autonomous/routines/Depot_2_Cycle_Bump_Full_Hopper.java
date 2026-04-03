@@ -29,7 +29,7 @@ public class Depot_2_Cycle_Bump_Full_Hopper extends AutoRoutineBase {
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2).alongWith(Commands.print("traj2")),
+                    followTrajectory(traj2).alongWith(Commands.print("traj2"))
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),

@@ -1,6 +1,5 @@
 package frc.robot.Autonomous.routines;
 
-import org.apache.commons.math3.analysis.function.Floor;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
