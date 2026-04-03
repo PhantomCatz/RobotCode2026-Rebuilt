@@ -249,7 +249,7 @@ public class Robot extends LoggedRobot {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
     Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
-
+    System.out.println("hello world! /n/n/n " + "\"" + DriverStation.getGameSpecificMessage() + "\"" + " /n/n/n boom it");
     try{
       if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
         && alliance == DriverStation.Alliance.Blue)
