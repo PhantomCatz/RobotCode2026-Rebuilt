@@ -103,7 +103,7 @@ public class RobotContainer {
     // GLOBAL STOP CONTROL
     // -------------------------------------------------------------------------
 
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
 
     // -------------------------------------------------------------------------
     // CLIMBING CONTROL
