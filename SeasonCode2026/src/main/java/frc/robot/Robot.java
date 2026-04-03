@@ -251,7 +251,8 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
-
+    CatzSuperstructure.Instance.cmdShooterStop().schedule();
+    CatzDrivetrain.getInstance().setNormalConfig();
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     if (m_autonomousCommand != null) {
