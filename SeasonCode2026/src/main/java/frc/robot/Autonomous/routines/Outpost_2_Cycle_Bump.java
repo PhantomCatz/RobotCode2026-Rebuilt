@@ -52,7 +52,7 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
             ),
             CatzSuperstructure.Instance.intakeOFF(),
             followTrajectoryWhileShooting(traj7),
-            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBallsNoJiggle(AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
     }
