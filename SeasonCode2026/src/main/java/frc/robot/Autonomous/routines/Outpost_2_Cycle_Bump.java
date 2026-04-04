@@ -27,7 +27,7 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
                     Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2)
+                    followTrajectoryWithAccuracy(traj2)
                 ),
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
