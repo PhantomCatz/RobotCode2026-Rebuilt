@@ -4,7 +4,7 @@
  "snapshot":{
   "waypoints":[
     {"x":4.4, "y":0.6, "heading":3.141592653589793, "intervals":29, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.664278984069824, "y":0.6, "heading":3.141592653589793, "intervals":44, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.664278984069824, "y":0.6, "heading":3.141592653589793, "intervals":44, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.404803276062012, "y":2.456477403640747, "heading":0.9571998181403328, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":7.191927433013916, "y":3.733734607696533, "heading":2.4436885789617735, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":6.226888179779053, "y":3.506666660308838, "heading":-2.4416995175612723, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
@@ -43,7 +43,7 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"StartBot.x", "val":4.4}, "y":{"exp":"StartBot.y", "val":0.6}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":29, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.664278984069824 m", "val":6.664278984069824}, "y":{"exp":"StartBot.y", "val":0.6}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":44, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.664278984069824 m", "val":6.664278984069824}, "y":{"exp":"StartBot.y", "val":0.6}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":44, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.404803276062012 m", "val":7.404803276062012}, "y":{"exp":"2.456477403640747 m", "val":2.456477403640747}, "heading":{"exp":"0.9571998181403327 rad", "val":0.9571998181403328}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.191927433013916 m", "val":7.191927433013916}, "y":{"exp":"3.733734607696533 m", "val":3.733734607696533}, "heading":{"exp":"2.4436885789617735 rad", "val":2.4436885789617735}, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.226888179779053 m", "val":6.226888179779053}, "y":{"exp":"3.506666660308838 m", "val":3.506666660308838}, "heading":{"exp":"-2.4416995175612723 rad", "val":-2.4416995175612723}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
@@ -634,10 +634,10 @@
     {"t":13.27495, "x":0.63333, "y":0.67038, "heading":-3.14129, "vx":-0.24723, "vy":-0.20335, "omega":-0.00572, "ax":3.53108, "ay":2.90443, "alpha":0.07996, "fx":[60.44474,60.02699,59.67805,60.10053], "fy":[48.93718,49.44992,49.869,49.35778]},
     {"t":13.30995, "x":0.62684, "y":0.66504, "heading":-3.14149, "vx":-0.12363, "vy":-0.10169, "omega":-0.00292, "ax":3.53192, "ay":2.90512, "alpha":0.08339, "fx":[60.4755,60.03978,59.67572,60.11657], "fy":[48.92878,49.46353,49.90088,49.36779]},
     {"t":13.34496, "x":0.62468, "y":0.66326, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,215,241,278,418,452]
+  "splits":[0,29,215,241,278,418,452]
  },
  "events":[
-   {"name":"Intake3", "from":{"target":null, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Intake3", "from":{"target":1, "targetTimestamp":1.13919, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"RampUp8", "from":{"target":6, "targetTimestamp":4.71618, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Score+StopIntake9", "from":{"target":7, "targetTimestamp":5.74849, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"Intake10", "from":{"target":8, "targetTimestamp":6.97779, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
