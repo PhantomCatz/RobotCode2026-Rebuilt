@@ -16,6 +16,7 @@ public class Depot_2_Cycle_Bump extends AutoRoutineBase {
         AutoTrajectory traj4 = getTrajectory("Depot_2_Cycle_Bump",3);
         AutoTrajectory traj5 = getTrajectory("Depot_2_Cycle_Bump",4);
         AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Bump",5);
+        AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_Bump",6);
 
 
         // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
@@ -59,7 +60,7 @@ public class Depot_2_Cycle_Bump extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
-            // CatzSuperstructure.Instance.autoClimbCommand(),
+            followTrajectory(traj7),
             Commands.print("done")
         );
     }
