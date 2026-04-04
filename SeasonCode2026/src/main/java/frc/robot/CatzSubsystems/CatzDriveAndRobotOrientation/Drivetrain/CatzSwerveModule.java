@@ -169,6 +169,10 @@ public class CatzSwerveModule {
     io.setShootWhileMoveConfig();
   }
 
+  public void setIntakeMoveConfig(){
+    io.setIntakeMoveConfig();
+  }
+
   public void setNormalConfig() {
     io.setNormalConfig();
   }

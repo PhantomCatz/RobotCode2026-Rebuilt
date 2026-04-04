@@ -70,6 +70,8 @@ public class ModuleIORealFoc implements ModuleIO {
 
   private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
+    private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
+
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
@@ -98,6 +100,12 @@ public class ModuleIORealFoc implements ModuleIO {
     shootWhileMoveCon.StatorCurrentLimitEnable = true;
     shootWhileMoveCon.SupplyCurrentLimit = 15.0;
     shootWhileMoveCon.SupplyCurrentLimitEnable = true;
+
+    intakeMoveCon.SupplyCurrentLowerTime = 0.0;
+    intakeMoveCon.StatorCurrentLimit = 80.0;
+    intakeMoveCon.StatorCurrentLimitEnable = true;
+    intakeMoveCon.SupplyCurrentLimit = 10.0;
+    intakeMoveCon.SupplyCurrentLimitEnable = true;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -268,6 +276,12 @@ public class ModuleIORealFoc implements ModuleIO {
   @Override
   public void setShootWhileMoveConfig() {
     driveTalonConfig.withCurrentLimits(shootWhileMoveCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setIntakeMoveConfig(){
+    driveTalonConfig.withCurrentLimits(intakeMoveCon);
     driveTalon.getConfigurator().apply(driveTalonConfig);
   }
 

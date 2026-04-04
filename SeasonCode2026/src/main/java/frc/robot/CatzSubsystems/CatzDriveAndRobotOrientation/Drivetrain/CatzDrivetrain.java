@@ -338,6 +338,12 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
+  public void setIntakeMoveConfig(){
+     for (CatzSwerveModule module : m_swerveModules) {
+      module.setIntakeMoveConfig();
+    }
+  }
+
   /** Set current limits for normal driving*/
   public void setNormalConfig() {
     for (CatzSwerveModule module : m_swerveModules) {
