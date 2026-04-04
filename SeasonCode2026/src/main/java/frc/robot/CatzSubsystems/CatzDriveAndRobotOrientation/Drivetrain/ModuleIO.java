@@ -70,6 +70,9 @@ public interface ModuleIO {
 
   public default void setShootWhileMoveConfig() {}
 
+  public default void setIntakeMoveConfig() {}
+
+
   public default void setNormalConfig() {}
 
   // ---------------------------------------------------------------------------

@@ -353,12 +353,20 @@ public class CatzSuperstructure {
             if (isIntakeOn) {
                 isIntakeOn = false;
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
+
+                if(!isScoring){
+                    CatzDrivetrain.getInstance().setNormalConfig();
+                }
                 RobotContainer.rumbleDrv(0.0);
 
             } else {
                 isIntakeOn = true;
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.getOnSetpoint());
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
+
+                if(!isScoring){
+                    CatzDrivetrain.getInstance().setIntakeMoveConfig();
+                }
                 RobotContainer.rumbleDrv(0.05);
             }
         }, CatzIntakeRoller.Instance);
