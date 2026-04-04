@@ -19,7 +19,7 @@ public class HoodConstants {
 	public static final Angle HOOD_ZERO_POS = Units.Degrees.of(14.0);
 	public static final Angle HOOD_MAX_POS = Units.Degrees.of(41.0);
 	public static final Angle HOOD_TEST_POS = Units.Degrees.of(35.0);
-	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS);
+	public static final Setpoint HOOD_STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_ZERO_POS); 	
 	public static final Setpoint HOOD_TEST_SETPOINT = Setpoint.withMotionMagicSetpoint(HOOD_TEST_POS);
 	public static final Setpoint HOOD_STOP = Setpoint.withVelocitySetpoint(0.0);
 

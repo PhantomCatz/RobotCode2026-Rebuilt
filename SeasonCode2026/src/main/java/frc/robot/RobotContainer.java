@@ -142,18 +142,18 @@ public class RobotContainer {
     // xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
     // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
     // xboxAux.x().onTrue(superstructure.resetClimbPose());
-    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
-
-    xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
-
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
+    // shooting a y x start
+    
+    // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
+    // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE
     // -------------------------------------------------------------------------
