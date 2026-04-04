@@ -81,7 +81,7 @@ public class FieldConstants {
   /*********************/
 
 
-  private static final Translation2d RIGHT_CORNER = new Translation2d(0.5798526406288147, 0.503104567527771);
+  private static final Translation2d RIGHT_CORNER = new Translation2d(0.5085551738739014, 0.5085861086845398);
   private static final double NET_LENGTH = 2.0; //meters
   public static final double NET_LENGTH_HALF = NET_LENGTH / 2.0;
   private static final Translation2d NET_POS = new Translation2d(5.527492523193359, fieldYHalf);
