@@ -184,7 +184,6 @@ public class CatzSuperstructure {
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
-    public boolean okBruh = false;
     public Command cmdShooterStop() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
@@ -354,9 +353,9 @@ public class CatzSuperstructure {
                 isIntakeOn = false;
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
 
-                if(!isScoring){
-                    CatzDrivetrain.getInstance().setNormalConfig();
-                }
+                // if(!isScoring){
+                //     CatzDrivetrain.getInstance().setNormalConfig();
+                // }
                 RobotContainer.rumbleDrv(0.0);
 
             } else {
@@ -364,9 +363,9 @@ public class CatzSuperstructure {
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.getOnSetpoint());
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
 
-                if(!isScoring){
-                    CatzDrivetrain.getInstance().setIntakeMoveConfig();
-                }
+                // if(!isScoring){
+                    // CatzDrivetrain.getInstance().setIntakeMoveConfig();
+                // }
                 RobotContainer.rumbleDrv(0.05);
             }
         }, CatzIntakeRoller.Instance);
