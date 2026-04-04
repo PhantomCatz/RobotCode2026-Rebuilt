@@ -151,7 +151,7 @@ public class RobotContainer {
     xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // shooting a y x start
-    
+
     // xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.deployIntake());
     // xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.stowIntake());
     // -------------------------------------------------------------------------
