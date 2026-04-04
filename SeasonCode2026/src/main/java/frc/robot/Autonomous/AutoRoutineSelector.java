@@ -31,6 +31,7 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Outpost_1_Cycle_Outpost", () -> new Outpost_1_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Outpost_1_Cycle", () -> new Outpost_1_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Bump", () -> new Outpost_2_Cycle_Bump().getRoutine());
+        autoSelector.addRoutine("Outpost_2_Cycle_Bump_846", () -> new Outpost_2_Cycle_Bump_846().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Outpost", () -> new Outpost_2_Cycle_Outpost().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle", () -> new Outpost_2_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_3_Cycle", () -> new Outpost_3_Cycle().getRoutine());
