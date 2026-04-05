@@ -41,7 +41,7 @@ public class Outpost_2_Cycle_Bump_Elim extends AutoRoutineBase {
                 Commands.sequence(
                     followTrajectory(traj4).alongWith(Commands.print("4")),
                     CatzSuperstructure.Instance.intakeON().alongWith(Commands.print("intakeOn")),
-                    followTrajectory(traj5).alongWith(Commands.print("5"))
+                    followTrajectoryWithAccuracy(traj5).alongWith(Commands.print("5"))
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
