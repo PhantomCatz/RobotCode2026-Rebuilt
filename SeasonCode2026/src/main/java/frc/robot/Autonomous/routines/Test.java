@@ -15,7 +15,7 @@ public class Test extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            Commands.waitSeconds(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             CatzSuperstructure.Instance.deployIntake(),
             //"pray for me" - kendrick lamar
             followTrajectory(traj1),
