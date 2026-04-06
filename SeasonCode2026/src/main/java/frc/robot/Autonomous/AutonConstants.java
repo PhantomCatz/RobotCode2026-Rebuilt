@@ -1,8 +1,8 @@
 package frc.robot.Autonomous;
 
 public class AutonConstants {
-    public static final double ACCEPTABLE_DIST_METERS = 0.25;
-    public static final double ACCEPTABLE_ANGLE_DEG = 2.0;
+    public static final double ACCEPTABLE_DIST_METERS = 0.04;
+    public static final double ACCEPTABLE_ANGLE_DEG = 1.0;
     public static final double ACCEPTABLE_LOOSE_DIST_METERS = 0.1;
     public static final double ACCEPTABLE_LOOSE_ANGLE_DEG = 10.0;
 
@@ -14,5 +14,5 @@ public class AutonConstants {
     public static final double OUTPOST_SCORING_WAIT = 15.0;
 
     public static final double ARTIFICIAL_PING_SEC = 0.15;
-    public static final double DEPLOY_INTAKE_WAIT = 0.5; //try 0.6
+    public static final double DEPLOY_INTAKE_WAIT = 0.5;
 }
