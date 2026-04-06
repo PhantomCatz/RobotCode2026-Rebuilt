@@ -356,7 +356,7 @@ public class CatzSuperstructure {
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
 
-        }, CatzIntakeRoller.Instance, CatzIntakeDeploy.Instance);
+        }, CatzIntakeRoller.Instance);
     }
 
     public Command toggleIntakeRollers() {
