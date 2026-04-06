@@ -202,8 +202,8 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(10.0, 0.0, 0.3),
-      new PIDController(10.0, 0.0, 0.3),
+      new PIDController(16.0, 0.0, 1),
+      new PIDController(16.0, 0.0, 1),
       new ProfiledPIDController(
         13.0,
         0.0,

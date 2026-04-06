@@ -4,18 +4,21 @@ package frc.robot.Autonomous.routines;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
+import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class Test extends AutoRoutineBase{
     public Test(){
         super("Test");
 
-        AutoTrajectory traj1 = getTrajectory("SOTMTest",0);
+        AutoTrajectory traj1 = getTrajectory("crashingInTheNameOfTestingPID",0);
 
         prepRoutine(
             traj1,
+            Commands.waitSeconds(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
             CatzSuperstructure.Instance.deployIntake(),
-            followTrajectoryWhileShooting(traj1),
+            //"pray for me" - kendrick lamar
+            followTrajectory(traj1),
             Commands.print("Done")
         );
     }
