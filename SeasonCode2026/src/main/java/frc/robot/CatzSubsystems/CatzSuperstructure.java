@@ -333,19 +333,30 @@ public class CatzSuperstructure {
     }
 
     public Command jiggleIntakeCommand() {
-        Command jiggleCmd = Commands.run(() -> {
+    //     Command jiggleCmd = Commands.run(() -> {
+    //         double time = Timer.getFPGATimestamp();
+    //         double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY * (2 * Math.PI)) > 0
+    //                 ? IntakeDeployConstants.UP_POSITION.in(Units.Rotations)
+    //                 : IntakeDeployConstants.DEPLOY_POSITION.in(Units.Rotations);
+    //         CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
+    //         intakeSetpoint = Units.Rotations.of(angleRot);
+
+    //     });
+    //     // TODO abuse of requirements. uses catz intake rollers to stop this command but
+    //     // shouldn't do this
+    //     jiggleCmd.addRequirements(CatzIntakeRoller.Instance);
+    //     return jiggleCmd;
+    // }
+            return Commands.run(() -> {
             double time = Timer.getFPGATimestamp();
             double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY * (2 * Math.PI)) > 0
                     ? IntakeDeployConstants.UP_POSITION.in(Units.Rotations)
                     : IntakeDeployConstants.DEPLOY_POSITION.in(Units.Rotations);
+
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
 
-        });
-        // TODO abuse of requirements. uses catz intake rollers to stop this command but
-        // shouldn't do this
-        jiggleCmd.addRequirements(CatzIntakeRoller.Instance);
-        return jiggleCmd;
+        }, CatzIntakeRoller.Instance, CatzIntakeDeploy.Instance);
     }
 
     public Command toggleIntakeRollers() {

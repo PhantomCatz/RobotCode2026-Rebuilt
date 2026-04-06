@@ -117,7 +117,7 @@ public class RobotContainer {
     xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
-    xboxDrv.y().onTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
+    xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
     xboxDrv.y().onFalse(CatzSuperstructure.Instance.deployIntake().alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)));
 
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
