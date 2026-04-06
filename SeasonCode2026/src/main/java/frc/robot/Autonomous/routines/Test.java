@@ -12,6 +12,7 @@ public class Test extends AutoRoutineBase{
         super("Test");
 
         AutoTrajectory traj1 = getTrajectory("crashingInTheNameOfTestingPID",0);
+        AutoTrajectory traj2 = getTrajectory("crashingInTheNameOfTestingPID",1);
 
         prepRoutine(
             traj1,
@@ -19,6 +20,7 @@ public class Test extends AutoRoutineBase{
             CatzSuperstructure.Instance.deployIntake(),
             //"pray for me" - kendrick lamar
             followTrajectory(traj1),
+            followTrajectory(traj2),
             Commands.print("Done")
         );
     }

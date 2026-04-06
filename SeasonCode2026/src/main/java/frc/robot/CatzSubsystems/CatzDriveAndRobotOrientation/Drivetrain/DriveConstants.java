@@ -202,12 +202,12 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(20.0, 0.0, 1),
-      new PIDController(20.0, 0.0, 1),
+      new PIDController(19.0, 0.0, 1.0),
+      new PIDController(17.0, 0.0, 0.8),
       new ProfiledPIDController(
-        13.0,
+        16.0,
         0.0,
-        0.3,
+        0.8,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
       )
     );
