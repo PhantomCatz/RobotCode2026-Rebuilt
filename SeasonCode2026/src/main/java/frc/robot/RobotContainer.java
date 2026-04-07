@@ -104,7 +104,6 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
 
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
-
     // -------------------------------------------------------------------------
     // CLIMBING CONTROL
     // -------------------------------------------------------------------------
@@ -137,18 +136,18 @@ public class RobotContainer {
     // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+    xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    // xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
-    // xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
-    // xboxAux.x().onTrue(superstructure.resetClimbPose());
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
-    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
-    xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxAux.a().onTrue(superstructure.enableClimbSoftLimit());
+    xboxAux.b().onTrue(superstructure.disableClimbSoftLimit());
+    xboxAux.x().onTrue(superstructure.resetClimbPose());
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    // xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
+    // xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    // xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+    // xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // shooting a y x start
 
