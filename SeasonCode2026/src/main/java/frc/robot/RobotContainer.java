@@ -1,6 +1,8 @@
 package frc.robot;
 
 
+import java.util.Set;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -13,6 +15,7 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -116,7 +119,13 @@ public class RobotContainer {
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    xboxDrv.y().onFalse(CatzSuperstructure.Instance.deployIntake());
+    xboxDrv.y().onFalse(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
+      if(CatzSuperstructure.Instance.isIntakeOn){
+        return CatzSuperstructure.Instance.intakeON();
+      }else{
+        return CatzSuperstructure.Instance.intakeOFF();
+      }
+    }, Set.of(CatzIntakeRoller.Instance))));
 
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
