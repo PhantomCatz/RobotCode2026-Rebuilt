@@ -2,9 +2,11 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -190,6 +192,13 @@ public class DriveConstants {
     MODULE_TRANSLATIONS[INDEX_BL] = new Translation2d(-DRIVE_CONFIG.robotLengthX(),  DRIVE_CONFIG.robotWidthY()).div(2.0);
     MODULE_TRANSLATIONS[INDEX_FL] = new Translation2d( DRIVE_CONFIG.robotLengthX(),  DRIVE_CONFIG.robotWidthY()).div(2.0);
   }
+
+  public static final SwerveModuleState[] xLockStates = {
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45)),        //FR
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)), //BR
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45)),        //BL
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)), //FL
+  };
 
   // calculates the orientation and speed of individual swerve modules when given
   // the motion of the whole robot

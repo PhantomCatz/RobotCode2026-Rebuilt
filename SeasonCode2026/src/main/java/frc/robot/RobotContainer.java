@@ -105,7 +105,13 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
 
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()));
-
+    //X LOCK DRIVETRAIN
+    xboxDrv.povLeft().whileTrue(
+    Commands.run(
+        () -> CatzDrivetrain.getInstance().setXLock(), 
+        CatzDrivetrain.getInstance()
+    )
+);
     // -------------------------------------------------------------------------
     // CLIMBING CONTROL
     // -------------------------------------------------------------------------
