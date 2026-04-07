@@ -61,8 +61,8 @@ public class DriveConstants {
   // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
 
   public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
-        1.6,
-        5.0,
+        1.0,
+        3.0,
         DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static final double DRIVE_DELAY_TIME = 0.02;
@@ -142,10 +142,10 @@ public class DriveConstants {
   static{
     switch(CatzConstants.getRobotType()){
         case SN_MANTA:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.416016, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.451, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.138672, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.493652+0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.0761+0.5, false);
         break;
 
         case SN1:
@@ -211,12 +211,25 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(20.0, 0.0, 1),
-      new PIDController(20.0, 0.0, 1),
+      new PIDController(10.0, 0.0, 0.2),
+      new PIDController(10.0, 0.0, 0.2),
       new ProfiledPIDController(
-        13.0,
+        6.0,
         0.0,
-        0.3,
+        0.8,
+        new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
+      )
+    );
+  }
+  
+  public static HolonomicDriveController getNewHolController_Slow() {
+    return new HolonomicDriveController(
+      new PIDController(7.0, 0.0, 0.4),
+      new PIDController(7.0, 0.0, 0.4),
+      new ProfiledPIDController(
+        5.0,
+        0.0,
+        0.6,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
       )
     );

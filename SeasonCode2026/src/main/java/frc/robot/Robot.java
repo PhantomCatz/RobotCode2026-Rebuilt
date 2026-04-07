@@ -249,8 +249,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
-    CatzSuperstructure.Instance.isIntakeDeployed = true;
+    // CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+    // CatzSuperstructure.Instance.isIntakeDeployed = true;
     CatzSuperstructure.Instance.cmdShooterStop().schedule();
     CatzDrivetrain.getInstance().setNormalConfig();
 

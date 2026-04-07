@@ -10,15 +10,23 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 public class Test extends AutoRoutineBase{
     public Test(){
         super("Test");
-
+            //i hate pid
         AutoTrajectory traj1 = getTrajectory("crashingInTheNameOfTestingPID",0);
+        AutoTrajectory traj2 = getTrajectory("crashingInTheNameOfTestingPID",1);
 
         prepRoutine(
             traj1,
             Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
             CatzSuperstructure.Instance.deployIntake(),
             //"pray for me" - kendrick lamar
-            followTrajectory(traj1),
+            Commands.deadline(
+                Commands.sequence(
+                    followTrajectory(traj1),
+                    followTrajectory(traj2)
+                ),
+                CatzSuperstructure.Instance.trackStaticHub()
+            ),
+
             Commands.print("Done")
         );
     }
