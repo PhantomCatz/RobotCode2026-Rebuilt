@@ -212,6 +212,19 @@ public class DriveConstants {
       )
     );
   }
+  
+  public static HolonomicDriveController getNewHolController_Slow() {
+    return new HolonomicDriveController(
+      new PIDController(7.0, 0.0, 0.4),
+      new PIDController(7.0, 0.0, 0.4),
+      new ProfiledPIDController(
+        5.0,
+        0.0,
+        0.6,
+        new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
+      )
+    );
+  }
 
 
 

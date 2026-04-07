@@ -70,6 +70,7 @@ public class CatzDrivetrain extends SubsystemBase {
   public final CatzSwerveModule LT_FRNT_MODULE;
 
   private HolonomicDriveController hoController = DriveConstants.getNewHolController();
+  private HolonomicDriveController hoController_Slow = DriveConstants.getNewHolController_Slow();
 
   private Queue<Pair<Double, SwerveSetpoint>> futureSwerveSetpoints = new LinkedList<>();
   public ChassisSpeeds futureChassisSpeeds = new ChassisSpeeds();
@@ -369,6 +370,10 @@ public class CatzDrivetrain extends SubsystemBase {
    */
   public void followChoreoTrajectoryInit(AutoTrajectory traj) {
     hoController = DriveConstants.getNewHolController();
+  }
+  //Intended for slow paths
+  public void followSlowChoreoTrajectoryInit(AutoTrajectory traj) {
+    hoController = DriveConstants.getNewHolController_Slow();
   }
 
 
