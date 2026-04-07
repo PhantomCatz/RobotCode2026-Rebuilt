@@ -407,6 +407,12 @@ public class CatzDrivetrain extends SubsystemBase {
     drive(adjustedSpeeds);
   }
 
+  public void setXLock() {
+      for (int i = 0; i < 4; i++) {
+          m_swerveModules[i].setModuleAngleAndVelocity(DriveConstants.xLockStates[i]);
+      }
+  }
+
   // -----------------------------------------------------------------------------------------------------------
   //
   // Drivetrain Getters
