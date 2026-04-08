@@ -559,7 +559,7 @@ public class CatzSuperstructure {
                         cmdClimbReach(),
                         deployIntake(),
                         alignToBackUpClimb(),
-                        alignToCloseClimb(),
+                        alignToCloseClimb().withTimeout(2.0),
                         stowIntake(),
                         cmdClimbStow()),
                 trackTower()).beforeStarting(() -> isClimbMode = true);

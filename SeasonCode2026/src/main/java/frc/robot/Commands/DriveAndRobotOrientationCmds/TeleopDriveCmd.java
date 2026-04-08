@@ -126,27 +126,27 @@ public class TeleopDriveCmd extends Command {
     ModuleLimits limits;
     if(CatzSuperstructure.Instance.getIsScoring()) {
       limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
-      
+
       // Get the current magnitude of the actual robot setpoint
       double currentVel = Math.hypot(
-          currentSetpoint.chassisSpeeds().vxMetersPerSecond, 
+          currentSetpoint.chassisSpeeds().vxMetersPerSecond,
           currentSetpoint.chassisSpeeds().vyMetersPerSecond
       );
-      
-      double maxScoringVel = limits.maxDriveVelocity(); 
-      
+
+      double maxScoringVel = limits.maxDriveVelocity();
+
       if (currentVel > maxScoringVel) {
         double scale = maxScoringVel / currentVel;
-        
+
         currentSetpoint.chassisSpeeds().vxMetersPerSecond *= scale;
         currentSetpoint.chassisSpeeds().vyMetersPerSecond *= scale;
-      
-        var states = currentSetpoint.moduleStates(); 
+
+        var states = currentSetpoint.moduleStates();
         for (int i = 0; i < states.length; i++) {
           states[i].speedMetersPerSecond *= scale;
         }
       }
-      
+
     } else {
       limits = DriveConstants.DRIVE_LIMITS;
     }
