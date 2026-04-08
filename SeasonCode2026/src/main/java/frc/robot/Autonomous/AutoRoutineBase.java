@@ -134,10 +134,14 @@ public class AutoRoutineBase {
                         choreoCommand.initialize();
                         pathStartTime = Timer.getFPGATimestamp();
                     },
-                    choreoCommand::execute,
-                    choreoCommand::end,
-                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
-        }, Set.of(CatzDrivetrain.getInstance()));
+
+                    (interrupted) -> CatzDrivetrain.getInstance().stopDriving(),
+
+                    () -> isAtPose(traj),
+
+                    CatzDrivetrain.getInstance()
+            ).unless(() -> isAtStrictPose(traj))
+        ).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
     }
 
     protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {

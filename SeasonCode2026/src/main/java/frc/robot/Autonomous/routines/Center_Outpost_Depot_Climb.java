@@ -22,7 +22,7 @@ public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     followTrajectory(traj1).alongWith(Commands.print("traj1")),
-                    Commands.waitSeconds(5), //Waiting for depot fuel to go into hopper
+                    Commands.waitSeconds(1.4), //Waiting for depot fuel to go into hopper
                     followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeON()
                 ),
