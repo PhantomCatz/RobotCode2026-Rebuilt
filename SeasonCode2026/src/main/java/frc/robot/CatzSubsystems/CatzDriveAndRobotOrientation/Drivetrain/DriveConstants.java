@@ -38,40 +38,40 @@ public class DriveConstants {
   // ---------------------------------------------------------------------------------------------------------------
 
 
-  public static final DriveConfig DRIVE_CONFIG =
-    DriveConfig.builder()
-        .wheelRadius(Units.inchesToMeters(1.7))
-        .robotLengthX(Units.inchesToMeters(28))
-        .robotWidthY(Units.inchesToMeters(28))
-        .bumperWidthX(Units.inchesToMeters(32))
-        .bumperWidthY(Units.inchesToMeters(32))
-        .maxLinearVelocity(4.5)
-        .maxLinearAcceleration(30.0)
+    public static final DriveConfig DRIVE_CONFIG =
+      DriveConfig.builder()
+          .wheelRadius(Units.inchesToMeters(1.7))
+          .robotLengthX(Units.inchesToMeters(28))
+          .robotWidthY(Units.inchesToMeters(28))
+          .bumperWidthX(Units.inchesToMeters(32))
+          .bumperWidthY(Units.inchesToMeters(32))
+          .maxLinearVelocity(4.5)
+          .maxLinearAcceleration(30.0)
+          .maxAngularVelocity(Units.degreesToRadians(540))
+          .maxAngularAcceleration(Units.degreesToRadians(720))
+          .build();
+
+    public static final DriveConfig TRAJECTORY_CONFIG =
+      DriveConfig.builder()
+        .maxLinearVelocity(4.3)
+        .maxLinearAcceleration(5.5)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
+    // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
 
-  public static final DriveConfig TRAJECTORY_CONFIG =
-    DriveConfig.builder()
-      .maxLinearVelocity(4.3)
-      .maxLinearAcceleration(5.5)
-      .maxAngularVelocity(Units.degreesToRadians(540))
-      .maxAngularAcceleration(Units.degreesToRadians(720))
-      .build();
-  // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
+    public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
+          1.0,
+          3.0,
+          DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
-  public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
-        1.0,
-        3.0,
-        DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+    public static final double DRIVE_DELAY_TIME = 0.0;
+    public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 
-  public static final double DRIVE_DELAY_TIME = 0.02;
-  public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
-
-  public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
-    DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-    DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
-    DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+    public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
+      DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+      DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
+      DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
   public static final ModuleLimits SHOOT_WHILE_MOVE_LIMITS = new ModuleLimits(
     1.6,
