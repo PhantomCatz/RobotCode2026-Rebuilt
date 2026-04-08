@@ -90,15 +90,15 @@ public class AutoRoutineBase {
 
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
         return Commands.sequence(
-                // Initial trajectory following
-                Commands.runOnce(()->pathStartTime = Timer.getFPGATimestamp()),
-                traj.cmd(),
+            // Initial trajectory following
+            Commands.runOnce(()->pathStartTime = Timer.getFPGATimestamp()),
+            traj.cmd(),
 
-                new FunctionalCommand(
-                        () -> {
-                        },
+            new FunctionalCommand(
+                    () -> {
+                    },
 
-                        () -> {
+                    () -> {
                             // Final pose adjustment
                             var finalPoseOpt = traj.getFinalPose();
 
@@ -116,28 +116,15 @@ public class AutoRoutineBase {
 
                                 CatzDrivetrain.getInstance().followChoreoTrajectoryExecute(holdSample);
                             }
-                        },
-
-                        (interrupted) -> CatzDrivetrain.getInstance().stopDriving(),
-
-                        () -> isAtPose(traj),
-
-                        CatzDrivetrain.getInstance())).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
-    }
-
-    protected Command followTrajectoryWithoutTimeout(AutoTrajectory traj) {
-        return Commands.defer(() -> {
-            final Command choreoCommand = traj.cmd();
-            return new FunctionalCommand(
-                    () -> {
-                        CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
-                        choreoCommand.initialize();
-                        pathStartTime = Timer.getFPGATimestamp();
                     },
-                    choreoCommand::execute,
-                    choreoCommand::end,
-                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
-        }, Set.of(CatzDrivetrain.getInstance()));
+
+                    (interrupted) -> CatzDrivetrain.getInstance().stopDriving(),
+
+                    () -> isAtPose(traj),
+
+                    CatzDrivetrain.getInstance()
+            )
+        ).unless(() -> isAtStrictPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
     }
 
     protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {
@@ -155,7 +142,7 @@ public class AutoRoutineBase {
                         CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds());
                     },
                     choreoCommand::end,
-                    () -> isAtLoosePose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
+                    () -> isAtStrictPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
         }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance))
         .andThen(CatzSuperstructure.Instance.cmdShooterStop());
     }
@@ -167,9 +154,9 @@ public class AutoRoutineBase {
         return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
-    private boolean isAtLoosePose(AutoTrajectory trajectory) {
-        boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_DIST_METERS);
-        boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_LOOSE_ANGLE_DEG);
+    private boolean isAtStrictPose(AutoTrajectory trajectory) {
+        boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_STRICT_DIST_METERS);
+        boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_STRICT_ANGLE_DEG);
 
         return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
