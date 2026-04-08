@@ -212,11 +212,11 @@ public class CatzDrivetrain extends SubsystemBase {
                                                                 speeds.vyMetersPerSecond*driveTime),
                                             new Rotation2d(speeds.omegaRadiansPerSecond*driveTime)));
       lastElement = curElement;
-      Logger.recordOutput("Future speed", Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
+      // Logger.recordOutput("Future speed", Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
     }
     CatzRobotTracker.Instance.setFuturePose(curPose);
 
-    Logger.recordOutput("Dist from hoard", curPose.getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
+    // Logger.recordOutput("Dist from hoard", curPose.getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
   } // end of drivetrain periodic
 
   // --------------------------------------------------------------------------------------------------------------------------
