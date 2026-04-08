@@ -108,7 +108,7 @@ public class RobotContainer {
     //X LOCK DRIVETRAIN
     xboxDrv.povLeft().whileTrue(
     Commands.run(
-        () -> CatzDrivetrain.getInstance().setXLock(), 
+        () -> CatzDrivetrain.getInstance().setXLock(),
         CatzDrivetrain.getInstance()
     )
 );
@@ -116,7 +116,7 @@ public class RobotContainer {
     // CLIMBING CONTROL
     // -------------------------------------------------------------------------
 
-    // xboxDrv.start().multiPress(3, 0.4).onTrue(CatzSuperstructure.Instance.autoClimbCommand());
+    xboxDrv.start().multiPress(3, 0.4).onTrue(CatzSuperstructure.Instance.autoClimbCommand());
 
     //--------------------------------------------------------------------------
     // INTAKE
@@ -147,8 +147,8 @@ public class RobotContainer {
 
     // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
-    // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
-    // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
+    xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
     xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
@@ -172,10 +172,10 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
 
 
-    xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
-    xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
-    xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
-    xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
+    // xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
+    // xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
+    // xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
+    // xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
 
     xboxAux.back().multiPress(2, 0.4).onTrue(Commands.runOnce(()-> CatzSuperstructure.Instance.canResetPose = ! CatzSuperstructure.Instance.canResetPose));

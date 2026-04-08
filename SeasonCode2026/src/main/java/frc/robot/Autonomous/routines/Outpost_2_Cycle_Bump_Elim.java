@@ -35,7 +35,7 @@ public class Outpost_2_Cycle_Bump_Elim extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF().alongWith(Commands.print("IntakeOFF")),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT+1.2),
 
             Commands.deadline(
                 Commands.sequence(
@@ -50,7 +50,7 @@ public class Outpost_2_Cycle_Bump_Elim extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF().alongWith(Commands.print("IntakeOFF")),
-            shootAllBallsNoJiggle(AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
     }

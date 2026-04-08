@@ -86,7 +86,7 @@ public class ModuleIORealFoc implements ModuleIO {
 
     // Config Motors Current Limits assume FOC is included with motors
     con.SupplyCurrentLowerTime = 0.0;
-    con.StatorCurrentLimit = 20.0;
+    con.StatorCurrentLimit = 80.0; //20 for bad home carpet
     con.StatorCurrentLimitEnable = true;
     con.SupplyCurrentLimit = 40.0;
     con.SupplyCurrentLimitEnable = true;
@@ -96,7 +96,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     shootWhileMoveCon.SupplyCurrentLowerTime = 0.0;
-    shootWhileMoveCon.StatorCurrentLimit = 20.0;
+    shootWhileMoveCon.StatorCurrentLimit = 80.0; //20 for bad home carpet
     shootWhileMoveCon.StatorCurrentLimitEnable = true;
     shootWhileMoveCon.SupplyCurrentLimit = 15.0;
     shootWhileMoveCon.SupplyCurrentLimitEnable = true;

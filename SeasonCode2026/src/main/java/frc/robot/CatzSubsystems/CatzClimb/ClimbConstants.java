@@ -72,7 +72,7 @@ public class ClimbConstants {
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
-		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
 		FXConfig.Feedback.SensorToMechanismRatio = 27.0; //TODO dont use magic number
 

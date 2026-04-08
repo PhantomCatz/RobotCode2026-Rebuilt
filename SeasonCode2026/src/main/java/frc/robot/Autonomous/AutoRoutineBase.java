@@ -69,10 +69,10 @@ public class AutoRoutineBase {
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
-                    () -> isAtPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
+                    () -> isAtPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
-    
+
     protected Command followSlowTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {
             final Command choreoCommand = traj.cmd();
@@ -84,7 +84,7 @@ public class AutoRoutineBase {
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
-                    () -> isAtPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
+                    () -> isAtPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 

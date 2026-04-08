@@ -1,8 +1,8 @@
 package frc.robot.Autonomous;
 
 public class AutonConstants {
-    public static final double ACCEPTABLE_DIST_METERS = 0.06;
-    public static final double ACCEPTABLE_ANGLE_DEG = 1.0;
+    public static final double ACCEPTABLE_DIST_METERS = 0.1;
+    public static final double ACCEPTABLE_ANGLE_DEG = 2.0;
     public static final double ACCEPTABLE_LOOSE_DIST_METERS = 0.1;
     public static final double ACCEPTABLE_LOOSE_ANGLE_DEG = 10.0;
 

@@ -214,14 +214,14 @@ public class DriveConstants {
       new PIDController(10.0, 0.0, 0.2),
       new PIDController(10.0, 0.0, 0.2),
       new ProfiledPIDController(
-        6.0,
+        9.0,
         0.0,
         0.8,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
       )
     );
   }
-  
+
   public static HolonomicDriveController getNewHolController_Slow() {
     return new HolonomicDriveController(
       new PIDController(7.0, 0.0, 0.4),

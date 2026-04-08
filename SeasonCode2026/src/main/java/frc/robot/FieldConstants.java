@@ -41,10 +41,10 @@ public class FieldConstants {
   public static final double BLUE_CLIMB_X_OFFSET = Units.inchesToMeters(1.5);
   public static final double RED_CLIMB_X_OFFSET = -Units.inchesToMeters(0.0); //1.5 at home 0.0 for Da Vinci
 
-  private static final double LEFT_X_OFFSET = Units.inchesToMeters(1.5);
+  private static final double LEFT_X_OFFSET = Units.inchesToMeters(0.0); //1.5 at home
   private static final double RIGHT_X_OFFSET = Units.inchesToMeters(0.0);
 
-  private static final double LEFT_Y_OFFSET = Units.inchesToMeters(0.0);
+  private static final double LEFT_Y_OFFSET = Units.inchesToMeters(0.0); //inwards towards the tower
   private static final double RIGHT_Y_OFFSET = Units.inchesToMeters(0.0);
 
   public static final Translation2d ROBOT_CLIMB_OFFSET = new Translation2d(Units.inchesToMeters(-3.75), Units.inchesToMeters(35.0/2 - 4.0));
