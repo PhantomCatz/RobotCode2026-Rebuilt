@@ -62,7 +62,7 @@ public class PIDDriveCmd extends Command {
         this.REQUIRES_ACCURACY = requiresAccuracy;
         this.POSITION_TOLERANCE_METERS = positionToleranceMeters;
         this.VELOCITY_TOLERANCE_MPS = 0.1;
-        this.ANGLE_TOLERANCE_DEGREES = 3.0;
+        this.ANGLE_TOLERANCE_DEGREES = 5.0;
         this.ALLOWABLE_VISION_ADJUST = 4e-3;
         this.GOAL_VELOCITY = 0.0;
 

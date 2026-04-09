@@ -725,7 +725,7 @@ public class CatzSuperstructure {
     public Command TowerSwipePosition() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false).alongWith(trackTower());
+            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
