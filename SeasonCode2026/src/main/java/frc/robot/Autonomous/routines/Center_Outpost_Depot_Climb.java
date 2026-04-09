@@ -2,6 +2,7 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Robot;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -14,7 +15,7 @@ public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
         AutoTrajectory traj2 = getTrajectory("Center_Outpost_Depot_Climb",1);
         AutoTrajectory traj3 = getTrajectory("Center_Outpost_Depot_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Center_Outpost_Depot_Climb",3);
-
+        Robot.climbedInAuton = true;
 
         prepRoutine(
             traj1,

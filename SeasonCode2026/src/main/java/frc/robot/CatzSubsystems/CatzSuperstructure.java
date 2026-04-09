@@ -565,6 +565,16 @@ public class CatzSuperstructure {
                 trackTower()).beforeStarting(() -> isClimbMode = true);
     }
 
+    public Command autoClimbLowerCommand() {
+        return Commands.deadline(
+            Commands.sequence(
+                cmdClimbReach(),
+                deployIntake(),
+                alignToBackUpClimb()
+            ),
+            trackTower()
+        ).andThen(() -> isClimbMode = false);
+    }
 
     public Command cmdClimbReach() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.REACH_SETPOINT);
