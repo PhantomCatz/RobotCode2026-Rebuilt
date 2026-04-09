@@ -725,32 +725,32 @@ public class CatzSuperstructure {
     public Command TowerSwipePosition() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
+
+            // Check if the outpost is the closest target (returns 1)
+            if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
+                return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
+            }
+
+            // Do nothing if closer to the depots
+            return Commands.none();
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
     public Command swipe() {
         return Commands.defer(() -> {
-            System.out.println("apapapapapapapapap");
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            switch(FieldConstants.getCloserSwipe(currentTranslation)) {
-                case(1): return outpostSwipeRun();
-                case(2): return depotMiddleSwipeRun();
-                case(3): return depotCornerSwipeRun();
-                default: return Commands.none().andThen(Commands.print("none!!!!"));
+
+            // Check if the outpost is the closest target (returns 1)
+            if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
+                return outpostSwipeRun();
             }
-        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance)); // Add any required subsystems to the Set here
+
+            // Do nothing if closer to the depots
+            return Commands.none();
+        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
     public Command outpostSwipeRun() {
         return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
-    }
-
-    public Command depotMiddleSwipeRun() {
-        return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
-    }
-
-    public Command depotCornerSwipeRun() {
-        return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
     }
 }
