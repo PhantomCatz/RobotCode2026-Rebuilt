@@ -714,7 +714,7 @@ public class CatzSuperstructure {
 
     public Command enableClimbSoftLimit() {
         return Commands.runOnce(() -> {
-            CatzClimb.Instance.setSoftLimitsEnabled(false, true);
+            CatzClimb.Instance.setSoftLimitsEnabled(true, true);
         });
     }
 
