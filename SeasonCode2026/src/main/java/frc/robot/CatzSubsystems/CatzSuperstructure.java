@@ -725,31 +725,32 @@ public class CatzSuperstructure {
     public Command TowerSwipePosition() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false);
+            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false).alongWith(trackTower());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
     public Command swipe() {
         return Commands.defer(() -> {
+            System.out.println("apapapapapapapapap");
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             switch(FieldConstants.getCloserSwipe(currentTranslation)) {
                 case(1): return outpostSwipeRun();
                 case(2): return depotMiddleSwipeRun();
                 case(3): return depotCornerSwipeRun();
-                default: return Commands.none();
+                default: return Commands.none().andThen(Commands.print("none!!!!"));
             }
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance)); // Add any required subsystems to the Set here
     }
 
     public Command outpostSwipeRun() {
-        return outpostSwipeRoutine.getPathCommand();
+        return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
     }
 
     public Command depotMiddleSwipeRun() {
-        return depotMiddleSwipeRoutine.getPathCommand();
+        return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
     }
 
     public Command depotCornerSwipeRun() {
-        return depotCornerSwipeRoutine.getPathCommand();
+        return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
     }
 }

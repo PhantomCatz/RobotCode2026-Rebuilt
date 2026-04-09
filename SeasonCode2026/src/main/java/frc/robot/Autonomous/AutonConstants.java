@@ -10,7 +10,7 @@ public class AutonConstants {
     public static final double TRAJ_GOAL_VELOCITY = 2.0;
 
     public static final double PRELOAD_SHOOTING_WAIT = 1.6;
-    public static final double RETURN_FROM_COLLECTING_SHOOTING_WAIT = 2.3;
+    public static final double RETURN_FROM_COLLECTING_SHOOTING_WAIT = 2.3+1.5;
     public static final double OUTPOST_SCORING_WAIT = 15.0;
 
     public static final double ARTIFICIAL_PING_SEC = 0.15;

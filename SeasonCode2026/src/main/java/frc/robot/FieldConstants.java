@@ -142,8 +142,8 @@ public class FieldConstants {
   // Tower swipe, needs 1st pos coords
   private static final Pose2d TowerSwipe_Outpost = new Pose2d(
       new Translation2d(
-        2.4216079,
-        1.4081799
+        1.12416,
+        2.09345
       ),
       Rotation2d.k180deg
   );
@@ -173,7 +173,8 @@ public class FieldConstants {
     return new Pose2d(closerPose.getTranslation(), closerPose.getRotation());
   }
 
-  public static int getCloserSwipe(Translation2d robotPose) {
+  public static int
+  getCloserSwipe(Translation2d robotPose) {
     Pose2d flippedOutpost = AllianceFlipUtil.apply(TowerSwipe_Outpost);
     Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
     Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
