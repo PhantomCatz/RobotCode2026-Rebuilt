@@ -66,6 +66,9 @@ public class LimelightSubsystem extends SubsystemBase {
 			if (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX) {
 				return 6;
 			}
+			if (pose.getX() < 13.90462 && pose.getY() < 1.3637) {
+				return 8;
+			}
 			return 7;
 		}
 	}

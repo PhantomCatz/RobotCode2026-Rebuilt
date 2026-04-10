@@ -112,7 +112,7 @@ public class RobotContainer {
         () -> CatzDrivetrain.getInstance().setXLock(),
         CatzDrivetrain.getInstance()
     )
-);
+    );
     // -------------------------------------------------------------------------
     // CLIMBING CONTROL
     // -------------------------------------------------------------------------
