@@ -27,7 +27,7 @@ public class LimelightConstants {
                     Inches.of(21.125).in(Meters) //This makes it easy to account for latency.
                 ),
                 new Rotation3d(
-                    Degrees.of(0.0).in(Radians),
+                    Degrees.of(-1.0).in(Radians),
                     Degrees.of(21.0 + limelightCrosshairCompensationPitch).in(Radians),
                     Degrees.of(limelightCrosshairCompensationYaw).in(Radians)
                 )
