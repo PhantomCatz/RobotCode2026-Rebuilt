@@ -569,8 +569,8 @@ public class CatzSuperstructure {
         return Commands.deadline(
             Commands.sequence(
                 cmdClimbReach(),
-                deployIntake(),
-                alignToBackUpClimb()
+                deployIntake()
+                // alignToBackUpClimb()
             ),
             trackTower()
         ).andThen(() -> isClimbMode = false);
