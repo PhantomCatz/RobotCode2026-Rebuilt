@@ -8,6 +8,8 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
@@ -186,6 +188,14 @@ public class FieldConstants {
       }
     } else {
       return 3; // outpost
+    }
+  }
+
+  public static Translation2d getOpposingHubLocation(){
+    if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red){
+      return HUB_LOCATION;
+    }else{
+      return AllianceFlipUtil.applyNoCondition(HUB_LOCATION);
     }
   }
 

@@ -203,6 +203,10 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
+    public Command trackOpposingHub(){
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateOpposingHubTrackingSetpoint());
+    }
+
     public Command trackHoardLocation() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(AimCalculations.getCornerHoardingTarget(currentHoardType)));
     }

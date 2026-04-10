@@ -168,6 +168,8 @@ public class RobotContainer {
 
     xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
     xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+
+    xboxAux.rightTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.trackOpposingHub());
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE
     // -------------------------------------------------------------------------

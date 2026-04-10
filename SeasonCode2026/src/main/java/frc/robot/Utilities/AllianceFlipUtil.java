@@ -27,6 +27,18 @@ public class AllianceFlipUtil {
         : pose;
   }
 
+  public static Translation2d applyNoCondition(Translation2d translation) {
+    return new Translation2d(applyXNoCondition(translation.getX()), applyYNoCondition(translation.getY()));
+  }
+
+  public static double applyXNoCondition(double x) {
+    return FieldConstants.fieldLength - x;
+  }
+
+  public static double applyYNoCondition(double y) {
+    return FieldConstants.fieldWidth - y;
+  }
+
   public static Translation3d apply(Translation3d translation) {
     return new Translation3d(
         applyX(translation.getX()), applyY(translation.getY()), translation.getZ());
