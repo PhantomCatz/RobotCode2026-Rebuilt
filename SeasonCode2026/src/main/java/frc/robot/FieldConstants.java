@@ -154,18 +154,8 @@ public class FieldConstants {
 
   public static Pose2d getTowerPosition(Translation2d robotPose) {
     Pose2d flippedOutpost = AllianceFlipUtil.apply(TowerSwipe_Outpost);
-    Pose2d flippedDepot_Middle = AllianceFlipUtil.apply(TowerSwipe_Depot_Middle);
-    Pose2d flippedDepot_Corner = AllianceFlipUtil.apply(TowerSwipe_Depot_Corner);
 
-    double distOutpost = robotPose.getDistance(flippedOutpost.getTranslation());
-    double distDepotMiddle = robotPose.getDistance(flippedDepot_Middle.getTranslation());
-    double distDepotCorner = robotPose.getDistance(flippedDepot_Corner.getTranslation());
-
-    Pose2d closerPose = (distOutpost <= distDepotMiddle && distOutpost <= distDepotCorner) ? flippedOutpost
-        : (distDepotMiddle <= distDepotCorner ? flippedDepot_Middle : flippedDepot_Corner);
-    // takes the lowest distancce and inputs its pose
-
-    return new Pose2d(closerPose.getTranslation(), closerPose.getRotation());
+    return new Pose2d(flippedOutpost.getTranslation(), flippedOutpost.getRotation());
   }
 
   public static int getCloserSwipe(Translation2d robotPose) {
