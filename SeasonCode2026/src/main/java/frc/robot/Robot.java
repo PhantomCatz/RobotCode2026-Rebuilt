@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
-import frc.robot.Autonomous.routines.Center_Outpost_Depot_Climb;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
