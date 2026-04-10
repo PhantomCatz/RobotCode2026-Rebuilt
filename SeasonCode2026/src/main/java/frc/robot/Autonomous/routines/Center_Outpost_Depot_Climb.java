@@ -15,10 +15,10 @@ public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
         AutoTrajectory traj2 = getTrajectory("Center_Outpost_Depot_Climb",1);
         AutoTrajectory traj3 = getTrajectory("Center_Outpost_Depot_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Center_Outpost_Depot_Climb",3);
-        Robot.climbedInAuton = true;
 
         prepRoutine(
             traj1,
+            Commands.runOnce(()->Robot.climbedInAuton = true),
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
