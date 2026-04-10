@@ -155,6 +155,7 @@ public class RobotContainer {
 
     xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit());
     xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
+
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
@@ -165,8 +166,8 @@ public class RobotContainer {
 
     // shooting a y x start
 
-    xboxAux.leftStick().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
-    xboxAux.rightStick().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
+    xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE
     // -------------------------------------------------------------------------
