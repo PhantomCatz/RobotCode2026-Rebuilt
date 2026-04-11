@@ -34,6 +34,7 @@ public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF().alongWith(Commands.print("IntakeOFF")),
+            CatzSuperstructure.Instance.cmdClimbReach(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT+0.5),
             followTrajectory(traj4),
             CatzSuperstructure.Instance.autoClimbCommand(),

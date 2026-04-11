@@ -142,8 +142,7 @@ public class CatzSuperstructure {
             initialShootReady = false;
             activeRegressionMode = currentMode;
         }
-
-        CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
+        CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode) );
         if (isShooting) {
             CatzTurret.Instance
                     .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose,

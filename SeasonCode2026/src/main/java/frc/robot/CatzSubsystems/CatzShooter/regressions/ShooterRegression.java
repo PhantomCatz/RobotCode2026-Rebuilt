@@ -5,7 +5,9 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.PolynomialRegression;
 import frc.robot.Utilities.Setpoint;
@@ -148,6 +150,7 @@ public class ShooterRegression {
     public static Setpoint getShooterSetpoint(Distance range, RegressionMode mode) {
         double rps = 0.0;
         double distMeters = range.in(Units.Meters);
+        double add = 0.0;
 
         if (kUseFlywheelPolynomial) {
             switch (mode) {
@@ -164,8 +167,13 @@ public class ShooterRegression {
                 case OPP_HOARD:   rps = oppHoardFlywheelMap.get(distMeters); break;
             }
         }
+        double turretAngle = CatzTurret.Instance.getLatencyCompensatedPosition() * 360.0;
 
-        return Setpoint.withVelocitySetpointVoltage(rps);
+        if(turretAngle > 0.0 && turretAngle < 90.0 && CatzSuperstructure.Instance.getIsScoring()){
+            add = 1.867;
+        }
+
+        return Setpoint.withVelocitySetpointVoltage(rps+ add);
     }
 
     public static Setpoint getHoodSetpoint(Distance range, RegressionMode mode) {

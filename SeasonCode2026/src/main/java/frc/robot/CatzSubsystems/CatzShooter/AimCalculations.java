@@ -9,6 +9,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
@@ -67,7 +68,9 @@ public class AimCalculations {
         double targetRads = hubDirection.getAngle().minus(predictedRobotPose.getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
-        
+        if(Math.toDegrees(targetRads) > -15.0 && Math.toDegrees(targetRads) < 120.0 && CatzSuperstructure.Instance.getIsScoring()){
+            targetRads += Math.toRadians(6.7);
+        }
         // if(distFromHub < 2.0){
         //     targetRads += Math.toRadians(10.0);
         // }
