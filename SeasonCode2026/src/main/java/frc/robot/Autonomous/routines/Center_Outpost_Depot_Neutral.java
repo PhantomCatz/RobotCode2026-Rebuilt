@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Robot;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -37,7 +36,7 @@ public class Center_Outpost_Depot_Neutral extends AutoRoutineBase {
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT+0.5),
             followTrajectory(traj4),
             CatzSuperstructure.Instance.intakeON(),
-            followTrajectory(traj5),
+            followTrajectoryWithAccuracy(traj5),
             CatzSuperstructure.Instance.intakeOFF(),
             Commands.print("done")
         );

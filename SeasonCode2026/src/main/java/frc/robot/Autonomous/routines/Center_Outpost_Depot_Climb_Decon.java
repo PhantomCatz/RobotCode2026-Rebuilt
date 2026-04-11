@@ -7,14 +7,14 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
-    public Center_Outpost_Depot_Climb(){
-        super("Center_Outpost_Depot_Climb");
+public class Center_Outpost_Depot_Climb_Decon extends AutoRoutineBase {
+    public Center_Outpost_Depot_Climb_Decon(){
+        super("Center_Outpost_Depot_Climb_Decon");
 
-        AutoTrajectory traj1 = getTrajectory("Center_Outpost_Depot_Climb",0);
-        AutoTrajectory traj2 = getTrajectory("Center_Outpost_Depot_Climb",1);
-        AutoTrajectory traj3 = getTrajectory("Center_Outpost_Depot_Climb",2);
-        AutoTrajectory traj4 = getTrajectory("Center_Outpost_Depot_Climb",3);
+        AutoTrajectory traj1 = getTrajectory("Center_Outpost_Depot_Climb_Decon",0);
+        AutoTrajectory traj2 = getTrajectory("Center_Outpost_Depot_Climb_Decon",1);
+        AutoTrajectory traj3 = getTrajectory("Center_Outpost_Depot_Climb_Decon",2);
+        AutoTrajectory traj4 = getTrajectory("Center_Outpost_Depot_Climb_Decon",3);
 
         prepRoutine(
             traj1,

@@ -14,7 +14,11 @@ public class AutoRoutineSelector {
 
         // autoSelector.addRoutine("Better_Outpost_2_Cycle_Outpost", () -> new Better_Outpost_2_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
+
         autoSelector.addRoutine("Center_Outpost_Depot_Climb", () -> new Center_Outpost_Depot_Climb().getRoutine());
+        // autoSelector.addRoutine("Center_Outpost_Depot_Climb_Decon", () -> new Center_Outpost_Depot_Climb_Decon().getRoutine());
+        // autoSelector.addRoutine("Center_Outpost_Depot_Neutral", () -> new Center_Outpost_Depot_Neutral().getRoutine());
+
         // autoSelector.addRoutine("Decon_Depot_2_Cycle_Bump_Fast", () -> new Decon_Depot_2_Cycle_Bump_Fast().getRoutine());
         // autoSelector.addRoutine("Decon_Depot_2_Cycle", () -> new Decon_Depot_2_Cycle().getRoutine());
         // autoSelector.addRoutine("Decon_Outpost_2_Cycle_Climb", () -> new Decon_Outpost_2_Cycle_Climb().getRoutine());
