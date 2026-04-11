@@ -22,6 +22,7 @@ import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
 import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
+import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
 import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
@@ -69,6 +70,7 @@ public class CatzSuperstructure {
 
 
     private final TowerSwipe outpostSwipeRoutine;
+    private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
     private final DepotMiddleSwipe depotMiddleSwipeRoutine;
     private final DepotCornerSwipe depotCornerSwipeRoutine;
 
@@ -84,6 +86,7 @@ public class CatzSuperstructure {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
 
         outpostSwipeRoutine = new TowerSwipe();
+        outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
         depotMiddleSwipeRoutine = new DepotMiddleSwipe();
         depotCornerSwipeRoutine = new DepotCornerSwipe();
     }
@@ -217,7 +220,7 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(
                 () -> {
                     if(CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getX() < FieldConstants.fieldXHalf){
-                        return AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getBlueAllianceClimbApriltagLocation());  
+                        return AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getBlueAllianceClimbApriltagLocation());
                     }else{
                         return AimCalculations.calculateTurretTrackingSetpoint(AllianceFlipUtil.applyNoCondition(FieldConstants.getBlueAllianceClimbApriltagLocation()));
                     }
@@ -776,10 +779,25 @@ public class CatzSuperstructure {
     public Command swipe() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            boolean flipAlliance = false;
 
+            if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
+                if(currentTranslation.getX() > FieldConstants.fieldXHalf){
+                    flipAlliance = true;
+                }
+            }else{
+                if(currentTranslation.getX() < FieldConstants.fieldXHalf){
+                    flipAlliance = true;
+                }
+            }
+            Command swipeRun = outpostSwipeRun();
+            if(flipAlliance){
+                swipeRun = outpostOppositeSwipeRun();
+                currentTranslation = AllianceFlipUtil.applyNoCondition(currentTranslation);
+            }
             // Check if the outpost is the closest target (returns 1)
             if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return outpostSwipeRun();
+                return swipeRun;
             }
 
             // Do nothing if closer to the depots
@@ -789,5 +807,9 @@ public class CatzSuperstructure {
 
     public Command outpostSwipeRun() {
         return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
+    }
+
+    public Command outpostOppositeSwipeRun(){
+        return outpostOppositeSwipeRoutine.getPathCommand();
     }
 }

@@ -28,7 +28,7 @@ public class LimelightConstants {
                 ),
                 new Rotation3d(
                     Degrees.of(-0.0).in(Radians),
-                    Degrees.of(22.0 + limelightCrosshairCompensationPitch).in(Radians),
+                    Degrees.of(21.0 + limelightCrosshairCompensationPitch).in(Radians),
                     Degrees.of(limelightCrosshairCompensationYaw).in(Radians)
                 )
             )
