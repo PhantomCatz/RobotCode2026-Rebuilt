@@ -13,6 +13,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -45,6 +46,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
+import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
@@ -213,7 +215,13 @@ public class CatzSuperstructure {
 
     public Command trackTower() {
         return CatzTurret.Instance.followSetpointCommand(
-                () -> AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getClimbApriltagLocation()));
+                () -> {
+                    if(CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getX() < FieldConstants.fieldXHalf){
+                        return AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getBlueAllianceClimbApriltagLocation());  
+                    }else{
+                        return AimCalculations.calculateTurretTrackingSetpoint(AllianceFlipUtil.applyNoCondition(FieldConstants.getBlueAllianceClimbApriltagLocation()));
+                    }
+                });
     }
 
     /* --- HOARDING --- */
@@ -739,10 +747,25 @@ public class CatzSuperstructure {
     public Command TowerSwipePosition() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            boolean flipAlliance = false;
 
+            if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
+                if(currentTranslation.getX() > FieldConstants.fieldXHalf){
+                    flipAlliance = true;
+                }
+            }else{
+                if(currentTranslation.getX() < FieldConstants.fieldXHalf){
+                    flipAlliance = true;
+                }
+            }
+            Pose2d towerSwipePosition = FieldConstants.getTowerPosition(currentTranslation);
+            if(flipAlliance){
+                towerSwipePosition = AllianceFlipUtil.applyNoCondition(towerSwipePosition);
+                currentTranslation = AllianceFlipUtil.applyNoCondition(currentTranslation);
+            }
             // Check if the outpost is the closest target (returns 1)
             if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
+                return new PIDDriveCmd(towerSwipePosition, false, 0.1).deadlineFor(trackTower());
             }
 
             // Do nothing if closer to the depots

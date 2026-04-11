@@ -99,6 +99,10 @@ public class FieldConstants {
     return AllianceFlipUtil.apply(CLIMB_APRILTAG_POSE);
   }
 
+  public static Translation2d getBlueAllianceClimbApriltagLocation(){
+    return CLIMB_APRILTAG_POSE;
+  }
+
   public static Pose2d getClimbClosePosition(Translation2d robotPose) {
     Pose2d flippedRight = AllianceFlipUtil.apply(CLIMB_CLOSE_RIGHT);
     Pose2d flippedLeft = AllianceFlipUtil.apply(CLIMB_CLOSE_LEFT);

@@ -21,6 +21,14 @@ public class AllianceFlipUtil {
     return shouldFlip() ? rotation.rotateBy(Rotation2d.kPi) : rotation;
   }
 
+  public static Rotation2d applyNoCondition(Rotation2d rotation) {
+    return rotation.rotateBy(Rotation2d.kPi);
+  }
+
+  public static Pose2d applyNoCondition(Pose2d pose) {
+    return new Pose2d(applyNoCondition(pose.getTranslation()), applyNoCondition(pose.getRotation()));
+  }
+
   public static Pose2d apply(Pose2d pose) {
     return shouldFlip()
         ? new Pose2d(apply(pose.getTranslation()), apply(pose.getRotation()))
