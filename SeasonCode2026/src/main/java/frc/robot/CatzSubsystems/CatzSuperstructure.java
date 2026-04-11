@@ -299,7 +299,8 @@ public class CatzSuperstructure {
 
     public Command reverseIndexers() {
         return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.REVERSE)
-                .alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.REVERSE));
+                .alongWith(CatzYdexer.Instance.setpointCommand(YdexerConstants.REVERSE))
+                .alongWith(CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.REVERSE_SETPOINT));
     }
 
     /* --- INTAKE --- */

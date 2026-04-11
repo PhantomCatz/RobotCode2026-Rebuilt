@@ -26,7 +26,7 @@ public class Depot_2_Cycle_Bump_Mg extends AutoRoutineBase {
         // traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
         // traj11.atTime("IntakeStop+RampUp11").onTrue(CatzSuperstructure.Instance.intakeOFF());
         // traj13.atTime("Score+StowIntake+TrackTower13")
-//pls 
+//pls
         prepRoutine(
             traj1,
             Commands.deadline(
