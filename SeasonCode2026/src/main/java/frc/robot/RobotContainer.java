@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -69,7 +70,9 @@ public class RobotContainer {
     // Left Field Corner
     xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
-    xboxDrv.povUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean()));
+    xboxDrv.povUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean())
+    .beforeStarting(() -> SmartDashboard.putBoolean("Swiping?", true))
+    .finallyDo(() -> SmartDashboard.putBoolean("Swiping?", false)));
 
     // -------------------------------------------------------------------------
     // HUB SCORING CONTROLS
