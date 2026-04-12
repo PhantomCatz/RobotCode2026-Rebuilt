@@ -202,6 +202,7 @@ public class Robot extends LoggedRobot {
       // System.out.println("Starting deteciton threaadf==================");
       // coralDetectionThread.startPeriodic(0.1);
       SmartDashboard.putBoolean("Won Auton?", false);
+      SmartDashboard.putBoolean("Swiping?", false);
   }
 
   @Override
