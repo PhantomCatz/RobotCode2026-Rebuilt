@@ -747,11 +747,23 @@ public class CatzSuperstructure {
     }
 
     public Command TowerSwipePosition() {
-        return Commands.defer(() -> {
-            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
-        }, Set.of(CatzDrivetrain.getInstance()));
-    }
+    return Commands.defer(() -> {
+        Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+
+        boolean isOpponentSide = false;
+        if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
+            if(currentTranslation.getX() > FieldConstants.fieldXHalf){
+                isOpponentSide = true;
+            }
+        }else{
+            if(currentTranslation.getX() < FieldConstants.fieldXHalf){
+                isOpponentSide = true;
+            }
+        }
+
+        return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation, isOpponentSide), false, 0.1).deadlineFor(trackTower());
+    }, Set.of(CatzDrivetrain.getInstance()));
+  }
 
     public Command swipe() {
         return Commands.defer(() -> {
@@ -767,15 +779,18 @@ public class CatzSuperstructure {
                     flipAlliance = true;
                 }
             }
-            // if (flipAlliance) {
-            //     switch(FieldConstants.getCloserSwipe(currentTranslation)) {
-            //         case(1): return outpostOppositeSwipeRun();
-            //         case(2): return depotOppositeMiddleSwipeRun();
-            //         case(3): return depotOppositeCornerSwipeRun();
-            //         default: return Commands.none().andThen(Commands.print("none!!!!"));
-            //     }
-            // }
-            switch(FieldConstants.getCloserSwipe(currentTranslation)) {
+
+            if (flipAlliance) {
+                // Pass true because we are on the opponent side
+                switch(FieldConstants.getCloserSwipe(currentTranslation, true)) {
+                    case(1): return outpostOppositeSwipeRun();
+                    case(2): return depotOppositeMiddleSwipeRun();
+                    case(3): return depotOppositeCornerSwipeRun();
+                    default: return Commands.none().andThen(Commands.print("none!!!!"));
+                }
+            }
+            // Pass false because we are on our home side
+            switch(FieldConstants.getCloserSwipe(currentTranslation, false)) {
                 case(1): return outpostSwipeRun();
                 case(2): return depotMiddleSwipeRun();
                 case(3): return depotCornerSwipeRun();
@@ -802,10 +817,10 @@ public class CatzSuperstructure {
     }
 
     public Command depotOppositeMiddleSwipeRun(){
-        return depotOppositeMiddleSwipeRun();
+        return depotOppositeMiddleSwipeRoutine.getPathCommand();
     }
 
     public Command depotOppositeCornerSwipeRun(){
-        return depotOppositeCornerSwipeRun();
+        return depotOppositeCornerSwipeRoutine.getPathCommand();
     }
 }
