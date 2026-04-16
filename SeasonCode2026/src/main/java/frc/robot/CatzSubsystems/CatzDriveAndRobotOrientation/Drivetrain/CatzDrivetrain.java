@@ -237,7 +237,7 @@ public class CatzDrivetrain extends SubsystemBase {
     }
     Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
     if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
-      return (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX);
+      return (pose.getX() > FieldConstants.fieldLength - FieldConstants.fieldTrenchX);
     }
     else {
       return (pose.getX() < FieldConstants.fieldTrenchX);
