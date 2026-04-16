@@ -123,34 +123,7 @@ public class TeleopDriveCmd extends Command {
         turningVelocity,
         CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
-    ModuleLimits limits;
-    if(CatzSuperstructure.Instance.getIsScoring()) {
-      limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
-
-      // Get the current magnitude of the actual robot setpoint
-      double currentVel = Math.hypot(
-          currentSetpoint.chassisSpeeds().vxMetersPerSecond,
-          currentSetpoint.chassisSpeeds().vyMetersPerSecond
-      );
-
-      double maxScoringVel = limits.maxDriveVelocity();
-
-      if (currentVel > maxScoringVel) {
-        double scale = maxScoringVel / currentVel;
-
-        currentSetpoint.chassisSpeeds().vxMetersPerSecond *= scale;
-        currentSetpoint.chassisSpeeds().vyMetersPerSecond *= scale;
-
-        var states = currentSetpoint.moduleStates();
-        for (int i = 0; i < states.length; i++) {
-          states[i].speedMetersPerSecond *= scale;
-        }
-      }
-
-    } else {
-      limits = DriveConstants.DRIVE_LIMITS;
-    }
-
+    ModuleLimits limits = DriveConstants.DRIVE_LIMITS;
     currentSetpoint = swerveSetpointGenerator.generateSetpoint(
       limits,
       currentSetpoint,
@@ -158,7 +131,6 @@ public class TeleopDriveCmd extends Command {
       0.02);
 
     // Send new chassisspeeds object to the drivetrain queue to use later
-    m_drivetrain.pushToQueue(Timer.getFPGATimestamp()+CatzDrivetrain.getInstance().getDelay(), currentSetpoint);
     // Logger.recordOutput("cur controller input", Math.hypot(currentSetpoint.chassisSpeeds().vxMetersPerSecond, currentSetpoint.chassisSpeeds().vyMetersPerSecond));
     // debugLogsDrive();
   } // end of execute()

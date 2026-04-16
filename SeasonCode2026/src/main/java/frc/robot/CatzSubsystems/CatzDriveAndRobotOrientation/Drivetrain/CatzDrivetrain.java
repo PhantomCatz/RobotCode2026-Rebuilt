@@ -189,31 +189,6 @@ public class CatzDrivetrain extends SubsystemBase {
         Timer.getFPGATimestamp());
     CatzRobotTracker.Instance.addOdometryObservation(observation);
 
-    // calculate robot state 0.1 seconds in the future
-    Iterator<Pair<Double, SwerveSetpoint>> it = futureSwerveSetpoints.iterator();
-    Pair<Double, SwerveSetpoint> lastElement = new Pair<Double,SwerveSetpoint>(currentTime, currentSetpoint);
-    Pair<Double, SwerveSetpoint> curElement;
-    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
-    while (it.hasNext() && lastElement.getFirst() < currentTime+getDelay()) {
-      curElement = it.next();
-      double driveTime;
-      ChassisSpeeds speeds = lastElement.getSecond().chassisSpeeds();
-      // this movement starts in 0.1 second window, so completely finish previous movement
-      if (curElement.getFirst() < currentTime+getDelay()) {
-        driveTime = curElement.getFirst() - lastElement.getFirst();
-      }
-      // this movement starts after 0.1 second window ends, so apply previous movement until end of 0.1 second window
-      else {
-        driveTime = currentTime+getDelay()-lastElement.getFirst();
-      }
-      curPose = curPose.plus(new Transform2d(new Translation2d(speeds.vxMetersPerSecond*driveTime,
-                                                                speeds.vyMetersPerSecond*driveTime),
-                                            new Rotation2d(speeds.omegaRadiansPerSecond*driveTime)));
-      lastElement = curElement;
-      // Logger.recordOutput("Future speed", Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
-    }
-    CatzRobotTracker.Instance.setFuturePose(curPose);
-
     // Logger.recordOutput("Dist from hoard", curPose.getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
   } // end of drivetrain periodic
 
@@ -482,15 +457,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
   public void pushToQueue(double time, SwerveSetpoint setpoint) {
     futureSwerveSetpoints.add(new Pair<Double,SwerveSetpoint>(time, setpoint));
-  }
-
-  public double getDelay() {
-    if (CatzSuperstructure.Instance.getIsScoring()) {
-      return DriveConstants.DRIVE_DELAY_TIME;
-    }
-    else {
-      return 0.0;
-    }
   }
 
 }

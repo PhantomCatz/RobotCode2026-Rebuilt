@@ -38,32 +38,6 @@ public class AutoRoutineBase {
                         .andThen(Commands.sequence(sequence)));
     }
 
-    protected Command shootAllBalls(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
-            CatzSuperstructure.Instance.cmdShooterStop()
-        ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
-        .andThen(CatzSuperstructure.Instance.intakeOFF()
-        .andThen(CatzSuperstructure.Instance.deployIntake()));
-    }
-
-    protected Command shootAllBallsNoJiggle(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls w/out jiggle command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
-            CatzSuperstructure.Instance.cmdShooterStop()
-        )
-        .andThen(CatzSuperstructure.Instance.intakeOFF());
-    }
-
-    protected Command shootAllBallsNoJiggleNoStop(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls w/out jiggle command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time)
-        )
-        .andThen(CatzSuperstructure.Instance.intakeOFF());
-    }
 
     private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
@@ -133,26 +107,6 @@ public class AutoRoutineBase {
                     CatzDrivetrain.getInstance()
             ).unless(() -> isAtStrictPose(traj))
         ).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
-    }
-
-    protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {
-        return Commands.defer(() -> {
-            final Command choreoCommand = traj.cmd();
-            return new FunctionalCommand(
-                    () -> {
-                        CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
-                        choreoCommand.initialize();
-                        pathStartTime = Timer.getFPGATimestamp();
-                        // CatzDrivetrain.getInstance().setShootWhileMoveConfig();
-                    },
-                    () -> {
-                        choreoCommand.execute();
-                        CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds());
-                    },
-                    choreoCommand::end,
-                    () -> isAtStrictPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
-        }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance))
-        .andThen(CatzSuperstructure.Instance.cmdShooterStop());
     }
 
     private boolean isAtPose(AutoTrajectory trajectory) {
