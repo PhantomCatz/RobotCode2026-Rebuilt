@@ -55,5 +55,46 @@ public class CatzSuperstructure {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
 
     }
+    
+    //-------------------- 
+    //    Shooter
+    //--------------------
+    public Command FlyWheelOn(){
+        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    }
 
+    public Command FlyWheelOff(){
+        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT);
+    }
+
+    public Command HubScore(){
+        return null;
+    }
+
+    public Command Hoard(){
+        return null;
+    }
+
+    //-------------------- 
+    //    Indexer
+    //--------------------
+    public Command SpindexerOn(){
+        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
+    }
+
+    public Command YdexerOn(){
+        return CatzYdexer.Instance.setpointCommand(YdexerConstants.ON);
+    }
+
+    public Command SpindexerOff(){
+        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF);
+    }
+
+    public Command YdexerOff(){
+        return CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF);
+    }
+
+    public Command ShooterToggle(){
+        return null;
+    }
 }
