@@ -768,7 +768,7 @@ public class CatzSuperstructure {
             }
             // Check if the outpost is the closest target (returns 1)
             if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return new PIDDriveCmd(towerSwipePosition, false, 0.1).deadlineFor(trackTower());
+                return new PIDDriveCmd(towerSwipePosition, false, 0.1, 20.0).deadlineFor(trackTower());
             }
 
             // Do nothing if closer to the depots

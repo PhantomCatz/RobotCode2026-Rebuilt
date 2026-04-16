@@ -57,14 +57,14 @@ public class PIDDriveCmd extends Command {
 
     }
 
-    public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy, double positionToleranceMeters) {
+    public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy, double positionToleranceMeters, double angleToleranceDegrees) {
         addRequirements(CatzDrivetrain.getInstance());
         this.goalPos = goal;
 
         this.REQUIRES_ACCURACY = requiresAccuracy;
         this.POSITION_TOLERANCE_METERS = positionToleranceMeters;
-        this.VELOCITY_TOLERANCE_MPS = 0.1;
-        this.ANGLE_TOLERANCE_DEGREES = 5.0;
+        this.VELOCITY_TOLERANCE_MPS = 1.0;
+        this.ANGLE_TOLERANCE_DEGREES = angleToleranceDegrees;
         this.ALLOWABLE_VISION_ADJUST = 4e-3;
         this.GOAL_VELOCITY = 0.0;
 
@@ -161,7 +161,7 @@ public class PIDDriveCmd extends Command {
         double translationFeedback = translationController.calculate(currentDistance, 0.0);
         double translationFeedforward = translationController.getSetpoint().velocity;
         double targetVel = Math.max(Math.abs(translationFeedback + translationFeedforward), GOAL_VELOCITY);
-        
+
         double angleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
         double rotationFeedback = rotationController.calculate(angleError, 0.0);
         double rotationFeedforward = rotationController.getSetpoint().velocity;
@@ -180,7 +180,7 @@ public class PIDDriveCmd extends Command {
     @Override
     public boolean isFinished(){
         boolean atTargetState = isAtTargetState();
-
+        Logger.recordOutput("Vision Pose Shift", CatzRobotTracker.Instance.getVisionPoseShift().getNorm());
         if(REQUIRES_ACCURACY){
             double curTime = Timer.getFPGATimestamp();
             return  atTargetState && LimelightSubsystem.Instance.isSeeingApriltag() && CatzRobotTracker.Instance.getVisionPoseShift().getNorm() < ALLOWABLE_VISION_ADJUST
@@ -198,7 +198,12 @@ public class PIDDriveCmd extends Command {
         double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
 
         double rotationError = Math.abs(MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0));
-
+        Logger.recordOutput("distance error", distanceError);
+        Logger.recordOutput("linear velocity", linearVelocity);
+        Logger.recordOutput("rotation error", rotationError);
+        Logger.recordOutput("is distance ok", distanceError < POSITION_TOLERANCE_METERS);
+        Logger.recordOutput("is velocity ok", linearVelocity < VELOCITY_TOLERANCE_MPS);
+        Logger.recordOutput("is rotation ok", rotationError < ANGLE_TOLERANCE_DEGREES);
         return distanceError < POSITION_TOLERANCE_METERS &&
                linearVelocity < VELOCITY_TOLERANCE_MPS &&
                rotationError < ANGLE_TOLERANCE_DEGREES;
