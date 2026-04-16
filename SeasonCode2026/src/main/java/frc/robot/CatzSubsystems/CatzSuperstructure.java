@@ -22,6 +22,9 @@ import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
 import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
+import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
+import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
+import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
 import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
@@ -70,7 +73,9 @@ public class CatzSuperstructure {
     private final TowerSwipe outpostSwipeRoutine;
     private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
     private final DepotMiddleSwipe depotMiddleSwipeRoutine;
+    private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
     private final DepotCornerSwipe depotCornerSwipeRoutine;
+    private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
@@ -84,8 +89,11 @@ public class CatzSuperstructure {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
 
         outpostSwipeRoutine = new TowerSwipe();
+        outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
         depotMiddleSwipeRoutine = new DepotMiddleSwipe();
+        depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
         depotCornerSwipeRoutine = new DepotCornerSwipe();
+        depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -741,14 +749,7 @@ public class CatzSuperstructure {
     public Command TowerSwipePosition() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-
-            // Check if the outpost is the closest target (returns 1)
-            if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
-            }
-
-            // Do nothing if closer to the depots
-            return Commands.none();
+            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
@@ -766,14 +767,14 @@ public class CatzSuperstructure {
                     flipAlliance = true;
                 }
             }
-            if (flipAlliance) {
-                switch(FieldConstants.getCloserSwipe(currentTranslation)) {
-                case(1): return outpostOppositeSwipeRun();
-                case(2): return depotMiddleSwipeRun();
-                case(3): return depotCornerSwipeRun();
-                default: return Commands.none().andThen(Commands.print("none!!!!"));
-            }
-            }
+            // if (flipAlliance) {
+            //     switch(FieldConstants.getCloserSwipe(currentTranslation)) {
+            //         case(1): return outpostOppositeSwipeRun();
+            //         case(2): return depotOppositeMiddleSwipeRun();
+            //         case(3): return depotOppositeCornerSwipeRun();
+            //         default: return Commands.none().andThen(Commands.print("none!!!!"));
+            //     }
+            // }
             switch(FieldConstants.getCloserSwipe(currentTranslation)) {
                 case(1): return outpostSwipeRun();
                 case(2): return depotMiddleSwipeRun();
@@ -781,8 +782,6 @@ public class CatzSuperstructure {
                 default: return Commands.none().andThen(Commands.print("none!!!!"));
             }
 
-            // Do nothing if closer to the depots
-            return Commands.none();
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
@@ -797,7 +796,16 @@ public class CatzSuperstructure {
     public Command depotCornerSwipeRun() {
         return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
     }
+
     public Command outpostOppositeSwipeRun(){
         return outpostOppositeSwipeRoutine.getPathCommand();
+    }
+
+    public Command depotOppositeMiddleSwipeRun(){
+        return depotOppositeMiddleSwipeRun();
+    }
+
+    public Command depotOppositeCornerSwipeRun(){
+        return depotOppositeCornerSwipeRun();
     }
 }
