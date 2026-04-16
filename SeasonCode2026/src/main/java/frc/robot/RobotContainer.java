@@ -42,7 +42,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-
+    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.scoreHub);
+    xboxDrv.leftBumper().onTrue(CatzSuperstructure.Instance.Hoard);
   }
 
   public static void rumbleDrv(double val) {

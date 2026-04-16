@@ -44,6 +44,8 @@ import frc.robot.Utilities.Setpoint;
 
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
+    public static final Command Hoard = null;
+    public Command scoreHub;
 
     private CatzSuperstructure() {
         CatzConstants.autoFactory = new AutoFactory(
@@ -53,7 +55,55 @@ public class CatzSuperstructure {
                                                   true,
                                                   CatzDrivetrain.getInstance()
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
-
     }
 
+    //-------------
+    // Flywheels  |
+    //-------------
+
+    public Command flywheelOn() {
+        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    }
+    
+    public Command flywheelOff() {
+        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT);
+    }
+
+    //-------------
+    // Spindexer  |
+    //-------------
+
+    public Command spinDexerOn() {
+        return CatzFlywheels.Instance.setpointCommand(SpindexerConstants.ON);
+    }
+    
+    public Command spinDexerOff() {
+        return CatzFlywheels.Instance.setpointCommand(SpindexerConstants.OFF);
+    }
+
+    //-------------
+    // Y-Dexer    |
+    //-------------
+
+    public Command ydexerOn() {
+        return CatzFlywheels.Instance.setpointCommand(YdexerConstants.ON);
+    }
+    
+    public Command ydexerOff() {
+        return CatzFlywheels.Instance.setpointCommand(YdexerConstants.OFF);
+    }
+
+    //-------------
+    // Shooting   |
+    //-------------
+
+    public Command shootHub() {
+        return CatzFlywheels.Instance.setpointCommand(YdexerConstants.OFF);
+    }
+
+    public Command Hoard() {
+        return CatzFlywheels.Instance.setpointCommand(YdexerConstants.OFF);
+    }
+
+    
 }
