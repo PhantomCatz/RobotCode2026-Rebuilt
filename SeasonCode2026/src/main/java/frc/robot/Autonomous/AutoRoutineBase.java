@@ -57,6 +57,14 @@ public class AutoRoutineBase {
         .andThen(CatzSuperstructure.Instance.intakeOFF());
     }
 
+    protected Command shootAllBallsNoJiggleNoStop(double time){
+        return Commands.sequence(
+            Commands.print("shootAllBalls w/out jiggle command"),
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time)
+        )
+        .andThen(CatzSuperstructure.Instance.intakeOFF());
+    }
+
     private double pathStartTime = 0.0;
     protected Command followTrajectory(AutoTrajectory traj) {
         return Commands.defer(() -> {
@@ -123,8 +131,8 @@ public class AutoRoutineBase {
                     () -> isAtPose(traj),
 
                     CatzDrivetrain.getInstance()
-            )
-        ).unless(() -> isAtStrictPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
+            ).unless(() -> isAtStrictPose(traj))
+        ).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
     }
 
     protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {

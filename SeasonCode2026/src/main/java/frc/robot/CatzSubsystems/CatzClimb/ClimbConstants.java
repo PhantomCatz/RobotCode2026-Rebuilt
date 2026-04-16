@@ -67,6 +67,9 @@ public class ClimbConstants {
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
+		// FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = converter.toAngle(Units.Inches.of(7.5)).in(Units.Rotations);
+		// FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		FXConfig.CurrentLimits.StatorCurrentLimit = 300.0;
 

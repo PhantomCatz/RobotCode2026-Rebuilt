@@ -16,7 +16,7 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
         AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Bump",3);
         AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Bump",4);
         AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Bump",5);
-        AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Bump",6);
+        // AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Bump",6);
 
 
         prepRoutine(
@@ -51,8 +51,9 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),
-            followTrajectoryWhileShooting(traj7),
-            shootAllBallsNoJiggle(AutonConstants.OUTPOST_SCORING_WAIT),
+            // followTrajectoryWhileShooting(traj7),
+            shootAllBallsNoJiggleNoStop(1.5),
+            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
     }

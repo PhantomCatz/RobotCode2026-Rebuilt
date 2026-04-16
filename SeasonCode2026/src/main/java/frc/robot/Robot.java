@@ -54,6 +54,7 @@ public class Robot extends LoggedRobot {
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
 
   public static double autonStartTime = 0.0;
+  public static boolean climbedInAuton = false;
 
   private int iterations = 0;
 
@@ -257,6 +258,9 @@ public class Robot extends LoggedRobot {
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+    }
+    if (climbedInAuton) {
+      CatzSuperstructure.Instance.autoClimbLowerCommand().schedule();
     }
   }
 

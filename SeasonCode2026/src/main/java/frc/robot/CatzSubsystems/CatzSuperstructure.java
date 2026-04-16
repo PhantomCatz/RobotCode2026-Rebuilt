@@ -205,6 +205,10 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
+    public Command trackOpposingHub(){
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateOpposingHubTrackingSetpoint());
+    }
+
     public Command trackHoardLocation() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(AimCalculations.getCornerHoardingTarget(currentHoardType)));
     }
@@ -291,7 +295,7 @@ public class CatzSuperstructure {
 
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
-    public boolean isIntakeDeployed = false;
+    public boolean isIntakeDeployed = true;
 
     // public Command toggleIntakeDeploy() {
     // return Commands.runOnce(() -> {
@@ -567,6 +571,16 @@ public class CatzSuperstructure {
                 trackTower()).beforeStarting(() -> isClimbMode = true);
     }
 
+    public Command autoClimbLowerCommand() {
+        return Commands.deadline(
+            Commands.sequence(
+                cmdClimbReach(),
+                deployIntake()
+                // alignToBackUpClimb()
+            ),
+            trackTower()
+        ).andThen(() -> isClimbMode = false);
+    }
 
     public Command cmdClimbReach() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.REACH_SETPOINT);
@@ -706,7 +720,7 @@ public class CatzSuperstructure {
 
     public Command enableClimbSoftLimit() {
         return Commands.runOnce(() -> {
-            CatzClimb.Instance.setSoftLimitsEnabled(false, true);
+            CatzClimb.Instance.setSoftLimitsEnabled(true, true);
         });
     }
 
@@ -727,7 +741,14 @@ public class CatzSuperstructure {
     public Command TowerSwipePosition() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
+
+            // Check if the outpost is the closest target (returns 1)
+            if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
+                return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation), false, 0.1).deadlineFor(trackTower());
+            }
+
+            // Do nothing if closer to the depots
+            return Commands.none();
         }, Set.of(CatzDrivetrain.getInstance()));
     }
 
@@ -759,7 +780,10 @@ public class CatzSuperstructure {
                 case(3): return depotCornerSwipeRun();
                 default: return Commands.none().andThen(Commands.print("none!!!!"));
             }
-        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance)); // Add any required subsystems to the Set here
+
+            // Do nothing if closer to the depots
+            return Commands.none();
+        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
     public Command outpostSwipeRun() {
