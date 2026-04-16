@@ -18,15 +18,7 @@ public class Depot_2_Cycle_Bump_Mg extends AutoRoutineBase {
         AutoTrajectory traj6 = getTrajectory("Depot_2_Cycle_Bump_Mg",5);
         AutoTrajectory traj7 = getTrajectory("Depot_2_Cycle_Bump_Mg",6);
 
-
-        // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        // traj6.atTime("IntakeStop+RampUp6").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        // traj8.atTime("Score8").onTrue(shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT));
-
-        // traj10.atTime("Intake10").onTrue(CatzSuperstructure.Instance.intakeON());
-        // traj11.atTime("IntakeStop+RampUp11").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        // traj13.atTime("Score+StowIntake+TrackTower13")
-//pls
+                /* praying */
         prepRoutine(
             traj1,
             Commands.deadline(

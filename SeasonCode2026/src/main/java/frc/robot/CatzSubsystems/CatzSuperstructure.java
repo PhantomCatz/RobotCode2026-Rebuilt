@@ -564,7 +564,7 @@ public class CatzSuperstructure {
     public Command alignToCloseClimb() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getClimbClosePosition(currentTranslation), true);
+            return new PIDDriveCmd(1.5, FieldConstants.getClimbClosePosition(currentTranslation), true);
         }, Set.of(CatzDrivetrain.getInstance()));//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
@@ -573,7 +573,7 @@ public class CatzSuperstructure {
                 Commands.sequence(
                         cmdClimbReach(),
                         deployIntake(),
-                        alignToBackUpClimb(),
+                        alignToBackUpClimb().withTimeout(2.0),
                         alignToCloseClimb().withTimeout(2.0),
                         stowIntake(),
                         cmdClimbStow()),

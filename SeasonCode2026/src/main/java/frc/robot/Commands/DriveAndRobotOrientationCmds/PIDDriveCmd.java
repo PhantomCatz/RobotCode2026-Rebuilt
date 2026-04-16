@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -24,6 +25,7 @@ public class PIDDriveCmd extends Command {
     private final double ANGLE_TOLERANCE_DEGREES;
     private final double ALLOWABLE_VISION_ADJUST;
     private final double GOAL_VELOCITY;
+    private double waitTime = 0.0;
 
     private final boolean REQUIRES_ACCURACY;
 
@@ -107,9 +109,45 @@ public class PIDDriveCmd extends Command {
 
     }
 
+    public PIDDriveCmd(double waitTime, Pose2d goal, boolean requiresAccuracy) {
+        addRequirements(CatzDrivetrain.getInstance());
+        this.goalPos = goal;
+        this.waitTime = waitTime;
+
+        this.REQUIRES_ACCURACY = requiresAccuracy;
+        this.POSITION_TOLERANCE_METERS = 0.02;
+        this.VELOCITY_TOLERANCE_MPS = 0.1;
+        this.ANGLE_TOLERANCE_DEGREES = 3.0;
+        this.ALLOWABLE_VISION_ADJUST = 4e-3;
+        this.GOAL_VELOCITY = 0.0;
+
+        // Configure the translation controller
+        var translationConstraints = new TrapezoidProfile.Constraints(
+                4.0,
+                4.0);
+                this.translationController = new ProfiledPIDController(3.0, 0.0, 0.0, translationConstraints);
+
+        // Configure the rotation controller
+        var rotationConstraints = new TrapezoidProfile.Constraints(
+                360.0,
+                720.0);
+        this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
+        this.rotationController.enableContinuousInput(-180.0, 180.0);
+
+    }
+
+    double startTime = 0.0;
+
     @Override
     public void initialize(){
+        startTime = Timer.getFPGATimestamp();
         Logger.recordOutput("PID Target Pose", goalPos);
+
+        Pose2d currentPose = CatzRobotTracker.getInstance().getEstimatedPose();
+        double currentDistance = goalPos.getTranslation().getDistance(currentPose.getTranslation());
+        translationController.reset(currentDistance);
+        double initAngleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
+        rotationController.reset(initAngleError);
     }
 
     @Override
@@ -118,15 +156,23 @@ public class PIDDriveCmd extends Command {
 
         Translation2d poseError = goalPos.minus(currentPose).getTranslation();
         double currentDistance = poseError.getNorm();
-
         Rotation2d direction = poseError.getAngle();
+
+        double translationFeedback = translationController.calculate(currentDistance, 0.0);
+        double translationFeedforward = translationController.getSetpoint().velocity;
+        double targetVel = Math.max(Math.abs(translationFeedback + translationFeedforward), GOAL_VELOCITY);
+        
         double angleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
+        double rotationFeedback = rotationController.calculate(angleError, 0.0);
+        double rotationFeedforward = rotationController.getSetpoint().velocity;
 
-        double targetVel = Math.max(Math.abs(translationController.calculate(currentDistance, 0.0)), GOAL_VELOCITY);
+        double targetOmega = -Math.toRadians(rotationFeedback + rotationFeedforward);
 
-        double targetOmega = -Math.toRadians(rotationController.calculate(angleError, 0.0));
-        ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
-
+        ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(
+            targetVel * direction.getCos(),
+            targetVel * direction.getSin(),
+            targetOmega
+        );
         CatzDrivetrain.getInstance().drive(goalChassisSpeeds);
 
     }
@@ -134,8 +180,11 @@ public class PIDDriveCmd extends Command {
     @Override
     public boolean isFinished(){
         boolean atTargetState = isAtTargetState();
+
         if(REQUIRES_ACCURACY){
-            return  atTargetState && LimelightSubsystem.Instance.isSeeingApriltag() && CatzRobotTracker.Instance.getVisionPoseShift().getNorm() < ALLOWABLE_VISION_ADJUST;
+            double curTime = Timer.getFPGATimestamp();
+            return  atTargetState && LimelightSubsystem.Instance.isSeeingApriltag() && CatzRobotTracker.Instance.getVisionPoseShift().getNorm() < ALLOWABLE_VISION_ADJUST
+                    && curTime - startTime > waitTime;
         }else{
             return atTargetState;
         }

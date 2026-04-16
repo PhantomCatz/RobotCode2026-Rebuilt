@@ -15,7 +15,7 @@ public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
         AutoTrajectory traj2 = getTrajectory("Center_Outpost_Depot_Climb",1);
         AutoTrajectory traj3 = getTrajectory("Center_Outpost_Depot_Climb",2);
         AutoTrajectory traj4 = getTrajectory("Center_Outpost_Depot_Climb",3);
-
+            /* im begging, beeging you ouuu ouu ouuuuuu */
         prepRoutine(
             traj1,
             Commands.runOnce(()->Robot.climbedInAuton = true),
@@ -34,7 +34,6 @@ public class Center_Outpost_Depot_Climb extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF().alongWith(Commands.print("IntakeOFF")),
-            // CatzSuperstructure.Instance.cmdClimbReach(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT+0.5),
             followTrajectory(traj4),
             CatzSuperstructure.Instance.autoClimbCommand(),
