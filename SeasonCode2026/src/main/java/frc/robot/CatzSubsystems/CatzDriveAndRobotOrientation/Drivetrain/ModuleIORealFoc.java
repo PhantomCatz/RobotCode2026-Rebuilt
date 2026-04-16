@@ -70,8 +70,8 @@ public class ModuleIORealFoc implements ModuleIO {
 
   private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
-    private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
-
+  private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs antihoardCon = new CurrentLimitsConfigs();
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
@@ -85,6 +85,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
 
     // Config Motors Current Limits assume FOC is included with motors
+    // if change one value, have to change for all configs
     con.SupplyCurrentLowerTime = 0.0;
     con.StatorCurrentLimit = 80.0; //20 for bad home carpet
     con.StatorCurrentLimitEnable = true;
@@ -106,6 +107,12 @@ public class ModuleIORealFoc implements ModuleIO {
     intakeMoveCon.StatorCurrentLimitEnable = true;
     intakeMoveCon.SupplyCurrentLimit = 10.0;
     intakeMoveCon.SupplyCurrentLimitEnable = true;
+
+    antihoardCon.SupplyCurrentLowerTime = 0.0;
+    antihoardCon.StatorCurrentLimit = 80.0;
+    antihoardCon.StatorCurrentLimitEnable = true;
+    antihoardCon.SupplyCurrentLimit = 5.0;
+    antihoardCon.SupplyCurrentLimitEnable = true;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -282,6 +289,12 @@ public class ModuleIORealFoc implements ModuleIO {
   @Override
   public void setIntakeMoveConfig(){
     driveTalonConfig.withCurrentLimits(intakeMoveCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setAntihoardConfig() {
+    driveTalonConfig.withCurrentLimits(antihoardCon);
     driveTalon.getConfigurator().apply(driveTalonConfig);
   }
 

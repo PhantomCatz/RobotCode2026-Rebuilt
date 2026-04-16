@@ -56,6 +56,7 @@ public class CatzSuperstructure {
     public boolean isClimbMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
     private boolean isScoring = false;
+    private boolean isHoarding = false;
 
     private boolean initialShootReady = false;
     private RegressionMode activeRegressionMode = RegressionMode.HUB;
@@ -198,6 +199,7 @@ public class CatzSuperstructure {
                 Commands.runOnce(() -> {
                     initialShootReady = !initialShootReady;
                     isScoring = false;
+                    isHoarding = false;
                     CatzDrivetrain.getInstance().setNormalConfig();
                 })
         );
@@ -227,13 +229,12 @@ public class CatzSuperstructure {
     }
 
     /* --- HOARDING --- */
-    boolean toggleHoard = false;
 
     public Command toggleCmdHoardShoot() {
         return Commands.either(
-            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> toggleHoard = false),
-            cmdHoardShoot().finallyDo(() -> toggleHoard = true),
-            () -> toggleHoard
+            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> isHoarding = false),
+            cmdHoardShoot().finallyDo(() -> isHoarding = true),
+            () -> isHoarding
         );
     }
 
@@ -241,7 +242,8 @@ public class CatzSuperstructure {
         return Commands.run(() -> {
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-        .beforeStarting(() -> {CatzDrivetrain.getInstance().setShootWhileMoveConfig();})
+        .beforeStarting(() -> {CatzDrivetrain.getInstance().setShootWhileMoveConfig();
+                               isHoarding = true;})
         .finallyDo(() -> {
             double intakePower = 0.0;
             if (isIntakeOn) {
@@ -254,7 +256,8 @@ public class CatzSuperstructure {
     public Command cmdHoardStandby() {
         return Commands.run(() -> {
             updateAndApplyShooterState(false, false);
-        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
+        }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
+        .beforeStarting(() -> isHoarding = false);
     }
 
     /* --- HUB SCORING --- */
@@ -410,6 +413,10 @@ public class CatzSuperstructure {
 
     public boolean getIsScoring() {
         return isScoring;
+    }
+
+    public boolean getIsHoarding() {
+        return isHoarding;
     }
 
     /* FUNCTIONAL COMMANDS */

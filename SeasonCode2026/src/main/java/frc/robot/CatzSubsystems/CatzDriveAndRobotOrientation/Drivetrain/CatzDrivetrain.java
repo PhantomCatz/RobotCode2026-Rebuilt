@@ -16,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
+import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
@@ -74,6 +77,8 @@ public class CatzDrivetrain extends SubsystemBase {
   public ChassisSpeeds futureChassisSpeeds = new ChassisSpeeds();
 
   private final Field2d field;
+
+  private boolean wasAntihoarding;
 
   private BaseStatusSignal[] allSignals;
 
@@ -215,7 +220,29 @@ public class CatzDrivetrain extends SubsystemBase {
     CatzRobotTracker.Instance.setFuturePose(curPose);
 
     // Logger.recordOutput("Dist from hoard", curPose.getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
+
+    boolean isAntihoarding = isAntihoarding();
+    if (isAntihoarding && !wasAntihoarding) { // started antihoarding
+      setAntihoardConfig();
+    }
+    if (!isAntihoarding && wasAntihoarding && CatzSuperstructure.Instance.getIsHoarding()) { // stopped antihoarding but still hoarding
+      setShootWhileMoveConfig();
+    }
+    wasAntihoarding = isAntihoarding;
   } // end of drivetrain periodic
+
+  private boolean isAntihoarding() {
+    if (!CatzSuperstructure.Instance.getIsHoarding()) {
+      return false;
+    }
+    Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+      return (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX);
+    }
+    else {
+      return (pose.getX() < FieldConstants.fieldTrenchX);
+    }
+  }
 
   // --------------------------------------------------------------------------------------------------------------------------
   //
@@ -332,19 +359,29 @@ public class CatzDrivetrain extends SubsystemBase {
 
   /** Set current limits for shoot while move */
   public void setShootWhileMoveConfig() {
+    System.out.println("set shoot while move config");
     for (CatzSwerveModule module : m_swerveModules) {
       module.setShootWhileMoveConfig();
     }
   }
 
   public void setIntakeMoveConfig(){
+    System.out.println("set intake move config");
      for (CatzSwerveModule module : m_swerveModules) {
       module.setIntakeMoveConfig();
     }
   }
 
+  public void setAntihoardConfig() {
+    System.out.println("set antihoard config");
+    for (CatzSwerveModule module : m_swerveModules) {
+      module.setAntihoardConfig();
+    }
+  }
+
   /** Set current limits for normal driving*/
   public void setNormalConfig() {
+    System.out.println("set normal config");
     for (CatzSwerveModule module : m_swerveModules) {
       module.setNormalConfig();
     }

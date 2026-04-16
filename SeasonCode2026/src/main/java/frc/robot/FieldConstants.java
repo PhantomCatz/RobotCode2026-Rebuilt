@@ -76,6 +76,12 @@ public class FieldConstants {
           CLIMB_CLOSE_LEFT_TARGET.getY() + ROBOT_CLIMB_OFFSET.getY()),
       new Rotation2d());
 
+  // TODO these are random numbers
+  private static final Pose2d CLIMB_RED_LEFT = new Pose2d(new Translation2d(15.520146369934082, 3.3339905738830566), Rotation2d.k180deg);
+  private static final Pose2d CLIMB_RED_RIGHT = new Pose2d(new Translation2d(15.520146369934082, 5.333996295928955), new Rotation2d());
+  private static final Pose2d CLIMB_BLUE_LEFT = new Pose2d(new Translation2d(1.0474562644958496, 4.761989593505859), new Rotation2d());
+  private static final Pose2d CLIMB_BLUE_RIGHT = new Pose2d(new Translation2d(1.0474562644958496, 2.746171474456787), Rotation2d.k180deg);
+
   private static final Translation2d CLIMB_APRILTAG_POSE = new Translation2d(0.0, TOWER_Y_CENTER);
   /*********************/
 
@@ -103,19 +109,30 @@ public class FieldConstants {
     return CLIMB_APRILTAG_POSE;
   }
 
+  // public static Pose2d getClimbClosePosition(Translation2d robotPose) {
+  //   Pose2d flippedRight = AllianceFlipUtil.apply(CLIMB_CLOSE_RIGHT);
+  //   Pose2d flippedLeft = AllianceFlipUtil.apply(CLIMB_CLOSE_LEFT);
+
+  //   double distRight = robotPose.getDistance(flippedRight.getTranslation());
+  //   double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
+
+  //   Pose2d closerPose = (distLeft < distRight) ? flippedLeft : flippedRight;
+
+  //   double xVariationOffset = AllianceFlipUtil.shouldFlip() ? RED_CLIMB_X_OFFSET : BLUE_CLIMB_X_OFFSET;
+  //   Translation2d variationTranslation = new Translation2d(xVariationOffset, 0.0);
+
+  //   return new Pose2d(closerPose.getTranslation().plus(variationTranslation), closerPose.getRotation());
+  // }
+
   public static Pose2d getClimbClosePosition(Translation2d robotPose) {
-    Pose2d flippedRight = AllianceFlipUtil.apply(CLIMB_CLOSE_RIGHT);
-    Pose2d flippedLeft = AllianceFlipUtil.apply(CLIMB_CLOSE_LEFT);
-
-    double distRight = robotPose.getDistance(flippedRight.getTranslation());
-    double distLeft = robotPose.getDistance(flippedLeft.getTranslation());
-
-    Pose2d closerPose = (distLeft < distRight) ? flippedLeft : flippedRight;
-
-    double xVariationOffset = AllianceFlipUtil.shouldFlip() ? RED_CLIMB_X_OFFSET : BLUE_CLIMB_X_OFFSET;
-    Translation2d variationTranslation = new Translation2d(xVariationOffset, 0.0);
-
-    return new Pose2d(closerPose.getTranslation().plus(variationTranslation), closerPose.getRotation());
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+      double distRight = robotPose.getDistance(CLIMB_RED_RIGHT.getTranslation());
+      double distLeft = robotPose.getDistance(CLIMB_RED_LEFT.getTranslation());
+      return (distRight < distLeft) ? CLIMB_RED_RIGHT : CLIMB_RED_LEFT;
+    }
+    double distRight = robotPose.getDistance(CLIMB_BLUE_RIGHT.getTranslation());
+    double distLeft = robotPose.getDistance(CLIMB_BLUE_LEFT.getTranslation());
+    return (distRight < distLeft) ? CLIMB_BLUE_RIGHT : CLIMB_BLUE_LEFT;
   }
 
   public static Pose2d getClimbAwayPosition(Translation2d robotPose) {

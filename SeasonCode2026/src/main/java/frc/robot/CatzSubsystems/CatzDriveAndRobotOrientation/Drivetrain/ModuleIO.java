@@ -72,6 +72,7 @@ public interface ModuleIO {
 
   public default void setIntakeMoveConfig() {}
 
+  public default void setAntihoardConfig() {}
 
   public default void setNormalConfig() {}
 

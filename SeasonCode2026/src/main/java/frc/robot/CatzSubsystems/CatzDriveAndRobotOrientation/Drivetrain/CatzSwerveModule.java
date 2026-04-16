@@ -173,6 +173,10 @@ public class CatzSwerveModule {
     io.setIntakeMoveConfig();
   }
 
+  public void setAntihoardConfig() {
+    io.setAntihoardConfig();
+  }
+
   public void setNormalConfig() {
     io.setNormalConfig();
   }
