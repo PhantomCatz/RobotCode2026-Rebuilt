@@ -32,6 +32,10 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
+  
+
+
+
     var turret = CatzTurret.Instance;
     var tracker = CatzRobotTracker.Instance;
     var vision = LimelightSubsystem.Instance;
@@ -42,6 +46,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.turnOnShooter().onlyIf(() -> CatzSuperstructure.Instance.shooterOn == false));
+    xboxDrv.rightBumper().onTrue(Catzsuperstructure.Instance.turnOffShooter().onlyIf(() -> CatzSuperstructure.Instance.shooterOn));
 
   }
 

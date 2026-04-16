@@ -55,5 +55,19 @@ public class CatzSuperstructure {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
 
     }
+    public boolean shooterOn = false;
+    public Command turnOnShooter(){
+        return CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(7.0))
+        .alongWith(CatzSpindexer.Instance.setpointCommand(Setpoint.withVoltageSetpoint(5.0)))
+        .alongWith(CatzYdexer.Instance.setpointCommand(Setpoint.withVoltageSetpoint(5.0)))
+        .alongWith(Commands.runOnce(() -> shooterOn = true));
+    }
+
+    public Command turnOffShooter(){
+        return CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.0))
+        .alongWith(CatzSpindexer.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.0)))
+        .alongWith(CatzYdexer.Instance.setpointCommand(Setpoint.withVoltageSetpoint(0.0)))
+        .alongWith(Commands.runOnce(() -> shooterOn = false));
+    }
 
 }
