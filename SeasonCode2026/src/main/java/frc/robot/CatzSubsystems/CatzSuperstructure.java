@@ -13,6 +13,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -67,6 +68,7 @@ public class CatzSuperstructure {
 
 
     private final TowerSwipe outpostSwipeRoutine;
+    private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
     private final DepotMiddleSwipe depotMiddleSwipeRoutine;
     private final DepotCornerSwipe depotCornerSwipeRoutine;
 
@@ -731,8 +733,26 @@ public class CatzSuperstructure {
 
     public Command swipe() {
         return Commands.defer(() -> {
-            System.out.println("apapapapapapapapap");
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+            boolean flipAlliance = false;
+
+            if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
+                if(currentTranslation.getX() > FieldConstants.fieldXHalf){
+                    flipAlliance = true;
+                }
+            }else{
+                if(currentTranslation.getX() < FieldConstants.fieldXHalf){
+                    flipAlliance = true;
+                }
+            }
+            if (flipAlliance) {
+                switch(FieldConstants.getCloserSwipe(currentTranslation)) {
+                case(1): return outpostOppositeSwipeRun();
+                case(2): return depotMiddleSwipeRun();
+                case(3): return depotCornerSwipeRun();
+                default: return Commands.none().andThen(Commands.print("none!!!!"));
+            }
+            }
             switch(FieldConstants.getCloserSwipe(currentTranslation)) {
                 case(1): return outpostSwipeRun();
                 case(2): return depotMiddleSwipeRun();
@@ -752,5 +772,8 @@ public class CatzSuperstructure {
 
     public Command depotCornerSwipeRun() {
         return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
+    }
+    public Command outpostOppositeSwipeRun(){
+        return outpostOppositeSwipeRoutine.getPathCommand();
     }
 }
