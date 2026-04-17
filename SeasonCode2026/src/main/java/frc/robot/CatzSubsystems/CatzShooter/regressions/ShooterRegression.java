@@ -5,7 +5,10 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.LoggedTunableNumber;
@@ -169,7 +172,12 @@ public class ShooterRegression {
         }
         double turretAngle = CatzTurret.Instance.getLatencyCompensatedPosition() * 360.0;
 
-        if(turretAngle > 0.0 && turretAngle < 90.0 && CatzSuperstructure.Instance.getIsScoring()){
+
+
+        if(
+            turretAngle > 0.0 && turretAngle < 90.0 && CatzSuperstructure.Instance.getIsScoring() && !DriverStation.isAutonomous()
+            && CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(FieldConstants.getHubLocation()) > 3.0
+            ){
             add = 1.867;
         }
 

@@ -79,6 +79,11 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         // Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 
         Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
+        if(Math.abs(inputs.torqueCurrentAmps[0]) > 20.0){
+            Logger.recordOutput("Turret Stalling?", true);
+        }else{
+            Logger.recordOutput("Turret Stalling?", false);
+        }
 
         angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }

@@ -571,7 +571,7 @@ public class CatzSuperstructure {
     public Command alignToCloseClimb() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            return new PIDDriveCmd(FieldConstants.getClimbClosePosition(currentTranslation), true);
+            return new PIDDriveCmd(1.5, FieldConstants.getClimbClosePosition(currentTranslation), true);
         }, Set.of(CatzDrivetrain.getInstance()));//.onlyIf(() -> isClimbMode || DriverStation.isAutonomous());
     }
 
@@ -580,7 +580,7 @@ public class CatzSuperstructure {
                 Commands.sequence(
                         cmdClimbReach(),
                         deployIntake(),
-                        alignToBackUpClimb(),
+                        alignToBackUpClimb().withTimeout(2.0),
                         alignToCloseClimb().withTimeout(2.0),
                         stowIntake(),
                         cmdClimbStow()),
@@ -775,7 +775,7 @@ public class CatzSuperstructure {
             }
             // Check if the outpost is the closest target (returns 1)
             if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return new PIDDriveCmd(towerSwipePosition, false, 0.1).deadlineFor(trackTower());
+                return new PIDDriveCmd(towerSwipePosition, false, 0.1, 20.0).deadlineFor(trackTower());
             }
 
             // Do nothing if closer to the depots
