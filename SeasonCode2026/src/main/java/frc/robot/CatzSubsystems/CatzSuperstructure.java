@@ -22,6 +22,8 @@ import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
 import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
+import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
+import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
 import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
 import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -73,7 +75,9 @@ public class CatzSuperstructure {
     private final TowerSwipe outpostSwipeRoutine;
     private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
     private final DepotMiddleSwipe depotMiddleSwipeRoutine;
+    private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
     private final DepotCornerSwipe depotCornerSwipeRoutine;
+    private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
@@ -89,7 +93,9 @@ public class CatzSuperstructure {
         outpostSwipeRoutine = new TowerSwipe();
         outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
         depotMiddleSwipeRoutine = new DepotMiddleSwipe();
+        depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
         depotCornerSwipeRoutine = new DepotCornerSwipe();
+        depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -755,33 +761,23 @@ public class CatzSuperstructure {
     }
 
     public Command TowerSwipePosition() {
-        return Commands.defer(() -> {
-            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            boolean flipAlliance = false;
+    return Commands.defer(() -> {
+        Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
 
-            if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
-                if(currentTranslation.getX() > FieldConstants.fieldXHalf){
-                    flipAlliance = true;
-                }
-            }else{
-                if(currentTranslation.getX() < FieldConstants.fieldXHalf){
-                    flipAlliance = true;
-                }
+        boolean isOpponentSide = false;
+        if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
+            if(currentTranslation.getX() > FieldConstants.fieldXHalf){
+                isOpponentSide = true;
             }
-            Pose2d towerSwipePosition = FieldConstants.getTowerPosition(currentTranslation);
-            if(flipAlliance){
-                towerSwipePosition = AllianceFlipUtil.applyNoCondition(towerSwipePosition);
-                currentTranslation = AllianceFlipUtil.applyNoCondition(currentTranslation);
+        }else{
+            if(currentTranslation.getX() < FieldConstants.fieldXHalf){
+                isOpponentSide = true;
             }
-            // Check if the outpost is the closest target (returns 1)
-            if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return new PIDDriveCmd(towerSwipePosition, false, 0.1, 20.0).deadlineFor(trackTower());
-            }
+        }
 
-            // Do nothing if closer to the depots
-            return Commands.none();
-        }, Set.of(CatzDrivetrain.getInstance()));
-    }
+        return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation, isOpponentSide), false, 0.1, 20.0).deadlineFor(trackTower());
+    }, Set.of(CatzDrivetrain.getInstance()));
+  }
 
     public Command swipe() {
         return Commands.defer(() -> {
@@ -797,18 +793,24 @@ public class CatzSuperstructure {
                     flipAlliance = true;
                 }
             }
-            Command swipeRun = outpostSwipeRun();
-            if(flipAlliance){
-                swipeRun = outpostOppositeSwipeRun();
-                currentTranslation = AllianceFlipUtil.applyNoCondition(currentTranslation);
+
+            if (flipAlliance) {
+                // Pass true because we are on the opponent side
+                switch(FieldConstants.getCloserSwipe(currentTranslation, true)) {
+                    case(1): return outpostOppositeSwipeRun();
+                    case(2): return depotOppositeMiddleSwipeRun();
+                    case(3): return depotOppositeCornerSwipeRun();
+                    default: return Commands.none().andThen(Commands.print("none!!!!"));
+                }
             }
-            // Check if the outpost is the closest target (returns 1)
-            if (FieldConstants.getCloserSwipe(currentTranslation) == 1) {
-                return swipeRun;
+            // Pass false because we are on our home side
+            switch(FieldConstants.getCloserSwipe(currentTranslation, false)) {
+                case(1): return outpostSwipeRun();
+                case(2): return depotMiddleSwipeRun();
+                case(3): return depotCornerSwipeRun();
+                default: return Commands.none().andThen(Commands.print("none!!!!"));
             }
 
-            // Do nothing if closer to the depots
-            return Commands.none();
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
@@ -816,7 +818,23 @@ public class CatzSuperstructure {
         return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
     }
 
+    public Command depotMiddleSwipeRun() {
+        return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
+    }
+
+    public Command depotCornerSwipeRun() {
+        return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
+    }
+
     public Command outpostOppositeSwipeRun(){
         return outpostOppositeSwipeRoutine.getPathCommand();
+    }
+
+    public Command depotOppositeMiddleSwipeRun(){
+        return depotOppositeMiddleSwipeRoutine.getPathCommand();
+    }
+
+    public Command depotOppositeCornerSwipeRun(){
+        return depotOppositeCornerSwipeRoutine.getPathCommand();
     }
 }
