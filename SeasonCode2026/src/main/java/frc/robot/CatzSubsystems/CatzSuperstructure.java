@@ -292,7 +292,7 @@ public class CatzSuperstructure {
             } else {
                 currentHoardType = HoardTargetType.RELATIVE_CLOSE;
             }
-        });
+        }).alongWith(Commands.print("toggle hoard location"));
     }
 
     public void setAbsoluteHoardingType(HoardTargetType type) {
