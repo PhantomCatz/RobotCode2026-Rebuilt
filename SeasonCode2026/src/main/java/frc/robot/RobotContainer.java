@@ -42,7 +42,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.HubScore());
+    xboxDrv.rightBumper().onTrue(CatzSuperstructure.Instance.ShooterScore());
     xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.Hoard());
   }
 

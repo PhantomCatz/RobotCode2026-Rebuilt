@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems;
 
+import java.util.Queue;
 import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
@@ -59,42 +60,73 @@ public class CatzSuperstructure {
     //-------------------- 
     //    Shooter
     //--------------------
-    public Command FlyWheelOn(){
-        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+    boolean flywheelToggle = false;
+
+    public Command FlyWheel(){
+        return Commands.runOnce(() -> {
+            if(flywheelToggle == true){
+                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+                flywheelToggle = true;
+            }
+            else{
+                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT);
+                flywheelToggle = true;
+            }
+        });
     }
 
-    public Command FlyWheelOff(){
-        return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT);
+    public Command trackHub(){
+        return null;
     }
 
-    public Command HubScore(){
+    public Command ShooterScore(){
         return null;
     }
 
     public Command Hoard(){
+        return Commands.run(() -> {
+            /* 
+             * Aim turret head toward alliance aside of field
+             */
+            CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.ON);
+        }, CatzFlywheels.Instance, CatzSpindexer.Instance, CatzYdexer.Instance);
+    }
+
+    public Command ShooterToggle(){
         return null;
     }
 
     //-------------------- 
     //    Indexer
     //--------------------
-    public Command SpindexerOn(){
-        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
+    boolean spindexerToggle = false;;
+    boolean ydexerToggle = false;
+
+    public Command Spindexer(){
+        return Commands.runOnce(() -> {
+            if(spindexerToggle == true){
+                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
+                spindexerToggle = false;
+            }
+            else{
+                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF);
+                spindexerToggle = true;
+            }
+        });
     }
 
-    public Command YdexerOn(){
-        return CatzYdexer.Instance.setpointCommand(YdexerConstants.ON);
-    }
-
-    public Command SpindexerOff(){
-        return CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF);
-    }
-
-    public Command YdexerOff(){
-        return CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF);
-    }
-
-    public Command ShooterToggle(){
-        return null;
+    public Command Ydexer(){
+        return Commands.runOnce(() -> {
+            if(ydexerToggle == true){
+                CatzYdexer.Instance.setpointCommand(YdexerConstants.ON);
+                ydexerToggle = false;
+            }
+            else{
+                CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF);
+                ydexerToggle = true;
+            }
+        });
     }
 }
