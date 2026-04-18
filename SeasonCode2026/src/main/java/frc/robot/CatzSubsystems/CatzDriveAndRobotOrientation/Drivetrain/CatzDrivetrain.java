@@ -339,6 +339,11 @@ public class CatzDrivetrain extends SubsystemBase {
 
   public void setIntakeMoveConfig(){
      for (CatzSwerveModule module : m_swerveModules) {
+      module.setDefenseConfig();
+    }
+  }
+    public void setDefenseConfig(){
+     for (CatzSwerveModule module : m_swerveModules) {
       module.setIntakeMoveConfig();
     }
   }

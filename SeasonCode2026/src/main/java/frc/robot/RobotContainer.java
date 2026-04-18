@@ -166,6 +166,7 @@ public class RobotContainer {
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
+    xboxAux.leftTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleDefenseMod());
 
     // shooting a y x start
 

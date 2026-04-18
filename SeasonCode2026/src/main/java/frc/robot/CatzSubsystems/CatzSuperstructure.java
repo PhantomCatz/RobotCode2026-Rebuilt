@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems;
 
+import static edu.wpi.first.units.Units.OunceForce;
+
 import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
@@ -53,6 +55,7 @@ import frc.robot.Utilities.Setpoint;
 public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
+    public boolean defenseMode = false;
     public boolean isClimbMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
     private boolean isScoring = false;
@@ -89,6 +92,14 @@ public class CatzSuperstructure {
         outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
         depotMiddleSwipeRoutine = new DepotMiddleSwipe();
         depotCornerSwipeRoutine = new DepotCornerSwipe();
+    }
+
+    public Command toggleDefenseMod() {
+         return Commands.either(
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()).finallyDo(() -> defenseMode = false),
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> defenseMode = true),
+            () -> defenseMode
+         );
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
