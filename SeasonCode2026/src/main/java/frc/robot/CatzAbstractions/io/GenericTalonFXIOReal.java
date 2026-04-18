@@ -113,6 +113,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}else{
 			BaseStatusSignal.setUpdateFrequencyForAll(4.0, allSignals);
 		}
+		if (followerTalons != null && followerTalons.length > 0) {
+			BaseStatusSignal.setUpdateFrequencyForAll(100.0,
+				leaderTalon.getMotorVoltage(),
+				leaderTalon.getDutyCycle(),
+				leaderTalon.getTorqueCurrent()
+			);
+		}
 		connectedBuffer = (followerTalons != null) ? new boolean[followerTalons.length] : new boolean[0];
 
 	}
