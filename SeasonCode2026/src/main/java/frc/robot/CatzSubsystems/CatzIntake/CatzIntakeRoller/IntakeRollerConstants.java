@@ -19,7 +19,7 @@ public class IntakeRollerConstants {
 
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
 	// public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(6.7);
-	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(7.67);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(0.67);
 	public static final Setpoint REVERSE_SETPOINT = Setpoint.withVoltageSetpoint(-ON_SETPOINT.baseUnits);
 	public static final Setpoint JIGGLE_SETPOINT = Setpoint.withVoltageSetpoint(3.0);
 
@@ -78,9 +78,9 @@ public class IntakeRollerConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
+		IOConfig.followerBuses = new String[] {""};
+		IOConfig.followerIDs = new int[] {32};
 		return IOConfig;
 	}
 

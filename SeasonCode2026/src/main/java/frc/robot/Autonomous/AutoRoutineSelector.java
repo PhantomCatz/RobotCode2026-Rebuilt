@@ -41,6 +41,8 @@ public class AutoRoutineSelector {
 
         autoSelector.addRoutine("Steal_Depot_Bump", () -> new Steal_Depot_Bump().getRoutine());
         autoSelector.addRoutine("Steal_Depot_Trench", () -> new Steal_Depot_Trench().getRoutine());
+        autoSelector.addRoutine("Steal_Outpost_Bump", () -> new Steal_Outpost_Bump().getRoutine());
+        autoSelector.addRoutine("Steal_Outpost_Trench", () -> new Steal_Outpost_Trench().getRoutine());
         // autoSelector.addRoutine("Outpost_2_Cycle_Bump_Elim", () -> new Outpost_2_Cycle_Bump_Elim().getRoutine());
         // autoSelector.addRoutine("Outpost_2_Cycle_Bump_846", () -> new Outpost_2_Cycle_Bump_846().getRoutine());
         // autoSelector.addRoutine("Outpost_2_Cycle_Outpost", () -> new Outpost_2_Cycle_Outpost().getRoutine());
