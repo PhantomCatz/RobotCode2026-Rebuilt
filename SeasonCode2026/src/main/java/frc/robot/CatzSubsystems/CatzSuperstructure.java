@@ -1,3 +1,4 @@
+
 package frc.robot.CatzSubsystems;
 
 import java.util.Set;
@@ -54,6 +55,7 @@ public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
     public boolean isClimbMode = false;
+    public boolean isDefenseMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
     private boolean isScoring = false;
 
@@ -706,6 +708,14 @@ public class CatzSuperstructure {
         if (excludedSubsystem != CatzIntakeDeploy.Instance) {
             CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
         }
+    }
+
+    public Command toggleDefenseMode(){
+        return Commands.either(
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = false),
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()).finallyDo(() -> isDefenseMode = true),
+            () -> isDefenseMode
+        );
     }
 
     public boolean canResetPose = false;

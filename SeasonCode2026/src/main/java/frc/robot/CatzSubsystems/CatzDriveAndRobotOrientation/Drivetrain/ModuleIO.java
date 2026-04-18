@@ -72,6 +72,8 @@ public interface ModuleIO {
 
   public default void setIntakeMoveConfig() {}
 
+  public default void setDefenseConfig() {}
+
 
   public default void setNormalConfig() {}
 

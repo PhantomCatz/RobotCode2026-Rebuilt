@@ -343,6 +343,12 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
+  public void setDefenseConfig(){
+     for (CatzSwerveModule module : m_swerveModules) {
+      module.setDefenseConfig();
+    }
+  }
+
   /** Set current limits for normal driving*/
   public void setNormalConfig() {
     for (CatzSwerveModule module : m_swerveModules) {
