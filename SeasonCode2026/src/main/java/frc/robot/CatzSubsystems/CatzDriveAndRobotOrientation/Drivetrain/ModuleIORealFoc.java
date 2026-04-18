@@ -72,6 +72,7 @@ public class ModuleIORealFoc implements ModuleIO {
   private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs antihoardCon = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs defenseCon = new CurrentLimitsConfigs();
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
@@ -113,6 +114,12 @@ public class ModuleIORealFoc implements ModuleIO {
     antihoardCon.StatorCurrentLimitEnable = true;
     antihoardCon.SupplyCurrentLimit = 5.0;
     antihoardCon.SupplyCurrentLimitEnable = true;
+
+    defenseCon.SupplyCurrentLowerTime = 0.0;
+    defenseCon.StatorCurrentLimit = 80.0;
+    defenseCon.StatorCurrentLimitEnable = true;
+    defenseCon.SupplyCurrentLimit = 80.0;
+    defenseCon.SupplyCurrentLimitEnable = true;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -295,6 +302,12 @@ public class ModuleIORealFoc implements ModuleIO {
   @Override
   public void setAntihoardConfig() {
     driveTalonConfig.withCurrentLimits(antihoardCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setDefenseConfig() {
+    driveTalonConfig.withCurrentLimits(defenseCon);
     driveTalon.getConfigurator().apply(driveTalonConfig);
   }
 

@@ -366,22 +366,25 @@ public class CatzDrivetrain extends SubsystemBase {
   }
 
   public void setIntakeMoveConfig(){
-    System.out.println("set intake move config");
      for (CatzSwerveModule module : m_swerveModules) {
       module.setIntakeMoveConfig();
     }
   }
 
   public void setAntihoardConfig() {
-    System.out.println("set antihoard config");
     for (CatzSwerveModule module : m_swerveModules) {
       module.setAntihoardConfig();
     }
   }
 
+  public void setDefenseConfig() {
+    for (CatzSwerveModule module : m_swerveModules) {
+      module.setDefenseConfig();
+    }
+  }
+
   /** Set current limits for normal driving*/
   public void setNormalConfig() {
-    System.out.println("set normal config");
     for (CatzSwerveModule module : m_swerveModules) {
       module.setNormalConfig();
     }

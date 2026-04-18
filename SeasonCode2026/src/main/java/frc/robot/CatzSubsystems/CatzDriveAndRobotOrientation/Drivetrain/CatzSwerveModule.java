@@ -177,6 +177,10 @@ public class CatzSwerveModule {
     io.setAntihoardConfig();
   }
 
+  public void setDefenseConfig() {
+    io.setDefenseConfig();
+  }
+
   public void setNormalConfig() {
     io.setNormalConfig();
   }

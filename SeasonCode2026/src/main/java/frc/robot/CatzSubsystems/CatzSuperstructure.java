@@ -56,6 +56,7 @@ public class CatzSuperstructure {
     public static final CatzSuperstructure Instance = new CatzSuperstructure();
 
     public boolean isClimbMode = false;
+    public boolean isDefenseMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
     private boolean isScoring = false;
     private boolean isHoarding = false;
@@ -750,6 +751,14 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             CatzClimb.Instance.setSoftLimitsEnabled(false, false);
         });
+    }
+
+    public Command toggleDefenseMode() {
+        return Commands.either(
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()).finallyDo(() -> isDefenseMode = false),
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = true),
+            () -> isDefenseMode
+        );
     }
 
     public void UpdateSim() {

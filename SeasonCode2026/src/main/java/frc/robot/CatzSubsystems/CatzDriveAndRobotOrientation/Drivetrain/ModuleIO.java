@@ -74,6 +74,8 @@ public interface ModuleIO {
 
   public default void setAntihoardConfig() {}
 
+  public default void setDefenseConfig() {}
+
   public default void setNormalConfig() {}
 
   // ---------------------------------------------------------------------------
