@@ -78,9 +78,9 @@ public class IntakeRollerConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {};
+		IOConfig.followerIDs = new int[] {32};
 		return IOConfig;
 	}
 

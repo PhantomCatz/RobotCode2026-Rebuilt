@@ -161,7 +161,7 @@ public class PIDDriveCmd extends Command {
         double translationFeedback = translationController.calculate(currentDistance, 0.0);
         double translationFeedforward = translationController.getSetpoint().velocity;
         double targetVel = Math.max(Math.abs(translationFeedback + translationFeedforward), GOAL_VELOCITY);
-        
+
         double angleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
         double rotationFeedback = rotationController.calculate(angleError, 0.0);
         double rotationFeedforward = rotationController.getSetpoint().velocity;
