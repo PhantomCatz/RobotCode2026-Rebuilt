@@ -63,16 +63,10 @@ public class CatzSuperstructure {
     boolean flywheelToggle = false;
 
     public Command FlyWheel(){
-        return Commands.runOnce(() -> {
-            if(flywheelToggle == true){
-                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
-                flywheelToggle = true;
-            }
-            else{
-                CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT);
-                flywheelToggle = true;
-            }
-        });
+        return Commands.either(
+            CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT),
+            CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
+            () -> flywheelToggle);
     }
 
     public Command trackHub(){
@@ -80,7 +74,12 @@ public class CatzSuperstructure {
     }
 
     public Command ShooterScore(){
-        return null;
+        return Commands.run(() -> {
+            trackHub();
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.ON);
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
+            CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
+        }, CatzTurret.Instance, CatzSpindexer.Instance, CatzYdexer.Instance, CatzFlywheels.Instance);
     }
 
     public Command Hoard(){
@@ -105,28 +104,16 @@ public class CatzSuperstructure {
     boolean ydexerToggle = false;
 
     public Command Spindexer(){
-        return Commands.runOnce(() -> {
-            if(spindexerToggle == true){
-                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON);
-                spindexerToggle = false;
-            }
-            else{
-                CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF);
-                spindexerToggle = true;
-            }
-        });
+        return Commands.either(
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.ON),
+            CatzSpindexer.Instance.setpointCommand(SpindexerConstants.OFF),
+            () -> spindexerToggle);
     }
 
     public Command Ydexer(){
-        return Commands.runOnce(() -> {
-            if(ydexerToggle == true){
-                CatzYdexer.Instance.setpointCommand(YdexerConstants.ON);
-                ydexerToggle = false;
-            }
-            else{
-                CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF);
-                ydexerToggle = true;
-            }
-        });
+        return Commands.either(
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.ON),
+            CatzYdexer.Instance.setpointCommand(YdexerConstants.OFF),
+            () -> ydexerToggle);
     }
 }
