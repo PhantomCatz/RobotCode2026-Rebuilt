@@ -20,7 +20,7 @@ public class FlywheelConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.05, 0.0, 0.0, 0.0, 0.0122, 0.0, 0.0);
-		case SN2 -> new Gains(1.0, 0.0, 0.0, 0.0, 0.127, 0.0, 0.0); //with duty cycle: p=0.05, v=0.0122
+		case SN2 -> new Gains(0.5, 0.0, 0.0, 0.0, 0.1464, 0.0, 0.0); //with duty cycle: p=0.05, v=0.0122
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -51,12 +51,12 @@ public class FlywheelConstants {
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 100.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 180.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

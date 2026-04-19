@@ -6,7 +6,6 @@ import java.util.Set;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
