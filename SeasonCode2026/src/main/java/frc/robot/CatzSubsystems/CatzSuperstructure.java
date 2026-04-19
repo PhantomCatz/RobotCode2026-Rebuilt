@@ -60,6 +60,7 @@ public class CatzSuperstructure {
     //-------------
     // Flywheels  |
     //-------------
+    private boolean spinFlywheel;
 
     public Command flywheelOn() {
         return CatzFlywheels.Instance.setpointCommand(FlywheelConstants.TEST_SETPOINT);
@@ -72,18 +73,31 @@ public class CatzSuperstructure {
     //-------------
     // Spindexer  |
     //-------------
+    private boolean spinSpindexer;
 
     public Command spinDexerOn() {
         return CatzFlywheels.Instance.setpointCommand(SpindexerConstants.ON);
     }
-    
+
     public Command spinDexerOff() {
         return CatzFlywheels.Instance.setpointCommand(SpindexerConstants.OFF);
     }
 
+    /*public Command toggleSpindexer() {
+        return Commands.runOnce(() -> spinSpindexer = !spinSpindexer)
+            .andThen(
+                Commands.either(
+                    spinDexerOn(),
+                    spinDexerOff(),
+                    () -> spinSpindexer
+                )
+            );
+    }
+   */ 
     //-------------
     // Y-Dexer    |
     //-------------
+    private boolean spinYDexer;
 
     public Command ydexerOn() {
         return CatzFlywheels.Instance.setpointCommand(YdexerConstants.ON);
@@ -93,17 +107,27 @@ public class CatzSuperstructure {
         return CatzFlywheels.Instance.setpointCommand(YdexerConstants.OFF);
     }
 
+    /*public Command toggleYDexer() {
+        return Commands.runOnce(() -> spinYDexer = !spinYDexer)
+            .andThen(
+                Commands.either(
+                    ydexerOn(),
+                    ydexerOff(),
+                    () -> spinSpindexer
+                )
+            );
+    }
+    */ 
+
     //-------------
     // Shooting   |
     //-------------
-
     public Command shootHub() {
-        return CatzFlywheels.Instance.setpointCommand(YdexerConstants.OFF);
+        return CatzFlywheels.Instance.setpointCommand();
     }
+
 
     public Command Hoard() {
-        return CatzFlywheels.Instance.setpointCommand(YdexerConstants.OFF);
-    }
-
-    
+        return CatzFlywheels.Instance.setpointCommand();
+    }  
 }
