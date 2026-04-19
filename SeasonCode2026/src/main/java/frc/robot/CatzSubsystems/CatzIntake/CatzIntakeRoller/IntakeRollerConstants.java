@@ -19,7 +19,7 @@ public class IntakeRollerConstants {
 
 	public static final Setpoint OFF_SETPOINT = Setpoint.withVoltageSetpoint(0.0);
 	// public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(6.7);
-	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(0.67);
+	public static final Setpoint ON_SETPOINT = Setpoint.withVoltageSetpoint(7.67);
 	public static final Setpoint REVERSE_SETPOINT = Setpoint.withVoltageSetpoint(-ON_SETPOINT.baseUnits);
 	public static final Setpoint JIGGLE_SETPOINT = Setpoint.withVoltageSetpoint(3.0);
 

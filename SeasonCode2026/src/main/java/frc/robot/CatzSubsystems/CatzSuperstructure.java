@@ -756,7 +756,7 @@ public class CatzSuperstructure {
     public Command toggleDefenseMode() {
         return Commands.either(
             Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()).finallyDo(() -> isDefenseMode = false),
-            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = true),
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = true).alongWith(CatzSuperstructure.Instance.stowIntake()),
             () -> isDefenseMode
         );
     }
