@@ -15,7 +15,7 @@ public class CatzSpindexer extends GenericMotorSubsystem<SpindexerIO, SpindexerI
         switch(CatzConstants.hardwareMode) {
             case REAL:
                 System.out.println("Spindexer Configured for Real");
-                return new SpindexerIOTalonFX(SpindexerConstants.getIOConfig());
+                return new SpindexerIOTalonFX(SpindexerConstants.getIOConfig(), true);
             case SIM:
                 System.out.println("Spindexer Configured for Simulation");
                 return new SpindexerIOSim(SpindexerConstants.gains);
@@ -28,6 +28,22 @@ public class CatzSpindexer extends GenericMotorSubsystem<SpindexerIO, SpindexerI
     private CatzSpindexer(){
         super(io, inputs, "CatzSpindexer");
     }
+
+    double prevP = 0.0;
+    double prevV = 0.0;
+    @Override
+    public void periodic(){
+        super.periodic();
+
+        double newP = SpindexerConstants.kP.get();
+        double newV = SpindexerConstants.kV.get();
+        if(newP != prevP || newV != prevV){
+            prevV = newV;
+            prevP = newP;
+            setGainsPV(newP, newV);
+        }
+    }
+
 
     public static final CatzSpindexer Instance = new CatzSpindexer();
 }

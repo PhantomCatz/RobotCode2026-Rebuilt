@@ -436,7 +436,7 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
             } else {
                 isSpindexerSpinning = true;
-                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON_VEL);
             }
         }, CatzSpindexer.Instance);
     }
@@ -450,7 +450,7 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             } else {
                 isYdexerSpinning = true;
-                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON_VEL);
             }
         }, CatzYdexer.Instance);
     }
