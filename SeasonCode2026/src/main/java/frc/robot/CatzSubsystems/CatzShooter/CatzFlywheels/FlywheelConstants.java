@@ -51,12 +51,12 @@ public class FlywheelConstants {
 
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 80.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 100.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 80.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 180.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

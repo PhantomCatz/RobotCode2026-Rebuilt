@@ -17,12 +17,14 @@ import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.DoublePressTracker;
+import frc.robot.Utilities.Setpoint;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
@@ -185,12 +187,12 @@ public class RobotContainer {
     xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
 
-    xboxAux.back().multiPress(2, 0.4).onTrue(Commands.runOnce(()-> CatzSuperstructure.Instance.canResetPose = ! CatzSuperstructure.Instance.canResetPose));
+    // xboxAux.back().multiPress(2, 0.4).onTrue(Commands.runOnce(()-> CatzSuperstructure.Instance.canResetPose = ! CatzSuperstructure.Instance.canResetPose));
     xboxAux.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());
     xboxAux.povDownLeft().onTrue(CatzSuperstructure.Instance.resetHoodPose());
     xboxAux.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
     xboxAux.povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
-
+    xboxAux.back().multiPress(2, 0.4).onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(12.0)));
   }
 
   public static void rumbleDrv(double val) {

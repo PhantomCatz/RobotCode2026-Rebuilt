@@ -11,6 +11,7 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
+import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
@@ -44,10 +45,11 @@ public class IntakeDeployConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    // public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
+    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
+
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Deploy/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
-    // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
 
@@ -64,8 +66,8 @@ public class IntakeDeployConstants {
 		FXConfig.Slot0.kG = gains.kG();
 
 		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 5.0;
-		FXConfig.MotionMagic.MotionMagicJerk = 10.0;
+        FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 250.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
