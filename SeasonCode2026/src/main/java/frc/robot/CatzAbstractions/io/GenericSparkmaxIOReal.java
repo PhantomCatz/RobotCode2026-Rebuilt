@@ -131,7 +131,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     }
 
     @Override
-    public void setVelocitySetpoint(double mechanismVelocity) {
+    public void setVelocityFOCSetpoint(double mechanismVelocity) {
         // REV units are RPM (Slot 1)
         double targetRPM = (mechanismVelocity / gearRatio) * 60.0;
         closedLoopController.setSetpoint(targetRPM, ControlType.kVelocity, ClosedLoopSlot.kSlot1);

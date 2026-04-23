@@ -75,12 +75,12 @@ public class Setpoint {
 		 * @param velocitySetpoint Velocity to go to in mechanism units.
 		 * @return A new Setpoint.
 		 */
-		public static Setpoint withVelocitySetpoint(AngularVelocity velocitySetpoint) {
+		public static Setpoint withVelocityFOCSetpoint(AngularVelocity velocitySetpoint) {
 			UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
-				io.setVelocitySetpoint(velocitySetpoint.in(Units.RotationsPerSecond));
+				io.setVelocityFOCSetpoint(velocitySetpoint.in(Units.RotationsPerSecond));
 				return io;
 			};
-			return new Setpoint(applier, Mode.VELOCITY, velocitySetpoint.baseUnitMagnitude());
+			return new Setpoint(applier, Mode.VELOCITY, velocitySetpoint.in(Units.RotationsPerSecond));
 		}
 
 		/**
@@ -148,7 +148,7 @@ public class Setpoint {
      */
     public static Setpoint withVelocitySetpoint(double velocitySetpoint) {
         UnaryOperator<GenericMotorIO> applier = (GenericMotorIO io) -> {
-            io.setVelocitySetpoint(velocitySetpoint);
+            io.setVelocityFOCSetpoint(velocitySetpoint);
             return io;
         };
         return new Setpoint(applier, Mode.VELOCITY, velocitySetpoint);

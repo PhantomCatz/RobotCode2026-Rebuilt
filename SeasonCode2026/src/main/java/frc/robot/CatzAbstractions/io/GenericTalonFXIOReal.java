@@ -274,7 +274,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	}
 
 	@Override
-	public void setVelocitySetpoint(double mechanismVelocity) {
+	public void setVelocityFOCSetpoint(double mechanismVelocity) {
 		leaderTalon.setControl(velocityRequest.withVelocity(mechanismVelocity));
 	}
 
