@@ -15,6 +15,8 @@ public class Steal_Depot_Bump extends AutoRoutineBase {
         AutoTrajectory traj3 = getTrajectory("Steal_Depot_Bump",2);
         AutoTrajectory traj4 = getTrajectory("Steal_Depot_Bump",3);
         AutoTrajectory traj5 = getTrajectory("Steal_Depot_Bump",4);
+        AutoTrajectory traj6 = getTrajectory("Steal_Depot_Bump",5);
+        AutoTrajectory traj7 = getTrajectory("Steal_Depot_Bump",6);
 
         prepRoutine(
             traj1,
@@ -22,7 +24,7 @@ public class Steal_Depot_Bump extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(2.5),
-                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
+                    followTrajectoryWithAccuracy(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectoryWithAccuracy(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
@@ -30,7 +32,7 @@ public class Steal_Depot_Bump extends AutoRoutineBase {
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj3),
+                followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggleNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2),
@@ -49,6 +51,9 @@ public class Steal_Depot_Bump extends AutoRoutineBase {
             CatzSuperstructure.Instance.intakeOFF(),
             shootAllBallsNoJiggleNoStop(1.5),
             shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            followTrajectoryWithAccuracy(traj6),
+            CatzSuperstructure.Instance.intakeON(),
+            followTrajectoryWithAccuracy(traj7),
             Commands.print("done")
         );
     }

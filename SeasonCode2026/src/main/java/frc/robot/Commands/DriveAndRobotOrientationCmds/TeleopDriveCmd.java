@@ -4,7 +4,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -15,7 +14,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveCon
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-import frc.robot.Utilities.ModuleLimits;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
 
@@ -117,48 +115,37 @@ public class TeleopDriveCmd extends Command {
         ? turningVelocity * DriveConstants.DRIVE_CONFIG.maxAngularVelocity()
         : 0.0;
 
-    // Construct desired chassis speeds
+   // Construct desired chassis speeds normally
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(finalVelX,
         finalVelY,
         turningVelocity,
         CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
-    ModuleLimits limits;
+    // Artificially cap the target translation speed if scoring
     if(CatzSuperstructure.Instance.getIsScoring()) {
-      limits = DriveConstants.MOVE_WHILE_SHOOT_LIMITS;
-
-      // Get the current magnitude of the actual robot setpoint
-      double currentVel = Math.hypot(
-          currentSetpoint.chassisSpeeds().vxMetersPerSecond,
-          currentSetpoint.chassisSpeeds().vyMetersPerSecond
+      double maxScoringVel = DriveConstants.MOVE_WHILE_SHOOT_LIMITS.maxDriveVelocity();
+      double currentTargetVel = Math.hypot(
+          chassisSpeeds.vxMetersPerSecond,
+          chassisSpeeds.vyMetersPerSecond
       );
 
-      double maxScoringVel = limits.maxDriveVelocity();
-
-      if (currentVel > maxScoringVel) {
-        double scale = maxScoringVel / currentVel;
-
-        currentSetpoint.chassisSpeeds().vxMetersPerSecond *= scale;
-        currentSetpoint.chassisSpeeds().vyMetersPerSecond *= scale;
-
-        var states = currentSetpoint.moduleStates();
-        for (int i = 0; i < states.length; i++) {
-          states[i].speedMetersPerSecond *= scale;
-        }
+      // Scale down linear translation if it exceeds the scoring speed limit
+      if (currentTargetVel > maxScoringVel) {
+        double scale = maxScoringVel / currentTargetVel;
+        chassisSpeeds.vxMetersPerSecond *= scale;
+        chassisSpeeds.vyMetersPerSecond *= scale;
       }
-
-    } else {
-      limits = DriveConstants.DRIVE_LIMITS;
     }
 
+    // ALWAYS use DRIVE_LIMITS so the robot can brake rotation instantly
     currentSetpoint = swerveSetpointGenerator.generateSetpoint(
-      limits,
+      DriveConstants.DRIVE_LIMITS,
       currentSetpoint,
       chassisSpeeds,
       0.02);
 
     // Send new chassisspeeds object to the drivetrain queue to use later
-    m_drivetrain.pushToQueue(Timer.getFPGATimestamp()+CatzDrivetrain.getInstance().getDelay(), currentSetpoint);
+    CatzDrivetrain.getInstance().swerveSetpointDrive(currentSetpoint);
     // Logger.recordOutput("cur controller input", Math.hypot(currentSetpoint.chassisSpeeds().vxMetersPerSecond, currentSetpoint.chassisSpeeds().vyMetersPerSecond));
     // debugLogsDrive();
   } // end of execute()

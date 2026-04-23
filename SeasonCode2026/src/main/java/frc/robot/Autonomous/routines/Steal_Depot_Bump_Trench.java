@@ -6,17 +6,17 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Steal_Depot_Trench extends AutoRoutineBase {
-    public Steal_Depot_Trench(){
-        super("Steal_Depot_Trench");
+public class Steal_Depot_Bump_Trench extends AutoRoutineBase {
+    public Steal_Depot_Bump_Trench(){
+        super("Steal_Depot_Bump_Trench");
 
-        AutoTrajectory traj1 = getTrajectory("Steal_Depot_Trench",0);
-        AutoTrajectory traj2 = getTrajectory("Steal_Depot_Trench",1);
-        AutoTrajectory traj3 = getTrajectory("Steal_Depot_Trench",2);
-        AutoTrajectory traj4 = getTrajectory("Steal_Depot_Trench",3);
-        AutoTrajectory traj5 = getTrajectory("Steal_Depot_Trench",4);
-        AutoTrajectory traj6 = getTrajectory("Steal_Depot_Trench",5);
-        AutoTrajectory traj7 = getTrajectory("Steal_Depot_Trench",6);
+        AutoTrajectory traj1 = getTrajectory("Steal_Depot_Bump_Trench",0);
+        AutoTrajectory traj2 = getTrajectory("Steal_Depot_Bump_Trench",1);
+        AutoTrajectory traj3 = getTrajectory("Steal_Depot_Bump_Trench",2);
+        AutoTrajectory traj4 = getTrajectory("Steal_Depot_Bump_Trench",3);
+        AutoTrajectory traj5 = getTrajectory("Steal_Depot_Bump_Trench",4);
+        AutoTrajectory traj6 = getTrajectory("Steal_Depot_Bump_Trench",5);
+        AutoTrajectory traj7 = getTrajectory("Steal_Depot_Bump_Trench",6);
 
         prepRoutine(
             traj1,

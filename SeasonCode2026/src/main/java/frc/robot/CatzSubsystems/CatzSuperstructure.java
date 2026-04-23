@@ -436,7 +436,7 @@ public class CatzSuperstructure {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
             } else {
                 isSpindexerSpinning = true;
-                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
+                CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON_VEL);
             }
         }, CatzSpindexer.Instance);
     }
@@ -450,7 +450,7 @@ public class CatzSuperstructure {
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
             } else {
                 isYdexerSpinning = true;
-                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON_VEL);
             }
         }, CatzYdexer.Instance);
     }
@@ -489,7 +489,7 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             if (isHoodAtHome) {
                 isHoodAtHome = false;
-                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_TEST_SETPOINT);
+                CatzHood.Instance.applySetpoint(HoodConstants.HOOD_MAX_SETPOINT);
             } else {
                 isHoodAtHome = true;
                 CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
@@ -756,7 +756,7 @@ public class CatzSuperstructure {
     public Command toggleDefenseMode() {
         return Commands.either(
             Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()).finallyDo(() -> isDefenseMode = false),
-            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = true),
+            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = true).alongWith(CatzSuperstructure.Instance.stowIntake()),
             () -> isDefenseMode
         );
     }

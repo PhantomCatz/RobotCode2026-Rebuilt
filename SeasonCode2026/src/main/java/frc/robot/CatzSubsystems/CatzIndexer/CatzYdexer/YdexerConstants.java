@@ -22,14 +22,17 @@ public class YdexerConstants {
 	public static final Setpoint REVERSE = Setpoint.withVoltageSetpoint(ON_VOLTS.times(-1.0));
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
+	public static final Setpoint ON_VEL = Setpoint.withVelocitySetpointVoltage(24.0);
+
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
-        case SN2 -> new Gains(0.0003, 0.0, 0.0, 0.33329, 0.00083, 0.0, 0.0);
+        case SN2 -> new Gains(1.3, 0.0, 0.0, 0.0, 0.29, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-	public static final LoggedTunableNumber SPEED = new LoggedTunableNumber("YDexer/Applied Volts", ON_VOLTS.in(Units.Volts));
+	public static final LoggedTunableNumber kP = new LoggedTunableNumber("VDexer/kP", gains.kP());
+	public static final LoggedTunableNumber kV = new LoggedTunableNumber("VDexer/kV", gains.kV());
 
     private static final int YDEXER_MOTOR_ID = 50;
 
@@ -61,7 +64,7 @@ public class YdexerConstants {
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
 
-		FXConfig.Feedback.SensorToMechanismRatio = 0.0; //TODO dont use magic number
+		FXConfig.Feedback.SensorToMechanismRatio = 3.0; //TODO dont use magic number
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;

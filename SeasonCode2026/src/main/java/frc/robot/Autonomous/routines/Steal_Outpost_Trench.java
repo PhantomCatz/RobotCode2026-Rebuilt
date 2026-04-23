@@ -13,6 +13,8 @@ public class Steal_Outpost_Trench extends AutoRoutineBase {
         AutoTrajectory traj1 = getTrajectory("Steal_Outpost_Trench",0);
         AutoTrajectory traj2 = getTrajectory("Steal_Outpost_Trench",1);
         AutoTrajectory traj3 = getTrajectory("Steal_Outpost_Trench",2);
+        AutoTrajectory traj4 = getTrajectory("Steal_Outpost_Trench",3);
+        AutoTrajectory traj5 = getTrajectory("Steal_Outpost_Trench",4);
 
         prepRoutine(
             traj1,
@@ -20,7 +22,7 @@ public class Steal_Outpost_Trench extends AutoRoutineBase {
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
                     Commands.waitSeconds(2.5),
-                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
+                    followTrajectoryWithAccuracy(traj1).alongWith(Commands.print("traj1")),
                     CatzSuperstructure.Instance.intakeON(),
                     followTrajectoryWithAccuracy(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
@@ -28,11 +30,14 @@ public class Steal_Outpost_Trench extends AutoRoutineBase {
                     CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj3),
+                followTrajectoryWithAccuracy(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggleNoStop(1.5),
             shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            followTrajectoryWithAccuracy(traj4),
+            CatzSuperstructure.Instance.intakeON(),
+            followTrajectoryWithAccuracy(traj5),
             Commands.print("done")
         );
     }
