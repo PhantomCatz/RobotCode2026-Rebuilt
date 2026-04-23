@@ -55,6 +55,8 @@ public class ShooterRegression {
 
     public static final LoggedTunableNumber TUNABLE_DIST = new LoggedTunableNumber("Regression/Dist", 0.0);
 
+    public static final LoggedTunableNumber SHOOTER_EXTRA = new LoggedTunableNumber("Regression/extra rps", 1.867);
+
     // -------------------------------------------------------------------------
     // Maps & Polynomials
     // -------------------------------------------------------------------------
@@ -86,6 +88,8 @@ public class ShooterRegression {
     private static final double OVER_TRENCH_HOARD_HOOD_SLOPE;
     private static final double OVER_NET_HOARD_HOOD_SLOPE;
     private static final double OPP_HOARD_HOOD_SLOPE;
+
+    private static final double MAX_HOOD_DIST = 10.0; // todo
 
     static {
         hubFlywheelPolynomial  = loadRegression(EpsilonRegression.flywheelHubRPS, hubFlywheelMap);
@@ -175,10 +179,10 @@ public class ShooterRegression {
 
 
         if(
-            turretAngle > 0.0 && turretAngle < 90.0 && CatzSuperstructure.Instance.getIsScoring() && !DriverStation.isAutonomous()
+            CatzSuperstructure.Instance.getIsScoring() && !DriverStation.isAutonomous()
             && CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(FieldConstants.getHubLocation()) > 3.0
             ){
-            add = 1.867;
+            add = SHOOTER_EXTRA.get();
         }
 
         return Setpoint.withVelocitySetpointVoltage(rps+ add);
@@ -217,7 +221,10 @@ public class ShooterRegression {
 
         // point slope form: y = m(x - x1) + y1
         angle = slope * (distMeters - xInterceptDist) + yInterceptAngle;
-
+        // if you're far enough, just use max hood angle to minimize flywheel speed
+        if (mode == RegressionMode.OVER_TRENCH_HOARD && distMeters > MAX_HOOD_DIST) {
+            angle = HoodConstants.HOOD_MAX_POS.in(Units.Degrees);
+        }
         angle = MathUtil.clamp(angle,
             HoodConstants.HOOD_ZERO_POS.in(Units.Degrees),
             HoodConstants.HOOD_MAX_POS.in(Units.Degrees)

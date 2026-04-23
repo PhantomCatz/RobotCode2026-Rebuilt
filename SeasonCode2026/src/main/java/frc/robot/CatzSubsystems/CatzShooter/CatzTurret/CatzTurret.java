@@ -5,12 +5,14 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
+import frc.robot.FieldConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
@@ -67,14 +69,14 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         //     v = TurretConstants.kV.get();
         // }
 
-        // Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
-        //         Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
-        //                 .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
-        //                 .plus(TurretConstants.TURRET_ROTATION_OFFSET));
+        Pose2d turretPose = new Pose2d(CatzTurret.Instance.getFieldToTurret(),
+                Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
+                        .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+                        .plus(TurretConstants.TURRET_ROTATION_OFFSET));
         // Logger.recordOutput("Shooter Location", turretPose);
 
-        // double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
-        // Logger.recordOutput("Distance from Hub", distFromHub);
+        double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
+        Logger.recordOutput("Distance from Hub", distFromHub);
         // Logger.recordOutput("Distance from Close Corner", AimCalculations.getCornerHoardingTarget(true).getDistance(getFieldToTurret()));
         // Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 
