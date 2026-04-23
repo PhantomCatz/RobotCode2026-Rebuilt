@@ -185,6 +185,10 @@ public class ShooterRegression {
             add = SHOOTER_EXTRA.get();
         }
 
+        if(turretAngle > 90.0 && turretAngle < 180.0){
+            add -= 0.5;
+        }
+
         return Setpoint.withVelocitySetpointVoltage(rps+ add);
     }
 

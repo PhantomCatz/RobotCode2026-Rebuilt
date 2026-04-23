@@ -112,7 +112,7 @@ public class ModuleIORealFoc implements ModuleIO {
     antihoardCon.SupplyCurrentLowerTime = 0.0;
     antihoardCon.StatorCurrentLimit = 80.0;
     antihoardCon.StatorCurrentLimitEnable = true;
-    antihoardCon.SupplyCurrentLimit = 5.0;
+    antihoardCon.SupplyCurrentLimit = 2.0;
     antihoardCon.SupplyCurrentLimitEnable = true;
 
     defenseCon.SupplyCurrentLowerTime = 0.0;

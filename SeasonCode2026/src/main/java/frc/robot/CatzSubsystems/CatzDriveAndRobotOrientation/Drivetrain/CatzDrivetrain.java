@@ -8,7 +8,6 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -29,6 +28,8 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
+import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
@@ -41,7 +42,6 @@ import java.util.Arrays;
 // import org.littletonrobotics.junction.AutoLogOutput;
 // import org.littletonrobotics.junction.Logger;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -171,14 +171,6 @@ public class CatzDrivetrain extends SubsystemBase {
     // ----------------------------------------------------------------------------------------------------
     // Swerve drive Odometry and Velocity updates
     // ----------------------------------------------------------------------------------------------------
-    double currentTime = Timer.getFPGATimestamp();
-    // find the last element with time before or equal the current time
-    while (!futureSwerveSetpoints.isEmpty() && futureSwerveSetpoints.peek().getFirst() <= currentTime) {
-      currentSetpoint = futureSwerveSetpoints.poll().getSecond();
-    }
-    // now the first element in the queue is the first one with time after the current time
-    // drive with the latest speed
-    swerveSetpointDrive(currentSetpoint);
 
     SwerveModulePosition[] wheelPositions = getModulePositions();
     // Grab latest gyro measurments
@@ -194,32 +186,7 @@ public class CatzDrivetrain extends SubsystemBase {
         Timer.getFPGATimestamp());
     CatzRobotTracker.Instance.addOdometryObservation(observation);
 
-    // calculate robot state 0.1 seconds in the future
-    Iterator<Pair<Double, SwerveSetpoint>> it = futureSwerveSetpoints.iterator();
-    Pair<Double, SwerveSetpoint> lastElement = new Pair<Double,SwerveSetpoint>(currentTime, currentSetpoint);
-    Pair<Double, SwerveSetpoint> curElement;
-    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
-    while (it.hasNext() && lastElement.getFirst() < currentTime+getDelay()) {
-      curElement = it.next();
-      double driveTime;
-      ChassisSpeeds speeds = lastElement.getSecond().chassisSpeeds();
-      // this movement starts in 0.1 second window, so completely finish previous movement
-      if (curElement.getFirst() < currentTime+getDelay()) {
-        driveTime = curElement.getFirst() - lastElement.getFirst();
-      }
-      // this movement starts after 0.1 second window ends, so apply previous movement until end of 0.1 second window
-      else {
-        driveTime = currentTime+getDelay()-lastElement.getFirst();
-      }
-      curPose = curPose.plus(new Transform2d(new Translation2d(speeds.vxMetersPerSecond*driveTime,
-                                                                speeds.vyMetersPerSecond*driveTime),
-                                            new Rotation2d(speeds.omegaRadiansPerSecond*driveTime)));
-      lastElement = curElement;
-      // Logger.recordOutput("Future speed", Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
-    }
-    CatzRobotTracker.Instance.setFuturePose(curPose);
-
-    // Logger.recordOutput("Dist from hoard", curPose.getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
+    Logger.recordOutput("Dist from hoard", CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
 
     boolean isAntihoarding = isAntihoarding();
     if (isAntihoarding && !wasAntihoarding) { // started antihoarding
@@ -518,19 +485,6 @@ public class CatzDrivetrain extends SubsystemBase {
       Instance = new CatzDrivetrain();
     }
     return Instance;
-  }
-
-  public void pushToQueue(double time, SwerveSetpoint setpoint) {
-    futureSwerveSetpoints.add(new Pair<Double,SwerveSetpoint>(time, setpoint));
-  }
-
-  public double getDelay() {
-    if (CatzSuperstructure.Instance.getIsScoring()) {
-      return DriveConstants.DRIVE_DELAY_TIME;
-    }
-    else {
-      return 0.0;
-    }
   }
 
 }

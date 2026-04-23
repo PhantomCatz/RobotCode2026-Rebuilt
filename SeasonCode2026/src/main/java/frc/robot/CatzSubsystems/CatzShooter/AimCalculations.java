@@ -76,6 +76,19 @@ public class AimCalculations {
         if(distFromHub > 4.0){
             targetRads += Math.toRadians(TURRET_EXTRA.get());
         }
+
+        double turretAngle = Math.toDegrees(targetRads);
+        if(turretAngle > 90.0 && turretAngle < 180.0){
+            targetRads -= Math.toRadians(3.0);
+        }
+
+        if(turretAngle > 180.0 && turretAngle < 270.0){
+            targetRads -= Math.toRadians(5.0);
+        }
+
+        if(turretAngle > 270.0 && turretAngle < 360.0){
+            targetRads -= Math.toRadians(10.0);
+        }
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 

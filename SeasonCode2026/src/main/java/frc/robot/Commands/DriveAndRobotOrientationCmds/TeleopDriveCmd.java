@@ -4,7 +4,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -134,12 +133,14 @@ public class TeleopDriveCmd extends Command {
       );
 
       double maxScoringVel = limits.maxDriveVelocity();
+      double maxTurnVel = limits.maxSteeringVelocity();
 
       if (currentVel > maxScoringVel) {
         double scale = maxScoringVel / currentVel;
 
         currentSetpoint.chassisSpeeds().vxMetersPerSecond *= scale;
         currentSetpoint.chassisSpeeds().vyMetersPerSecond *= scale;
+        currentSetpoint.chassisSpeeds().omegaRadiansPerSecond *= scale;
 
         var states = currentSetpoint.moduleStates();
         for (int i = 0; i < states.length; i++) {
@@ -158,7 +159,7 @@ public class TeleopDriveCmd extends Command {
       0.02);
 
     // Send new chassisspeeds object to the drivetrain queue to use later
-    m_drivetrain.pushToQueue(Timer.getFPGATimestamp()+CatzDrivetrain.getInstance().getDelay(), currentSetpoint);
+    CatzDrivetrain.getInstance().swerveSetpointDrive(currentSetpoint);
     // Logger.recordOutput("cur controller input", Math.hypot(currentSetpoint.chassisSpeeds().vxMetersPerSecond, currentSetpoint.chassisSpeeds().vyMetersPerSecond));
     // debugLogsDrive();
   } // end of execute()
