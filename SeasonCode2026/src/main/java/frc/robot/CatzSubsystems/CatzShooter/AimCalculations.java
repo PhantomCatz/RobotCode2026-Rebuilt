@@ -87,7 +87,7 @@ public class AimCalculations {
         }
 
         if(turretAngle > 270.0 && turretAngle < 360.0){
-            targetRads -= Math.toRadians(10.0);
+            targetRads -= Math.toRadians(16.0);
         }
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
