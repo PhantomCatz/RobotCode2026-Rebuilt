@@ -40,7 +40,7 @@ public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0);
+        case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 30.0, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -75,7 +75,7 @@ public class IntakeDeployConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 60.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

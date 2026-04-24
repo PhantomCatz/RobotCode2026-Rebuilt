@@ -24,7 +24,7 @@
     {"x":{"exp":"7.688638687133789 m", "val":7.688638687133789}, "y":{"exp":"4.074336528778076 m", "val":4.074336528778076}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":19, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.639485359191895 m", "val":8.639485359191895}, "y":{"exp":"4.074336528778076 m", "val":4.074336528778076}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":17, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.87313175201416 m", "val":7.87313175201416}, "y":{"exp":"4.045953273773193 m", "val":4.045953273773193}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":15, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"8.440801620483398 m", "val":8.440801620483398}, "y":{"exp":"4.060144901275635 m", "val":4.060144901275635}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":{"exp":"8.440801620483398 m", "val":8.440801620483398}, "y":{"exp":"4.060144901275635 m", "val":4.060144901275635}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -196,8 +196,8 @@
   "splits":[0,39,78,97]
  },
  "events":[
-   {"name":"RampUp + DeployIntake2", "from":{"target":1, "targetTimestamp":1.05505, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Wait for 3 seconds + Hoard3", "from":{"target":2, "targetTimestamp":2.1125, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Hoard4", "from":{"target":3, "targetTimestamp":3.02641, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Delay1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"RampUp", "from":{"target":1, "targetTimestamp":1.05505, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Wait3s+Hoard", "from":{"target":2, "targetTimestamp":2.1125, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Hoard", "from":{"target":3, "targetTimestamp":3.02641, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Delay1+DeployIntake", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
