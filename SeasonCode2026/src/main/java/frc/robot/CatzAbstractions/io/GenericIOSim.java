@@ -139,7 +139,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
     }
 
     @Override
-    public void setVelocitySetpoint(double mechanismVelocity) {
+    public void setVelocityFOCSetpoint(double mechanismVelocity) {
         currentControlMode = ControlMode.VELOCITY;
         this.targetSetpoint = mechanismVelocity;
     }
