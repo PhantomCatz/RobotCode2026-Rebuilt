@@ -13,14 +13,13 @@ public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
         AutoTrajectory traj1 = getTrajectory("NZ_Hoard_Depot_Bump",0);
         AutoTrajectory traj2 = getTrajectory("NZ_Hoard_Depot_Bump",1);
         AutoTrajectory traj3 = getTrajectory("NZ_Hoard_Depot_Bump",2);
-        AutoTrajectory traj4 = getTrajectory("NZ_Hoard_Depot_Bump",3);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(1),
+                    Commands.waitSeconds(2),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON()
                 ),
@@ -28,7 +27,7 @@ public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
             ),
             Commands.deadline(
                 followTrajectory(traj2),
-                CatzSuperstructure.Instance.cmdHubStandby()
+                CatzSuperstructure.Instance.cmdHoardStandby()
             ),
             shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
 
@@ -39,7 +38,7 @@ public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
-            CatzSuperstructure.Instance.intakeOFF(),
+            CatzSuperstructure.Instance.cmdHoardShoot(),
             Commands.print("done")
         );
     }
