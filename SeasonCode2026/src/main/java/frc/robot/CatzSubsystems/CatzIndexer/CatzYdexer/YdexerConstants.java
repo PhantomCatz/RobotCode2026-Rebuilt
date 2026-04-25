@@ -22,7 +22,7 @@ public class YdexerConstants {
 	public static final Setpoint REVERSE = Setpoint.withVoltageSetpoint(ON_VOLTS.times(-1.0));
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
-	public static final Setpoint ON_VEL = Setpoint.withVelocitySetpointVoltage(24.0);
+	// public static final Setpoint ON_VEL = Setpoint.withVelocitySetpointVoltage(24.0);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);

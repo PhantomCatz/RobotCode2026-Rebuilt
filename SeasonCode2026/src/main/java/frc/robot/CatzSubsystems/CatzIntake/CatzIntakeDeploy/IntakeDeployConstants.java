@@ -45,6 +45,7 @@ public class IntakeDeployConstants {
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
+
     public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
     public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
 
