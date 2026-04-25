@@ -39,6 +39,17 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Outpost_2_Cycle_Bump", () -> new Outpost_2_Cycle_Bump().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Bump_Mg", () -> new Outpost_2_Cycle_Bump_Mg().getRoutine());
 
+        autoSelector.addRoutine("NZ_Hoard_Depot_Bump", () -> new NZ_Hoard_Depot_Bump().getRoutine());
+        autoSelector.addRoutine("NZ_Hoard_Depot_Trench", () -> new NZ_Hoard_Depot_Trench().getRoutine());
+        autoSelector.addRoutine("NZ_Hoard_Outpost_Bump", () -> new NZ_Hoard_Outpost_Bump().getRoutine());
+        autoSelector.addRoutine("NZ_Hoard_Outpost_Trench", () -> new NZ_Hoard_Outpost_Trench().getRoutine());
+
+        autoSelector.addRoutine("Swipe_Depot", () -> new Swipe_Depot().getRoutine());
+        autoSelector.addRoutine("Swipe_Depot_Outpost", () -> new Swipe_Depot_Outpost().getRoutine());
+        autoSelector.addRoutine("Swipe_Outpost", () -> new Swipe_Outpost().getRoutine());
+        autoSelector.addRoutine("Swipe_Outpost_Depot", () -> new Swipe_Outpost_Depot().getRoutine());
+
+
         // autoSelector.addRoutine("Steal_Depot_Bump", () -> new Steal_Depot_Bump().getRoutine());
         // autoSelector.addRoutine("Steal_Depot_Trench", () -> new Steal_Depot_Trench().getRoutine());
         // autoSelector.addRoutine("Steal_Outpost_Bump", () -> new Steal_Outpost_Bump().getRoutine());

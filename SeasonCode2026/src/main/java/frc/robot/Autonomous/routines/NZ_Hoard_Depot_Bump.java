@@ -27,22 +27,13 @@ public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
             ),
             CatzSuperstructure.Instance.intakeON(),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj2),
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj2),
+                    Commands.waitSeconds(2),
+                    followTrajectoryWithAccuracy(traj3)
+                ),
                 CatzSuperstructure.Instance.cmdHoardStandby()
             ),
-            Commands.deadline(
-                followTrajectory(traj2),
-                CatzSuperstructure.Instance.cmdHoardStandby()
-            ),
-            Commands.deadline(
-                followTrajectoryWithAccuracy(traj3),
-                CatzSuperstructure.Instance.cmdHoardStandby()
-            ),
-            Commands.deadline(
-                followTrajectoryWithAccuracy(traj4),
-                CatzSuperstructure.Instance.cmdHoardShoot()
-            ),
-            CatzSuperstructure.Instance.cmdHoardShoot(),
             Commands.print("done")
         );
     }

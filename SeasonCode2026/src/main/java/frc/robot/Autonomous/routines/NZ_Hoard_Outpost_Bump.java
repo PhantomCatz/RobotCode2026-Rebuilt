@@ -13,34 +13,26 @@ public class NZ_Hoard_Outpost_Bump extends AutoRoutineBase {
         AutoTrajectory traj1 = getTrajectory("NZ_Hoard_Outpost_Bump",0);
         AutoTrajectory traj2 = getTrajectory("NZ_Hoard_Outpost_Bump",1);
         AutoTrajectory traj3 = getTrajectory("NZ_Hoard_Outpost_Bump",2);
-        AutoTrajectory traj4 = getTrajectory("NZ_Hoard_Outpost_Bump",3);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(1),
-                    followTrajectoryWithAccuracy(traj1)
+                    Commands.waitSeconds(2),
+                    followTrajectoryWithAccuracy(traj1),
+                    CatzSuperstructure.Instance.intakeON()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             CatzSuperstructure.Instance.intakeON(),
             Commands.deadline(
-                followTrajectoryWithAccuracy(traj2),
+                Commands.sequence(
+                    followTrajectoryWithAccuracy(traj2),
+                    Commands.waitSeconds(2),
+                    followTrajectoryWithAccuracy(traj3)
+                ),
                 CatzSuperstructure.Instance.cmdHoardStandby()
-            ),
-            Commands.deadline(
-                Commands.waitSeconds(3),
-                CatzSuperstructure.Instance.cmdHoardShoot()
-            ),
-            Commands.deadline(
-                followTrajectoryWithAccuracy(traj3),
-                CatzSuperstructure.Instance.cmdHoardStandby()
-            ),
-            Commands.deadline(
-                followTrajectoryWithAccuracy(traj4),
-                CatzSuperstructure.Instance.cmdHoardShoot()
             ),
             Commands.print("done")
         );
