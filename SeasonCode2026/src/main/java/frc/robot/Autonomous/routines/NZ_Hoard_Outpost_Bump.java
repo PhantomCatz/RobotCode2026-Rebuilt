@@ -6,22 +6,22 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
-    public NZ_Hoard_Depot_Bump(){
-        super("NZ_Hoard_Depot_Bump");
+public class NZ_Hoard_Outpost_Bump extends AutoRoutineBase {
+    public NZ_Hoard_Outpost_Bump(){
+        super("NZ_Hoard_Outpost_Bump");
 
-        AutoTrajectory traj1 = getTrajectory("NZ_Hoard_Depot_Bump",0);
-        AutoTrajectory traj2 = getTrajectory("NZ_Hoard_Depot_Bump",1);
-        AutoTrajectory traj3 = getTrajectory("NZ_Hoard_Depot_Bump",2);
+        AutoTrajectory traj1 = getTrajectory("NZ_Hoard_Outpost_Bump",0);
+        AutoTrajectory traj2 = getTrajectory("NZ_Hoard_Outpost_Bump",1);
+        AutoTrajectory traj3 = getTrajectory("NZ_Hoard_Outpost_Bump",2);
+        AutoTrajectory traj4 = getTrajectory("NZ_Hoard_Outpost_Bump",3);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(2),
-                    followTrajectoryWithAccuracy(traj1),
-                    CatzSuperstructure.Instance.intakeON()
+                    Commands.waitSeconds(1),
+                    followTrajectoryWithAccuracy(traj1)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
@@ -31,8 +31,8 @@ public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHoardStandby()
             ),
             Commands.deadline(
-                followTrajectory(traj2),
-                CatzSuperstructure.Instance.cmdHoardStandby()
+                Commands.waitSeconds(3),
+                CatzSuperstructure.Instance.cmdHoardShoot()
             ),
             Commands.deadline(
                 followTrajectoryWithAccuracy(traj3),
@@ -42,7 +42,6 @@ public class NZ_Hoard_Depot_Bump extends AutoRoutineBase {
                 followTrajectoryWithAccuracy(traj4),
                 CatzSuperstructure.Instance.cmdHoardShoot()
             ),
-            CatzSuperstructure.Instance.cmdHoardShoot(),
             Commands.print("done")
         );
     }

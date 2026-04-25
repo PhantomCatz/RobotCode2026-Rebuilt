@@ -16,6 +16,7 @@ import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -130,14 +131,16 @@ public class RobotContainer {
     xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
+    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 20)));
     xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    xboxDrv.y().onFalse(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
+    xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 30)))
+               .alongWith(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
       if(CatzSuperstructure.Instance.isIntakeOn){
         return CatzSuperstructure.Instance.intakeON();
       }else{
         return CatzSuperstructure.Instance.intakeOFF();
       }
-    }, Set.of(CatzIntakeRoller.Instance))));
+    }, Set.of(CatzIntakeRoller.Instance)))));
 
     xboxDrv.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
