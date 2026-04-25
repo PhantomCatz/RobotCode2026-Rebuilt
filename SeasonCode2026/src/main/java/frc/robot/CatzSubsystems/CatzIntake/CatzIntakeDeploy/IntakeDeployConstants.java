@@ -40,7 +40,7 @@ public class IntakeDeployConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 30.0, 0.0, 0.0);
+        case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 3.5, 0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
@@ -65,7 +65,7 @@ public class IntakeDeployConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 2.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 0.85;
         FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 250.0;
 
