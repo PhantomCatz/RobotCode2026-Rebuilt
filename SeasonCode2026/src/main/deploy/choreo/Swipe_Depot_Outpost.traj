@@ -7,8 +7,8 @@
     {"x":6.964859485626221, "y":7.4945478439331055, "heading":4.71238898038469, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.497568130493164, "y":6.898494243621826, "heading":5.497787143782138, "intervals":44, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":8.497568130493164, "y":1.6049724817276, "heading":5.497787143782138, "intervals":37, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":6.8513264656066895, "y":0.6683172583580017, "heading":0.0, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":3.856867551803589, "y":0.6257420182228088, "heading":0.0, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":6.8513264656066895, "y":0.6683172583580017, "heading":0.0, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":3.856867551803589, "y":0.6257420182228088, "heading":0.0, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -27,8 +27,8 @@
     {"x":{"exp":"6.964859485626221 m", "val":6.964859485626221}, "y":{"exp":"7.4945478439331055 m", "val":7.4945478439331055}, "heading":{"exp":"270 deg", "val":4.71238898038469}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.497568130493164 m", "val":8.497568130493164}, "y":{"exp":"6.898494243621826 m", "val":6.898494243621826}, "heading":{"exp":"315 deg", "val":5.497787143782138}, "intervals":44, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"8.497568130493164 m", "val":8.497568130493164}, "y":{"exp":"1.6049724817276 m", "val":1.6049724817276}, "heading":{"exp":"315 deg", "val":5.497787143782138}, "intervals":37, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"6.8513264656066895 m", "val":6.8513264656066895}, "y":{"exp":"0.6683172583580017 m", "val":0.6683172583580017}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":33, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"3.856867551803589 m", "val":3.856867551803589}, "y":{"exp":"0.6257420182228088 m", "val":0.6257420182228088}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":{"exp":"6.8513264656066895 m", "val":6.8513264656066895}, "y":{"exp":"0.6683172583580017 m", "val":0.6683172583580017}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":33, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"3.856867551803589 m", "val":3.856867551803589}, "y":{"exp":"0.6257420182228088 m", "val":0.6257420182228088}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":true, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -251,7 +251,7 @@
     {"t":5.41185, "x":3.86857, "y":0.62592, "heading":0.00016, "vx":-0.32715, "vy":-0.00485, "omega":-0.00302, "ax":4.57285, "ay":0.06725, "alpha":0.04011, "fx":[77.77934,77.78569,77.78626,77.77997], "fy":[1.36262,0.93136,0.9263,1.35519]},
     {"t":5.44762, "x":3.85979, "y":0.62579, "heading":0.00006, "vx":-0.16358, "vy":-0.00244, "omega":-0.00158, "ax":4.57303, "ay":0.06834, "alpha":0.04426, "fx":[77.782,77.78912,77.78973,77.78269], "fy":[1.40395,0.92792,0.92231,1.39545]},
     {"t":5.48339, "x":3.85687, "y":0.62574, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
-  "splits":[0,65]
+  "splits":[0,65,146]
  },
  "events":[
    {"name":"Delay2Sec+Intake3", "from":{"target":2, "targetTimestamp":1.90713, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
