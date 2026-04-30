@@ -30,10 +30,10 @@ public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
+                    // Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectory(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj2),
+                    followTrajectoryWithAccuracy(traj2),
                     CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
@@ -48,7 +48,7 @@ public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
                 Commands.sequence(
                     followTrajectory(traj4),
                     CatzSuperstructure.Instance.intakeON(),
-                    followTrajectory(traj5)
+                    followTrajectoryWithAccuracy(traj5)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
@@ -57,7 +57,7 @@ public class Decon_Depot_2_Cycle_Bump_Fast extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),
-            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             CatzSuperstructure.Instance.autoClimbCommand(),
             Commands.print("done")
         );

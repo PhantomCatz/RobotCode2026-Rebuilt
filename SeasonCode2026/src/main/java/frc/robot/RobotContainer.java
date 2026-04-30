@@ -161,8 +161,8 @@ public class RobotContainer {
 
     // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit());
-    xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
+    // xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit());
+    // xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
@@ -174,8 +174,8 @@ public class RobotContainer {
 
     // shooting a y x start
 
-    xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
-    xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    // xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
+    // xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
 
     xboxAux.rightTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.trackOpposingHub());
     xboxAux.leftTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleDefenseMode());
@@ -184,14 +184,14 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
 
 
-    xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
+    // xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
     xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
     xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
 
     // xboxAux.back().multiPress(2, 0.4).onTrue(Commands.runOnce(()-> CatzSuperstructure.Instance.canResetPose = ! CatzSuperstructure.Instance.canResetPose));
-    xboxAux.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());
+    // xboxAux.povUpRight().onTrue(CatzSuperstructure.Instance.resetClimbPose());
     xboxAux.povDownLeft().onTrue(CatzSuperstructure.Instance.resetHoodPose());
     xboxAux.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
     xboxAux.povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());

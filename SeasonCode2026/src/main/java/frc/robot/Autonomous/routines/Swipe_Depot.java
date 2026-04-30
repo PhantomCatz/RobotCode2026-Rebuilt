@@ -19,9 +19,10 @@ public class Swipe_Depot extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(0.5),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(2),
+                    Commands.waitSeconds(0.75),
                     followTrajectoryWithAccuracy(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()

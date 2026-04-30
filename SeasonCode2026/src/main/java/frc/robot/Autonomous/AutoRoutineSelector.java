@@ -28,7 +28,7 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Depot_1_Cycle", () -> new Depot_1_Cycle().getRoutine());
         // autoSelector.addRoutine("Depot_2_Cycle_Bump_Full_Hopper", () -> new Depot_2_Cycle_Bump_Full_Hopper().getRoutine());
         autoSelector.addRoutine("Depot_2_Cycle_Bump", () -> new Depot_2_Cycle_Bump().getRoutine());
-        autoSelector.addRoutine("Depot_2_Cycle_Bump_Mg", () -> new Depot_2_Cycle_Bump_Mg().getRoutine());
+        // autoSelector.addRoutine("Depot_2_Cycle_Bump_Mg", () -> new Depot_2_Cycle_Bump_Mg().getRoutine());
         // autoSelector.addRoutine("Depot_2_Cycle", () -> new Depot_2_Cycle().getRoutine());
         // autoSelector.addRoutine("Depot_3_Cycle", () -> new Depot_3_Cycle().getRoutine());
         // autoSelector.addRoutine("Forefit_Depot", () -> new Forefit_Depot().getRoutine());
@@ -37,7 +37,7 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Outpost_1_Cycle_Outpost", () -> new Outpost_1_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Outpost_1_Cycle", () -> new Outpost_1_Cycle().getRoutine());
         autoSelector.addRoutine("Outpost_2_Cycle_Bump", () -> new Outpost_2_Cycle_Bump().getRoutine());
-        autoSelector.addRoutine("Outpost_2_Cycle_Bump_Mg", () -> new Outpost_2_Cycle_Bump_Mg().getRoutine());
+        // autoSelector.addRoutine("Outpost_2_Cycle_Bump_Mg", () -> new Outpost_2_Cycle_Bump_Mg().getRoutine());
 
         autoSelector.addRoutine("NZ_Hoard_Depot_Bump", () -> new NZ_Hoard_Depot_Bump().getRoutine());
         autoSelector.addRoutine("NZ_Hoard_Depot_Trench", () -> new NZ_Hoard_Depot_Trench().getRoutine());
@@ -45,9 +45,9 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("NZ_Hoard_Outpost_Trench", () -> new NZ_Hoard_Outpost_Trench().getRoutine());
 
         autoSelector.addRoutine("Swipe_Depot", () -> new Swipe_Depot().getRoutine());
-        autoSelector.addRoutine("Swipe_Depot_Outpost", () -> new Swipe_Depot_Outpost().getRoutine());
+        // autoSelector.addRoutine("Swipe_Depot_Outpost", () -> new Swipe_Depot_Outpost().getRoutine());
         autoSelector.addRoutine("Swipe_Outpost", () -> new Swipe_Outpost().getRoutine());
-        autoSelector.addRoutine("Swipe_Outpost_Depot", () -> new Swipe_Outpost_Depot().getRoutine());
+        // autoSelector.addRoutine("Swipe_Outpost_Depot", () -> new Swipe_Outpost_Depot().getRoutine());
 
 
         // autoSelector.addRoutine("Steal_Depot_Bump", () -> new Steal_Depot_Bump().getRoutine());

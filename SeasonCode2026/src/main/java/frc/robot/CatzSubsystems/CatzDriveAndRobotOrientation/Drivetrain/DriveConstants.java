@@ -159,7 +159,7 @@ public class DriveConstants {
             MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.4145 + 0.5, false); //this one is changing?  0.811035 shifted by 7 degrees?
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.401855, false);
             MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.2155+0.5, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.3394, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.1235, false);
         break;
 
         case SN_TEST:
