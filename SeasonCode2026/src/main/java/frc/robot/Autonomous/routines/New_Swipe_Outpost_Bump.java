@@ -20,10 +20,9 @@ public class New_Swipe_Outpost_Bump extends AutoRoutineBase {
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(1),
+                    Commands.waitSeconds(0.25),
                     followTrajectoryWithAccuracy(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
