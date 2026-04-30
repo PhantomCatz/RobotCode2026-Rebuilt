@@ -131,9 +131,9 @@ public class RobotContainer {
     xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
-    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 20)));
+    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)));
     xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 30)))
+    xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 2)))
                .alongWith(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
       if(CatzSuperstructure.Instance.isIntakeOn){
         return CatzSuperstructure.Instance.intakeON();
@@ -178,7 +178,9 @@ public class RobotContainer {
     // xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
 
     xboxAux.rightTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.trackOpposingHub());
-    xboxAux.leftTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleDefenseMode());
+    // xboxAux.leftTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleDefenseMode());
+    xboxAux.leftTrigger().onTrue(CatzSuperstructure.Instance.toggleDefenseMode());
+    xboxAux.leftTrigger().onFalse(CatzSuperstructure.Instance.toggleDefenseMode());
     // -------------------------------------------------------------------------
     // MANUAL OVERRIDE
     // -------------------------------------------------------------------------
