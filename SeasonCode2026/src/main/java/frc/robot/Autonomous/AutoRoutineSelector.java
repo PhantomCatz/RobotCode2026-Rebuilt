@@ -44,6 +44,9 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("NZ_Hoard_Outpost_Bump", () -> new NZ_Hoard_Outpost_Bump().getRoutine());
         autoSelector.addRoutine("NZ_Hoard_Outpost_Trench", () -> new NZ_Hoard_Outpost_Trench().getRoutine());
 
+        autoSelector.addRoutine("New_Swipe_Outpost_Bump", () -> new New_Swipe_Outpost_Bump().getRoutine());
+        autoSelector.addRoutine("New_Swipe_Outpost_Trench", () -> new New_Swipe_Outpost_Trench().getRoutine());
+
         autoSelector.addRoutine("Swipe_Depot", () -> new Swipe_Depot().getRoutine());
         // autoSelector.addRoutine("Swipe_Depot_Outpost", () -> new Swipe_Depot_Outpost().getRoutine());
         autoSelector.addRoutine("Swipe_Outpost", () -> new Swipe_Outpost().getRoutine());
