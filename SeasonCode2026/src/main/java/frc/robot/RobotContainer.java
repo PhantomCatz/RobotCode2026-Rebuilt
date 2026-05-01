@@ -18,14 +18,12 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.DoublePressTracker;
-import frc.robot.Utilities.Setpoint;
 
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
@@ -161,8 +159,8 @@ public class RobotContainer {
 
     // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    // xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit());
-    // xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
+    xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
+    xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
@@ -174,8 +172,8 @@ public class RobotContainer {
 
     // shooting a y x start
 
-    // xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
-    // xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
+    xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
 
     xboxAux.rightTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.trackOpposingHub());
     // xboxAux.leftTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleDefenseMode());
@@ -186,7 +184,7 @@ public class RobotContainer {
     // -------------------------------------------------------------------------
 
 
-    // xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
+    xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
     xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
     xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
@@ -197,7 +195,7 @@ public class RobotContainer {
     xboxAux.povDownLeft().onTrue(CatzSuperstructure.Instance.resetHoodPose());
     xboxAux.povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
     xboxAux.povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
-    xboxAux.back().multiPress(2, 0.4).onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(12.0)));
+    // xboxAux.back().multiPress(2, 0.4).onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(12.0)));
   }
 
   public static void rumbleDrv(double val) {

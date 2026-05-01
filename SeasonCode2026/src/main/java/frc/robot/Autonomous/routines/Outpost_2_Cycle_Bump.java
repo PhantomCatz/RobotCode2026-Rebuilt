@@ -36,7 +36,8 @@ public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF(),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBallsNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2.8),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-1),
 
             Commands.deadline(
                 Commands.sequence(

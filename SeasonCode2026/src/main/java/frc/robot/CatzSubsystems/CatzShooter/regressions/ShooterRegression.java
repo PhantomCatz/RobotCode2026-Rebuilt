@@ -55,8 +55,6 @@ public class ShooterRegression {
 
     public static final LoggedTunableNumber TUNABLE_DIST = new LoggedTunableNumber("Regression/Dist", 0.0);
 
-    public static final LoggedTunableNumber SHOOTER_EXTRA = new LoggedTunableNumber("Regression/extra rps", 1.867);
-
     // -------------------------------------------------------------------------
     // Maps & Polynomials
     // -------------------------------------------------------------------------
@@ -182,7 +180,7 @@ public class ShooterRegression {
             CatzSuperstructure.Instance.getIsScoring() && !DriverStation.isAutonomous()
             && CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(FieldConstants.getHubLocation()) > 3.0
             ){
-            add = SHOOTER_EXTRA.get();
+            add = 1.867;
         }
 
         if(turretAngle > 90.0 && turretAngle < 180.0){

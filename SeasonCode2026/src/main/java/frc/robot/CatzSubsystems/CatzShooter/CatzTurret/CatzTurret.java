@@ -73,7 +73,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
                 Rotation2d.fromRotations(CatzTurret.Instance.getLatencyCompensatedPosition())
                         .plus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                         .plus(TurretConstants.TURRET_ROTATION_OFFSET));
-        // Logger.recordOutput("Shooter Location", turretPose);
+        Logger.recordOutput("Shooter Location", turretPose);
 
         double distFromHub = FieldConstants.getHubLocation().getDistance(turretPose.getTranslation());
         Logger.recordOutput("Distance from Hub", distFromHub);

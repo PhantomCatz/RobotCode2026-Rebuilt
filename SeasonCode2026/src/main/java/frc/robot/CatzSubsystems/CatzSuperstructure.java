@@ -457,16 +457,16 @@ public class CatzSuperstructure {
         }, CatzFlywheels.Instance);
     }
 
-    private boolean isTurretAtZero = true;
+    private boolean isTurretAt180 = true;
 
     public Command toggleTurret() {
         return Commands.runOnce(() -> {
-            if (isTurretAtZero) {
-                isTurretAtZero = false;
-                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(90)));
+            if (isTurretAt180) {
+                isTurretAt180 = false;
+                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(-180)));
             } else {
-                isTurretAtZero = true;
-                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(0)));
+                isTurretAt180 = true;
+                CatzTurret.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(Units.Degrees.of(180)));
             }
         }, CatzTurret.Instance);
     }

@@ -59,10 +59,19 @@ public class AutoRoutineBase {
 
     protected Command shootAllBallsNoJiggleNoStop(double time){
         return Commands.sequence(
-            Commands.print("shootAllBalls w/out jiggle command"),
+            Commands.print("shootAllBalls noStop w/out jiggle command"),
             CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time)
         )
         .andThen(CatzSuperstructure.Instance.intakeOFF());
+    }
+
+    protected Command shootAllBallsNoStop(double time){
+        return Commands.sequence(
+            Commands.print("shootAllBalls noStop command"),
+            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time)
+        ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
+        .andThen(CatzSuperstructure.Instance.intakeOFF()
+        .andThen(CatzSuperstructure.Instance.deployIntake()));
     }
 
     private double pathStartTime = 0.0;

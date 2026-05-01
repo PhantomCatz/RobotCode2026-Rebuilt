@@ -46,7 +46,7 @@ public class AutoRoutineSelector {
 
         // autoSelector.addRoutine("New_Swipe_Outpost_Bump", () -> new New_Swipe_Outpost_Bump().getRoutine());
         // autoSelector.addRoutine("New_Swipe_Outpost_Trench", () -> new New_Swipe_Outpost_Trench().getRoutine());
-        
+
         autoSelector.addRoutine("Swipe_Depot_Wait", () -> new Swipe_Depot_Wait().getRoutine());
         autoSelector.addRoutine("Swipe_Depot_Bump", () -> new Swipe_Depot_Bump().getRoutine());
         autoSelector.addRoutine("Swipe_Outpost_Bump", () -> new Swipe_Outpost_Bump().getRoutine());

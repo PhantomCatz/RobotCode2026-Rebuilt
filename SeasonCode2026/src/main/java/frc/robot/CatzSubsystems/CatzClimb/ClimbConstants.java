@@ -67,15 +67,15 @@ public class ClimbConstants {
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-		// FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = converter.toAngle(Units.Inches.of(7.5)).in(Units.Rotations);
-		// FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = converter.toAngle(Units.Inches.of(7.0)).in(Units.Rotations);
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		FXConfig.CurrentLimits.StatorCurrentLimit = 300.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
-		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 		FXConfig.Feedback.SensorToMechanismRatio = 27.0; //TODO dont use magic number
 
