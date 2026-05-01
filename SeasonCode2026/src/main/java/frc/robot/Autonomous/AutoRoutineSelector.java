@@ -15,7 +15,7 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Better_Outpost_2_Cycle_Outpost", () -> new Better_Outpost_2_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
 
-        autoSelector.addRoutine("Center_Outpost_Depot_Climb", () -> new Center_Outpost_Depot_Climb().getRoutine());
+        // autoSelector.addRoutine("Center_Outpost_Depot_Climb", () -> new Center_Outpost_Depot_Climb().getRoutine());
         autoSelector.addRoutine("Center_Outpost_Depot_Climb_Decon", () -> new Center_Outpost_Depot_Climb_Decon().getRoutine());
         // autoSelector.addRoutine("Center_Outpost_Depot_Neutral", () -> new Center_Outpost_Depot_Neutral().getRoutine());
 
@@ -39,16 +39,17 @@ public class AutoRoutineSelector {
         autoSelector.addRoutine("Outpost_2_Cycle_Bump", () -> new Outpost_2_Cycle_Bump().getRoutine());
         // autoSelector.addRoutine("Outpost_2_Cycle_Bump_Mg", () -> new Outpost_2_Cycle_Bump_Mg().getRoutine());
 
-        autoSelector.addRoutine("NZ_Hoard_Depot_Bump", () -> new NZ_Hoard_Depot_Bump().getRoutine());
-        autoSelector.addRoutine("NZ_Hoard_Depot_Trench", () -> new NZ_Hoard_Depot_Trench().getRoutine());
-        autoSelector.addRoutine("NZ_Hoard_Outpost_Bump", () -> new NZ_Hoard_Outpost_Bump().getRoutine());
-        autoSelector.addRoutine("NZ_Hoard_Outpost_Trench", () -> new NZ_Hoard_Outpost_Trench().getRoutine());
+        // autoSelector.addRoutine("NZ_Hoard_Depot_Bump", () -> new NZ_Hoard_Depot_Bump().getRoutine());
+        // autoSelector.addRoutine("NZ_Hoard_Depot_Trench", () -> new NZ_Hoard_Depot_Trench().getRoutine());
+        // autoSelector.addRoutine("NZ_Hoard_Outpost_Bump", () -> new NZ_Hoard_Outpost_Bump().getRoutine());
+        // autoSelector.addRoutine("NZ_Hoard_Outpost_Trench", () -> new NZ_Hoard_Outpost_Trench().getRoutine());
 
-        autoSelector.addRoutine("New_Swipe_Outpost_Bump", () -> new New_Swipe_Outpost_Bump().getRoutine());
-        autoSelector.addRoutine("New_Swipe_Outpost_Trench", () -> new New_Swipe_Outpost_Trench().getRoutine());
-
-        autoSelector.addRoutine("Swipe_Depot", () -> new Swipe_Depot().getRoutine());
-        // autoSelector.addRoutine("Swipe_Depot_Outpost", () -> new Swipe_Depot_Outpost().getRoutine());
+        // autoSelector.addRoutine("New_Swipe_Outpost_Bump", () -> new New_Swipe_Outpost_Bump().getRoutine());
+        // autoSelector.addRoutine("New_Swipe_Outpost_Trench", () -> new New_Swipe_Outpost_Trench().getRoutine());
+        
+        autoSelector.addRoutine("Swipe_Depot_Wait", () -> new Swipe_Depot_Wait().getRoutine());
+        autoSelector.addRoutine("Swipe_Depot_Bump", () -> new Swipe_Depot_Bump().getRoutine());
+        autoSelector.addRoutine("Swipe_Outpost_Bump", () -> new Swipe_Outpost_Bump().getRoutine());
         autoSelector.addRoutine("Swipe_Outpost", () -> new Swipe_Outpost().getRoutine());
         // autoSelector.addRoutine("Swipe_Outpost_Depot", () -> new Swipe_Outpost_Depot().getRoutine());
 

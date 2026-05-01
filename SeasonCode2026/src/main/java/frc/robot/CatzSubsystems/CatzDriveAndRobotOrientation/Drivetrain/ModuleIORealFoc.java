@@ -2,6 +2,8 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
@@ -63,6 +65,10 @@ public class ModuleIORealFoc implements ModuleIO {
 
   // Module Name/config
   private final String MODULE_NAME;
+  private final String MODULE_MODULE_NAME;
+  private final String MODULE_MODULE_NAME_DRIVE_TARGET;
+
+
   ModuleIDs m_config;
 
   public CANBus driveTalonCANBus = new CANBus("*");
@@ -76,6 +82,9 @@ public class ModuleIORealFoc implements ModuleIO {
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
+    MODULE_MODULE_NAME = "Module " + MODULE_NAME;
+    MODULE_MODULE_NAME_DRIVE_TARGET = MODULE_MODULE_NAME + "/drive target mps";
+
 
     encoder = new CANcoder(config.absoluteEncoderChannel(), driveTalonCANBus);
     m_config = config;
@@ -246,6 +255,10 @@ public class ModuleIORealFoc implements ModuleIO {
     }else{
       driveTalon.setControl(velocityVoltage.withVelocity(velocityMetersPerSec));
     }
+
+    Logger.recordOutput(MODULE_MODULE_NAME_DRIVE_TARGET, velocityMetersPerSec);
+
+
   }
 
   public void runSteerPercentOutput(double percentOutput) {

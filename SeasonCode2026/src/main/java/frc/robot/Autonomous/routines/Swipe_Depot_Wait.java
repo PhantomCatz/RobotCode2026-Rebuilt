@@ -6,23 +6,26 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Swipe_Depot_Outpost extends AutoRoutineBase {
-    public Swipe_Depot_Outpost(){
-        super("Swipe_Depot_Outpost");
+public class Swipe_Depot_Wait extends AutoRoutineBase {
+    public Swipe_Depot_Wait(){
+        super("Swipe_Depot_Wait");
 
-        AutoTrajectory traj1 = getTrajectory("Swipe_Depot_Outpost",0);
-        AutoTrajectory traj2 = getTrajectory("Swipe_Depot_Outpost",1);
-        AutoTrajectory traj3 = getTrajectory("Swipe_Depot_Outpost",2);
+        AutoTrajectory traj1 = getTrajectory("Swipe_Depot_Wait",0);
+        AutoTrajectory traj2 = getTrajectory("Swipe_Depot_Wait",1);
+        AutoTrajectory traj3 = getTrajectory("Swipe_Depot_Wait",2);
+        AutoTrajectory traj4 = getTrajectory("Swipe_Depot_Wait",3);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(2),
-                    followTrajectoryWithAccuracy(traj2)
+                    Commands.waitSeconds(3),
+                    followTrajectoryWithAccuracy(traj2),
+                    Commands.waitSeconds(1)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
@@ -34,7 +37,8 @@ public class Swipe_Depot_Outpost extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggleNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2),
-            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-1.8),
+            followTrajectoryWithAccuracy(traj4),
             Commands.print("done")
         );
     }

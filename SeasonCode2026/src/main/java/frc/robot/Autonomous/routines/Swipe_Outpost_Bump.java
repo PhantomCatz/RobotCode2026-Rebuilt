@@ -6,36 +6,38 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Swipe_Depot extends AutoRoutineBase {
-    public Swipe_Depot(){
-        super("Swipe_Depot");
+public class Swipe_Outpost_Bump extends AutoRoutineBase {
+    public Swipe_Outpost_Bump(){
+        super("Swipe_Outpost_Bump");
 
-        AutoTrajectory traj1 = getTrajectory("Swipe_Depot",0);
-        AutoTrajectory traj2 = getTrajectory("Swipe_Depot",1);
-        AutoTrajectory traj3 = getTrajectory("Swipe_Depot",2);
+        AutoTrajectory traj1 = getTrajectory("Swipe_Outpost_Bump",0);
+        AutoTrajectory traj2 = getTrajectory("Swipe_Outpost_Bump",1);
+        AutoTrajectory traj3 = getTrajectory("Swipe_Outpost_Bump",2);
+        AutoTrajectory traj4 = getTrajectory("Swipe_Outpost_Bump",3);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(0.5),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(0.75),
+                    Commands.waitSeconds(2),
                     followTrajectoryWithAccuracy(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
                 Commands.sequence(
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectoryWithAccuracy(traj3)
+                    followTrajectoryWithAccuracy(traj3),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggleNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2),
-            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-1.8),
+            followTrajectoryWithAccuracy(traj4),
             Commands.print("done")
         );
     }

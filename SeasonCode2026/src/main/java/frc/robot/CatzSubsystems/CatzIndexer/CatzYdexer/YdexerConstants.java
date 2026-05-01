@@ -11,16 +11,19 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class YdexerConstants {
 	private static final Voltage ON_VOLTS = Units.Volts.of(7.0);
+	private static final Voltage ANTIHOARD_VOLTS = Units.Volts.of(12.0);
 
 	public static final Setpoint ON = Setpoint.withVoltageSetpoint(ON_VOLTS);
 	public static final Setpoint REVERSE = Setpoint.withVoltageSetpoint(ON_VOLTS.times(-1.0));
 	public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
+	public static final Setpoint ANTIHOARD = Setpoint.withVoltageSetpoint(ANTIHOARD_VOLTS);
 
 	// public static final Setpoint ON_VEL = Setpoint.withVelocitySetpointVoltage(24.0);
 
@@ -85,5 +88,12 @@ public class YdexerConstants {
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
+	}
+
+	public static Setpoint getYdexerSetpoint() {
+		if (CatzDrivetrain.getInstance().isAntihoarding) {
+			return ANTIHOARD;
+		}
+		return ON;
 	}
 }

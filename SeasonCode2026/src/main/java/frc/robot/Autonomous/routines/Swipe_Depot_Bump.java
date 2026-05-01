@@ -6,19 +6,21 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Swipe_Outpost_Depot extends AutoRoutineBase {
-    public Swipe_Outpost_Depot(){
-        super("Swipe_Outpost_Depot");
+public class Swipe_Depot_Bump extends AutoRoutineBase {
+    public Swipe_Depot_Bump(){
+        super("Swipe_Depot_Bump");
 
-        AutoTrajectory traj1 = getTrajectory("Swipe_Outpost_Depot",0);
-        AutoTrajectory traj2 = getTrajectory("Swipe_Outpost_Depot",1);
-        AutoTrajectory traj3 = getTrajectory("Swipe_Outpost_Depot",2);
+        AutoTrajectory traj1 = getTrajectory("Swipe_Depot_Bump",0);
+        AutoTrajectory traj2 = getTrajectory("Swipe_Depot_Bump",1);
+        AutoTrajectory traj3 = getTrajectory("Swipe_Depot_Bump",2);
+        AutoTrajectory traj4 = getTrajectory("Swipe_Depot_Bump",3);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
                     Commands.waitSeconds(2),
@@ -28,13 +30,14 @@ public class Swipe_Outpost_Depot extends AutoRoutineBase {
             ),
             Commands.deadline(
                 Commands.sequence(
-                    CatzSuperstructure.Instance.intakeOFF(),
-                    followTrajectoryWithAccuracy(traj3)
+                    followTrajectoryWithAccuracy(traj3),
+                    CatzSuperstructure.Instance.intakeOFF()
                 ),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggleNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2),
-            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-1.8),
+            followTrajectoryWithAccuracy(traj4),
             Commands.print("done")
         );
     }

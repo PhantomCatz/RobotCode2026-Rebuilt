@@ -169,7 +169,7 @@ public class CatzSuperstructure {
 
             if (initialShootReady) {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.ON);
-                CatzYdexer.Instance.applySetpoint(YdexerConstants.ON);
+                CatzYdexer.Instance.applySetpoint(YdexerConstants.getYdexerSetpoint());
             } else {
                 CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
                 CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
@@ -179,6 +179,8 @@ public class CatzSuperstructure {
                 intakePower = 0.05;
             }
             RobotContainer.rumbleDrv(getRumbleStrength() + intakePower);
+
+            Logger.recordOutput("Is Scoring?", isScoring);
         } else {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
@@ -770,7 +772,8 @@ public class CatzSuperstructure {
             }
         }
 
-        return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation, isOpponentSide), false, 0.1, 20.0).deadlineFor(trackTower());
+        return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation, isOpponentSide), false, 0.1, 20.0).deadlineFor(trackTower())
+        .alongWith(deployIntake());
     }, Set.of(CatzDrivetrain.getInstance()));
   }
 

@@ -260,9 +260,9 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    if (climbedInAuton) {
-      CatzSuperstructure.Instance.autoClimbLowerCommand().schedule();
-    }
+    // if (climbedInAuton) {
+    //   CatzSuperstructure.Instance.autoClimbLowerCommand().schedule();
+    // }
   }
 
   @Override

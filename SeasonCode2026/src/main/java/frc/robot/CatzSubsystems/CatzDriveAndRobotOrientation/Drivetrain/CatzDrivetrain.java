@@ -84,6 +84,8 @@ public class CatzDrivetrain extends SubsystemBase {
 
   public double timeToReachTrench = 0.0;
 
+  public boolean isAntihoarding = false;
+
   private SwerveSetpoint currentSetpoint = new SwerveSetpoint(
       new ChassisSpeeds(),
       new SwerveModuleState[] {
@@ -188,7 +190,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
     Logger.recordOutput("Dist from hoard", CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
 
-    boolean isAntihoarding = isAntihoarding();
+    isAntihoarding = isAntihoarding();
     if (isAntihoarding && !wasAntihoarding) { // started antihoarding
       setAntihoardConfig();
     }
@@ -330,24 +332,28 @@ public class CatzDrivetrain extends SubsystemBase {
     for (CatzSwerveModule module : m_swerveModules) {
       module.setShootWhileMoveConfig();
     }
+    Logger.recordOutput("Drive Config", "shoot while move");
   }
 
   public void setIntakeMoveConfig(){
      for (CatzSwerveModule module : m_swerveModules) {
       module.setIntakeMoveConfig();
     }
+    Logger.recordOutput("Drive Config", "intake");
   }
 
   public void setAntihoardConfig() {
     for (CatzSwerveModule module : m_swerveModules) {
       module.setAntihoardConfig();
     }
+    Logger.recordOutput("Drive Config", "antihoard");
   }
 
   public void setDefenseConfig() {
     for (CatzSwerveModule module : m_swerveModules) {
       module.setDefenseConfig();
     }
+    Logger.recordOutput("Drive Config", "defense");
   }
 
   /** Set current limits for normal driving*/
@@ -355,6 +361,7 @@ public class CatzDrivetrain extends SubsystemBase {
     for (CatzSwerveModule module : m_swerveModules) {
       module.setNormalConfig();
     }
+    Logger.recordOutput("Drive Config", "normal");
   }
 
   /** command to cancel running auto trajectories */

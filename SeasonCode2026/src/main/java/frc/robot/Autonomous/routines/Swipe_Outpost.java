@@ -1,6 +1,7 @@
 package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
@@ -13,17 +14,19 @@ public class Swipe_Outpost extends AutoRoutineBase {
         AutoTrajectory traj1 = getTrajectory("Swipe_Outpost",0);
         AutoTrajectory traj2 = getTrajectory("Swipe_Outpost",1);
         AutoTrajectory traj3 = getTrajectory("Swipe_Outpost",2);
+        AutoTrajectory traj4 = getTrajectory("Swipe_Outpost",2);
 
         prepRoutine(
             traj1,
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    Commands.waitSeconds(0.5),
+                    Commands.waitSeconds(AutonConstants.DEPLOY_INTAKE_WAIT),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(0.5),
-                    followTrajectoryWithAccuracy(traj2)
+                    Commands.waitSeconds(2),
+                    followTrajectoryWithAccuracy(traj2),
+                    Commands.waitSeconds(1)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
@@ -35,7 +38,8 @@ public class Swipe_Outpost extends AutoRoutineBase {
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             shootAllBallsNoJiggleNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2),
-            shootAllBalls(AutonConstants.OUTPOST_SCORING_WAIT),
+            shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-1.8),
+            followTrajectoryWithAccuracy(traj4),
             Commands.print("done")
         );
     }
