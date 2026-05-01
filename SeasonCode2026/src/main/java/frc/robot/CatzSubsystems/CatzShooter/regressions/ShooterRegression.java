@@ -5,7 +5,6 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -177,15 +176,56 @@ public class ShooterRegression {
 
 
         if(
-            CatzSuperstructure.Instance.getIsScoring() && !DriverStation.isAutonomous()
-            && CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(FieldConstants.getHubLocation()) > 3.0
+            CatzSuperstructure.Instance.getIsScoring()
+            && CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(FieldConstants.getHubLocation()) > 4.0
             ){
-            add = 1.867;
+
+            // if (turretAngle < -140.0) { // -180 to -140
+
+            // }
+            // else if (turretAngle < -105.0) { // -140 to -105
+
+            // }
+            // else if (turretAngle < -75.0) { // -105 to -75
+
+            // }
+            // else if (turretAngle < -45.0) { // -75 to -45
+
+            // }
+            // else if (turretAngle < -15.0) { // -45 to -15
+
+            // }
+            // else if (turretAngle < 15.0) { // -15 to 15
+
+            // }
+            // else if (turretAngle < 45.0) { // 15 to 45
+
+            // }
+            // else if (turretAngle < 75.0) { // 45 to 75
+
+            // }
+            // else if (turretAngle < 105.0) { // 75 to 105
+
+            // }
+            // else if (turretAngle < 140.0) { // 105 to 140
+
+            // }
+            // else { // 140 to 180
+
+            // }
+            if(turretAngle > 90.0 && turretAngle < 180.0){
+                add -= 0.5;
+            }
+
+            if (turretAngle > -10.0 && turretAngle < 70.0) {
+                add += 2.3;
+            }
+
+            if(turretAngle > 30 && turretAngle < 90){
+                add += 1.67;
+            }
         }
 
-        if(turretAngle > 90.0 && turretAngle < 180.0){
-            add -= 0.5;
-        }
 
         return Setpoint.withVelocitySetpointVoltage(rps+ add);
     }

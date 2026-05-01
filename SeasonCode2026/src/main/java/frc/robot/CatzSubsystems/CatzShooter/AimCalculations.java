@@ -17,7 +17,6 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.EpsilonRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.Setpoint;
 
 
@@ -25,7 +24,6 @@ import frc.robot.Utilities.Setpoint;
 public class AimCalculations {
     private static final double phaseDelay = 0.0;
 
-    public static final LoggedTunableNumber TURRET_EXTRA = new LoggedTunableNumber("Regression/extra turret", 6.7);
 
     public enum HoardTargetType {
         RELATIVE_CLOSE,
@@ -73,25 +71,60 @@ public class AimCalculations {
         // if(Math.toDegrees(targetRads) > -15.0 && Math.toDegrees(targetRads) < 120.0 && CatzSuperstructure.Instance.getIsScoring()){
         //     targetRads += Math.toRadians(6.7);
         // }
-        if(distFromHub > 4.0){
-            targetRads += Math.toRadians(TURRET_EXTRA.get());
-        }
+        // if(distFromHub > 4.0){
+        //     targetRads += Math.toRadians(6.7);
+        // }
+
+        // double turretAngle = Math.toDegrees(targetRads);
+        // if(turretAngle > 90.0 && turretAngle < 180.0){
+        //     targetRads -= Math.toRadians(3.0);
+        // }
+
+        // if(turretAngle > 180.0 && turretAngle < 270.0){
+        //     targetRads -= Math.toRadians(5.0);
+        // }
+
+        // if(turretAngle > 270.0 && turretAngle < 360.0){
+        //     targetRads -= Math.toRadians(20.0);
+        // }
+
+        // if(Math.abs(turretAngle) < 10.0){
+        //     targetRads -= Math.toRadians(5.0);
+        // }
 
         double turretAngle = Math.toDegrees(targetRads);
-        if(turretAngle > 90.0 && turretAngle < 180.0){
-            targetRads -= Math.toRadians(3.0);
-        }
+        if (turretAngle < -140.0) { // -180 to -140
 
-        if(turretAngle > 180.0 && turretAngle < 270.0){
-            targetRads -= Math.toRadians(5.0);
         }
+        else if (turretAngle < -105.0) { // -140 to -105
 
-        if(turretAngle > 270.0 && turretAngle < 360.0){
-            targetRads -= Math.toRadians(20.0);
         }
+        else if (turretAngle < -75.0) { // -105 to -75
 
-        if(Math.abs(turretAngle) < 10.0){
-            targetRads -= Math.toRadians(5.0);
+        }
+        else if (turretAngle < -45.0) { // -75 to -45
+            targetRads += Math.toRadians(5.0);
+        }
+        else if (turretAngle < -15.0) { // -45 to -15
+
+        }
+        else if (turretAngle < 15.0) { // -15 to 15
+            targetRads += Math.toRadians(6.7);
+        }
+        else if (turretAngle < 45.0) { // 15 to 45
+            targetRads += Math.toRadians(10.0);
+        }
+        else if (turretAngle < 75.0) { // 45 to 75
+            targetRads += Math.toRadians(6.7);
+        }
+        else if (turretAngle < 105.0) { // 75 to 105
+            targetRads += Math.toRadians(5.6);
+        }
+        else if (turretAngle < 140.0) { // 105 to 140
+
+        }
+        else { // 140 to 180
+            targetRads += Math.toRadians(3.0);
         }
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }

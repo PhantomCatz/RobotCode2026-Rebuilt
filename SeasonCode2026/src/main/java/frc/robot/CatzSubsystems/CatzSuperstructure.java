@@ -603,22 +603,22 @@ public class CatzSuperstructure {
 
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
-            if (climbManual == false) {
-                disableManuals(CatzClimb.Instance);
-                climbManual = true;
+            disableManuals(CatzClimb.Instance);
+            climbManual = true;
 
-                CatzClimb.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
-                    if (Math.abs(input) < 0.84)
-                        return Setpoint.withVoltageSetpoint(0.0);
+            CatzClimb.Instance.followSetpointCommand(() -> {
+                double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                if (Math.abs(input) < 0.84)
+                    return Setpoint.withVoltageSetpoint(0.0);
 
-                    return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                return Setpoint.withVoltageSetpoint(input);
+            }).schedule();
+            // if (climbManual == false) {
 
-            } else {
-                CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
-                climbManual = false;
-            }
+            // } else {
+            //     // CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+            //     climbManual = false;
+            // }
         });
     }
 

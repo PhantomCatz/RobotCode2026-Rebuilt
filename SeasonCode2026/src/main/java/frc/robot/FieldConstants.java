@@ -281,7 +281,11 @@ public class FieldConstants {
     if (isRight) {
       return allianceFlipped;
     } else {
-      return new Translation2d(allianceFlipped.getX(), fieldWidth - allianceFlipped.getY());
+      double adjustment = -1.0;
+      if(AllianceFlipUtil.shouldFlip()){
+        adjustment *= -1.0;
+      }
+      return new Translation2d(allianceFlipped.getX(), fieldWidth - allianceFlipped.getY() + adjustment);
     }
   }
 
