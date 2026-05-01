@@ -22,7 +22,7 @@ public class Swipe_Depot_Bump extends AutoRoutineBase {
                     CatzSuperstructure.Instance.deployIntake(),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(2),
+                    Commands.waitSeconds(0.5),
                     followTrajectoryWithAccuracy(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()

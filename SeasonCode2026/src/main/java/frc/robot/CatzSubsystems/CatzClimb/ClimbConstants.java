@@ -25,7 +25,7 @@ public class ClimbConstants {
 	private static final Angle STOW_POSITION = converter.toAngle(Units.Inches.of(0.0));
 	public static final LoggedTunableNumber REACH_POSITION_LOG = new LoggedTunableNumber("CatzClimb/Reach Inch", 5.0);
 
-	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(REACH_POSITION.in(Units.Rotations));
+	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(0.6389);
 	public static final Setpoint STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(STOW_POSITION.in(Units.Rotations));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
