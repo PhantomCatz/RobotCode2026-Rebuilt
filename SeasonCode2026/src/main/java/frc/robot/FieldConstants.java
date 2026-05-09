@@ -1,5 +1,6 @@
 package frc.robot;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -268,8 +269,8 @@ public class FieldConstants {
     return AllianceFlipUtil.apply(TRENCH_SHOOTING_LOCATION);
   }
 
-  public static Translation2d getRightCornerHoardLocation() {
-    return AllianceFlipUtil.apply(RIGHT_CORNER_HOARD);
+  public static Translation2d getCornerHoardLocation() {
+    return RIGHT_CORNER_HOARD;
   }
 
   public static Translation2d getNetLocation() {
@@ -279,13 +280,14 @@ public class FieldConstants {
   public static Translation2d getCorner(boolean isRight) {
     Translation2d allianceFlipped = AllianceFlipUtil.apply(RIGHT_CORNER);
     if (isRight) {
-      return allianceFlipped;
-    } else {
-      double adjustment = -1.0;
+      double adjustment = 1.5;
       if(AllianceFlipUtil.shouldFlip()){
         adjustment *= -1.0;
       }
-      return new Translation2d(allianceFlipped.getX(), fieldWidth - allianceFlipped.getY() + adjustment);
+      return new Translation2d(allianceFlipped.getX(), allianceFlipped.getY() + adjustment);
+      // return allianceFlipped;
+    } else {
+      return new Translation2d(allianceFlipped.getX(), fieldWidth - allianceFlipped.getY());
     }
   }
 

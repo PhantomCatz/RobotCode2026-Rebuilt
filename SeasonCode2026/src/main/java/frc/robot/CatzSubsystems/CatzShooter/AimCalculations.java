@@ -1,7 +1,10 @@
 package frc.robot.CatzSubsystems.CatzShooter;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -17,13 +20,11 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.EpsilonRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.Setpoint;
-
-
 
 public class AimCalculations {
     private static final double phaseDelay = 0.0;
-
 
     public enum HoardTargetType {
         RELATIVE_CLOSE,
@@ -42,10 +43,10 @@ public class AimCalculations {
 
         double slopeAngle = Math.atan2(FieldConstants.HEIGHT_DIFF, distToRim);
         return MathUtil.clamp(
-            Math.PI/2.0 - (slopeAngle + (Math.PI / 2.0)) / 2.0 - Math.toRadians(EpsilonRegression.HOOD_ANGLE_OFFSET),
-            HoodConstants.HOOD_ZERO_POS.in(Units.Radians),
-            HoodConstants.HOOD_MAX_POS.in(Units.Radians)
-        );
+                Math.PI / 2.0 - (slopeAngle + (Math.PI / 2.0)) / 2.0
+                        - Math.toRadians(EpsilonRegression.HOOD_ANGLE_OFFSET),
+                HoodConstants.HOOD_ZERO_POS.in(Units.Radians),
+                HoodConstants.HOOD_MAX_POS.in(Units.Radians));
     }
 
     /**
@@ -63,79 +64,71 @@ public class AimCalculations {
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose, Translation2d predictedTurretPose, double distFromHub) {
+    public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose,
+            Translation2d predictedTurretPose, double distFromHub) {
         Translation2d hubDirection = target.minus(predictedTurretPose);
         double targetRads = hubDirection.getAngle().minus(predictedRobotPose.getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
-        // if(Math.toDegrees(targetRads) > -15.0 && Math.toDegrees(targetRads) < 120.0 && CatzSuperstructure.Instance.getIsScoring()){
-        //     targetRads += Math.toRadians(6.7);
+        // if(Math.toDegrees(targetRads) > -15.0 && Math.toDegrees(targetRads) < 120.0
+        // && CatzSuperstructure.Instance.getIsScoring()){
+        // targetRads += Math.toRadians(6.7);
         // }
         // if(distFromHub > 4.0){
-        //     targetRads += Math.toRadians(6.7);
+        // targetRads += Math.toRadians(6.7);
         // }
 
         // double turretAngle = Math.toDegrees(targetRads);
         // if(turretAngle > 90.0 && turretAngle < 180.0){
-        //     targetRads -= Math.toRadians(3.0);
+        // targetRads -= Math.toRadians(3.0);
         // }
 
         // if(turretAngle > 180.0 && turretAngle < 270.0){
-        //     targetRads -= Math.toRadians(5.0);
+        // targetRads -= Math.toRadians(5.0);
         // }
 
         // if(turretAngle > 270.0 && turretAngle < 360.0){
-        //     targetRads -= Math.toRadians(20.0);
+        // targetRads -= Math.toRadians(20.0);
         // }
 
         // if(Math.abs(turretAngle) < 10.0){
-        //     targetRads -= Math.toRadians(5.0);
+        // targetRads -= Math.toRadians(5.0);
         // }
 
         double turretAngle = Math.toDegrees(targetRads);
         if (turretAngle < -140.0) { // -180 to -140
 
-        }
-        else if (turretAngle < -105.0) { // -140 to -105
+        } else if (turretAngle < -105.0) { // -140 to -105
 
-        }
-        else if (turretAngle < -75.0) { // -105 to -75
+        } else if (turretAngle < -75.0) { // -105 to -75
 
-        }
-        else if (turretAngle < -45.0) { // -75 to -45
+        } else if (turretAngle < -45.0) { // -75 to -45
             targetRads += Math.toRadians(5.0);
-        }
-        else if (turretAngle < -15.0) { // -45 to -15
+        } else if (turretAngle < -15.0) { // -45 to -15
 
-        }
-        else if (turretAngle < 15.0) { // -15 to 15
+        } else if (turretAngle < 15.0) { // -15 to 15
             targetRads += Math.toRadians(6.7);
-        }
-        else if (turretAngle < 45.0) { // 15 to 45
+        } else if (turretAngle < 45.0) { // 15 to 45
             targetRads += Math.toRadians(10.0);
-        }
-        else if (turretAngle < 75.0) { // 45 to 75
+        } else if (turretAngle < 75.0) { // 45 to 75
             targetRads += Math.toRadians(6.7);
-        }
-        else if (turretAngle < 105.0) { // 75 to 105
+        } else if (turretAngle < 105.0) { // 75 to 105
             targetRads += Math.toRadians(5.6);
-        }
-        else if (turretAngle < 140.0) { // 105 to 140
+        } else if (turretAngle < 140.0) { // 105 to 140
 
-        }
-        else { // 140 to 180
+        } else { // 140 to 180
             targetRads += Math.toRadians(3.0);
         }
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
 
-    public static Setpoint calculateOpposingHubTrackingSetpoint(){
+    public static Setpoint calculateOpposingHubTrackingSetpoint() {
         return calculateTurretTrackingSetpoint(FieldConstants.getOpposingHubLocation());
     }
 
     public static Translation2d getCornerHoardingTarget(HoardTargetType targetType) {
         Translation2d turretPos = CatzTurret.Instance.getFieldToTurret();
-        Translation2d targetPos = FieldConstants.getRightCornerHoardLocation();
+        Translation2d targetPos = FieldConstants.getCornerHoardLocation();
         boolean shouldMirror = false;
 
         boolean isLeftHalf = turretPos.getY() >= FieldConstants.fieldYHalf;
@@ -161,7 +154,14 @@ public class AimCalculations {
         if (shouldMirror) {
             targetPos = new Translation2d(targetPos.getX(), FieldConstants.fieldWidth - targetPos.getY());
         }
-        return targetPos;
+
+        double adjustment = 0.0;
+        if (!isLeftHalf) {
+            adjustment = 3.0;
+        }
+        targetPos = new Translation2d(targetPos.getX(), targetPos.getY() + adjustment);
+        Logger.recordOutput("hoard target", new Pose2d(AllianceFlipUtil.apply(targetPos), new Rotation2d()));
+        return AllianceFlipUtil.apply(targetPos);
     }
 
     public static boolean doesTrajectoryCrossNet(Translation2d turretPos, Translation2d targetPos) {
@@ -195,13 +195,14 @@ public class AimCalculations {
         return baseTarget.plus(targetVelocity.times(futureAirtime));
     }
 
-    private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose, ChassisSpeeds predictedChassisSpeeds) {
+    private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose,
+            ChassisSpeeds predictedChassisSpeeds) {
 
-        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(predictedChassisSpeeds, predictedRobotPose.getRotation());
+        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(predictedChassisSpeeds,
+                predictedRobotPose.getRotation());
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
                 .getRadians();
-
 
         double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
                 * currentVelocity.omegaRadiansPerSecond + currentVelocity.vxMetersPerSecond;
@@ -215,17 +216,19 @@ public class AimCalculations {
             Translation2d targetPos,
             RegressionMode mode) {
 
-        if(targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0) return 0.0;
+        if (targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0)
+            return 0.0;
 
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
         double distToTarget = targetToTurret.getNorm();
 
-        if (targetToTurret.getX() == 0.0 && targetToTurret.getY() == 0.0) return 0.0;
+        if (targetToTurret.getX() == 0.0 && targetToTurret.getY() == 0.0)
+            return 0.0;
 
         double turretTargetRadians = Math.abs(
                 MathUtil.angleModulus(targetToTurret.getAngle().getRadians() - targetVelocity.getAngle().getRadians()));
         double[] regCoeffs = ShooterRegression.getAirtimeCoeffs(mode);
-        //test comment
+        // test comment
 
         double targetSpeed = targetVelocity.getNorm();
 
@@ -267,7 +270,8 @@ public class AimCalculations {
     }
 
     public static boolean readyToShoot() {
-        // Logger.recordOutput("Turret Ready", CatzTurret.Instance.nearPositionSetpoint());
+        // Logger.recordOutput("Turret Ready",
+        // CatzTurret.Instance.nearPositionSetpoint());
         // Logger.recordOutput("Hood Ready", CatzHood.Instance.nearPositionSetpoint());
         // Logger.recordOutput("Flywheel Ready", CatzFlywheels.Instance.spunUp());
         return CatzTurret.Instance.nearPositionSetpoint() && CatzFlywheels.Instance.spunUp();

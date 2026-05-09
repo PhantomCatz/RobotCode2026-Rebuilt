@@ -172,8 +172,8 @@ public class RobotContainer {
 
     // shooting a y x start
 
-    xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow());
-    xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbReach());
+    xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow().andThen(Commands.waitSeconds(0.5).andThen(CatzSuperstructure.Instance.deployIntake())));
+    xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.stowIntake().andThen(Commands.waitSeconds(0.5)).andThen(CatzSuperstructure.Instance.cmdClimbReach()));
 
     xboxAux.rightTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.trackOpposingHub());
     // xboxAux.leftTrigger().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleDefenseMode());
