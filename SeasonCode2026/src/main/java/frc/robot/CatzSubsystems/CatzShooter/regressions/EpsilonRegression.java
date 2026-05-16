@@ -16,9 +16,9 @@ public class EpsilonRegression {
                         // { 1.246, 29.5 }, // distance meters, flywheel rps
                         // { 2.877, 32.5 },
                         // { 5.256, 39.0 }
-                        { 1.279, 28.5 }, // distance meters, flywheel rps
-                        { 3.167, 32.0 },
-                        { 4.873, 37.5 }
+                        { 1.279, 27.5 }, // distance meters, flywheel rps
+                        { 3.167, 32.3 },
+                        { 4.873, 40.1 } //39.5 (overshooting)
         };
 
         public static double[][] airtimeHub = {
@@ -57,19 +57,19 @@ public class EpsilonRegression {
          */
 
         // Closest Corner Hoarding
-        public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 5.029, 45.0 };
-        public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 9.314, 45.0 };
+        public static final double[] CLOSEST_HOOD_ANGLE_OVER_TRENCH_HOARD = { 5.609, 30.0 };
+        public static final double[] FARTHEST_HOOD_ANGLE_OVER_TRENCH_HOARD = {13.644, 41.0 }; // 6.952 hood 41 flywheel 35
 
         public static double[][] flywheelOverTrenchHoardRPS = {
-                        { 5.768, 30.0 },
-                        { 7.6, 40.0 },
-                        { 8.0, 42.0 }
+                        { 5.609, 29.0 },
+                        { 7.681, 37.0 },
+                        { 13.644, 67.0 }
         };
 
         public static double[][] airtimeOverTrenchHoard = {
-                        { 9.314, 1.50 },
-                        { 7.528, 1.30 },
-                        { 5.768, 1.10 }
+                        { 5.609, 1.212 },
+                        { 7.681, 1.46 },
+                        { 13.644, 1.826 }
         };
 
         // Far Corner Hoarding

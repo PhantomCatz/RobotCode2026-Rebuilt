@@ -127,4 +127,9 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     public int getNumTags() {
         return latestEstimateNumTags;
     }
+
+	@Override
+	public void setPipelineIndex(int index) {
+		LimelightHelpers.setPipelineIndex(config.name, index);
+	}
 }

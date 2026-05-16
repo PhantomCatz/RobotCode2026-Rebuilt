@@ -23,21 +23,19 @@ public class CatzIntakeDeploy extends ServoMotorSubsystem<IntakeDeployIO, Intake
         setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
     }
 
-    double p = 0.0;
-    double d = 0.0;
-    double s = 0.0;
-    double v = 0.0;
+    double prevP = 0.0;
+    double prevV = 0.0;
     @Override
     public void periodic(){
         super.periodic();
 
-        // if(IntakeDeployConstants.kP.get() != p || IntakeDeployConstants.kD.get() != d || IntakeDeployConstants.kS.get() != s || IntakeDeployConstants.kV.get() != v){
-        //     setPDSVGGains(IntakeDeployConstants.kP.get(), IntakeDeployConstants.kD.get(), IntakeDeployConstants.kS.get(), IntakeDeployConstants.kV.get(), 0.0);
-        //     p = IntakeDeployConstants.kP.get();
-        //     d = IntakeDeployConstants.kD.get();
-        //     s = IntakeDeployConstants.kS.get();
-        //     v = IntakeDeployConstants.kV.get();
-        // }
+        double newP = IntakeDeployConstants.kP.get();
+        double newV = IntakeDeployConstants.kV.get();
+        if(newP != prevP || newV != prevV){
+            prevV = newV;
+            prevP = newP;
+            setGainsPV(newP, newV);
+        }
     }
 
     private static IntakeDeployIO getIOInstance() {

@@ -3,6 +3,7 @@ package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.ApriltagScanningIO.VisionIOInputs;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers.PoseEstimate;
 
@@ -17,6 +18,8 @@ public interface ApriltagScanningIO {
 	public default int getNumTags() {return 0;}
 
 	LimelightConfig getConfig();
+
+	public default void setPipelineIndex(int index) {}
 
 	@AutoLog
 	public static class VisionIOInputs {

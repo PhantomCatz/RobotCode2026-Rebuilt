@@ -15,7 +15,7 @@ public class TurretIOTalonFX extends GenericTalonFXIOReal<TurretIO.TurretIOInput
     @Override
     public void setMotionMagicSetpoint(double targetRot){
         double curAngularVel = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds().omegaRadiansPerSecond;
-        double velFeedforward = -TurretConstants.omegaFF.get() * curAngularVel;
+        double velFeedforward = -TurretConstants.ROBOT_OMEGA_FEEDFORWARD * curAngularVel;
         leaderTalon.setControl(new MotionMagicVoltage(targetRot).withFeedForward(velFeedforward));
     }
 }

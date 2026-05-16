@@ -40,6 +40,9 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
     private CatzTurret() {
         super(io, inputs, "CatzTurret", TurretConstants.TURRET_THRESHOLD);
 
+        // CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+        // encoderConfig.MagnetSensor.MagnetOffset = -0.592041;
+
         setCurrentPosition(Units.Rotations.of(getCANCoderAbsPos()));
         // setCurrentPosition(Units.Rotations.of(0.0));
 
@@ -78,6 +81,11 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
         // Logger.recordOutput("Distance from Far Corner", AimCalculations.getCornerHoardingTarget(false).getDistance(getFieldToTurret()));
 
         Logger.recordOutput("CANCoder Absolute Position", getCANCoderAbsPos());
+        if(Math.abs(inputs.torqueCurrentAmps[0]) > 20.0){
+            Logger.recordOutput("Turret Stalling?", true);
+        }else{
+            Logger.recordOutput("Turret Stalling?", false);
+        }
 
         angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }

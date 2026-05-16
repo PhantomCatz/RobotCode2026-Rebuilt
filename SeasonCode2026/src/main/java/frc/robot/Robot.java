@@ -18,8 +18,10 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -35,12 +37,13 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
+import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.Setpoint;
+import frc.robot.Utilities.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
@@ -51,6 +54,9 @@ public class Robot extends LoggedRobot {
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
 
   public static double autonStartTime = 0.0;
+  public static boolean climbedInAuton = false;
+
+  private int iterations = 0;
 
   public Robot() {
   }
@@ -189,16 +195,19 @@ public class Robot extends LoggedRobot {
       }
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+      System.out.println("Led "+CatzLED.Instance);
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);
       // System.out.println("Starting deteciton threaadf==================");
       // coralDetectionThread.startPeriodic(0.1);
+      SmartDashboard.putBoolean("Won Auton?", false);
+      SmartDashboard.putBoolean("Swiping?", false);
   }
 
   @Override
   public void robotPeriodic() {
-    // VirtualSubsystem.periodicAll();
+    VirtualSubsystem.periodicAll();
     if(allSignals.length > 0) {
       BaseStatusSignal.refreshAll(allSignals);
     }
@@ -242,17 +251,40 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
+    CatzSuperstructure.Instance.cmdShooterStop().schedule();
+    CatzDrivetrain.getInstance().setNormalConfig();
 
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // if (climbedInAuton) {
+    //   CatzSuperstructure.Instance.autoClimbLowerCommand().schedule();
+    // }
   }
 
   @Override
   public void teleopPeriodic() {
+    if(iterations < 20) {
+      Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+      System.out.println("hello world!\n" + "\"" + DriverStation.getGameSpecificMessage() + "\"" + " \n boom it");
+      try{
+        if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
+          && alliance == DriverStation.Alliance.Blue)
+          ||(DriverStation.getGameSpecificMessage().charAt(0) == 'R'
+          && alliance == DriverStation.Alliance.Red)
+          )
+        {
+          SmartDashboard.putBoolean("Won Auton?", true);
+          iterations = 21;
+        }
+      } catch(Exception e){
+        e.printStackTrace();
+      }
+      iterations++;
+    }
   }
 
   @Override

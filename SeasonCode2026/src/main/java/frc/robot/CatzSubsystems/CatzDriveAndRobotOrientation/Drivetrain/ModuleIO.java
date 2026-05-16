@@ -68,6 +68,16 @@ public interface ModuleIO {
 
   public default void setSteerPID(double kP, double kI, double kD) {}
 
+  public default void setShootWhileMoveConfig() {}
+
+  public default void setIntakeMoveConfig() {}
+
+  public default void setAntihoardConfig() {}
+
+  public default void setDefenseConfig() {}
+
+  public default void setNormalConfig() {}
+
   // ---------------------------------------------------------------------------
   //   Mag Enc Access Methods
   // ---------------------------------------------------------------------------

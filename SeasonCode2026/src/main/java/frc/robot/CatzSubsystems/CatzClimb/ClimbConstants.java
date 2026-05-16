@@ -21,11 +21,11 @@ public class ClimbConstants {
 	private static final double SPOOL_DIAMETER_INCH = 1.5;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 
-	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(8.5));
+	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(9.3));
 	private static final Angle STOW_POSITION = converter.toAngle(Units.Inches.of(0.0));
 	public static final LoggedTunableNumber REACH_POSITION_LOG = new LoggedTunableNumber("CatzClimb/Reach Inch", 5.0);
 
-	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(REACH_POSITION.in(Units.Rotations));
+	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(0.6389);
 	public static final Setpoint STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(STOW_POSITION.in(Units.Rotations));
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
@@ -66,6 +66,9 @@ public class ClimbConstants {
 
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = converter.toAngle(Units.Inches.of(7.0)).in(Units.Rotations);
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 		FXConfig.CurrentLimits.StatorCurrentLimit = 300.0;

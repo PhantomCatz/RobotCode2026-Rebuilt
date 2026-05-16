@@ -84,4 +84,10 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	public LimelightConfig getConfig(){
 		return config;
 	}
+
+	@Override
+	public void setPipelineIndex(int index) {
+		System.out.println("change "+config.name+" to "+index);
+		LimelightHelpers.setPipelineIndex(config.name, index);
+	}
 }

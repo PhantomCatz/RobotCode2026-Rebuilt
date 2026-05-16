@@ -1,8 +1,11 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.FieldConstants;
 import frc.robot.Robot;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers;
 
@@ -10,13 +13,15 @@ public class LimelightSubsystem extends SubsystemBase {
 
 	public static LimelightSubsystem Instance = new LimelightSubsystem();
 
+	private int lastZone = -1;
+
 	private final ApriltagScanningIO[] ios;
 
 	private LimelightSubsystem() {
 		ios = LimelightConstants.LIMELIGHT_ARRAY;
 
 		if (Robot.isReal()) {
-			for(ApriltagScanningIO limelight : LimelightConstants.LIMELIGHT_ARRAY){
+			for (ApriltagScanningIO limelight : LimelightConstants.LIMELIGHT_ARRAY) {
 				LimelightConfig config = limelight.getConfig();
 
 				LimelightHelpers.setCameraPose_RobotSpace(
@@ -34,15 +39,53 @@ public class LimelightSubsystem extends SubsystemBase {
 		}
 	}
 
-	@Override
-	public void periodic() {
-		for(int i = 0; i < ios.length; i++){
-			ios[i].update();
+	// These are the zones. Blue alliance on left. Seperated by middle line and
+	// trench bar.
+	// 0 1 2 3
+	// 4 5 6 7
+	private int getZone() {
+		Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
+		if (pose.getY() > FieldConstants.fieldYHalf) {
+			if (pose.getX() < FieldConstants.fieldTrenchX) {
+				return 0;
+			}
+			if (pose.getX() < FieldConstants.fieldXHalf) {
+				return 1;
+			}
+			if (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX) {
+				return 2;
+			}
+			return 3;
+		} else {
+			if (pose.getX() < FieldConstants.fieldTrenchX) {
+				return 4;
+			}
+			if (pose.getX() < FieldConstants.fieldXHalf) {
+				return 5;
+			}
+			if (pose.getX() < FieldConstants.fieldLength - FieldConstants.fieldTrenchX) {
+				return 6;
+			}
+			return 7;
 		}
 	}
 
-	public boolean isSeeingApriltag(){
-		for(ApriltagScanningIO io : ios){
+	@Override
+	public void periodic() {
+		int curZone = getZone();
+		for (int i = 0; i < ios.length; i++) {
+			if (curZone != lastZone) {
+				ios[i].setPipelineIndex(curZone);
+			}
+
+			ios[i].update();
+		}
+		lastZone = curZone;
+
+	}
+
+	public boolean isSeeingApriltag() {
+		for (ApriltagScanningIO io : ios) {
 			return io.getNumTags() > 0;
 		}
 		return false;

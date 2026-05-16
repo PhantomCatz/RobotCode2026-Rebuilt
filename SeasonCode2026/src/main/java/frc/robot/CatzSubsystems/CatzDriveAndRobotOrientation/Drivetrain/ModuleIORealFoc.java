@@ -2,9 +2,12 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -19,7 +22,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
-import org.littletonrobotics.junction.Logger;
 
 public class ModuleIORealFoc implements ModuleIO {
   // Hardware
@@ -63,14 +65,26 @@ public class ModuleIORealFoc implements ModuleIO {
 
   // Module Name/config
   private final String MODULE_NAME;
+  private final String MODULE_MODULE_NAME;
+  private final String MODULE_MODULE_NAME_DRIVE_TARGET;
+
+
   ModuleIDs m_config;
 
   public CANBus driveTalonCANBus = new CANBus("*");
   public CANBus steerTalonCANBus = new CANBus("*");
 
+  private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs antihoardCon = new CurrentLimitsConfigs();
+  private final CurrentLimitsConfigs defenseCon = new CurrentLimitsConfigs();
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
+    MODULE_MODULE_NAME = "Module " + MODULE_NAME;
+    MODULE_MODULE_NAME_DRIVE_TARGET = MODULE_MODULE_NAME + "/drive target mps";
+
 
     encoder = new CANcoder(config.absoluteEncoderChannel(), driveTalonCANBus);
     m_config = config;
@@ -81,11 +95,40 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
 
     // Config Motors Current Limits assume FOC is included with motors
-    driveTalonConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
-    driveTalonConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
-    driveTalonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
-    driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
+    // if change one value, have to change for all configs
+    con.SupplyCurrentLowerTime = 0.0;
+    con.StatorCurrentLimit = 80.0; //20 for bad home carpet
+    con.StatorCurrentLimitEnable = true;
+    con.SupplyCurrentLimit = 40.0;
+    con.SupplyCurrentLimitEnable = true;
+    driveTalonConfig.withCurrentLimits(con);
+    driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.0;
+
     driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+    shootWhileMoveCon.SupplyCurrentLowerTime = 0.0;
+    shootWhileMoveCon.StatorCurrentLimit = 80.0; //20 for bad home carpet
+    shootWhileMoveCon.StatorCurrentLimitEnable = true;
+    shootWhileMoveCon.SupplyCurrentLimit = 15.0;
+    shootWhileMoveCon.SupplyCurrentLimitEnable = true;
+
+    intakeMoveCon.SupplyCurrentLowerTime = 0.0;
+    intakeMoveCon.StatorCurrentLimit = 80.0;
+    intakeMoveCon.StatorCurrentLimitEnable = true;
+    intakeMoveCon.SupplyCurrentLimit = 10.0;
+    intakeMoveCon.SupplyCurrentLimitEnable = true;
+
+    antihoardCon.SupplyCurrentLowerTime = 0.0;
+    antihoardCon.StatorCurrentLimit = 80.0;
+    antihoardCon.StatorCurrentLimitEnable = true;
+    antihoardCon.SupplyCurrentLimit = 2.0;
+    antihoardCon.SupplyCurrentLimitEnable = true;
+
+    defenseCon.SupplyCurrentLowerTime = 0.0;
+    defenseCon.StatorCurrentLimit = 80.0;
+    defenseCon.StatorCurrentLimitEnable = true;
+    defenseCon.SupplyCurrentLimit = 80.0;
+    defenseCon.SupplyCurrentLimitEnable = true;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -212,6 +255,10 @@ public class ModuleIORealFoc implements ModuleIO {
     }else{
       driveTalon.setControl(velocityVoltage.withVelocity(velocityMetersPerSec));
     }
+
+    Logger.recordOutput(MODULE_MODULE_NAME_DRIVE_TARGET, velocityMetersPerSec);
+
+
   }
 
   public void runSteerPercentOutput(double percentOutput) {
@@ -225,7 +272,7 @@ public class ModuleIORealFoc implements ModuleIO {
           steerFeedback.calculate(currentAngleRads, targetAngleRads))
     );
 
-    Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);
+    // Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);
   }
 
   @Override
@@ -251,5 +298,35 @@ public class ModuleIORealFoc implements ModuleIO {
   public void setSteerNeutralModeIO(NeutralModeValue type) {
     steerTalonConfig.MotorOutput.NeutralMode = type;
     steerTalon.getConfigurator().apply(steerTalonConfig);
+  }
+
+  @Override
+  public void setShootWhileMoveConfig() {
+    driveTalonConfig.withCurrentLimits(shootWhileMoveCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setIntakeMoveConfig(){
+    driveTalonConfig.withCurrentLimits(intakeMoveCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setAntihoardConfig() {
+    driveTalonConfig.withCurrentLimits(antihoardCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setDefenseConfig() {
+    driveTalonConfig.withCurrentLimits(defenseCon);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
+  }
+
+  @Override
+  public void setNormalConfig() {
+    driveTalonConfig.withCurrentLimits(con);
+    driveTalon.getConfigurator().apply(driveTalonConfig);
   }
 }

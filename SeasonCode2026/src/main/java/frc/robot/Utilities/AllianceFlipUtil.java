@@ -21,10 +21,30 @@ public class AllianceFlipUtil {
     return shouldFlip() ? rotation.rotateBy(Rotation2d.kPi) : rotation;
   }
 
+  public static Rotation2d applyNoCondition(Rotation2d rotation) {
+    return rotation.rotateBy(Rotation2d.kPi);
+  }
+
+  public static Pose2d applyNoCondition(Pose2d pose) {
+    return new Pose2d(applyNoCondition(pose.getTranslation()), applyNoCondition(pose.getRotation()));
+  }
+
   public static Pose2d apply(Pose2d pose) {
     return shouldFlip()
         ? new Pose2d(apply(pose.getTranslation()), apply(pose.getRotation()))
         : pose;
+  }
+
+  public static Translation2d applyNoCondition(Translation2d translation) {
+    return new Translation2d(applyXNoCondition(translation.getX()), applyYNoCondition(translation.getY()));
+  }
+
+  public static double applyXNoCondition(double x) {
+    return FieldConstants.fieldLength - x;
+  }
+
+  public static double applyYNoCondition(double y) {
+    return FieldConstants.fieldWidth - y;
   }
 
   public static Translation3d apply(Translation3d translation) {

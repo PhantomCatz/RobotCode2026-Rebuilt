@@ -2,15 +2,16 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.CatzConstants;
 import frc.robot.Utilities.HolonomicDriveController;
-import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.ModuleLimits;
 import lombok.Builder;
 
@@ -37,39 +38,46 @@ public class DriveConstants {
   // ---------------------------------------------------------------------------------------------------------------
 
 
-  public static final DriveConfig DRIVE_CONFIG =
-    DriveConfig.builder()
-        .wheelRadius(Units.inchesToMeters(1.7))
-        .robotLengthX(Units.inchesToMeters(28))
-        .robotWidthY(Units.inchesToMeters(28))
-        .bumperWidthX(Units.inchesToMeters(32))
-        .bumperWidthY(Units.inchesToMeters(32))
+    public static final DriveConfig DRIVE_CONFIG =
+      DriveConfig.builder()
+          .wheelRadius(Units.inchesToMeters(1.7))
+          .robotLengthX(Units.inchesToMeters(28))
+          .robotWidthY(Units.inchesToMeters(28))
+          .bumperWidthX(Units.inchesToMeters(32))
+          .bumperWidthY(Units.inchesToMeters(32))
+          .maxLinearVelocity(5.0)
+          .maxLinearAcceleration(50.0)
+          .maxAngularVelocity(Units.degreesToRadians(540))
+          .maxAngularAcceleration(Units.degreesToRadians(720))
+          .build();
+
+    public static final DriveConfig TRAJECTORY_CONFIG =
+      DriveConfig.builder()
         .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(30)
+        .maxLinearAcceleration(5.5)
         .maxAngularVelocity(Units.degreesToRadians(540))
         .maxAngularAcceleration(Units.degreesToRadians(720))
         .build();
+    // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
 
-  public static final DriveConfig TRAJECTORY_CONFIG =
-    DriveConfig.builder()
-      .maxLinearVelocity(4.3)
-      .maxLinearAcceleration(5.5)
-      .maxAngularVelocity(Units.degreesToRadians(540))
-      .maxAngularAcceleration(Units.degreesToRadians(720))
-      .build();
-  private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
+    public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
+          1.0,
+          3.0,
+          DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
-  public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
-        DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-        accLimit.get(),
-        DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+    public static final double DRIVE_DELAY_TIME = 0.0;
+    public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
 
-  public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
+    public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
+      DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
+      DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
+      DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
 
-  public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
-    DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
-    DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
-    DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
+  public static final ModuleLimits SHOOT_WHILE_MOVE_LIMITS = new ModuleLimits(
+    1.6,
+    5.0,
+    DriveConstants.DRIVE_CONFIG.maxAngularVelocity
+  );
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
@@ -123,35 +131,35 @@ public class DriveConstants {
   // ---------------------------------------------------------------------------------------------------------------------
   // Logged Tunable PIDF values for swerve modules
   // ---------------------------------------------------------------------------------------------------------------------
-  public static final LoggedTunableNumber drivekP = new LoggedTunableNumber("Drive/Module/DrivekP", MODULE_GAINS_AND_RATIOS.drivekP());
-  public static final LoggedTunableNumber drivekD = new LoggedTunableNumber("Drive/Module/DrivekD", MODULE_GAINS_AND_RATIOS.drivekD());
-  public static final LoggedTunableNumber drivekS = new LoggedTunableNumber("Drive/Module/DrivekS", MODULE_GAINS_AND_RATIOS.driveFFkS());
-  public static final LoggedTunableNumber drivekV = new LoggedTunableNumber("Drive/Module/DrivekV", MODULE_GAINS_AND_RATIOS.driveFFkV());
-  public static final LoggedTunableNumber steerkP = new LoggedTunableNumber("Drive/Module/steerkP", MODULE_GAINS_AND_RATIOS.steerkP());
-  public static final LoggedTunableNumber steerkD = new LoggedTunableNumber("Drive/Module/steerkD", MODULE_GAINS_AND_RATIOS.steerkD());
+  // public static final LoggedTunableNumber drivekP = new LoggedTunableNumber("Drive/Module/DrivekP", MODULE_GAINS_AND_RATIOS.drivekP());
+  // public static final LoggedTunableNumber drivekD = new LoggedTunableNumber("Drive/Module/DrivekD", MODULE_GAINS_AND_RATIOS.drivekD());
+  // public static final LoggedTunableNumber drivekS = new LoggedTunableNumber("Drive/Module/DrivekS", MODULE_GAINS_AND_RATIOS.driveFFkS());
+  // public static final LoggedTunableNumber drivekV = new LoggedTunableNumber("Drive/Module/DrivekV", MODULE_GAINS_AND_RATIOS.driveFFkV());
+  // public static final LoggedTunableNumber steerkP = new LoggedTunableNumber("Drive/Module/steerkP", MODULE_GAINS_AND_RATIOS.steerkP());
+  // public static final LoggedTunableNumber steerkD = new LoggedTunableNumber("Drive/Module/steerkD", MODULE_GAINS_AND_RATIOS.steerkD());
 
   public static final ModuleIDs[] MODULE_CONFIGS = new ModuleIDs[4];
   static{
     switch(CatzConstants.getRobotType()){
         case SN_MANTA:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 2.54248, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -2.866211, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.988281, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.416016, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.512695, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, -0.368896 + 0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.481201 + 0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.080078 + 0.5, false);
         break;
 
         case SN1:
-            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.3125, false);
-            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.0896, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.4382 + 0.5, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, -0.1447 + 0.5, false);
+            MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, 0.103+0.5, false);
+            MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.437+0.5, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -0.159+0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.4628+0.5, false);
         break;
 
         case SN2:
             MODULE_CONFIGS[INDEX_FR] = new ModuleIDs(1, 2, 11, -0.4145 + 0.5, false); //this one is changing?  0.811035 shifted by 7 degrees?
             MODULE_CONFIGS[INDEX_BR] = new ModuleIDs(3, 4, 12, 0.401855, false);
-            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, -1.060303, false);
-            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.3394, false);
+            MODULE_CONFIGS[INDEX_BL] = new ModuleIDs(5, 6, 13, 0.2155+0.5, false);
+            MODULE_CONFIGS[INDEX_FL] = new ModuleIDs(7, 8, 14, 0.1235, false);
         break;
 
         case SN_TEST:
@@ -185,6 +193,13 @@ public class DriveConstants {
     MODULE_TRANSLATIONS[INDEX_FL] = new Translation2d( DRIVE_CONFIG.robotLengthX(),  DRIVE_CONFIG.robotWidthY()).div(2.0);
   }
 
+  public static final SwerveModuleState[] xLockStates = {
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45)),        //FR
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)), //BR
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45)),        //BL
+    new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)), //FL
+  };
+
   // calculates the orientation and speed of individual swerve modules when given
   // the motion of the whole robot
   public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
@@ -196,12 +211,25 @@ public class DriveConstants {
   // -----------------------------------------------------------------------------------------------------------------------------
   public static HolonomicDriveController getNewHolController() {
     return new HolonomicDriveController(
-      new PIDController(10.0, 0.0, 0.3),
-      new PIDController(10.0, 0.0, 0.3),
+      new PIDController(10.0, 0.0, 0.2),
+      new PIDController(10.0, 0.0, 0.2),
       new ProfiledPIDController(
-        17.0,
+        9.0,
         0.0,
-        0.3,
+        0.8,
+        new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
+      )
+    );
+  }
+
+  public static HolonomicDriveController getNewHolController_Slow() {
+    return new HolonomicDriveController(
+      new PIDController(7.0, 0.0, 0.4),
+      new PIDController(7.0, 0.0, 0.4),
+      new ProfiledPIDController(
+        5.0,
+        0.0,
+        0.6,
         new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
       )
     );

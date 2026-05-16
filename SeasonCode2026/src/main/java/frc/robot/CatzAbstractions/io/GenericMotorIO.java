@@ -83,7 +83,7 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
    *
    * @param mechanismVelocity Mechanism velocity to go to (rad/s or RPM depending on implementation).
    */
-  public default void setVelocitySetpoint(double mechanismVelocity) {}
+  public default void setVelocityFOCSetpoint(double mechanismVelocity) {}
 
   /**
    * Doesn't use FOC

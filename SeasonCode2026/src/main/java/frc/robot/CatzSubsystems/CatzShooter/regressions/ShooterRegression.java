@@ -5,7 +5,11 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.FieldConstants;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.HoodConstants;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.PolynomialRegression;
 import frc.robot.Utilities.Setpoint;
@@ -82,6 +86,8 @@ public class ShooterRegression {
     private static final double OVER_NET_HOARD_HOOD_SLOPE;
     private static final double OPP_HOARD_HOOD_SLOPE;
 
+    private static final double MAX_HOOD_DIST = 10.0; // todo
+
     static {
         hubFlywheelPolynomial  = loadRegression(EpsilonRegression.flywheelHubRPS, hubFlywheelMap);
         overTrenchHoardPolynomial   = loadRegression(EpsilonRegression.flywheelOverTrenchHoardRPS, closeHoardFlywheelMap);
@@ -148,6 +154,7 @@ public class ShooterRegression {
     public static Setpoint getShooterSetpoint(Distance range, RegressionMode mode) {
         double rps = 0.0;
         double distMeters = range.in(Units.Meters);
+        double add = 0.0;
 
         if (kUseFlywheelPolynomial) {
             switch (mode) {
@@ -164,8 +171,63 @@ public class ShooterRegression {
                 case OPP_HOARD:   rps = oppHoardFlywheelMap.get(distMeters); break;
             }
         }
+        double turretAngle = CatzTurret.Instance.getLatencyCompensatedPosition() * 360.0;
 
-        return Setpoint.withVelocitySetpointVoltage(rps);
+
+
+        if(
+            CatzSuperstructure.Instance.getIsScoring()
+            && CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(FieldConstants.getHubLocation()) > 4.0
+            ){
+
+            // if (turretAngle < -140.0) { // -180 to -140
+
+            // }
+            // else if (turretAngle < -105.0) { // -140 to -105
+
+            // }
+            // else if (turretAngle < -75.0) { // -105 to -75
+
+            // }
+            // else if (turretAngle < -45.0) { // -75 to -45
+
+            // }
+            // else if (turretAngle < -15.0) { // -45 to -15
+
+            // }
+            // else if (turretAngle < 15.0) { // -15 to 15
+
+            // }
+            // else if (turretAngle < 45.0) { // 15 to 45
+
+            // }
+            // else if (turretAngle < 75.0) { // 45 to 75
+
+            // }
+            // else if (turretAngle < 105.0) { // 75 to 105
+
+            // }
+            // else if (turretAngle < 140.0) { // 105 to 140
+
+            // }
+            // else { // 140 to 180
+
+            // }
+            if(turretAngle > 90.0 && turretAngle < 180.0){
+                add -= 0.5;
+            }
+
+            if (turretAngle > -10.0 && turretAngle < 70.0) {
+                add += 2.3;
+            }
+
+            if(turretAngle > 30 && turretAngle < 90){
+                add += 1.67;
+            }
+        }
+
+
+        return Setpoint.withVelocitySetpointVoltage(rps+ add);
     }
 
     public static Setpoint getHoodSetpoint(Distance range, RegressionMode mode) {
@@ -201,7 +263,10 @@ public class ShooterRegression {
 
         // point slope form: y = m(x - x1) + y1
         angle = slope * (distMeters - xInterceptDist) + yInterceptAngle;
-
+        // if you're far enough, just use max hood angle to minimize flywheel speed
+        if (mode == RegressionMode.OVER_TRENCH_HOARD && distMeters > MAX_HOOD_DIST) {
+            angle = HoodConstants.HOOD_MAX_POS.in(Units.Degrees);
+        }
         angle = MathUtil.clamp(angle,
             HoodConstants.HOOD_ZERO_POS.in(Units.Degrees),
             HoodConstants.HOOD_MAX_POS.in(Units.Degrees)

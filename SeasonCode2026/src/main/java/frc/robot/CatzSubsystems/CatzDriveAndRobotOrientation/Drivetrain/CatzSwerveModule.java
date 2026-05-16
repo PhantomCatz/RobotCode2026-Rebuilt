@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.CatzConstants;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.CatzMathUtils;
 import frc.robot.Utilities.CatzMathUtils.Conversions;
@@ -99,14 +100,22 @@ public class CatzSwerveModule {
   }
 
   double prevCur = 0.0;
+  int logCount = 0;
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
-    Logger.processInputs(motorOutputs, inputs); //TODO only update these once every 5 loops or smth
+
+    if(logCount >= 5){
+      Logger.processInputs(motorOutputs, inputs);
+      logCount = 0;
+    }
+    logCount++;
 
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
     steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
+
+    // debugLogsSwerve();
 
   }
 
@@ -154,6 +163,26 @@ public class CatzSwerveModule {
 
   public void setNeutralModeSteer(NeutralModeValue type) {
     io.setSteerNeutralModeIO(type);
+  }
+
+  public void setShootWhileMoveConfig() {
+    io.setShootWhileMoveConfig();
+  }
+
+  public void setIntakeMoveConfig(){
+    io.setIntakeMoveConfig();
+  }
+
+  public void setAntihoardConfig() {
+    io.setAntihoardConfig();
+  }
+
+  public void setDefenseConfig() {
+    io.setDefenseConfig();
+  }
+
+  public void setNormalConfig() {
+    io.setNormalConfig();
   }
 
   public void resetDriveEncs() {
