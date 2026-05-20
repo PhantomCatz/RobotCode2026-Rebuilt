@@ -359,8 +359,9 @@ public class CatzSuperstructure {
         });
     }
 
+    //TODO abuse of requirements
     public Command jiggleIntakeCommand() {
-            return Commands.run(() -> {
+        Command jiggleCmd = Commands.run(() -> {
             double time = Timer.getFPGATimestamp();
             double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY * (2 * Math.PI)) > 0
                     ? IntakeDeployConstants.UP_POSITION.in(Units.Rotations)
@@ -368,8 +369,9 @@ public class CatzSuperstructure {
 
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
-
-        }, CatzIntakeRoller.Instance);
+        });
+        jiggleCmd.addRequirements(CatzIntakeRoller.Instance);
+        return jiggleCmd;
     }
 
     public Command toggleIntakeRollers() {
