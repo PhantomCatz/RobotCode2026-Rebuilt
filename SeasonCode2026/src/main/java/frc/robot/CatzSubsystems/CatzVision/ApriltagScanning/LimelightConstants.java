@@ -15,9 +15,6 @@ public class LimelightConstants {
     public static final int kEnabledPipeline = 0;
     public static final int kDisabledPipeline = 1;
 
-    private static final double limelightCrosshairCompensationPitch = 0.0;
-    private static final double limelightCrosshairCompensationYaw = -1.0; // -2.0 for sushi
-
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
         new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
             new Pose3d(
@@ -26,11 +23,7 @@ public class LimelightConstants {
                     Inches.of(5.526).in(Meters),           //We recalculate robot's actual position based off of the data fed by the limelight.
                     Inches.of(21.125).in(Meters) //This makes it easy to account for latency.
                 ),
-                new Rotation3d(
-                    Degrees.of(-0.0).in(Radians),
-                    Degrees.of(21.0 + limelightCrosshairCompensationPitch).in(Radians),
-                    Degrees.of(limelightCrosshairCompensationYaw).in(Radians)
-                )
+                new Rotation3d()
             )
         ))
     };
