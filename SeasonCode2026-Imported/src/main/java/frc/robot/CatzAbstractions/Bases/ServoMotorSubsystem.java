@@ -1,0 +1,129 @@
+package frc.robot.CatzAbstractions.Bases;
+
+import frc.robot.CatzAbstractions.io.GenericMotorIO;
+import frc.robot.Utilities.Setpoint;
+import frc.robot.Utilities.EqualsUtil;
+
+import java.util.function.Supplier;
+
+
+import org.wpilib.units.Units;
+import org.wpilib.units.measure.Angle;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.Commands;
+
+public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs>
+		extends GenericMotorSubsystem<S, I> {
+
+	protected final String name;
+	protected Angle epsilonThreshold;
+
+	private double manualSpeed = 0.0;
+	protected boolean isFullManual = false;
+
+	public ServoMotorSubsystem(S io, I inputs, String name, Angle epsilonThreshold) {
+		super(io, inputs, name);
+		this.name = name;
+		this.epsilonThreshold = epsilonThreshold;
+	}
+
+	@Override
+	public void periodic() {
+		super.periodic();
+
+		if (isFullManual) {
+			runFullManual(manualSpeed);
+		}
+	}
+
+	@Override
+	public void applySetpoint(Setpoint setpoint){
+		super.applySetpoint(setpoint);
+	}
+
+	public void runFullManual(double speed) {
+		if (Math.abs(speed) < 0.1) {
+			io.setMotionMagicSetpoint(getLatencyCompensatedPosition());
+		} else {
+			io.setDutyCycleSetpoint(speed);
+		}
+	}
+
+	public void setSoftLimitsEnabled(boolean forward, boolean reverse) {
+		io.setSoftLimitsEnabled(forward, reverse);
+	}
+
+	public void setDegThreshold(Angle threshold) {
+		this.epsilonThreshold = threshold;
+	}
+
+	/**
+	 * Determines whether the subsystem is near it's position setpoint.
+	 *
+	 * @return True if currently near setpoint, false if not. Returns false if not
+	 *         in position control.
+	 */
+	public boolean nearPositionSetpoint() {
+		return (setpoint.mode.isPositionControl()) && nearPosition(Units.Radians.of(setpoint.baseUnits));
+	}
+
+	public void setPDSVGGains(double p, double d, double s, double v, double g) {
+		io.setGainsSlot0(p, 0.0, d, s, v, 0.0, g);
+	}
+
+	/**
+	 * Creates a Command that goes to a setpoint and then waits until the mechanism
+	 * is the setpoint's position.
+	 *
+	 * @param mechanismPosition Position to evaluate proximity to.
+	 * @return A new Command to apply setpoint and wait.
+	 */
+	public Command setpointCommandWithWait(Setpoint setpoint) {
+		return waitForPositionCommand(Units.Radians.of(setpoint.baseUnits))
+				.deadlineFor(followSetpointCommand(() -> setpoint));
+	}
+
+	/**
+	 * Creates a Command that waits until the mechanism is near a given position.
+	 *
+	 * @param mechanismPosition Position to evaluate proximity to.
+	 * @return A wait command.
+	 */
+	public Command waitForPositionCommand(Angle mechanismPosition) {
+		return Commands.waitUntil(() -> {
+			return nearPosition(mechanismPosition);
+		});
+	}
+
+	/**
+	 * Determines whether the subsystem is near a given position.
+	 *
+	 * @param mechanismPosition Position to compare to.
+	 * @return True if near provided position, false if not.
+	 */
+	public boolean nearPosition(Angle mechanismPosition) {
+		return EqualsUtil.epsilonEquals(
+				getLatencyCompensatedPosition(),
+				mechanismPosition.in(Units.Rotations),
+				epsilonThreshold.in(Units.Rotations));
+	}
+
+	public void setCurrentPosition(Angle position) {
+		io.setCurrentPosition(position.in(Units.Rotations));
+	}
+
+	public Command setCurrentPositionCommand(Angle position) {
+		return runOnce(() -> setCurrentPosition(position));
+	}
+
+	public Command fullManualCommand(Supplier<Double> speed) {
+		return runOnce(() -> {
+			isFullManual = true;
+			manualSpeed = speed.get();
+			applySetpoint(Setpoint.withBrakeSetpoint());
+		}).until(() -> !isFullManual).andThen(runOnce(() -> {
+			isFullManual = false;
+			manualSpeed = 0.0;
+		}));
+	}
+}

@@ -1,0 +1,216 @@
+package frc.robot.Commands.DriveAndRobotOrientationCmds;
+
+
+import org.littletonrobotics.junction.Logger;
+
+import org.wpilib.math.util.MathUtil;
+import org.wpilib.math.controller.ProfiledPIDController;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.geometry.Translation2d;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.math.trajectory.TrapezoidProfile;
+import org.wpilib.system.Timer;
+import org.wpilib.command2.Command;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
+
+public class PIDDriveCmd extends Command {
+    private final ProfiledPIDController translationController;
+    private final ProfiledPIDController rotationController;
+
+    private final double POSITION_TOLERANCE_METERS;
+    private final double VELOCITY_TOLERANCE_MPS;
+    private final double ANGLE_TOLERANCE_DEGREES;
+    private final double ALLOWABLE_VISION_ADJUST;
+    private final double GOAL_VELOCITY;
+    private double waitTime = 0.0;
+
+    private final boolean REQUIRES_ACCURACY;
+
+    private Pose2d goalPos;
+
+    public PIDDriveCmd(Pose2d goal, double goalVel, double velTolerance, double posTolerance, double angleTolerance, boolean requiresAccuracy) {
+        addRequirements(CatzDrivetrain.getInstance());
+        this.goalPos = goal;
+
+        this.POSITION_TOLERANCE_METERS = posTolerance;
+        this.VELOCITY_TOLERANCE_MPS = velTolerance;
+        this.ANGLE_TOLERANCE_DEGREES = angleTolerance;
+        this.ALLOWABLE_VISION_ADJUST = 4e-3;
+        this.REQUIRES_ACCURACY = requiresAccuracy;
+        this.GOAL_VELOCITY = goalVel;
+
+        // Configure the translation controller
+        var translationConstraints = new TrapezoidProfile.Constraints(
+                4.0,
+                4.0);
+        this.translationController = new ProfiledPIDController(3.0, 0.0, 0.0, translationConstraints);
+
+        // Configure the rotation controller
+        var rotationConstraints = new TrapezoidProfile.Constraints(
+                360.0,
+                720.0);
+        this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
+        this.rotationController.enableContinuousInput(-180.0, 180.0);
+
+    }
+
+    public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy, double positionToleranceMeters, double angleToleranceDegrees) {
+        addRequirements(CatzDrivetrain.getInstance());
+        this.goalPos = goal;
+
+        this.REQUIRES_ACCURACY = requiresAccuracy;
+        this.POSITION_TOLERANCE_METERS = positionToleranceMeters;
+        this.VELOCITY_TOLERANCE_MPS = 1.0;
+        this.ANGLE_TOLERANCE_DEGREES = angleToleranceDegrees;
+        this.ALLOWABLE_VISION_ADJUST = 4e-3;
+        this.GOAL_VELOCITY = 0.0;
+
+        // Configure the translation controller
+        var translationConstraints = new TrapezoidProfile.Constraints(
+                4.0,
+                4.0);
+                this.translationController = new ProfiledPIDController(3.0, 0.0, 0.0, translationConstraints);
+
+        // Configure the rotation controller
+        var rotationConstraints = new TrapezoidProfile.Constraints(
+                360.0,
+                720.0);
+        this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
+        this.rotationController.enableContinuousInput(-180.0, 180.0);
+
+    }
+
+    public PIDDriveCmd(Pose2d goal, boolean requiresAccuracy) {
+        addRequirements(CatzDrivetrain.getInstance());
+        this.goalPos = goal;
+
+        this.REQUIRES_ACCURACY = requiresAccuracy;
+        this.POSITION_TOLERANCE_METERS = 0.02;
+        this.VELOCITY_TOLERANCE_MPS = 0.1;
+        this.ANGLE_TOLERANCE_DEGREES = 3.0;
+        this.ALLOWABLE_VISION_ADJUST = 4e-3;
+        this.GOAL_VELOCITY = 0.0;
+
+        // Configure the translation controller
+        var translationConstraints = new TrapezoidProfile.Constraints(
+                4.0,
+                4.0);
+                this.translationController = new ProfiledPIDController(3.0, 0.0, 0.0, translationConstraints);
+
+        // Configure the rotation controller
+        var rotationConstraints = new TrapezoidProfile.Constraints(
+                360.0,
+                720.0);
+        this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
+        this.rotationController.enableContinuousInput(-180.0, 180.0);
+
+    }
+
+    public PIDDriveCmd(double waitTime, Pose2d goal, boolean requiresAccuracy) {
+        addRequirements(CatzDrivetrain.getInstance());
+        this.goalPos = goal;
+        this.waitTime = waitTime;
+
+        this.REQUIRES_ACCURACY = requiresAccuracy;
+        this.POSITION_TOLERANCE_METERS = 0.02;
+        this.VELOCITY_TOLERANCE_MPS = 0.1;
+        this.ANGLE_TOLERANCE_DEGREES = 3.0;
+        this.ALLOWABLE_VISION_ADJUST = 4e-3;
+        this.GOAL_VELOCITY = 0.0;
+
+        // Configure the translation controller
+        var translationConstraints = new TrapezoidProfile.Constraints(
+                4.0,
+                4.0);
+                this.translationController = new ProfiledPIDController(3.0, 0.0, 0.0, translationConstraints);
+
+        // Configure the rotation controller
+        var rotationConstraints = new TrapezoidProfile.Constraints(
+                360.0,
+                720.0);
+        this.rotationController = new ProfiledPIDController(3.0, 0.0, 0.0, rotationConstraints);
+        this.rotationController.enableContinuousInput(-180.0, 180.0);
+
+    }
+
+    double startTime = 0.0;
+
+    @Override
+    public void initialize(){
+        startTime = Timer.getTimestamp();
+        Logger.recordOutput("PID Target Pose", goalPos);
+
+        Pose2d currentPose = CatzRobotTracker.getInstance().getEstimatedPose();
+        double currentDistance = goalPos.getTranslation().getDistance(currentPose.getTranslation());
+        translationController.reset(currentDistance);
+        double initAngleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
+        rotationController.reset(initAngleError);
+    }
+
+    @Override
+    public void execute(){
+        Pose2d currentPose = CatzRobotTracker.getInstance().getEstimatedPose();
+
+        Translation2d poseError = goalPos.minus(currentPose).getTranslation();
+        double currentDistance = poseError.getNorm();
+        Rotation2d direction = poseError.getAngle();
+
+        double translationFeedback = translationController.calculate(currentDistance, 0.0);
+        double translationFeedforward = translationController.getSetpoint().velocity;
+        double targetVel = Math.max(Math.abs(translationFeedback + translationFeedforward), GOAL_VELOCITY);
+
+        double angleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
+        double rotationFeedback = rotationController.calculate(angleError, 0.0);
+        double rotationFeedforward = rotationController.getSetpoint().velocity;
+
+        double targetOmega = -Math.toRadians(rotationFeedback + rotationFeedforward);
+
+        ChassisVelocities goalChassisVelocities = new ChassisVelocities(
+            targetVel * direction.getCos(),
+            targetVel * direction.getSin(),
+            targetOmega
+        );
+        CatzDrivetrain.getInstance().drive(goalChassisVelocities);
+
+    }
+
+    @Override
+    public boolean isFinished(){
+        boolean atTargetState = isAtTargetState();
+        Logger.recordOutput("Vision Pose Shift", CatzRobotTracker.Instance.getVisionPoseShift().getNorm());
+        if(REQUIRES_ACCURACY){
+            double curTime = Timer.getTimestamp();
+            return  atTargetState && LimelightSubsystem.Instance.isSeeingApriltag() && CatzRobotTracker.Instance.getVisionPoseShift().getNorm() < ALLOWABLE_VISION_ADJUST
+                    && curTime - startTime > waitTime;
+        }else{
+            return atTargetState;
+        }
+    }
+
+    private boolean isAtTargetState(){
+        Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
+        ChassisVelocities currentSpeed = CatzRobotTracker.Instance.getRobotRelativeChassisVelocities();
+
+        double distanceError = currentPose.getTranslation().getDistance(goalPos.getTranslation());
+        double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
+
+        double rotationError = Math.abs(MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0));
+        Logger.recordOutput("distance error", distanceError);
+        Logger.recordOutput("linear velocity", linearVelocity);
+        Logger.recordOutput("rotation error", rotationError);
+        Logger.recordOutput("is distance ok", distanceError < POSITION_TOLERANCE_METERS);
+        Logger.recordOutput("is velocity ok", linearVelocity < VELOCITY_TOLERANCE_MPS);
+        Logger.recordOutput("is rotation ok", rotationError < ANGLE_TOLERANCE_DEGREES);
+        return distanceError < POSITION_TOLERANCE_METERS &&
+               linearVelocity < VELOCITY_TOLERANCE_MPS &&
+               rotationError < ANGLE_TOLERANCE_DEGREES;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        System.out.println("finished!!!!!! yayayay " + interrupted);
+    }
+}

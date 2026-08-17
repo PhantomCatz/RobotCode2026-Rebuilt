@@ -1,0 +1,41 @@
+package frc.robot.CatzSubsystems.CatzVision.Detection;
+
+import org.wpilib.math.linalg.VecBuilder;
+import org.wpilib.math.geometry.Pose3d;
+import org.wpilib.math.geometry.Rotation3d;
+import org.wpilib.math.geometry.Translation3d;
+import org.wpilib.units.Units;
+import org.wpilib.units.measure.Distance;
+import frc.robot.Robot;
+import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
+
+public class DetectionConstants {
+	public static final String kLimelightName = "limelight-cheese";
+	public static final Pose3d kRobotToCameraOffset = new Pose3d(
+			// forward/back, left/right, up/down
+			new Translation3d(Units.Inches.of(4.5), Units.Inches.of(-10.75), Units.Inches.of(20.5)),
+			// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
+			new Rotation3d(Units.Degree.of(0.0), Units.Degree.of(-12.0), Units.Degree.of(0.0)));
+	public static final int kTelePipeline = 3;
+	public static final int kAutoPipeline = 0;
+	public static final int kDisabledPipeline = 1;
+	public static final Distance kFuelRadius = Units.Inches.of(3.0);
+	public static final double DETECTION_POSE_BUFFER_SIZE_SEC = 2.0;
+	public static final double MAX_GROUP_DIST_SQUARED = 0.25; // meters, square of the max distance
+
+	public static final LimelightConfig getDetectionIOConfig() {
+		LimelightConfig config = new LimelightConfig();
+		config.name = kLimelightName;
+		config.robotToCameraOffset = kRobotToCameraOffset;
+		config.aprilTagVisionStdDevs = VecBuilder.fill(0.8, 0.8, 99999.0);
+		return config;
+	}
+
+	public static final DetectionIOLimelight getDetectionIO() {
+		if (Robot.isReal()) {
+			return new DetectionIOLimelight();
+		} else {
+			return null;
+		}
+	}
+}
