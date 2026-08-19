@@ -296,7 +296,7 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
 	public void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {
 		threadPoolExecutor.submit(() -> {
-			fx.setNeutralMode(neutralMode);
+			fx.configNeutralMode(neutralMode);
 		});
 	}
 

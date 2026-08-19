@@ -8,6 +8,7 @@ import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.math.numbers.N1;
 import org.wpilib.math.numbers.N3;
+import org.wpilib.math.util.Nat;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.linalg.VecBuilder;
 import frc.robot.FieldConstants;
@@ -130,22 +131,22 @@ public class CatzRobotTracker {
 
     //Add twist to odometry pose
     if((twist.dx != 0 || twist.dy != 0 || twist.dtheta != 0) && (!Double.isNaN(twist.dx) && !Double.isNaN(twist.dy) && !Double.isNaN(twist.dtheta))){
-      odometryPose = odometryPose.exp(twist);
-      estimatedPose = estimatedPose.exp(twist);
+      odometryPose = odometryPose.plus(twist.exp());
+      estimatedPose = estimatedPose.plus(twist.exp());
     }
     // Add pose to buffer at timestamp
     POSE_BUFFER.addSample(observation.timestamp(), odometryPose);
     ChassisVelocities ChassisVelocities = KINEMATICS.toChassisVelocities(observation.moduleStates);
     robotAccelerations =
       new Twist2d(
-        (ChassisVelocities.vxMetersPerSecond - m_lastChassisVelocities.vxMetersPerSecond) / (observation.timestamp - lastTimestamp),
-        (ChassisVelocities.vyMetersPerSecond - m_lastChassisVelocities.vyMetersPerSecond) / (observation.timestamp - lastTimestamp),
-        (ChassisVelocities.omegaRadiansPerSecond - m_lastChassisVelocities.omegaRadiansPerSecond) / (observation.timestamp - lastTimestamp)
+        (ChassisVelocities.vx - m_lastChassisVelocities.vx) / (observation.timestamp - lastTimestamp),
+        (ChassisVelocities.vy - m_lastChassisVelocities.vy) / (observation.timestamp - lastTimestamp),
+        (ChassisVelocities.omega - m_lastChassisVelocities.omega) / (observation.timestamp - lastTimestamp)
       );
 
     m_lastChassisVelocities = ChassisVelocities;
     lastTimestamp = observation.timestamp;
-    Logger.recordOutput("CatzRobotTracker/ChassisVelocities", Math.hypot(m_lastChassisVelocities.vxMetersPerSecond, m_lastChassisVelocities.vyMetersPerSecond));
+    Logger.recordOutput("CatzRobotTracker/ChassisVelocities", Math.hypot(m_lastChassisVelocities.vx, m_lastChassisVelocities.vy));
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
@@ -256,7 +257,7 @@ public class CatzRobotTracker {
   }
 
   public ChassisVelocities getFieldRelativeChassisVelocities() {
-    return ChassisVelocities.fromRobotRelativeSpeeds(m_lastChassisVelocities, estimatedPose.getRotation());
+    return m_lastChassisVelocities.toFieldRelative(estimatedPose.getRotation());
   }
 
   /********************************************************************************************************************************

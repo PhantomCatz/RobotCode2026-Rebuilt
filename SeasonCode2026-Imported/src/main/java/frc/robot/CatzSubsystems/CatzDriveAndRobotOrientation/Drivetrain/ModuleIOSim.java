@@ -8,7 +8,7 @@ import org.wpilib.math.numbers.N1;
 import org.wpilib.math.numbers.N2;
 import org.wpilib.math.system.LinearSystem;
 import org.wpilib.math.system.DCMotor;
-import org.wpilib.math.system.LinearSystemUtil;
+import org.wpilib.math.system.Models;
 import org.wpilib.math.util.Units;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.simulation.DCMotorSim;
@@ -17,10 +17,10 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveCon
 
 public class ModuleIOSim implements ModuleIO {
   private final LinearSystem<N2, N1, N2> plantDrive =
-      LinearSystemUtil.createDCMotorSystem(
+      Models.singleJointedArmFromPhysicalConstants(
           DCMotor.getKrakenX60(1), 0.025, DriveConstants.MODULE_GAINS_AND_RATIOS.driveReduction());
   private final LinearSystem<N2, N1, N2> plantSteer =
-      LinearSystemUtil.createDCMotorSystem(
+      Models.singleJointedArmFromPhysicalConstants(
           DCMotor.getKrakenX60(1), 0.004, DriveConstants.MODULE_GAINS_AND_RATIOS.driveReduction());
 
   private final DCMotorSim driveSim =

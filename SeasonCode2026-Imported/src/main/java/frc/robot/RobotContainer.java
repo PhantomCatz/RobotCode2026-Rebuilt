@@ -201,6 +201,7 @@ public class RobotContainer {
   }
 
   public static void rumbleDrv(double val) {
-    xboxDrv.setRumble(RumbleType.kBothRumble, val);
+    xboxDrv.setRumble(RumbleType.LEFT_RUMBLE, val);
+    xboxDrv.setRumble(RumbleType.RIGHT_RUMBLE, val);
   }
 }

@@ -2,7 +2,7 @@ package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
@@ -95,7 +95,7 @@ public class TeleopDriveCmd extends Command {
                                                      // alliances
 
     // Flip Directions for left joystick if alliance is red
-    if (DriverStation.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
+    if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
       joyX = -joyX;
       joyY = -joyY;
     }
@@ -125,15 +125,15 @@ public class TeleopDriveCmd extends Command {
     if(CatzSuperstructure.Instance.getIsScoring()) {
       double maxScoringVel = DriveConstants.MOVE_WHILE_SHOOT_LIMITS.maxDriveVelocity();
       double currentTargetVel = Math.hypot(
-          ChassisVelocities.vxMetersPerSecond,
-          ChassisVelocities.vyMetersPerSecond
+          ChassisVelocities.vx,
+          ChassisVelocities.vy
       );
 
       // Scale down linear translation if it exceeds the scoring speed limit
       if (currentTargetVel > maxScoringVel) {
         double scale = maxScoringVel / currentTargetVel;
-        ChassisVelocities.vxMetersPerSecond *= scale;
-        ChassisVelocities.vyMetersPerSecond *= scale;
+        ChassisVelocities.vx *= scale;
+        ChassisVelocities.vy *= scale;
       }
     }
 
@@ -146,7 +146,7 @@ public class TeleopDriveCmd extends Command {
 
     // Send new ChassisVelocities object to the drivetrain queue to use later
     CatzDrivetrain.getInstance().swerveSetpointDrive(currentSetpoint);
-    // Logger.recordOutput("cur controller input", Math.hypot(currentSetpoint.ChassisVelocities().vxMetersPerSecond, currentSetpoint.ChassisVelocities().vyMetersPerSecond));
+    // Logger.recordOutput("cur controller input", Math.hypot(currentSetpoint.ChassisVelocities().vx, currentSetpoint.ChassisVelocities().vy));
     // debugLogsDrive();
   } // end of execute()
 
@@ -156,9 +156,9 @@ public class TeleopDriveCmd extends Command {
   //
   // --------------------------------------------------------------------------------------
   public void debugLogsDrive() {
-    Logger.recordOutput("Drive/robot orientation rad per sec", ChassisVelocities.omegaRadiansPerSecond);
-    Logger.recordOutput("Drive/chassisspeed x speed mtr sec", ChassisVelocities.vxMetersPerSecond);
-    Logger.recordOutput("Drive/chassisspeed y speed mtr sec", ChassisVelocities.vyMetersPerSecond);
+    Logger.recordOutput("Drive/robot orientation rad per sec", ChassisVelocities.omega);
+    Logger.recordOutput("Drive/chassisspeed x speed mtr sec", ChassisVelocities.vx);
+    Logger.recordOutput("Drive/chassisspeed y speed mtr sec", ChassisVelocities.vy);
   }
 
   // --------------------------------------------------------------------------------------

@@ -195,7 +195,7 @@ public class PIDDriveCmd extends Command {
         ChassisVelocities currentSpeed = CatzRobotTracker.Instance.getRobotRelativeChassisVelocities();
 
         double distanceError = currentPose.getTranslation().getDistance(goalPos.getTranslation());
-        double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
+        double linearVelocity = Math.hypot(currentSpeed.vx, currentSpeed.vy);
 
         double rotationError = Math.abs(MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0));
         Logger.recordOutput("distance error", distanceError);

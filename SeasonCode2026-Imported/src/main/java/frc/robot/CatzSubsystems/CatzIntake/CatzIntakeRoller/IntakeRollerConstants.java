@@ -86,8 +86,8 @@ public class IntakeRollerConstants {
 
 	public static Setpoint getOnSetpoint() {
 		ChassisVelocities speeds = CatzRobotTracker.Instance.getRobotRelativeChassisVelocities();
-		double vx = speeds.vxMetersPerSecond;
-		double vy = speeds.vyMetersPerSecond;
+		double vx = speeds.vx;
+		double vy = speeds.vy;
 		double driveDirection = Math.atan2(vy, vx);
 		double intakeDirection = CatzRobotTracker.Instance.getEstimatedPose().getRotation().getRadians();
 		double angleBetween = Math.abs(MathUtil.angleModulus(intakeDirection-driveDirection));

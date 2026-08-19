@@ -43,7 +43,7 @@ public class SubsystemVisualizer {
         this.name = name;
 
         // 1. Initialize Canvas (6m x 6m)
-        mechanism = new LoggedMechanism2d(6.0, 6.0, new Color8Bit(Color.kDarkGray));
+        mechanism = new LoggedMechanism2d(6.0, 6.0, new Color8Bit(Color.DARK_GRAY));
 
         // 2. Build Turret Hierarchy (Root -> Turret -> Hood)
         // The root is where the turret is mounted on the robot chassis
@@ -55,14 +55,14 @@ public class SubsystemVisualizer {
 
         // Append Hood to Turret (so it rotates WITH the turret)
         hoodLigament = turretLigament.append(
-            new LoggedMechanismLigament2d("Hood", HOOD_LENGTH, 0, 4, new Color8Bit(Color.kYellow))
+            new LoggedMechanismLigament2d("Hood", HOOD_LENGTH, 0, 4, new Color8Bit(Color.YELLOW))
         );
 
         // 3. Build Intake Hierarchy (Root -> Intake)
         intakeRoot = mechanism.getRoot(name + "IntakeRoot", 3.0 + INTAKE_X_OFFSET, 3.0);
 
         intakeLigament = intakeRoot.append(
-            new LoggedMechanismLigament2d("Intake", INTAKE_LENGTH, 0, 6, new Color8Bit(Color.kOrange))
+            new LoggedMechanismLigament2d("Intake", INTAKE_LENGTH, 0, 6, new Color8Bit(Color.ORANGE))
         );
     }
 

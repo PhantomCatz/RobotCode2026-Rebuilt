@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -52,7 +53,7 @@ public class TurretConstants {
 	public static final Rotation2d TURRET_RADIAL_ANGLE = new Rotation2d(Math.PI * 0.75);
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
-	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
+	public static final CANcoder TURRET_CANCODER = new CANcoder(26, new CANBus());
 
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 	public static final Distance TURRET_HEIGHT = Units.Inches.of(18.0);

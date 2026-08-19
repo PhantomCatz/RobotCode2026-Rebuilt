@@ -10,7 +10,7 @@ public class CatzMathUtils {
       SwerveModuleVelocity desiredState, Rotation2d currentAngle) {
     double targetAngle =
         placeTargetInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
-    double targetSpeed = desiredState.speedMetersPerSecond;
+    double targetSpeed = desiredState.velocity;
     double delta = targetAngle - currentAngle.getDegrees();
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;

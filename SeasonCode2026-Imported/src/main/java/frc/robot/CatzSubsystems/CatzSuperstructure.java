@@ -12,7 +12,7 @@ import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.Distance;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.command2.CommandScheduler;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
@@ -639,7 +639,7 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT).schedule();
+                CommandScheduler.getInstance().schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT));
                 hoodManual = false;
             }
         });
@@ -661,7 +661,7 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+                CommandScheduler.getInstance().schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
                 turretManual = false;
             }
         });
@@ -683,7 +683,7 @@ public class CatzSuperstructure {
                 }).schedule();
 
             } else {
-                CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+                CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
                 deployManual = false;
             }
         });
@@ -698,16 +698,16 @@ public class CatzSuperstructure {
 
         // Only schedule stow if it's NOT the one we are about to manually control
         if (excludedSubsystem != CatzClimb.Instance) {
-            CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+            CommandScheduler.getInstance().schedule(CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT));
         }
         if (excludedSubsystem != CatzHood.Instance) {
-            CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT).schedule();
+            CommandScheduler.getInstance().schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
         }
         if (excludedSubsystem != CatzTurret.Instance) {
-            CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT).schedule();
+            CommandScheduler.getInstance().schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
         }
         if (excludedSubsystem != CatzIntakeDeploy.Instance) {
-            CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+            CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
         }
     }
 
@@ -763,7 +763,7 @@ public class CatzSuperstructure {
         Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
 
         boolean isOpponentSide = false;
-        if(DriverStation.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE){
+        if(DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE){
             if(currentTranslation.getX() > FieldConstants.fieldXHalf){
                 isOpponentSide = true;
             }
@@ -783,7 +783,7 @@ public class CatzSuperstructure {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             boolean flipAlliance = false;
 
-            if(DriverStation.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE){
+            if(DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE){
                 if(currentTranslation.getX() > FieldConstants.fieldXHalf){
                     flipAlliance = true;
                 }

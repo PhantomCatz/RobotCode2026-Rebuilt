@@ -9,7 +9,7 @@ import org.wpilib.vision.apriltag.AprilTagFields;
 import org.wpilib.math.geometry.*;
 import org.wpilib.math.util.Units;
 import org.wpilib.units.measure.Distance;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.AllianceFlipUtil;
@@ -126,7 +126,7 @@ public class FieldConstants {
   // }
 
   public static Pose2d getClimbClosePosition(Translation2d robotPose) {
-    if (DriverStation.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
+    if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
       double distRight = robotPose.getDistance(CLIMB_RED_RIGHT.getTranslation());
       double distLeft = robotPose.getDistance(CLIMB_RED_LEFT.getTranslation());
       return (distRight < distLeft) ? CLIMB_RED_RIGHT : CLIMB_RED_LEFT;
@@ -250,7 +250,7 @@ public class FieldConstants {
   }
 
   public static Translation2d getOpposingHubLocation(){
-    if(DriverStation.getAlliance().orElse(Alliance.BLUE) == Alliance.RED){
+    if(DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED){
       return HUB_LOCATION;
     }else{
       return AllianceFlipUtil.applyNoCondition(HUB_LOCATION);

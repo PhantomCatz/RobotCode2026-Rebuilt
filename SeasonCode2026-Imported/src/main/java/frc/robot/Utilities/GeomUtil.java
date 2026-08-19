@@ -129,7 +129,7 @@ public class GeomUtil {
    */
   public static Twist2d toTwist2d(ChassisVelocities speeds) {
     return new Twist2d(
-        speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+        speeds.vx, speeds.vy, speeds.omega);
   }
 
   /**

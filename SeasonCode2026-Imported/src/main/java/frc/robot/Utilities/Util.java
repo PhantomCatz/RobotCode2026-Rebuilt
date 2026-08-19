@@ -110,14 +110,14 @@ public class Util {
 	}
 
 	public static boolean epsilonEquals(ChassisVelocities a, ChassisVelocities b) {
-		return epsilonEquals(a.vxMetersPerSecond, b.vxMetersPerSecond)
-				&& epsilonEquals(a.vyMetersPerSecond, b.vyMetersPerSecond)
-				&& epsilonEquals(a.omegaRadiansPerSecond, b.omegaRadiansPerSecond);
+		return epsilonEquals(a.vx, b.vx)
+				&& epsilonEquals(a.vy, b.vy)
+				&& epsilonEquals(a.omega, b.omega);
 	}
 
 	public static boolean epsilonEquals(ChassisVelocities a, ChassisVelocities b, double linearVelocityEpsilon) {
-		return epsilonEquals(a.vxMetersPerSecond, b.vxMetersPerSecond, linearVelocityEpsilon)
-				&& epsilonEquals(a.vyMetersPerSecond, b.vyMetersPerSecond, linearVelocityEpsilon);
+		return epsilonEquals(a.vx, b.vx, linearVelocityEpsilon)
+				&& epsilonEquals(a.vy, b.vy, linearVelocityEpsilon);
 	}
 
 	public static boolean allCloseTo(final List<Double> list, double value, double epsilon) {
@@ -356,12 +356,12 @@ public class Util {
 		}
 
 		public Pose2dTimeInterpolable(Trajectory trajwithTan, Rotation2d startHeading, Rotation2d endHeading) {
-			double totalTimeSecpnods = trajwithTan.getTotalTimeSeconds();
+			double totalTimeSecpnods = trajwithTan.getTotalTime();
 			for (State state : trajwithTan.getStates()) {
-				Rotation2d poseRotation = startHeading.interpolate(endHeading, state.timeSeconds / totalTimeSecpnods);
+				Rotation2d poseRotation = startHeading.interpolate(endHeading, state.time / totalTimeSecpnods);
 				poseList.add(new Pair<>(
-						new Pose2d(state.poseMeters.getTranslation(), poseRotation),
-						Units.Seconds.of(state.timeSeconds)));
+						new Pose2d(state.pose.getTranslation(), poseRotation),
+						Units.Seconds.of(state.time)));
 			}
 			SmartDashboard.putNumber("Auto Align Traj/Number Of Trajectory States", poseList.size());
 		}

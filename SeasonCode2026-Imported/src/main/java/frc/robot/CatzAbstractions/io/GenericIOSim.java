@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.system.DCMotor;
+import org.wpilib.math.system.Models;
 import org.wpilib.math.util.Units;
 import org.wpilib.simulation.DCMotorSim;
 import frc.robot.Utilities.MotorUtil.Gains;
@@ -54,7 +55,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
         this.pid = new PIDController(gains.kP(), gains.kI(), gains.kD());
 
         // Using a standard DC motor system
-        var plant = LinearSystemId.createDCMotorSystem(gearBox, J_KG_M2, GEAR_REDUCTION);
+        var plant = Models.singleJointedArmFromPhysicalConstants(gearBox, J_KG_M2, GEAR_REDUCTION);
         motorSim = new DCMotorSim(plant, gearBox, GEAR_REDUCTION - 0.01, GEAR_REDUCTION + 0.01);
     }
 

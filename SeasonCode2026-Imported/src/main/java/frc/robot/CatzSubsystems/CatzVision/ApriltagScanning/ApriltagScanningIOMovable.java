@@ -32,7 +32,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     public void update() {
         updateGyroWithTurret();
 
-        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisVelocities().omegaRadiansPerSecond);
+        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisVelocities().omega);
 
         double turretOmegaDegPerSec = CatzTurret.Instance.getVelocity().in(Units.DegreesPerSecond);
 

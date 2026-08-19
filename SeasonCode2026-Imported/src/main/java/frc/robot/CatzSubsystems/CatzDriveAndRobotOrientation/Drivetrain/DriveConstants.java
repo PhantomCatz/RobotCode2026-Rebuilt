@@ -85,7 +85,7 @@ public class DriveConstants {
             new ModuleGainsAndRatios(
                 5.0,
                 0.45,
-                1.0 / DCMotor.getKrakenX60Foc(1).KtNMPerAmp, // A/(N*m)
+                1.0 / DCMotor.getKrakenX60Foc(1).Kt, // A/(N*m)
                 6.0,
                 0.0,
                 1.0,

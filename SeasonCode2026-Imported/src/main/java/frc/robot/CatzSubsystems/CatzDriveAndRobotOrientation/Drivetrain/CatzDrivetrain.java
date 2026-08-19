@@ -15,7 +15,7 @@ import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.math.trajectory.Trajectory;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.Field2d;
@@ -205,7 +205,7 @@ public class CatzDrivetrain extends SubsystemBase {
       return false;
     }
     Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
-    if (DriverStation.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE) {
+    if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE) {
       return (pose.getX() > FieldConstants.fieldLength - FieldConstants.fieldTrenchX);
     }
     else {
@@ -222,15 +222,15 @@ public class CatzDrivetrain extends SubsystemBase {
 
   public void drive(ChassisVelocities ChassisVelocities) {
     appliedChassisVelocities = ChassisVelocities;
-    ChassisVelocities descreteSpeeds = ChassisVelocities.discretize(ChassisVelocities, CatzConstants.LOOP_TIME);
+    ChassisVelocities descreteSpeeds = ChassisVelocities.discretize(CatzConstants.LOOP_TIME);
     // --------------------------------------------------------
     // Convert chassis speeds to individual module states and set module states
     // --------------------------------------------------------
-    SwerveModuleVelocity[] unoptimizedModuleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleVelocitys(descreteSpeeds);
+    SwerveModuleVelocity[] unoptimizedModuleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleVelocities(descreteSpeeds);
     // --------------------------------------------------------
     // Scale down wheel speeds
     // --------------------------------------------------------
-    SwerveDriveKinematics.desaturateWheelSpeeds(unoptimizedModuleStates,
+    SwerveDriveKinematics.desaturateWheelVelocities(unoptimizedModuleStates,
         DriveConstants.DRIVE_CONFIG.maxLinearVelocity());
     // --------------------------------------------------------
     // Optimize Wheel Angles
@@ -246,7 +246,7 @@ public class CatzDrivetrain extends SubsystemBase {
   }
 
   public void simpleDrive(ChassisVelocities speeds) {
-    SwerveModuleVelocity[] moduleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleVelocitys(speeds);
+    SwerveModuleVelocity[] moduleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleVelocities(speeds);
 
     for (int i = 0; i < 4; i++) {
       // The module returns the optimized state that prevents it from overturn, useful

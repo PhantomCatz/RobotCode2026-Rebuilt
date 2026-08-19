@@ -1,6 +1,6 @@
 package frc.robot.CatzSubsystems.CatzLEDs;
 
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.util.Color;
@@ -24,7 +24,7 @@ import com.ctre.phoenix6.signals.RGBWColor;
 public class CatzLED extends VirtualSubsystem {
   public static final CatzLED Instance = new CatzLED();
 
-  private CANdle candle = new CANdle(10);
+  private CANdle candle = new CANdle(10, new CanBus());
 
   // ----------------------------------------------------------------------------------------------
   // Robot state LED tracking
@@ -100,8 +100,8 @@ public class CatzLED extends VirtualSubsystem {
 
   private void updateControllerState() {
     if (DriverStationBackend.isDisabled()) {
-      if(DriverStation.isDSAttached()){
-        if (DriverStation.getAlliance().orElseThrow() == Alliance.BLUE) {
+      if(DriverStationBackend.isDSAttached()){
+        if (DriverStationBackend.getAlliance().orElseThrow() == Alliance.BLUE) {
           curLEDState = LEDState.DISABLED_BLUE;
         }
         else {
@@ -132,7 +132,7 @@ public class CatzLED extends VirtualSubsystem {
   public void periodic() {
     // Update alliance color
     // if (DriverStation.isDSAttached()) {
-    //   alliance = DriverStation.getAlliance();
+    //   alliance = DriverStationBackend.getAlliance();
     //   allianceColor =
     //       alliance
     //           .map(alliance -> alliance == Alliance.BLUE ? Color.kAqua : Color.kOrangeRed)

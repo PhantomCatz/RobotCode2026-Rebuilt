@@ -262,7 +262,7 @@ public class ModuleIORealFoc implements ModuleIO {
   }
 
   public void runSteerPercentOutput(double percentOutput) {
-    steerTalon.set(percentOutput);
+    steerTalon.setControl(dutyCycleOutControl.withOutput(percentOutput));
   }
 
   @Override

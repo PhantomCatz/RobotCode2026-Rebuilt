@@ -13,7 +13,7 @@ import org.wpilib.networktables.StructPublisher;
 import org.wpilib.units.BaseUnits;
 import org.wpilib.units.measure.Distance;
 import org.wpilib.units.measure.Time;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -95,7 +95,7 @@ public class DetectionIOLimelight extends DetectionIO {
 	}
 
 	private boolean inOpposingArea(Pose2d fuelPose) {
-		if (DriverStation.getAlliance().get() == Alliance.BLUE) {
+		if (DriverStationBackend.getAlliance().get() == Alliance.BLUE) {
 			return fuelPose.getX() > 11.928191184997559;
 		}
 		else {

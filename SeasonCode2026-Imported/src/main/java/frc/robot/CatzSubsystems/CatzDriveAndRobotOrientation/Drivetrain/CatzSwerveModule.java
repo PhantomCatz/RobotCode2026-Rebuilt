@@ -122,7 +122,7 @@ public class CatzSwerveModule {
   public void debugLogsSwerve() {
     // OPTIMIZATION: Use pre-cached keys
     Logger.recordOutput(logKeyDriveRecFPS, Units.metersToFeet(Conversions.RPSToMPS(inputs.driveVelocityRPS)));
-    Logger.recordOutput(logKeyDriveTargFPS, Units.metersToFeet(m_SwerveModuleVelocity.speedMetersPerSecond));
+    Logger.recordOutput(logKeyDriveTargFPS, Units.metersToFeet(m_SwerveModuleVelocity.velocity));
     Logger.recordOutput(logKeyCurModState, m_SwerveModuleVelocity.angle.getRadians());
     Logger.recordOutput(logKeyAngleErr, Math.toDegrees(m_SwerveModuleVelocity.angle.getRadians() - getAbsEncRadians()));
     Logger.recordOutput(logKeyCurModAng, getAbsEncRadians());
@@ -141,7 +141,7 @@ public class CatzSwerveModule {
     double targetAngleRads = state.angle.getRadians();
     double currentAngleRads = getAbsEncRadians();
 
-    io.runDriveVelocityRPSIO(Conversions.MPSToRPS(state.speedMetersPerSecond));
+    io.runDriveVelocityRPSIO(Conversions.MPSToRPS(state.velocity));
     io.runSteerPositionSetpoint(currentAngleRads, targetAngleRads);
   }
 

@@ -17,7 +17,9 @@ import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.internal.DriverStationBackend;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.SmartDashboard;
@@ -173,7 +175,7 @@ public class Robot extends LoggedRobot {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
     System.out.println(AutoRoutineSelector.Instance);
 
-      DriverStation.silenceJoystickConnectionWarning(true);
+      DriverStationBackend.silenceJoystickConnectionWarning(true);
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
@@ -248,7 +250,7 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
-    CatzSuperstructure.Instance.cmdShooterStop().schedule();
+    CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
     CatzDrivetrain.getInstance().setNormalConfig();
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
@@ -263,13 +265,13 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
     if(iterations < 20) {
-      Alliance alliance = DriverStation.getAlliance().orElse(Alliance.BLUE);
-      System.out.println("hello world!\n" + "\"" + DriverStation.getGameSpecificMessage() + "\"" + " \n boom it");
+      Alliance alliance = DriverStationBackend.getAlliance().orElse(Alliance.BLUE);
+      System.out.println("hello world!\n" + "\"" + DriverStationBackend.getGameData() + "\"" + " \n boom it");
       try{
-        if ((DriverStation.getGameSpecificMessage().charAt(0) == 'B'
-          && alliance == DriverStation.Alliance.BLUE)
-          ||(DriverStation.getGameSpecificMessage().charAt(0) == 'R'
-          && alliance == DriverStation.Alliance.RED)
+        if ((DriverStationBackend.getGameData().toString().charAt(0) == 'B'
+          && alliance == Alliance.BLUE)
+          ||(DriverStationBackend.getGameData().toString().charAt(0) == 'R'
+          && alliance == Alliance.RED)
           )
         {
           SmartDashboard.putBoolean("Won Auton?", true);
@@ -286,16 +288,17 @@ public class Robot extends LoggedRobot {
   public void teleopExit() {
   }
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+  // @Override
+  // public void testInit() {
+  //   CommandScheduler.getInstance().cancelAll();
+  // }
 
-  @Override
-  public void testPeriodic() {
-  }
+  // @Override
+  // public void testPeriodic() {
+  // }
 
-  @Override
-  public void testExit() {
+  // @Override
+  // public void testExit() {
+  // }
+
   }
-}
