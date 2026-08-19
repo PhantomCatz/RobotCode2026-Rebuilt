@@ -41,7 +41,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         this.gearRatio = config.gearRatio;
 
         // 1. Initialize Leader
-        leaderMotor = new SparkMax(0, config.mainID, MotorType.kBrushless);
+        leaderMotor = new SparkMax(0, config.mainID, MotorType.kBrushless); // TODO need to have a system for defining buses
         encoder = leaderMotor.getEncoder();
         closedLoopController = leaderMotor.getClosedLoopController();
 

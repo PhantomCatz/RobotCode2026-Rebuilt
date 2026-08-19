@@ -61,5 +61,6 @@
     "org.wpilib.math.**.struct.*",
     null
   ],
-  "java.dependency.enableDependencyCheckup": false
+  "java.dependency.enableDependencyCheckup": false,
+  "java.compile.nullAnalysis.mode": "automatic"
 }

@@ -20,7 +20,7 @@ public class GyroIOPigeon implements GyroIO {
   private final StatusSignal<AngularVelocity> yawVelocity;
 
   public GyroIOPigeon() {
-    pigeon = new Pigeon2(GYRO_ID, new CANBus());
+    pigeon = new Pigeon2(GYRO_ID, new CANBus()); // TODO why different than shoving in the id of the bus may need the * since it is on the CAN FD bus
     yaw = pigeon.getYaw();
     yawVelocity = pigeon.getAngularVelocityZWorld();
 

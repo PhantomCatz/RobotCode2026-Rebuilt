@@ -613,7 +613,7 @@ public class CatzSuperstructure {
                     return Setpoint.withVoltageSetpoint(0.0);
 
                 return Setpoint.withVoltageSetpoint(input);
-            }).schedule();
+            }).schedule(); // TODO do we nee to wrap around the commandschedule.shcedule() for all these commands?
             // if (climbManual == false) {
 
             // } else {
