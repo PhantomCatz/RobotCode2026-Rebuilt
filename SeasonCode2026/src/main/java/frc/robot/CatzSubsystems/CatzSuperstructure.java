@@ -3,8 +3,6 @@ package frc.robot.CatzSubsystems;
 import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
-
-import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,15 +15,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
-import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
-import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -70,33 +61,8 @@ public class CatzSuperstructure {
     private boolean deployManual = false;
 
     private final SubsystemVisualizer visualizer;
-
-
-
-    private final TowerSwipe outpostSwipeRoutine;
-    private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
-    private final DepotMiddleSwipe depotMiddleSwipeRoutine;
-    private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
-    private final DepotCornerSwipe depotCornerSwipeRoutine;
-    private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
-
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
-
-        CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
-                                                  CatzRobotTracker.getInstance()::resetPose,
-                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-                                                  true,
-                                                  CatzDrivetrain.getInstance()
-                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
-
-        outpostSwipeRoutine = new TowerSwipe();
-        outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
-        depotMiddleSwipeRoutine = new DepotMiddleSwipe();
-        depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
-        depotCornerSwipeRoutine = new DepotCornerSwipe();
-        depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -777,62 +743,5 @@ public class CatzSuperstructure {
     }, Set.of(CatzDrivetrain.getInstance()));
   }
 
-    public Command swipe() {
-        return Commands.defer(() -> {
-            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
-            boolean flipAlliance = false;
 
-            if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue){
-                if(currentTranslation.getX() > FieldConstants.fieldXHalf){
-                    flipAlliance = true;
-                }
-            }else{
-                if(currentTranslation.getX() < FieldConstants.fieldXHalf){
-                    flipAlliance = true;
-                }
-            }
-
-            if (flipAlliance) {
-                // Pass true because we are on the opponent side
-                switch(FieldConstants.getCloserSwipe(currentTranslation, true)) {
-                    case(1): return outpostOppositeSwipeRun();
-                    case(2): return depotOppositeMiddleSwipeRun();
-                    case(3): return depotOppositeCornerSwipeRun();
-                    default: return Commands.none().andThen(Commands.print("none!!!!"));
-                }
-            }
-            // Pass false because we are on our home side
-            switch(FieldConstants.getCloserSwipe(currentTranslation, false)) {
-                case(1): return outpostSwipeRun();
-                case(2): return depotMiddleSwipeRun();
-                case(3): return depotCornerSwipeRun();
-                default: return Commands.none().andThen(Commands.print("none!!!!"));
-            }
-
-        }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
-    }
-
-    public Command outpostSwipeRun() {
-        return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
-    }
-
-    public Command depotMiddleSwipeRun() {
-        return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
-    }
-
-    public Command depotCornerSwipeRun() {
-        return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
-    }
-
-    public Command outpostOppositeSwipeRun(){
-        return outpostOppositeSwipeRoutine.getPathCommand();
-    }
-
-    public Command depotOppositeMiddleSwipeRun(){
-        return depotOppositeMiddleSwipeRoutine.getPathCommand();
-    }
-
-    public Command depotOppositeCornerSwipeRun(){
-        return depotOppositeCornerSwipeRoutine.getPathCommand();
-    }
 }

@@ -5,9 +5,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.Alert.AlertType;
 
-
-import choreo.auto.AutoFactory;
-
 public final class CatzConstants {
 
   // ----------------------------------------------------
@@ -22,8 +19,6 @@ public final class CatzConstants {
   public static boolean disableHAL = false;
 
   public static final double LOOP_TIME = 0.02;
-
-  public static AutoFactory autoFactory;
 
   public static final boolean ClimbOn = true;
   public static final boolean HoodOn = true;

@@ -15,8 +15,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
-import choreo.auto.AutoFactory;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
@@ -27,11 +27,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
-import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -71,7 +69,7 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter("/U/logs")); ///"home/lvuser/logs"
         Logger.addDataReceiver(new RLOGServer());
         Logger.addDataReceiver(new WPILOGWriter("/Logs"));
-
+        DataLogManager.start();
         Logger.addDataReceiver(new NT4Publisher());
         break;
 
@@ -169,15 +167,6 @@ public class Robot extends LoggedRobot {
 
     m_robotContainer = new RobotContainer();
 
-    CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
-                                                  CatzRobotTracker.getInstance()::resetPose,
-                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-                                                  true,
-                                                  CatzDrivetrain.getInstance()
-                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
-    System.out.println(AutoRoutineSelector.Instance);
-
       DriverStation.silenceJoystickConnectionWarning(true);
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
@@ -194,7 +183,6 @@ public class Robot extends LoggedRobot {
         allSignals = new BaseStatusSignal[0];
       }
 
-      System.out.println("Chooser: " + AutoRoutineSelector.Instance);
       System.out.println("Led "+CatzLED.Instance);
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
@@ -233,7 +221,6 @@ public class Robot extends LoggedRobot {
     autonStartTime = Timer.getFPGATimestamp();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
-    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     System.out.println("auton: " + m_autonomousCommand);
     if (m_autonomousCommand != null) {
