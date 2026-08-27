@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
 
-import choreo.auto.AutoFactory;
+// import choreo.auto.AutoFactory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
@@ -18,15 +18,14 @@ import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.Commands;
-import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
-import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
-import frc.robot.Autonomous.autoSequence.TowerSwipe;
+// import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
+// import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
+// import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
+// import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
+// import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
+// import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -74,31 +73,31 @@ public class CatzSuperstructure {
 
 
 
-    private final TowerSwipe outpostSwipeRoutine;
-    private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
-    private final DepotMiddleSwipe depotMiddleSwipeRoutine;
-    private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
-    private final DepotCornerSwipe depotCornerSwipeRoutine;
-    private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
+    // private final TowerSwipe outpostSwipeRoutine;
+    // private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
+    // private final DepotMiddleSwipe depotMiddleSwipeRoutine;
+    // private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
+    // private final DepotCornerSwipe depotCornerSwipeRoutine;
+    // private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
 
-        CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
-                                                  CatzRobotTracker.getInstance()::resetPose,
-                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-                                                  true,
-                                                  CatzDrivetrain.getInstance()
-                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+        // CatzConstants.autoFactory = new AutoFactory(
+        //                                           CatzRobotTracker.getInstance()::getEstimatedPose,
+        //                                           CatzRobotTracker.getInstance()::resetPose,
+        //                                           CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
+        //                                           true,
+        //                                           CatzDrivetrain.getInstance()
+        //                                         ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
 
-        outpostSwipeRoutine = new TowerSwipe();
-        outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
-        depotMiddleSwipeRoutine = new DepotMiddleSwipe();
-        depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
-        depotCornerSwipeRoutine = new DepotCornerSwipe();
-        depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
-    }
+    // outpostSwipeRoutine = new TowerSwipe();
+    // outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
+    // depotMiddleSwipeRoutine = new DepotMiddleSwipe();
+    // depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
+    // depotCornerSwipeRoutine = new DepotCornerSwipe();
+    // depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
+}
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
         if (isHub) {
@@ -607,13 +606,13 @@ public class CatzSuperstructure {
             disableManuals(CatzClimb.Instance);
             climbManual = true;
 
-            CatzClimb.Instance.followSetpointCommand(() -> {
+            CommandScheduler.getInstance().schedule(CatzClimb.Instance.followSetpointCommand(() -> {
                 double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                 if (Math.abs(input) < 0.84)
                     return Setpoint.withVoltageSetpoint(0.0);
 
                 return Setpoint.withVoltageSetpoint(input);
-            }).schedule(); // TODO do we nee to wrap around the commandschedule.shcedule() for all these commands?
+            })); // TODO do we nee to wrap around the commandschedule.shcedule() for all these commands?
             // if (climbManual == false) {
 
             // } else {
@@ -630,13 +629,13 @@ public class CatzSuperstructure {
                 disableManuals(CatzHood.Instance);
                 hoodManual = true;
 
-                CatzHood.Instance.followSetpointCommand(() -> {
+                CommandScheduler.getInstance().schedule(CatzHood.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if (Math.abs(input) < 0.84)
                         return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                }));
 
             } else {
                 CommandScheduler.getInstance().schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT));
@@ -652,13 +651,13 @@ public class CatzSuperstructure {
                 disableManuals(CatzTurret.Instance);
                 turretManual = true;
 
-                CatzTurret.Instance.followSetpointCommand(() -> {
+                CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if (Math.abs(input) < 0.84)
                         return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                }));
 
             } else {
                 CommandScheduler.getInstance().schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
@@ -674,13 +673,13 @@ public class CatzSuperstructure {
                 disableManuals(CatzIntakeDeploy.Instance);
                 deployManual = true;
 
-                CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+                CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if (Math.abs(input) < 0.84)
                         return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                }));
 
             } else {
                 CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
@@ -796,44 +795,44 @@ public class CatzSuperstructure {
             if (flipAlliance) {
                 // Pass true because we are on the opponent side
                 switch(FieldConstants.getCloserSwipe(currentTranslation, true)) {
-                    case(1): return outpostOppositeSwipeRun();
-                    case(2): return depotOppositeMiddleSwipeRun();
-                    case(3): return depotOppositeCornerSwipeRun();
+                    // case(1): return outpostOppositeSwipeRun();
+                    // case(2): return depotOppositeMiddleSwipeRun();
+                    // case(3): return depotOppositeCornerSwipeRun();
                     default: return Commands.none().andThen(Commands.print("none!!!!"));
                 }
             }
             // Pass false because we are on our home side
             switch(FieldConstants.getCloserSwipe(currentTranslation, false)) {
-                case(1): return outpostSwipeRun();
-                case(2): return depotMiddleSwipeRun();
-                case(3): return depotCornerSwipeRun();
+                // case(1): return outpostSwipeRun();
+                // case(2): return depotMiddleSwipeRun();
+                // case(3): return depotCornerSwipeRun();
                 default: return Commands.none().andThen(Commands.print("none!!!!"));
             }
 
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
-    public Command outpostSwipeRun() {
-        return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
-    }
+    // public Command outpostSwipeRun() {
+    //     return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
+    // }
 
-    public Command depotMiddleSwipeRun() {
-        return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
-    }
+    // public Command depotMiddleSwipeRun() {
+    //     return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
+    // }
 
-    public Command depotCornerSwipeRun() {
-        return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
-    }
+    // public Command depotCornerSwipeRun() {
+    //     return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
+    // }
 
-    public Command outpostOppositeSwipeRun(){
-        return outpostOppositeSwipeRoutine.getPathCommand();
-    }
+    // public Command outpostOppositeSwipeRun(){
+    //     return outpostOppositeSwipeRoutine.getPathCommand();
+    // }
 
-    public Command depotOppositeMiddleSwipeRun(){
-        return depotOppositeMiddleSwipeRoutine.getPathCommand();
-    }
+    // public Command depotOppositeMiddleSwipeRun(){
+    //     return depotOppositeMiddleSwipeRoutine.getPathCommand();
+    // }
 
-    public Command depotOppositeCornerSwipeRun(){
-        return depotOppositeCornerSwipeRoutine.getPathCommand();
-    }
+    // public Command depotOppositeCornerSwipeRun(){
+    //     return depotOppositeCornerSwipeRoutine.getPathCommand();
+    // }
 }

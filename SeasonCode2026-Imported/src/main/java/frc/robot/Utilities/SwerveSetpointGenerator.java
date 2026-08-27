@@ -1,27 +1,19 @@
 package frc.robot.Utilities;
 
-import org.wpilib.math.geometry.Rotation2d;
-
-import org.wpilib.math.geometry.Translation2d;
-
-import org.wpilib.math.geometry.Twist2d;
-
-import org.wpilib.math.kinematics.ChassisVelocities;
-
-import org.wpilib.math.kinematics.SwerveDriveKinematics;
-
-import org.wpilib.math.kinematics.SwerveModuleVelocity;
-
 import java.util.ArrayList;
-
 import java.util.List;
-
 import java.util.Optional;
 
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.geometry.Translation2d;
+import org.wpilib.math.geometry.Twist2d;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.math.kinematics.SwerveDriveKinematics;
+import org.wpilib.math.kinematics.SwerveModuleVelocity;
+
+import frc.robot.Utilities.EqualsUtil.GeomExtensions;
 import lombok.Builder;
-
 import lombok.RequiredArgsConstructor;
-
 import lombok.experimental.ExtensionMethod;
 
 /**
@@ -57,9 +49,9 @@ import lombok.experimental.ExtensionMethod;
 
 public class SwerveSetpointGenerator {
 
-    private final SwerveDriveKinematics kinematics = null;
+    private final SwerveDriveKinematics kinematics;
 
-    private final Translation2d[] moduleLocations = null;
+    private final Translation2d[] moduleLocations;
 
     /**
      *
@@ -400,7 +392,7 @@ public class SwerveSetpointGenerator {
         // just use the previous angle.
 
         boolean need_to_steer = true;
-        if (GeomUtil.toTwist2d(desiredState).epsilonEquals(new Twist2d())) {
+        if (GeomExtensions.epsilonEquals(GeomUtil.toTwist2d(desiredState), new Twist2d())) {
 
             need_to_steer = false;
 
@@ -486,9 +478,9 @@ public class SwerveSetpointGenerator {
 
         if (all_modules_should_flip
 
-                && !prevSetpoint.toTwist2d().epsilonEquals(new Twist2d())
+                && !GeomExtensions.epsilonEquals(GeomUtil.toTwist2d(prevSetpoint.ChassisVelocities()), new Twist2d())
 
-                && !desiredState.toTwist2d().epsilonEquals(new Twist2d())) {
+                && !GeomExtensions.epsilonEquals(GeomUtil.toTwist2d(desiredState), new Twist2d())) {
 
             // It will (likely) be faster to stop the robot, rotate the modules in place to
             // the complement

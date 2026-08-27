@@ -4,17 +4,15 @@ import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.D
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import choreo.auto.AutoTrajectory;
-import choreo.trajectory.SwerveSample;
+// import choreo.auto.AutoTrajectory;
+// import choreo.trajectory.SwerveSample;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.geometry.Twist2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.math.trajectory.Trajectory;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
@@ -380,13 +378,13 @@ public class CatzDrivetrain extends SubsystemBase {
   /**
    * Make sure to run this before every new trajectory
    */
-  public void followChoreoTrajectoryInit(AutoTrajectory traj) {
-    hoController = DriveConstants.getNewHolController();
-  }
-  //Intended for slow paths
-  public void followSlowChoreoTrajectoryInit(AutoTrajectory traj) {
-    hoController = DriveConstants.getNewHolController_Slow();
-  }
+  // public void followChoreoTrajectoryInit(AutoTrajectory traj) {
+  //   hoController = DriveConstants.getNewHolController();
+  // }
+  // //Intended for slow paths
+  // public void followSlowChoreoTrajectoryInit(AutoTrajectory traj) {
+  //   hoController = DriveConstants.getNewHolController_Slow();
+  // }
 
 
   /**
@@ -395,34 +393,34 @@ public class CatzDrivetrain extends SubsystemBase {
    *
    * @param sample
    */
-  public void followChoreoTrajectoryExecute(SwerveSample sample) {
-    // 1. Calculate the denominator (velocity magnitude cubed)
-    double velocitySq = (sample.vx * sample.vx) + (sample.vy * sample.vy);
-    double velocityMag = Math.sqrt(velocitySq);
+  // public void followChoreoTrajectoryExecute(SwerveSample sample) {
+  //   // 1. Calculate the denominator (velocity magnitude cubed)
+  //   double velocitySq = (sample.vx * sample.vx) + (sample.vy * sample.vy);
+  //   double velocityMag = Math.sqrt(velocitySq);
 
-    double curvature = 0.0;
+  //   double curvature = 0.0;
 
-    // 2. Protect against division by zero if the robot is stopped
-    if (velocityMag > 1e-6) {
-      curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
-    }
+  //   // 2. Protect against division by zero if the robot is stopped
+  //   if (velocityMag > 1e-6) {
+  //     curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
+  //   }
 
-    Trajectory.State state = new Trajectory.State(
-        sample.t,
-        velocityMag,
-        Math.hypot(sample.ax, sample.ay), // Use raw acceleration here
-        new Pose2d(
-            new Translation2d(sample.x, sample.y),
-            Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
-        curvature // Input the calculated curvature here
-    );
+  //   Trajectory.State state = new Trajectory.State(
+  //       sample.t,
+  //       velocityMag,
+  //       Math.hypot(sample.ax, sample.ay), // Use raw acceleration here
+  //       new Pose2d(
+  //           new Translation2d(sample.x, sample.y),
+  //           Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
+  //       curvature // Input the calculated curvature here
+  //   );
 
-    Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
-    ChassisVelocities adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
+  //   Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
+  //   ChassisVelocities adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
-    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
-    drive(adjustedSpeeds);
-  }
+  //   Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
+  //   drive(adjustedSpeeds);
+  // }
 
   public void setXLock() {
       for (int i = 0; i < 4; i++) {
