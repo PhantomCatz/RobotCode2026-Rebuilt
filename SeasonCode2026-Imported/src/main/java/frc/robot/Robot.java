@@ -19,7 +19,6 @@ import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
-import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.SmartDashboard;

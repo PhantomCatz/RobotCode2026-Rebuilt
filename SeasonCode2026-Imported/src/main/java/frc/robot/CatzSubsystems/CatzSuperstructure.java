@@ -607,13 +607,13 @@ public class CatzSuperstructure {
             disableManuals(CatzClimb.Instance);
             climbManual = true;
 
-            CatzClimb.Instance.followSetpointCommand(() -> {
+            CommandScheduler.getInstance().schedule(CatzClimb.Instance.followSetpointCommand(() -> {
                 double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                 if (Math.abs(input) < 0.84)
                     return Setpoint.withVoltageSetpoint(0.0);
 
                 return Setpoint.withVoltageSetpoint(input);
-            }).schedule(); // TODO do we nee to wrap around the commandschedule.shcedule() for all these commands?
+            })); // TODO do we nee to wrap around the commandschedule.shcedule() for all these commands?
             // if (climbManual == false) {
 
             // } else {
@@ -630,13 +630,13 @@ public class CatzSuperstructure {
                 disableManuals(CatzHood.Instance);
                 hoodManual = true;
 
-                CatzHood.Instance.followSetpointCommand(() -> {
+                CommandScheduler.getInstance().schedule(CatzHood.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if (Math.abs(input) < 0.84)
                         return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                }));
 
             } else {
                 CommandScheduler.getInstance().schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT));
@@ -652,13 +652,13 @@ public class CatzSuperstructure {
                 disableManuals(CatzTurret.Instance);
                 turretManual = true;
 
-                CatzTurret.Instance.followSetpointCommand(() -> {
+                CommandScheduler.getInstance().schedule(CatzTurret.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if (Math.abs(input) < 0.84)
                         return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                }));
 
             } else {
                 CommandScheduler.getInstance().schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
@@ -674,13 +674,13 @@ public class CatzSuperstructure {
                 disableManuals(CatzIntakeDeploy.Instance);
                 deployManual = true;
 
-                CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
+                CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.followSetpointCommand(() -> {
                     double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                     if (Math.abs(input) < 0.84)
                         return Setpoint.withVoltageSetpoint(0.0);
 
                     return Setpoint.withVoltageSetpoint(input);
-                }).schedule();
+                }));
 
             } else {
                 CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));

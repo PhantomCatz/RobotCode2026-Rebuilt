@@ -22,6 +22,7 @@ import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.Subsystem;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
@@ -420,7 +421,7 @@ public class CatzDrivetrain extends SubsystemBase {
     Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
     ChassisVelocities adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
-    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
+    Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)).toMatrix());
     drive(adjustedSpeeds);
   }
 

@@ -1,18 +1,13 @@
 package frc.robot.CatzSubsystems.CatzLEDs;
 
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.Alliance;
-import org.wpilib.util.Color;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.Utilities.VirtualSubsystem;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.internal.DriverStationBackend;
+import org.wpilib.util.Color;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.EmptyAnimation;
 import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SingleFadeAnimation;
@@ -21,10 +16,15 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.Utilities.VirtualSubsystem;
+import lombok.Getter;
+import lombok.Setter;
+
 public class CatzLED extends VirtualSubsystem {
   public static final CatzLED Instance = new CatzLED();
 
-  private CANdle candle = new CANdle(10, new CanBus());
+  private CANdle candle = new CANdle(10, new CANBus());
 
   // ----------------------------------------------------------------------------------------------
   // Robot state LED tracking

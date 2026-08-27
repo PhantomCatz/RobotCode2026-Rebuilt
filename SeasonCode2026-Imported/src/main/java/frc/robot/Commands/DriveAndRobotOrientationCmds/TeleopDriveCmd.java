@@ -116,10 +116,7 @@ public class TeleopDriveCmd extends Command {
         : 0.0;
 
    // Construct desired chassis speeds normally
-    ChassisVelocities = ChassisVelocities.fromFieldRelativeSpeeds(finalVelX,
-        finalVelY,
-        turningVelocity,
-        CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
+    ChassisVelocities = ChassisVelocities.toFieldRelative(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
     // Artificially cap the target translation speed if scoring
     if(CatzSuperstructure.Instance.getIsScoring()) {
