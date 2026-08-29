@@ -9,8 +9,6 @@ import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.math.numbers.N1;
 import org.wpilib.math.numbers.N3;
 import org.wpilib.math.util.Nat;
-import org.wpilib.vision.apriltag.AprilTagFieldLayout;
-import org.wpilib.vision.apriltag.AprilTagFields;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.linalg.VecBuilder;
 import frc.robot.FieldConstants;
@@ -43,7 +41,8 @@ public class CatzRobotTracker {
     for (int i = 1; i <= FieldConstants.aprilTagCount; i++) {
       tagPoses2d.put(
           i,
-          AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField)
+          FieldConstants.defaultAprilTagType
+              .getLayout()
               .getTagPose(i)
               .map(Pose3d::toPose2d)
               .orElse(new Pose2d()));
