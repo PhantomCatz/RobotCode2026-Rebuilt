@@ -58,7 +58,7 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
      * @param s0g slot 0 gains
      */
     public GenericTalonFXSIOReal(MotorIOTalonFXSConfig config) {
-	
+
 		requestGetter = config.requestGetter;
 		leaderTalon = new TalonFXS(config.mainID, leaderTalonCANBus);
 		setMainConfig(config.mainConfig);

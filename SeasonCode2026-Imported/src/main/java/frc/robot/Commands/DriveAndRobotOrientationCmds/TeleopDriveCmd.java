@@ -90,7 +90,8 @@ public class TeleopDriveCmd extends Command {
   @Override
   public void execute() {
     // Obtain realtime joystick inputs with supplier methods
-    joyX = -m_headingPctOutput_Y.get(); // Raw accel
+    joyX = -m_headingPctOutput_Y.get();
+    System.out.println(joyX); // Raw accel
     joyY = -m_headingPctOutput_X.get();
     turningVelocity = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching
                                                      // alliances
@@ -117,7 +118,7 @@ public class TeleopDriveCmd extends Command {
         : 0.0;
 
    // Construct desired chassis speeds normally
-    Translation2d rotated = new Translation2d(0, 0).rotateBy(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
+    Translation2d rotated = new Translation2d(finalVelX, finalVelY).rotateBy(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
     chassisVelocities = new ChassisVelocities(rotated.getX(), rotated.getY(), turningVelocity);
 
     // Artificially cap the target translation speed if scoring
