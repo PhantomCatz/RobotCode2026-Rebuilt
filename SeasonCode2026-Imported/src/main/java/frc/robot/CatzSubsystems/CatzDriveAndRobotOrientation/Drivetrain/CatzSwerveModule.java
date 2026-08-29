@@ -1,0 +1,238 @@
+package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
+
+import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.*;
+
+
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.BaseStatusSignal; // Import added
+
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.kinematics.SwerveModulePosition;
+import org.wpilib.math.kinematics.SwerveModuleVelocity;
+import org.wpilib.math.util.Units;
+import org.wpilib.smartdashboard.SmartDashboard;
+import frc.robot.CatzConstants;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
+import frc.robot.Utilities.Alert;
+import frc.robot.Utilities.CatzMathUtils;
+import frc.robot.Utilities.CatzMathUtils.Conversions;
+import org.littletonrobotics.junction.Logger;
+
+public class CatzSwerveModule {
+
+  // Module delcaration block
+  private final ModuleIO io;
+  private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
+
+  // Module Strings for Logging
+  private final String m_moduleName;
+
+  // OPTIMIZATION: Pre-calculate logging keys to avoid string concatenation in loops
+  private final String logKeyDriveRecFPS;
+  private final String logKeyDriveTargFPS;
+  private final String logKeyCurModState;
+  private final String logKeyAngleErr;
+  private final String logKeyCurModAng;
+  private final String logKeyAbsEnc;
+  private final String smartDashAbsEnc;
+  private final String smartDashAngle;
+  private final String motorOutputs;
+
+  // Global swerve module variables
+  private SwerveModuleVelocity m_SwerveModuleVelocity = new SwerveModuleVelocity();
+
+  // Alerts
+  private final Alert driveMotorDisconnected;
+  private final Alert steerMotorDisconnected;
+
+  public CatzSwerveModule(ModuleIDs config, String moduleName) {
+    this.m_moduleName = moduleName;
+
+    // Init Logging Strings once
+    logKeyDriveRecFPS = "Module " + m_moduleName + "/drive recorded fps";
+    logKeyDriveTargFPS = "Module " + m_moduleName + "/drive target fps";
+    logKeyCurModState = "Module " + m_moduleName + "/currentmodule state";
+    logKeyAngleErr = "Module " + m_moduleName + "/angle error deg";
+    logKeyCurModAng = "Module " + m_moduleName + "/currentmoduleangle rad";
+    logKeyAbsEnc = "Module " + m_moduleName + "/current absolute enc";
+    smartDashAbsEnc = "absencposrad" + m_moduleName;
+    smartDashAngle = "angle" + m_moduleName;
+    motorOutputs = "RealInputs/Drive/Motors " + m_moduleName;
+
+    // Run Subsystem disconnect check
+    if (DriveConstants.IS_DRIVE_DISABLED) {
+      io = new ModuleIONull();
+      System.out.println("Module " + m_moduleName + " Unconfigured");
+    } else {
+      // Run Robot Mode hardware assignment
+      switch (CatzConstants.hardwareMode) {
+        case REAL:
+          io = new ModuleIORealFoc(config, m_moduleName);
+          System.out.println("Module " + m_moduleName + " Configured for Real");
+          break;
+        case REPLAY:
+          io = new ModuleIORealFoc(config, m_moduleName) {};
+          System.out.println("Module " + m_moduleName + " Configured for Replay simulation");
+          break;
+        case SIM:
+          io = null;
+          System.out.println("Module " + m_moduleName + " Configured for WPILIB simulation");
+          break;
+        default:
+          io = null;
+          System.out.println("Module " + m_moduleName + " Unconfigured");
+          break;
+      }
+    }
+
+    // Disconnected Alerts
+    driveMotorDisconnected =
+        new Alert(m_moduleName + " drive motor disconnected!", Alert.AlertType.kError);
+    steerMotorDisconnected =
+        new Alert(m_moduleName + " steer motor disconnected!", Alert.AlertType.kError);
+
+    resetDriveEncs();
+  }
+
+  // Pass signals up to the subsystem
+  public BaseStatusSignal[] getPhoenixSignals() {
+      return io.getSignals();
+  }
+
+  double prevCur = 0.0;
+  int logCount = 0;
+  public void periodic() {
+    // Process and Log Module Inputs
+    io.updateInputs(inputs);
+
+    if(logCount >= 5){
+      Logger.processInputs(motorOutputs, inputs);
+      logCount = 0;
+    }
+    logCount++;
+
+    // Display alerts
+    driveMotorDisconnected.set(!inputs.isDriveMotorConnected);
+    steerMotorDisconnected.set(!inputs.isSteerMotorConnected);
+
+    // debugLogsSwerve();
+
+  }
+
+  public void debugLogsSwerve() {
+    // OPTIMIZATION: Use pre-cached keys
+    Logger.recordOutput(logKeyDriveRecFPS, Units.metersToFeet(Conversions.RPSToMPS(inputs.driveVelocityRPS)));
+    Logger.recordOutput(logKeyDriveTargFPS, Units.metersToFeet(m_SwerveModuleVelocity.velocity));
+    Logger.recordOutput(logKeyCurModState, m_SwerveModuleVelocity.angle.getRadians());
+    Logger.recordOutput(logKeyAngleErr, Math.toDegrees(m_SwerveModuleVelocity.angle.getRadians() - getAbsEncRadians()));
+    Logger.recordOutput(logKeyCurModAng, getAbsEncRadians());
+    Logger.recordOutput(logKeyAbsEnc, inputs.rawAbsEncValueRotation);
+
+    SmartDashboard.putNumber(smartDashAngle, getCurrentRotation().getDegrees());
+  }
+
+  /**
+   * Sets the desired state for the module.
+   *
+   * @param state Desired state with speed and angle.
+   */
+  public void setModuleAngleAndVelocity(SwerveModuleVelocity state) {
+    this.m_SwerveModuleVelocity = state;
+    double targetAngleRads = state.angle.getRadians();
+    double currentAngleRads = getAbsEncRadians();
+
+    io.runDriveVelocityRPSIO(Conversions.MPSToRPS(state.velocity));
+    io.runSteerPositionSetpoint(currentAngleRads, targetAngleRads);
+  }
+
+  public void setSteerPower(double pwr) {
+    io.runSteerPercentOutput(pwr);
+  }
+
+  public void setDriveVelocity(double velocity) {
+    io.runDriveVelocityRPSIO(velocity);
+  }
+
+  public void stopDriving() {
+    io.runDriveVelocityRPSIO(0.0);
+  }
+
+  public void setNeutralModeDrive(NeutralModeValue type) {
+    io.setDriveNeutralModeIO(type);
+  }
+
+  public void setNeutralModeSteer(NeutralModeValue type) {
+    io.setSteerNeutralModeIO(type);
+  }
+
+  public void setShootWhileMoveConfig() {
+    io.setShootWhileMoveConfig();
+  }
+
+  public void setIntakeMoveConfig(){
+    io.setIntakeMoveConfig();
+  }
+
+  public void setAntihoardConfig() {
+    io.setAntihoardConfig();
+  }
+
+  public void setDefenseConfig() {
+    io.setDefenseConfig();
+  }
+
+  public void setNormalConfig() {
+    io.setNormalConfig();
+  }
+
+  public void resetDriveEncs() {
+    io.setDrvSensorPositionIO(0.0);
+  }
+
+  public SwerveModuleVelocity optimizeWheelAngles(SwerveModuleVelocity unoptimizedState) {
+    SwerveModuleVelocity optimizedState =
+        CatzMathUtils.optimize(unoptimizedState, getCurrentRotation());
+    return optimizedState;
+  }
+
+  public SwerveModuleVelocity getModuleState() {
+    double velocityMPS = CatzMathUtils.Conversions.RPSToMPS(inputs.driveVelocityRPS);
+    return new SwerveModuleVelocity(velocityMPS, getCurrentRotation());
+  }
+
+  public SwerveModuleVelocity getModuleStateSetpoint() {
+    return m_SwerveModuleVelocity;
+  }
+
+  public SwerveModulePosition getModulePosition() {
+    return new SwerveModulePosition(getDriveDistanceMeters(), getCurrentRotation());
+  }
+
+  public double getDriveDistanceMeters() {
+    return CatzMathUtils.Conversions.RPSToMPS(inputs.drivePositionUnits);
+  }
+
+  public double getPositionRads() {
+    return Units.rotationsToRadians(inputs.drivePositionUnits);
+  }
+
+  public Rotation2d getAngle() {
+    return inputs.steerAbsPosition;
+  }
+
+  public double getCharacterizationVelocityRadPerSec() {
+    return Units.rotationsToRadians(getDrvVelocityRPS());
+  }
+
+  public double getDrvVelocityRPS() {
+    return inputs.driveVelocityRPS;
+  }
+
+  public Rotation2d getCurrentRotation() {
+    return new Rotation2d(getAbsEncRadians());
+  }
+
+  private double getAbsEncRadians() {
+    return inputs.steerAbsPosition.getRadians();
+  }
+}

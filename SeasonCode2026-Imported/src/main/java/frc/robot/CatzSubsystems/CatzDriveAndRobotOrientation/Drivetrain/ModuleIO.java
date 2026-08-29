@@ -1,0 +1,87 @@
+package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
+
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import org.wpilib.math.geometry.Rotation2d;
+import org.littletonrobotics.junction.AutoLog;
+
+public interface ModuleIO {
+
+  @AutoLog
+  static class ModuleIOInputs {
+    public boolean isDriveMotorConnected;
+    public double drivePositionUnits;
+    public double driveVelocityRPS;
+    public double driveAppliedVolts;
+    public double driveSupplyCurrentAmps;
+    public double driveTorqueCurrentAmps;
+
+    public boolean isSteerMotorConnected;
+    public double steerAbsoluteInitPosition;
+
+    public boolean isAbsEncoderConnected;
+    public Rotation2d rawAbsEncPosition = new Rotation2d();
+    public double rawAbsEncValueRotation;
+    public Rotation2d steerAbsPosition = new Rotation2d();
+
+    public double steerTorqueCurrentAmps;
+    public double steerSupplyCurrentAmps;
+
+    // Simulation Inputs
+    public Rotation2d steerPosition = new Rotation2d();
+    public double steerVelocityRadsPerSec;
+  }
+
+  /** Updates the set of loggable inputs. */
+  public default void updateInputs(ModuleIOInputs inputs) {}
+
+  public default BaseStatusSignal[] getSignals() {return null;}
+
+
+  // ---------------------------------------------------------------------------
+  //   Drive Access Methods
+  // ---------------------------------------------------------------------------
+  public default void runDrivePwrPercentIO(double drivePwrPercent) {}
+
+  public default void runDriveVelocityRPSIO(double velocity) {}
+
+  public default void setDriveNeutralModeIO(NeutralModeValue type) {}
+
+  public default void setDrvSensorPositionIO(double sensorpos) {}
+
+  public default void setDriveSimPwrIO(double volts) {}
+
+  public default void runCharacterization(double input) {}
+
+  public default void setDrivePID(double kP, double kI, double kD) {}
+
+  // ---------------------------------------------------------------------------
+  //   Steer Access Methods
+  // ---------------------------------------------------------------------------
+  public default void runSteerPercentOutput(double steerPwr) {}
+
+  public default void runSteerPositionSetpoint(double currentAngleRads, double targetAngleRads) {}
+
+  public default void setSteerNeutralModeIO(NeutralModeValue type) {}
+
+  public default void setSteerSimPwrIO(double volts) {}
+
+  public default void setSteerPID(double kP, double kI, double kD) {}
+
+  public default void setShootWhileMoveConfig() {}
+
+  public default void setIntakeMoveConfig() {}
+
+  public default void setAntihoardConfig() {}
+
+  public default void setDefenseConfig() {}
+
+  public default void setNormalConfig() {}
+
+  // ---------------------------------------------------------------------------
+  //   Mag Enc Access Methods
+  // ---------------------------------------------------------------------------
+  public default void resetMagEncoderIO() {}
+
+
+}
