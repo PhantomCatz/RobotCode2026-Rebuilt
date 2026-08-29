@@ -39,6 +39,7 @@ public class TurretConstants {
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
+	private static final String TURRET_BUS_ID = "can_s1";
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(90.0);
 
@@ -101,7 +102,7 @@ public class TurretConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = TURRET_MOTOR_ID;
-		IOConfig.mainBus = "";
+		IOConfig.mainBus = TURRET_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)

@@ -38,6 +38,11 @@ public class FlywheelConstants {
 	public static final Translation2d VDEXER_FEED_COMPENSATION = new Translation2d(2.0, 0.0); //Because of the way we feed the balls into the shooter with the indexer, there is a directional bias in the ball trajectory.
 	public static final double VDEXER_FEED_COMPENSATION_NORM = VDEXER_FEED_COMPENSATION.getNorm();
 
+	private static final int FLYWHEEL_MOTOR_ID = 20;
+	private static final String FLYWHEEL_BUS_ID = "can_s1";
+	private static final int FLYWHEEL_FOLLOWER_MOTOR_ID = 21;
+	private static final String FLYWHEEL_FOLLOWER_BUS_ID = "can_s1";
+
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
@@ -73,16 +78,16 @@ public class FlywheelConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = 20; //TODO magic numbers!!
-		IOConfig.mainBus = "";
+		IOConfig.mainID = FLYWHEEL_MOTOR_ID;
+		IOConfig.mainBus = FLYWHEEL_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 
-		IOConfig.followerBuses = new String[] {""};
-		IOConfig.followerIDs = new int[] {21}; //TODO magic numbers!!
+		IOConfig.followerBuses = new String[] {FLYWHEEL_FOLLOWER_BUS_ID};
+		IOConfig.followerIDs = new int[] {FLYWHEEL_FOLLOWER_MOTOR_ID};
 		return IOConfig;
 	}
 }

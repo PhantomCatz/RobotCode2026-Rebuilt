@@ -34,6 +34,9 @@ public class IntakeRollerConstants {
     };
 
 	private static final int INTAKE_MOTOR_ID = 31;
+	private static final String INTAKE_BUS_ID = "can_s1";
+	private static final int INTAKE_FOLLOWER_MOTOR_ID = 32;
+	private static final String INTAKE_FOLLOWER_BUS_ID = "can_s1";
 	private static final double NO_MOVE_INTAKE_SPEED = 5.0; // TODO make this right
 	private static final double INTAKE_SPEED_SLOPE = 0.3; // TODO make this right
 
@@ -73,14 +76,14 @@ public class IntakeRollerConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = INTAKE_MOTOR_ID;
-		IOConfig.mainBus = "can_s0";
+		IOConfig.mainBus = INTAKE_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
-		IOConfig.followerBuses = new String[] {""};
-		IOConfig.followerIDs = new int[] {32};
+		IOConfig.followerBuses = new String[] {INTAKE_FOLLOWER_BUS_ID};
+		IOConfig.followerIDs = new int[] {INTAKE_FOLLOWER_MOTOR_ID};
 		return IOConfig;
 	}
 

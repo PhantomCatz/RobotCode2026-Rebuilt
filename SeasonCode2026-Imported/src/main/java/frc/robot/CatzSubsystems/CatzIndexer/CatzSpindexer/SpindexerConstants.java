@@ -41,6 +41,7 @@ public class SpindexerConstants {
 
 
     private static final int SPINDEXER_MOTOR_ID = 40;
+	private static final String SPINDEXER_BUS_ID = "can_s1";
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -77,7 +78,7 @@ public class SpindexerConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = SPINDEXER_MOTOR_ID;
-		IOConfig.mainBus = "";
+		IOConfig.mainBus = SPINDEXER_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)

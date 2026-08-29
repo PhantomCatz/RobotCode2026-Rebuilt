@@ -53,6 +53,7 @@ public class IntakeDeployConstants {
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
+	private static final String INTAKE_DEPLOY_BUS_ID = "can_s1";
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -94,7 +95,7 @@ public class IntakeDeployConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = INTAKE_DEPLOY_MOTOR_ID;
-		IOConfig.mainBus = "";
+		IOConfig.mainBus = INTAKE_DEPLOY_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
