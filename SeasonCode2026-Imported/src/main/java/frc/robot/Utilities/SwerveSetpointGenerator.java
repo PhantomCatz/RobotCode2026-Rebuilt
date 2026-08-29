@@ -380,7 +380,7 @@ public class SwerveSetpointGenerator {
 
         if (limits.maxDriveVelocity() > 0.0) {
 
-            SwerveDriveKinematics.desaturateWheelVelocities(desiredModuleState, limits.maxDriveVelocity());
+            desiredModuleState = SwerveDriveKinematics.desaturateWheelVelocities(desiredModuleState, limits.maxDriveVelocity());
 
             desiredState = kinematics.toChassisVelocities(desiredModuleState);
 
