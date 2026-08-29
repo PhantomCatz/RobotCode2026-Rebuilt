@@ -38,6 +38,8 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzPivotArm.CatzPivotArm;
+import frc.robot.CatzSubsystems.CatzPivotArm.PivotArmConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -68,6 +70,7 @@ public class CatzSuperstructure {
     private boolean hoodManual = false;
     private boolean turretManual = false;
     private boolean deployManual = false;
+    private boolean pivotArmManual = false;
 
     private final SubsystemVisualizer visualizer;
 
@@ -694,6 +697,7 @@ public class CatzSuperstructure {
         hoodManual = false;
         turretManual = false;
         deployManual = false;
+        pivotArmManual = false;
 
         // Only schedule stow if it's NOT the one we are about to manually control
         if (excludedSubsystem != CatzClimb.Instance) {
@@ -707,6 +711,9 @@ public class CatzSuperstructure {
         }
         if (excludedSubsystem != CatzIntakeDeploy.Instance) {
             CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW).schedule();
+        }
+        if (excludedSubsystem != CatzPivotArm.Instance) {
+            CatzPivotArm.Instance.setpointCommand(PivotArmConstants.STOW).schedule();
         }
     }
 
@@ -834,5 +841,35 @@ public class CatzSuperstructure {
 
     public Command depotOppositeCornerSwipeRun(){
         return depotOppositeCornerSwipeRoutine.getPathCommand();
+    }
+
+    public Command pivotArmUp(){
+        return CatzPivotArm.Instance.setpointCommand(PivotArmConstants.DEPLOY);
+    }
+
+    public Command pivotArmDown(){
+        return CatzPivotArm.Instance.setpointCommand(PivotArmConstants.STOW);
+    }
+
+    public Command toggleManualPivotArm() {
+        return Commands.runOnce(() -> {
+
+            if (pivotArmManual == false) {
+                disableManuals(CatzPivotArm.Instance);
+                pivotArmManual = true;
+
+                CatzPivotArm.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }).schedule();
+
+            } else {
+                CatzPivotArm.Instance.setpointCommand(PivotArmConstants.STOW).schedule();
+                pivotArmManual = false;
+            }
+        });
     }
 }

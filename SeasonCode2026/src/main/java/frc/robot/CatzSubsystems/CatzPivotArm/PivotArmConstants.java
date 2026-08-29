@@ -16,10 +16,10 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class PivotArmConstants {
-	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle STOW_POSITION = Units.Rotations.of(-0.1);
-	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.30);
-	public static final Angle UP_POSITION = Units.Rotations.of(0.05);
+	public static final Angle HOME_POSITION = Units.Degrees.of(0.00);
+	public static final Angle STOW_POSITION = Units.Rotations.of(-0.10);
+	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.35);
+	public static final Angle UP_POSITION = Units.Rotations.of(0.10);
 
 	// public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
 	// public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
