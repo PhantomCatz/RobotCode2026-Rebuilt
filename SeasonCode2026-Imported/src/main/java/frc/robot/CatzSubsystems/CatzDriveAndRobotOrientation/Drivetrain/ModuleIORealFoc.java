@@ -75,10 +75,6 @@ public class ModuleIORealFoc implements ModuleIO {
   public CANBus steerTalonCANBus = new CANBus("*");
 
   private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
-  private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
-  private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
-  private final CurrentLimitsConfigs antihoardCon = new CurrentLimitsConfigs();
-  private final CurrentLimitsConfigs defenseCon = new CurrentLimitsConfigs();
 
   public ModuleIORealFoc(ModuleIDs config, String name) {
     MODULE_NAME = name;
@@ -105,30 +101,6 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalonConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.0;
 
     driveTalonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-    shootWhileMoveCon.SupplyCurrentLowerTime = 0.0;
-    shootWhileMoveCon.StatorCurrentLimit = 80.0; //20 for bad home carpet
-    shootWhileMoveCon.StatorCurrentLimitEnable = true;
-    shootWhileMoveCon.SupplyCurrentLimit = 15.0;
-    shootWhileMoveCon.SupplyCurrentLimitEnable = true;
-
-    intakeMoveCon.SupplyCurrentLowerTime = 0.0;
-    intakeMoveCon.StatorCurrentLimit = 80.0;
-    intakeMoveCon.StatorCurrentLimitEnable = true;
-    intakeMoveCon.SupplyCurrentLimit = 10.0;
-    intakeMoveCon.SupplyCurrentLimitEnable = true;
-
-    antihoardCon.SupplyCurrentLowerTime = 0.0;
-    antihoardCon.StatorCurrentLimit = 80.0;
-    antihoardCon.StatorCurrentLimitEnable = true;
-    antihoardCon.SupplyCurrentLimit = 2.0;
-    antihoardCon.SupplyCurrentLimitEnable = true;
-
-    defenseCon.SupplyCurrentLowerTime = 0.0;
-    defenseCon.StatorCurrentLimit = 80.0;
-    defenseCon.StatorCurrentLimitEnable = true;
-    defenseCon.SupplyCurrentLimit = 80.0;
-    defenseCon.SupplyCurrentLimitEnable = true;
 
     // Gain Setting
     driveTalonConfig.Slot0.kP = MODULE_GAINS_AND_RATIOS.drivekP();
@@ -298,30 +270,6 @@ public class ModuleIORealFoc implements ModuleIO {
   public void setSteerNeutralModeIO(NeutralModeValue type) {
     steerTalonConfig.MotorOutput.NeutralMode = type;
     steerTalon.getConfigurator().apply(steerTalonConfig);
-  }
-
-  @Override
-  public void setShootWhileMoveConfig() {
-    driveTalonConfig.withCurrentLimits(shootWhileMoveCon);
-    driveTalon.getConfigurator().apply(driveTalonConfig);
-  }
-
-  @Override
-  public void setIntakeMoveConfig(){
-    driveTalonConfig.withCurrentLimits(intakeMoveCon);
-    driveTalon.getConfigurator().apply(driveTalonConfig);
-  }
-
-  @Override
-  public void setAntihoardConfig() {
-    driveTalonConfig.withCurrentLimits(antihoardCon);
-    driveTalon.getConfigurator().apply(driveTalonConfig);
-  }
-
-  @Override
-  public void setDefenseConfig() {
-    driveTalonConfig.withCurrentLimits(defenseCon);
-    driveTalon.getConfigurator().apply(driveTalonConfig);
   }
 
   @Override

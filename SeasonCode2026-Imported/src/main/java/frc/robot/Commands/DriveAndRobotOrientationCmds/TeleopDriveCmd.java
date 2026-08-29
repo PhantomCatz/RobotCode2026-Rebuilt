@@ -6,7 +6,6 @@ import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.Command;
 import frc.robot.CatzConstants.XboxInterfaceConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
@@ -116,23 +115,7 @@ public class TeleopDriveCmd extends Command {
         : 0.0;
 
    // Construct desired chassis speeds normally
-    ChassisVelocities = ChassisVelocities.toFieldRelative(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
-
-    // Artificially cap the target translation speed if scoring
-    if(CatzSuperstructure.Instance.getIsScoring()) {
-      double maxScoringVel = DriveConstants.MOVE_WHILE_SHOOT_LIMITS.maxDriveVelocity();
-      double currentTargetVel = Math.hypot(
-          ChassisVelocities.vx,
-          ChassisVelocities.vy
-      );
-
-      // Scale down linear translation if it exceeds the scoring speed limit
-      if (currentTargetVel > maxScoringVel) {
-        double scale = maxScoringVel / currentTargetVel;
-        ChassisVelocities.vx *= scale;
-        ChassisVelocities.vy *= scale;
-      }
-    }
+    ChassisVelocities = new ChassisVelocities(finalVelX, finalVelY, turningVelocity).toRobotRelative(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
 
     // ALWAYS use DRIVE_LIMITS so the robot can brake rotation instantly
     currentSetpoint = swerveSetpointGenerator.generateSetpoint(

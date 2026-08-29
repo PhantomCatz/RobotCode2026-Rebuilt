@@ -165,22 +165,6 @@ public class CatzSwerveModule {
     io.setSteerNeutralModeIO(type);
   }
 
-  public void setShootWhileMoveConfig() {
-    io.setShootWhileMoveConfig();
-  }
-
-  public void setIntakeMoveConfig(){
-    io.setIntakeMoveConfig();
-  }
-
-  public void setAntihoardConfig() {
-    io.setAntihoardConfig();
-  }
-
-  public void setDefenseConfig() {
-    io.setDefenseConfig();
-  }
-
   public void setNormalConfig() {
     io.setNormalConfig();
   }

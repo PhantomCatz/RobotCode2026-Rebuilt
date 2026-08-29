@@ -4,45 +4,27 @@ import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.D
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-// import choreo.auto.AutoTrajectory;
-// import choreo.trajectory.SwerveSample;
-import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Twist2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.smartdashboard.SmartDashboard;
-import org.wpilib.command2.Command;
-import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.CatzConstants;
-import frc.robot.FieldConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
-import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
-import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
-import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.SwerveSetpoint;
-import frc.robot.Utilities.SwerveSetpointGenerator;
-import org.wpilib.math.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-// import org.littletonrobotics.junction.AutoLogOutput;
-// import org.littletonrobotics.junction.Logger;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -68,32 +50,9 @@ public class CatzDrivetrain extends SubsystemBase {
   public final CatzSwerveModule LT_BACK_MODULE;
   public final CatzSwerveModule LT_FRNT_MODULE;
 
-  private HolonomicDriveController hoController = DriveConstants.getNewHolController();
-  private HolonomicDriveController hoController_Slow = DriveConstants.getNewHolController_Slow();
-
-  private Queue<Pair<Double, SwerveSetpoint>> futureSwerveSetpoints = new LinkedList<>();
-  public ChassisVelocities futureChassisVelocities = new ChassisVelocities();
-
   private final Field2d field;
 
-  private boolean wasAntihoarding;
-
   private BaseStatusSignal[] allSignals;
-
-  public double timeToReachTrench = 0.0;
-
-  public boolean isAntihoarding = false;
-
-  private SwerveSetpoint currentSetpoint = new SwerveSetpoint(
-      new ChassisVelocities(),
-      new SwerveModuleVelocity[] {
-          new SwerveModuleVelocity(),
-          new SwerveModuleVelocity(),
-          new SwerveModuleVelocity(),
-          new SwerveModuleVelocity()
-      });
-
-  private final SwerveSetpointGenerator swerveSetpointGenerator;
 
   private CatzDrivetrain() {
 
@@ -138,7 +97,6 @@ public class CatzDrivetrain extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
-    swerveSetpointGenerator = new SwerveSetpointGenerator(SWERVE_KINEMATICS, MODULE_TRANSLATIONS);
   }
 
   @Override
@@ -184,42 +142,16 @@ public class CatzDrivetrain extends SubsystemBase {
         getModuleStates(),
         gyroAngle2d,
         Timer.getTimestamp());
-    CatzRobotTracker.Instance.addOdometryObservation(observation);
+    CatzRobotTracker.getInstance().addOdometryObservation(observation);
 
-    Logger.recordOutput("Dist from hoard", CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
-
-    isAntihoarding = isAntihoarding();
-    if (isAntihoarding && !wasAntihoarding) { // started antihoarding
-      setAntihoardConfig();
-    }
-    if (!isAntihoarding && wasAntihoarding && CatzSuperstructure.Instance.getIsHoarding()) { // stopped antihoarding but still hoarding
-      setShootWhileMoveConfig();
-    }
-    wasAntihoarding = isAntihoarding;
   } // end of drivetrain periodic
-
-  private boolean isAntihoarding() {
-    if (!CatzSuperstructure.Instance.getIsHoarding()) {
-      return false;
-    }
-    Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
-    if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE) {
-      return (pose.getX() > FieldConstants.fieldLength - FieldConstants.fieldTrenchX);
-    }
-    else {
-      return (pose.getX() < FieldConstants.fieldTrenchX);
-    }
-  }
 
   // --------------------------------------------------------------------------------------------------------------------------
   //
   // Driving methods
   //
   // --------------------------------------------------------------------------------------------------------------------------
-  public ChassisVelocities appliedChassisVelocities = new ChassisVelocities();
-
   public void drive(ChassisVelocities ChassisVelocities) {
-    appliedChassisVelocities = ChassisVelocities;
     ChassisVelocities descreteSpeeds = ChassisVelocities.discretize(CatzConstants.LOOP_TIME);
     // --------------------------------------------------------
     // Convert chassis speeds to individual module states and set module states
@@ -324,36 +256,6 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
-  /** Set current limits for shoot while move */
-  public void setShootWhileMoveConfig() {
-    System.out.println("set shoot while move config");
-    for (CatzSwerveModule module : m_swerveModules) {
-      module.setShootWhileMoveConfig();
-    }
-    Logger.recordOutput("Drive Config", "shoot while move");
-  }
-
-  public void setIntakeMoveConfig(){
-     for (CatzSwerveModule module : m_swerveModules) {
-      module.setIntakeMoveConfig();
-    }
-    Logger.recordOutput("Drive Config", "intake");
-  }
-
-  public void setAntihoardConfig() {
-    for (CatzSwerveModule module : m_swerveModules) {
-      module.setAntihoardConfig();
-    }
-    Logger.recordOutput("Drive Config", "antihoard");
-  }
-
-  public void setDefenseConfig() {
-    for (CatzSwerveModule module : m_swerveModules) {
-      module.setDefenseConfig();
-    }
-    Logger.recordOutput("Drive Config", "defense");
-  }
-
   /** Set current limits for normal driving*/
   public void setNormalConfig() {
     for (CatzSwerveModule module : m_swerveModules) {
@@ -362,65 +264,11 @@ public class CatzDrivetrain extends SubsystemBase {
     Logger.recordOutput("Drive Config", "normal");
   }
 
-  /** command to cancel running auto trajectories */
-  public Command cancelTrajectory() {
-    Command cancel = new InstantCommand();
-    cancel.addRequirements(this);
-    return cancel;
-  }
-
   public void resetDriveEncs() {
     for (CatzSwerveModule module : m_swerveModules) {
       module.resetDriveEncs();
     }
   }
-
-  /**
-   * Make sure to run this before every new trajectory
-   */
-  // public void followChoreoTrajectoryInit(AutoTrajectory traj) {
-  //   hoController = DriveConstants.getNewHolController();
-  // }
-  // //Intended for slow paths
-  // public void followSlowChoreoTrajectoryInit(AutoTrajectory traj) {
-  //   hoController = DriveConstants.getNewHolController_Slow();
-  // }
-
-
-  /**
-   * This function only runs the "execute" portion of a command. Initialization
-   * and ending should be done elsewhere.
-   *
-   * @param sample
-   */
-  // public void followChoreoTrajectoryExecute(SwerveSample sample) {
-  //   // 1. Calculate the denominator (velocity magnitude cubed)
-  //   double velocitySq = (sample.vx * sample.vx) + (sample.vy * sample.vy);
-  //   double velocityMag = Math.sqrt(velocitySq);
-
-  //   double curvature = 0.0;
-
-  //   // 2. Protect against division by zero if the robot is stopped
-  //   if (velocityMag > 1e-6) {
-  //     curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
-  //   }
-
-  //   Trajectory.State state = new Trajectory.State(
-  //       sample.t,
-  //       velocityMag,
-  //       Math.hypot(sample.ax, sample.ay), // Use raw acceleration here
-  //       new Pose2d(
-  //           new Translation2d(sample.x, sample.y),
-  //           Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
-  //       curvature // Input the calculated curvature here
-  //   );
-
-  //   Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
-  //   ChassisVelocities adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
-
-  //   Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
-  //   drive(adjustedSpeeds);
-  // }
 
   public void setXLock() {
       for (int i = 0; i < 4; i++) {

@@ -1,17 +1,12 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
-import org.wpilib.math.controller.PIDController;
-import org.wpilib.math.controller.ProfiledPIDController;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.math.system.DCMotor;
-import org.wpilib.math.trajectory.TrapezoidProfile;
 import org.wpilib.math.util.Units;
 import frc.robot.CatzConstants;
-import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.ModuleLimits;
 import lombok.Builder;
 
@@ -51,33 +46,10 @@ public class DriveConstants {
           .maxAngularAcceleration(Units.degreesToRadians(720))
           .build();
 
-    public static final DriveConfig TRAJECTORY_CONFIG =
-      DriveConfig.builder()
-        .maxLinearVelocity(4.3)
-        .maxLinearAcceleration(5.5)
-        .maxAngularVelocity(Units.degreesToRadians(540))
-        .maxAngularAcceleration(Units.degreesToRadians(720))
-        .build();
-    // private static final LoggedTunableNumber accLimit = new LoggedTunableNumber("accLimit", 22.0);
-
-    public static final ModuleLimits MOVE_WHILE_SHOOT_LIMITS = new ModuleLimits(
-          1.0,
-          3.0,
-          DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
-
-    public static final double DRIVE_DELAY_TIME = 0.0;
-    public static double MAX_SHOOT_WHILE_MOVE_VELOCITY = 2.0;
-
     public static final ModuleLimits DRIVE_LIMITS = new ModuleLimits(
       DriveConstants.DRIVE_CONFIG.maxLinearVelocity(),
       DriveConstants.DRIVE_CONFIG.maxLinearAcceleration(),
       DriveConstants.DRIVE_CONFIG.maxAngularVelocity());
-
-  public static final ModuleLimits SHOOT_WHILE_MOVE_LIMITS = new ModuleLimits(
-    1.6,
-    5.0,
-    DriveConstants.DRIVE_CONFIG.maxAngularVelocity
-  );
 
   public static final ModuleGainsAndRatios MODULE_GAINS_AND_RATIOS =
       switch (CatzConstants.getRobotType()) {
@@ -203,55 +175,6 @@ public class DriveConstants {
   // calculates the orientation and speed of individual swerve modules when given
   // the motion of the whole robot
   public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
-
-  // -----------------------------------------------------------------------------------------------------------------------------
-  //
-  //      Trajectory Helpers
-  //
-  // -----------------------------------------------------------------------------------------------------------------------------
-  public static HolonomicDriveController getNewHolController() {
-    return new HolonomicDriveController(
-      new PIDController(10.0, 0.0, 0.2),
-      new PIDController(10.0, 0.0, 0.2),
-      new ProfiledPIDController(
-        9.0,
-        0.0,
-        0.8,
-        new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
-      )
-    );
-  }
-
-  public static HolonomicDriveController getNewHolController_Slow() {
-    return new HolonomicDriveController(
-      new PIDController(7.0, 0.0, 0.4),
-      new PIDController(7.0, 0.0, 0.4),
-      new ProfiledPIDController(
-        5.0,
-        0.0,
-        0.6,
-        new TrapezoidProfile.Constraints(TRAJECTORY_CONFIG.maxAngularVelocity, TRAJECTORY_CONFIG.maxAngularAcceleration)
-      )
-    );
-  }
-
-
-
-  private static final double CARPET_COEF_FRICTION = 800000.0;
-  private static final double DRIVE_CURRENT_LIMIT = 400.0;
-  public static final double DRIVE_VELOCITY_DEADBAND = 1e-9;
-  public static final ChassisVelocities NON_ZERO_CHASSIS_SPEED = new ChassisVelocities(1, 1, 0); //TODO should this be smaller?
-
-  public static final double ROBOT_MASS = 60.0;
-  public static final double ROBOT_MOI = (2.0 / 12.0) * ROBOT_MASS * (Math.pow(DRIVE_CONFIG.bumperWidthX(), 2));
-
-
-
-  // -----------------------------------------------------------------------------------------------------------------------------
-  //
-  //      Simulation helpers
-  //
-  // -----------------------------------------------------------------------------------------------------------------------------
 
   /****************************************************************************************
    *

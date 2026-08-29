@@ -1,12 +1,8 @@
 package frc.robot;
 
 import org.wpilib.framework.RobotBase;
-import org.wpilib.util.Color;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.Alert.AlertType;
-
-
-// import choreo.auto.AutoFactory;
 
 public final class CatzConstants {
 
@@ -18,21 +14,8 @@ public final class CatzConstants {
   public static final RobotScenario robotScenario = RobotScenario.TUNING;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.SIM;
   private static RobotID robotType = RobotID.SN_TEST;
-  private static AlertPriority alertWarningPriority = AlertPriority.ONE;
-  public static boolean disableHAL = false;
 
   public static final double LOOP_TIME = 0.02;
-
-  // public static AutoFactory autoFactory;
-
-  public static final boolean ClimbOn = true;
-  public static final boolean HoodOn = true;
-  public static final boolean IndexerOn = true;
-  public static final boolean SpindexerOn = true;
-  public static final boolean YdexerOn = true;
-  public static final boolean IntakeOn = true;
-  public static final boolean ShooterOn = true;
-  public static final boolean TurretOn = true;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers
@@ -55,11 +38,6 @@ public final class CatzConstants {
     }
     return robotType;
   }
-
-  public static void disableHAL() {
-    disableHAL = true;
-  }
-
 
   /** Checks whether the correct robot is selected when deploying. */
   public static class CheckDeploy {
@@ -90,28 +68,11 @@ public final class CatzConstants {
     BUBBLES
   }
 
-  public static enum AllianceColor {
-    Blue,
-    Red
-  }
-
   public static final class XboxInterfaceConstants {
     // Xbox Driver Ports
     public static final int XBOX_DRV_PORT = 0;
-    public static final int XBOX_AUX_PORT = 1;
 
     // Deadbands
     public static final double kDeadband = 0.1;
-  }
-
-  // COLOR CONSTANTS
-  public static final class CatzColorConstants {
-    public static final Color PHANTOM_SAPPHIRE = new Color(15, 25, 400);
-  }
-
-  public static enum AlertPriority {
-    ONE, // Includes only critical Error Alerts
-    TWO, // Includes critical Error and Warning Alerts
-    THREE, // Includes Critical Error, Warning, and Info Alerts
   }
 }
