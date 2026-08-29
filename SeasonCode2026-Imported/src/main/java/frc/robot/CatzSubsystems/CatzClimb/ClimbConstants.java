@@ -44,6 +44,7 @@ public class ClimbConstants {
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
     private static final int CLIMB_MOTOR_ID = 60;
+	private static final String CLIMB_BUS_ID = "can_s1";
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
@@ -88,7 +89,7 @@ public class ClimbConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = CLIMB_MOTOR_ID; //TODO magic numbers!!
-		IOConfig.mainBus = "";
+		IOConfig.mainBus = CLIMB_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
