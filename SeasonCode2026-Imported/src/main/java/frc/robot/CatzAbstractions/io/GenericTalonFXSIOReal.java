@@ -47,8 +47,8 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
     private static double Final_Ratio;
 
-	private CANBus followerTalonCANBus = new CANBus("0");
-	private CANBus leaderTalonCANBus = new CANBus("0");
+	private CANBus followerTalonCANBus = new CANBus("can_s1");
+	private CANBus leaderTalonCANBus = new CANBus("can_s1");
 
     /**
      * base for constructors
@@ -58,7 +58,7 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
      * @param s0g slot 0 gains
      */
     public GenericTalonFXSIOReal(MotorIOTalonFXSConfig config) {
-
+	
 		requestGetter = config.requestGetter;
 		leaderTalon = new TalonFXS(config.mainID, leaderTalonCANBus);
 		setMainConfig(config.mainConfig);

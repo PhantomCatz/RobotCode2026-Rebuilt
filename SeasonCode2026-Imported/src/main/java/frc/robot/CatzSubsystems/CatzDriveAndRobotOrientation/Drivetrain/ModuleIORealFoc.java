@@ -71,8 +71,8 @@ public class ModuleIORealFoc implements ModuleIO {
 
   ModuleIDs m_config;
 
-  public CANBus driveTalonCANBus = new CANBus("0"); // TODO do we need to use the "can_s0" to "can_s24" naming for going to systemcore?
-  public CANBus steerTalonCANBus = new CANBus("0");
+  public CANBus driveTalonCANBus = new CANBus("can_s1"); // TODO do we need to use the "can_s0" to "can_s24" naming for going to systemcore?
+  public CANBus steerTalonCANBus = new CANBus("can_s1");
 
   private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();

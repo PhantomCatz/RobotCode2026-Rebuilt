@@ -20,7 +20,6 @@ import org.wpilib.units.Units;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
@@ -122,7 +121,7 @@ public class Robot extends LoggedRobot {
     //         });
 
     // Set Brownout Voltage to WPILIB recommendations
-    RobotController.setBrownoutVoltage(6.3);
+    // RobotController.setBrownoutVoltage(6.3);
 
     // Print out Catz Constant enums
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());

@@ -73,7 +73,7 @@ public class IntakeRollerConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = INTAKE_MOTOR_ID;
-		IOConfig.mainBus = "";
+		IOConfig.mainBus = "can_s0";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
