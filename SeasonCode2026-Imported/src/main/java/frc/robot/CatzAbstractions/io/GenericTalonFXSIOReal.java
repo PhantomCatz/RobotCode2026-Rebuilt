@@ -47,8 +47,8 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
     private static double Final_Ratio;
 
-	private CANBus followerTalonCANBus = new CANBus("*");
-	private CANBus leaderTalonCANBus = new CANBus("*");
+	private CANBus followerTalonCANBus = new CANBus("0");
+	private CANBus leaderTalonCANBus = new CANBus("0");
 
     /**
      * base for constructors

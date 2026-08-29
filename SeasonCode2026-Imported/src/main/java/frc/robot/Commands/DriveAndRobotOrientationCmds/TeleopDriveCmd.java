@@ -1,5 +1,6 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
+import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.driverstation.internal.DriverStationBackend;
@@ -37,7 +38,7 @@ public class TeleopDriveCmd extends Command {
   private double joyY;
   private double turningVelocity;
 
-  private ChassisVelocities ChassisVelocities;
+  private ChassisVelocities chassisVelocities;
   private SwerveSetpoint currentSetpoint = new SwerveSetpoint(
       new ChassisVelocities(),
       new SwerveModuleVelocity[] {
@@ -116,21 +117,22 @@ public class TeleopDriveCmd extends Command {
         : 0.0;
 
    // Construct desired chassis speeds normally
-    ChassisVelocities = ChassisVelocities.toFieldRelative(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
+    Translation2d rotated = new Translation2d(0, 0).rotateBy(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
+    chassisVelocities = new ChassisVelocities(rotated.getX(), rotated.getY(), turningVelocity);
 
     // Artificially cap the target translation speed if scoring
     if(CatzSuperstructure.Instance.getIsScoring()) {
       double maxScoringVel = DriveConstants.MOVE_WHILE_SHOOT_LIMITS.maxDriveVelocity();
       double currentTargetVel = Math.hypot(
-          ChassisVelocities.vx,
-          ChassisVelocities.vy
+          chassisVelocities.vx,
+          chassisVelocities.vy
       );
 
       // Scale down linear translation if it exceeds the scoring speed limit
       if (currentTargetVel > maxScoringVel) {
         double scale = maxScoringVel / currentTargetVel;
-        ChassisVelocities.vx *= scale;
-        ChassisVelocities.vy *= scale;
+        chassisVelocities.vx *= scale;
+        chassisVelocities.vy *= scale;
       }
     }
 
@@ -138,7 +140,7 @@ public class TeleopDriveCmd extends Command {
     currentSetpoint = swerveSetpointGenerator.generateSetpoint(
       DriveConstants.DRIVE_LIMITS,
       currentSetpoint,
-      ChassisVelocities,
+      chassisVelocities,
       0.02);
 
     // Send new ChassisVelocities object to the drivetrain queue to use later
@@ -153,9 +155,9 @@ public class TeleopDriveCmd extends Command {
   //
   // --------------------------------------------------------------------------------------
   public void debugLogsDrive() {
-    Logger.recordOutput("Drive/robot orientation rad per sec", ChassisVelocities.omega);
-    Logger.recordOutput("Drive/chassisspeed x speed mtr sec", ChassisVelocities.vx);
-    Logger.recordOutput("Drive/chassisspeed y speed mtr sec", ChassisVelocities.vy);
+    Logger.recordOutput("Drive/robot orientation rad per sec", chassisVelocities.omega);
+    Logger.recordOutput("Drive/chassisspeed x speed mtr sec", chassisVelocities.vx);
+    Logger.recordOutput("Drive/chassisspeed y speed mtr sec", chassisVelocities.vy);
   }
 
   // --------------------------------------------------------------------------------------
