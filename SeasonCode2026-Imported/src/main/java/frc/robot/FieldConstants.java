@@ -21,15 +21,16 @@ import lombok.Getter;
  * have a blue alliance origin.
  */
 public class FieldConstants {
-  public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
-  public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
+
+  public static final double fieldLength = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getFieldLength();
+  public static final double fieldWidth = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getFieldLength();
   public static final double fieldXHalf = fieldLength / 2.0;
   public static final double fieldYHalf = fieldWidth / 2.0;
   public static final double fieldTrenchX = 4.645359992980957;
 
-  public static final int aprilTagCount = AprilTagLayoutType.OFFICIAL.getLayout().getTags().size();
+  public static final int aprilTagCount = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getTags().size();
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
-  public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
+  // public static final AprilTagLayoutType defaultAprilTagType = AprilTagLayoutType.OFFICIAL;
 
   private static final Translation2d HUB_LOCATION = new Translation2d(4.6256194, 4.0346376);
   private static final Translation2d TRENCH_SHOOTING_LOCATION = new Translation2d(4.3802995681762695,

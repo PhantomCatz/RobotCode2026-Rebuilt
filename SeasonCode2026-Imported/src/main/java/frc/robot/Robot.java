@@ -32,6 +32,7 @@ import frc.robot.CatzConstants.RobotID;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -163,6 +164,7 @@ public class Robot extends LoggedRobot {
     allSubsystems[6] = CatzHood.Instance;
     allSubsystems[7] = CatzTurret.Instance;
 
+    CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();
 
     // CatzConstants.autoFactory = new AutoFactory(
