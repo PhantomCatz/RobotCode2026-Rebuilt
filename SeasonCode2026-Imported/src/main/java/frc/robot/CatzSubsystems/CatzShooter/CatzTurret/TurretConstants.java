@@ -39,7 +39,7 @@ public class TurretConstants {
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
-	private static final String TURRET_BUS_ID = "can_s1";
+	private static final String TURRET_BUS_ID = "can_s0";
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(90.0);
 

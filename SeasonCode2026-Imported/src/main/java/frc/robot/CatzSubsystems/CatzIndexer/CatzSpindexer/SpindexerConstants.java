@@ -41,7 +41,7 @@ public class SpindexerConstants {
 
 
     private static final int SPINDEXER_MOTOR_ID = 40;
-	private static final String SPINDEXER_BUS_ID = "can_s1";
+	private static final String SPINDEXER_BUS_ID = "can_s0";
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();

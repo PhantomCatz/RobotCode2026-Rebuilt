@@ -53,7 +53,7 @@ public class IntakeDeployConstants {
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
-	private static final String INTAKE_DEPLOY_BUS_ID = "can_s1";
+	private static final String INTAKE_DEPLOY_BUS_ID = "can_s2";
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;

@@ -38,7 +38,7 @@ public class YdexerConstants {
 	public static final LoggedTunableNumber kV = new LoggedTunableNumber("VDexer/kV", gains.kV());
 
     private static final int YDEXER_MOTOR_ID = 50;
-	private static final String YDEXER_BUS_ID = "can_s1";
+	private static final String YDEXER_BUS_ID = "can_s0";
 
 	// private static final double[][] FLYWHEEL_VS_VOLTS = {
 	// 	//flywheel rps vs vdexer volts
