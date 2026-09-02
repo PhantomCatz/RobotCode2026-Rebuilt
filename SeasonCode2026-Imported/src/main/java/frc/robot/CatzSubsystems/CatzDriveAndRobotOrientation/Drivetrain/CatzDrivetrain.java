@@ -20,7 +20,6 @@ import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.InstantCommand;
-import org.wpilib.command2.Subsystem;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;

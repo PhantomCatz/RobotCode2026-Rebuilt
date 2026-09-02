@@ -34,6 +34,8 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.IntakeBlockerConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
@@ -68,6 +70,7 @@ public class CatzSuperstructure {
     private boolean hoodManual = false;
     private boolean turretManual = false;
     private boolean deployManual = false;
+    private boolean blockerManual = false;
 
     private final SubsystemVisualizer visualizer;
 
@@ -694,6 +697,7 @@ public class CatzSuperstructure {
         hoodManual = false;
         turretManual = false;
         deployManual = false;
+        blockerManual = false;
 
         // Only schedule stow if it's NOT the one we are about to manually control
         if (excludedSubsystem != CatzClimb.Instance) {
@@ -707,6 +711,9 @@ public class CatzSuperstructure {
         }
         if (excludedSubsystem != CatzIntakeDeploy.Instance) {
             CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
+        }
+        if (excludedSubsystem != CatzIntakeBlocker.Instance) {
+            CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
         }
     }
 
@@ -835,4 +842,33 @@ public class CatzSuperstructure {
     // public Command depotOppositeCornerSwipeRun(){
     //     return depotOppositeCornerSwipeRoutine.getPathCommand();
     // }
+    public Command shotBlockerOut() {
+        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.Blocker);
+    }
+
+    public Command shotBlockerHome() {
+        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW);
+    }
+
+    public Command toggleManualBlocker() {
+        return Commands.runOnce(() -> {
+
+            if (blockerManual == false) {
+                disableManuals(CatzIntakeBlocker.Instance);
+                hoodManual = true;
+
+                CommandScheduler.getInstance().schedule(CatzHood.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 6;
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }));
+
+            } else {
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
+                hoodManual = false;
+            }
+        });
+    }
 }
