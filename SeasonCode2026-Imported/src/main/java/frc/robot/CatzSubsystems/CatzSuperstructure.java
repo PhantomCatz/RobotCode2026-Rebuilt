@@ -863,11 +863,11 @@ public class CatzSuperstructure {
     // public Command depotOppositeCornerSwipeRun(){
     //     return depotOppositeCornerSwipeRoutine.getPathCommand();
     // }
-    public Command shotBlockerOut() {
-        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.Blocker);
+    public Command shotBlockerDeploy() {
+        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.BLOCKER);
     }
 
-    public Command shotBlockerHome() {
+    public Command shotBlockerStow() {
         return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW);
     }
 

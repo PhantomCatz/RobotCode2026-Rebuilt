@@ -164,8 +164,8 @@ public class RobotContainer {
     xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
     xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
-    xboxAux.button(Gamepad.Button.WEST_FACE).onTrue(CatzSuperstructure.Instance.shotBlockerOut());
-    xboxAux.button(Gamepad.Button.EAST_FACE).onTrue(CatzSuperstructure.Instance.shotBlockerHome());
+    xboxAux.button(Gamepad.Button.WEST_FACE).onTrue(CatzSuperstructure.Instance.shotBlockerDeploy());
+    xboxAux.button(Gamepad.Button.EAST_FACE).onTrue(CatzSuperstructure.Instance.shotBlockerStow());
 
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());

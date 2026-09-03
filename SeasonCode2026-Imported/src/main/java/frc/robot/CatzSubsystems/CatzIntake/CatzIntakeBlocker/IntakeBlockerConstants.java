@@ -17,46 +17,26 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.025); // CHANGE !!!
+	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.025);
+
 	private static final String INTAKE_BLOCKER_BUS_ID = "can_s2";
-	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
-	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
-	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
-
-	//STOW POSITION: -60.0
-	// public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Blocker/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
-	// public static final LoggedTunableNumber Blocker_POSITION_LOG = new LoggedTunableNumber("Intake Blocker/Blocker Pos Deg", Blocker_POSITION.in(Units.Degrees));
-	// public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Blocker/Jiggle Pos Rot", UP_POSITION.in(Units.Rotations));
-	// public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("Intake Blocker/Jiggle Frequency", JIGGLE_FREQUENCY);
-
+	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
-	public static final Setpoint Blocker = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
-
-	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
-	public static final Setpoint Zero = Setpoint.withVoltageSetpoint(0.0);
-	public static final Setpoint Sixty = Setpoint.withMotionMagicSetpoint(Units.Degrees.of(60));
-
-    public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 2, 0.0, 0.0);
-        case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    };
-
-
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Blocker/kP", gains.kP());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Blocker/kV", gains.kV());
-
-    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Blocker/kD", gains.kD());
-    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Blocker/kS", gains.kS());
-
-	private static final int INTAKE_BLOCKER_MOTOR_ID = 32; // CHANGE!!!
-
+	public static final Setpoint BLOCKER = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
 	public static final Angle BLOCKER_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.2; //CHANGE !!!!
-	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Blocker/kG", GRAVITY_FEEDFORWARD);
+	public static final double GRAVITY_FEEDFORWARD = 1; // CHANGE !!!!
 
-    public static final TalonFXConfiguration getFXConfig() {
+	public static final Gains gains = switch (CatzConstants.getRobotType()) {
+		case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
+		case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 2, 0.0, 0.0);
+		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	};
+
+	public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Blocker/kP", gains.kP());
+	public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Blocker/kV", gains.kV());
+
+	public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
 		FXConfig.Slot0.kP = gains.kP();
 		FXConfig.Slot0.kD = gains.kD();
@@ -65,7 +45,7 @@ public class IntakeBlockerConstants {
 		FXConfig.Slot0.kG = gains.kG();
 
 		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 0.85;
-        FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
+		FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 250.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
@@ -84,7 +64,6 @@ public class IntakeBlockerConstants {
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-
 		return FXConfig;
 	}
 
@@ -98,7 +77,7 @@ public class IntakeBlockerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new String[] { "", "" };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
