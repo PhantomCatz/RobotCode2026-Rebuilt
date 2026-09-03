@@ -21,6 +21,7 @@ import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularVelocity;
 import org.wpilib.units.measure.Current;
 import org.wpilib.units.measure.Voltage;
+
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 
 public class ModuleIORealFoc implements ModuleIO {
@@ -71,9 +72,6 @@ public class ModuleIORealFoc implements ModuleIO {
 
   ModuleIDs m_config;
 
-  public CANBus driveTalonCANBus = new CANBus("can_s3"); // TODO do we need to use the "can_s0" to "can_s24" naming for going to systemcore?
-  public CANBus steerTalonCANBus = new CANBus("can_s3");
-
   private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
@@ -86,10 +84,11 @@ public class ModuleIORealFoc implements ModuleIO {
     MODULE_MODULE_NAME_DRIVE_TARGET = MODULE_MODULE_NAME + "/drive target mps";
 
 
-    encoder = new CANcoder(config.absoluteEncoderChannel(), driveTalonCANBus);
+    encoder = new CANcoder(config.absoluteEncoderChannel(), CANBus.systemcore(DRIVE_CANBUS));
     m_config = config;
     // Init drive controllers from config constants
-    driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
+    // driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
+    driveTalon = new TalonFX(config.driveID(), CANBus.systemcore(DriveConstants.DRIVE_CANBUS));
 
     // Restore Factory Defaults
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
@@ -156,7 +155,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.optimizeBusUtilization(0, 1.0);
 
     // Init steer controllers from config constants
-    steerTalon = new TalonFX(config.steerID(), steerTalonCANBus);
+    steerTalon = new TalonFX(config.steerID(), CANBus.systemcore(DRIVE_CANBUS));
     absoluteEncoderOffset = Rotation2d.fromRotations(config.absoluteEncoderOffset());
     // absEncoder = new MT6835(config.absoluteEncoderChannel(), false);
 

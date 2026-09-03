@@ -35,6 +35,7 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
@@ -51,7 +52,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private BaseStatusSignal[] allSignals;
-  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
+  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[9];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -162,6 +163,7 @@ public class Robot extends LoggedRobot {
     allSubsystems[5] = CatzFlywheels.Instance;
     allSubsystems[6] = CatzHood.Instance;
     allSubsystems[7] = CatzTurret.Instance;
+    allSubsystems[8] = CatzIntakeBlocker.Instance;
 
     CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();

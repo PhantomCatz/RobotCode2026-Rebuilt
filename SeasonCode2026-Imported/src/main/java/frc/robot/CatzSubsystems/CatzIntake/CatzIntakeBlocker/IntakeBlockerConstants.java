@@ -17,8 +17,8 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle Blocker_POSITION = Units.Rotations.of(0.45); // CHANGE !!!
-
+	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.025); // CHANGE !!!
+	private static final String INTAKE_BLOCKER_BUS_ID = "can_s2";
 	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
 	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
 	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
@@ -30,7 +30,7 @@ public class IntakeBlockerConstants {
 	// public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("Intake Blocker/Jiggle Frequency", JIGGLE_FREQUENCY);
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
-	public static final Setpoint Blocker = Setpoint.withMotionMagicSetpoint(Blocker_POSITION);
+	public static final Setpoint Blocker = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
 
 	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
 	public static final Setpoint Zero = Setpoint.withVoltageSetpoint(0.0);
@@ -50,9 +50,9 @@ public class IntakeBlockerConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Blocker/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Blocker/kS", gains.kS());
 
-	private static final int INTAKE_Blocker_MOTOR_ID = 30; // CHANGE!!!
+	private static final int INTAKE_BLOCKER_MOTOR_ID = 32; // CHANGE!!!
 
-	public static final Angle Blocker_THRESHOLD = Units.Degrees.of(2.0);
+	public static final Angle BLOCKER_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.2; //CHANGE !!!!
 	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Blocker/kG", GRAVITY_FEEDFORWARD);
 
@@ -91,8 +91,8 @@ public class IntakeBlockerConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = INTAKE_Blocker_MOTOR_ID;
-		IOConfig.mainBus = "";
+		IOConfig.mainID = INTAKE_BLOCKER_MOTOR_ID;
+		IOConfig.mainBus = INTAKE_BLOCKER_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)

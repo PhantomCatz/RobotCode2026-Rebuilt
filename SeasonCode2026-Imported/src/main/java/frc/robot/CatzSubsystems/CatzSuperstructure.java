@@ -690,6 +690,27 @@ public class CatzSuperstructure {
             }
         });
     }
+    public Command toggleManualBlocker() {
+        return Commands.runOnce(() -> {
+            System.out.println("NK: Test");
+            if (blockerManual == false) {
+                disableManuals(CatzIntakeBlocker.Instance);
+                blockerManual = true;
+
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }));
+
+            } else {
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
+                blockerManual = false;
+            }
+        });
+    }
 
     private void disableManuals(Object excludedSubsystem) {
         // Reset flags
@@ -850,25 +871,4 @@ public class CatzSuperstructure {
         return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW);
     }
 
-    public Command toggleManualBlocker() {
-        return Commands.runOnce(() -> {
-
-            if (blockerManual == false) {
-                disableManuals(CatzIntakeBlocker.Instance);
-                hoodManual = true;
-
-                CommandScheduler.getInstance().schedule(CatzHood.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxAux.getLeftY()) * 6;
-                    if (Math.abs(input) < 0.84)
-                        return Setpoint.withVoltageSetpoint(0.0);
-
-                    return Setpoint.withVoltageSetpoint(input);
-                }));
-
-            } else {
-                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
-                hoodManual = false;
-            }
-        });
-    }
 }
