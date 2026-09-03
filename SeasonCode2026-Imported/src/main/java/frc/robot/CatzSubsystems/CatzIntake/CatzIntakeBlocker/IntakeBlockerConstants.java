@@ -17,18 +17,18 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.025);
+	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.04);
 
 	private static final String INTAKE_BLOCKER_BUS_ID = "can_s2";
 	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
 	public static final Setpoint BLOCKER = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
 	public static final Angle BLOCKER_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 1; // CHANGE !!!!
+	public static final double GRAVITY_FEEDFORWARD = 2 ; // CHANGE !!!!
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
 		case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-		case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 2, 0.0, 0.0);
+		case SN2 -> new Gains(30.0, 1.0, 2.0, 0.0, 2, 0.0, 0.0);
 		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	};
