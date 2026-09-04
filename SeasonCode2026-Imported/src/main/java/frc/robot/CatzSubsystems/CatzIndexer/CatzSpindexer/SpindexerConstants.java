@@ -41,7 +41,7 @@ public class SpindexerConstants {
 
 
     private static final int SPINDEXER_MOTOR_ID = 40;
-	private static final String SPINDEXER_BUS_ID = "can_s0";
+	private static final int SPINDEXER_BUS_ID = 0;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -84,7 +84,7 @@ public class SpindexerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] { 0, 0 };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

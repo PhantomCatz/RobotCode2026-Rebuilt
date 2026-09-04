@@ -692,7 +692,6 @@ public class CatzSuperstructure {
     }
     public Command toggleManualBlocker() {
         return Commands.runOnce(() -> {
-            System.out.println("NK: Test");
             if (blockerManual == false) {
                 disableManuals(CatzIntakeBlocker.Instance);
                 blockerManual = true;

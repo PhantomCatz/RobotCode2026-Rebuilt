@@ -19,7 +19,7 @@ public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
 	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.04);
 
-	private static final String INTAKE_BLOCKER_BUS_ID = "can_s2";
+	private static final int INTAKE_BLOCKER_BUS_ID = 2;
 	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
 	public static final Setpoint BLOCKER = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
@@ -77,7 +77,7 @@ public class IntakeBlockerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] { "", "" };
+		IOConfig.followerBuses = new int[] { 2, 2 };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

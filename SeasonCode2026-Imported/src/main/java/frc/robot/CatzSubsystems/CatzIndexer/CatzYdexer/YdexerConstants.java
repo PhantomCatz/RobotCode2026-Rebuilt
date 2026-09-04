@@ -38,7 +38,7 @@ public class YdexerConstants {
 	public static final LoggedTunableNumber kV = new LoggedTunableNumber("VDexer/kV", gains.kV());
 
     private static final int YDEXER_MOTOR_ID = 50;
-	private static final String YDEXER_BUS_ID = "can_s0";
+	private static final int YDEXER_BUS_ID = 0;
 
 	// private static final double[][] FLYWHEEL_VS_VOLTS = {
 	// 	//flywheel rps vs vdexer volts
@@ -86,7 +86,7 @@ public class YdexerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] { 0, 0 };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

@@ -45,7 +45,7 @@ public class HoodConstants {
 	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodelAngle", HOOD_ZERO_POS.in(Units.Degrees));
 
     private static final int HOOD_MOTOR_ID = 22;
-	private static final String HOOD_BUS_ID = "can_s1";
+	private static final int HOOD_BUS_ID = 1;
 	public static final double HOOD_GRAVITY_FF = 0.4;
 	public static final double HOOD_GRAVITY_FF_PHASE_SHIFT = Units.Degrees.of(-10.0).in(Units.Radians);
 	// public static final LoggedTunableNumber hoodPhaseShift = new LoggedTunableNumber("Hood/Gravity Phase Shift Deg", Math.toDegrees(HOOD_GRAVITY_FF_PHASE_SHIFT));
@@ -99,7 +99,7 @@ public class HoodConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] {0, 0};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
