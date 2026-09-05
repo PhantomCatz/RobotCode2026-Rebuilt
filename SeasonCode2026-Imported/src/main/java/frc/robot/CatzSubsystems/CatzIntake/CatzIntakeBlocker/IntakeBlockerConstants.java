@@ -17,7 +17,7 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.04);
+	public static final Angle BLOCKER_POSITION = Units.Degrees.of(-90.0);
 
 	private static final int INTAKE_BLOCKER_BUS_ID = 2;
 	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
@@ -28,7 +28,7 @@ public class IntakeBlockerConstants {
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
 		case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-		case SN2 -> new Gains(30.0, 1.0, 2.0, 0.0, 2, 0.0, 0.0);
+		case SN2 -> new Gains(100.0, 1.0, 2.0, 0.0, 2, 0.0, 0.0);
 		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	};
@@ -44,9 +44,9 @@ public class IntakeBlockerConstants {
 		FXConfig.Slot0.kV = gains.kV();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 0.85;
-		FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
-		FXConfig.MotionMagic.MotionMagicJerk = 250.0;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 5.0;
+		FXConfig.MotionMagic.MotionMagicAcceleration = 500.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
 		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
@@ -54,12 +54,12 @@ public class IntakeBlockerConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 120.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 40.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-		FXConfig.Feedback.SensorToMechanismRatio = 14.95;
+		FXConfig.Feedback.SensorToMechanismRatio = 184 / 10.0;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
