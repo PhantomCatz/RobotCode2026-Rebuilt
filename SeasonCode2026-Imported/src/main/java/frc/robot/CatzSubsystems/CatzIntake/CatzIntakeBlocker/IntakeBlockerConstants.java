@@ -17,7 +17,7 @@ import frc.robot.Utilities.Setpoint;
 
 public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle BLOCKER_POSITION = Units.Degrees.of(-90.0);
+	public static final Angle BLOCKER_POSITION = Units.Degrees.of(-60.0);
 
 	private static final int INTAKE_BLOCKER_BUS_ID = 2;
 	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
@@ -28,7 +28,7 @@ public class IntakeBlockerConstants {
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
 		case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-		case SN2 -> new Gains(100.0, 1.0, 2.0, 0.0, 2, 0.0, 0.0);
+		case SN2 -> new Gains(160,1.0, 2.0, 0.0, 2, 0.0, 0.0);
 		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	};

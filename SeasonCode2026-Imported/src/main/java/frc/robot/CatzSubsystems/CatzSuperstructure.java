@@ -351,7 +351,7 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
             isIntakeDeployed = true;
-        });
+        }).alongWith(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
     }
 
     public Command stowIntake() {
@@ -372,7 +372,7 @@ public class CatzSuperstructure {
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
 
-        }, CatzIntakeRoller.Instance);
+        }, CatzIntakeRoller.Instance).beforeStarting(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
     }
 
     public Command toggleIntakeRollers() {
@@ -692,6 +692,7 @@ public class CatzSuperstructure {
     }
     public Command toggleManualBlocker() {
         return Commands.runOnce(() -> {
+            System.out.println("NK: Test");
             if (blockerManual == false) {
                 disableManuals(CatzIntakeBlocker.Instance);
                 blockerManual = true;

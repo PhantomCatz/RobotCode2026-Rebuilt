@@ -14,6 +14,8 @@ import frc.robot.CatzAbstractions.io.GenericMotorIO;
 import frc.robot.Utilities.Setpoint;
 
 public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends SubsystemBase {
+	private static final String REAL_INPUTS_PREFIX = "RealInputs/";
+
 	protected final S io;
 	protected final I inputs;
 	protected final String name;
@@ -33,10 +35,11 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	int logCount = 0;
 	@Override
 	public void periodic() {
+		System.out.println("generic periodic");
 		io.updateInputs(inputs);
 
 		if(logCount >= 0){
-			Logger.processInputs(name, (LoggableInputs) inputs);
+			Logger.processInputs(REAL_INPUTS_PREFIX + name, (LoggableInputs) inputs);
 			logCount = 0;
 		}
 		logCount++;

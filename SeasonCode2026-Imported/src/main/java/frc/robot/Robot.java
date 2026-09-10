@@ -52,7 +52,13 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private BaseStatusSignal[] allSignals;
+  private BaseStatusSignal[] bus0Signals;
+  private BaseStatusSignal[] bus1Signals;
+  private BaseStatusSignal[] bus2Signals;
   private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[9];
+  private GenericMotorSubsystem[] bus0Subsystems = new GenericMotorSubsystem[3];
+  private GenericMotorSubsystem[] bus1Subsystems = new GenericMotorSubsystem[3];
+  private GenericMotorSubsystem[] bus2Subsystems = new GenericMotorSubsystem[3];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -164,6 +170,15 @@ public class Robot extends LoggedRobot {
     allSubsystems[6] = CatzHood.Instance;
     allSubsystems[7] = CatzTurret.Instance;
     allSubsystems[8] = CatzIntakeBlocker.Instance;
+    bus0Subsystems[0] = CatzSpindexer.Instance;
+    bus0Subsystems[1] = CatzYdexer.Instance;
+    bus0Subsystems[2] = CatzTurret.Instance;
+    bus1Subsystems[0] = CatzClimb.Instance;
+    bus1Subsystems[1] = CatzFlywheels.Instance;
+    bus1Subsystems[2] = CatzHood.Instance;
+    bus2Subsystems[0] = CatzIntakeBlocker.Instance;
+    bus2Subsystems[1] = CatzIntakeRoller.Instance;
+    bus2Subsystems[2] = CatzIntakeDeploy.Instance;
 
     CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();
@@ -181,16 +196,37 @@ public class Robot extends LoggedRobot {
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
-        List<BaseStatusSignal> signalList = new ArrayList<>();
-        for(GenericMotorSubsystem subsystem : allSubsystems){
-          if(subsystem == null){
+        List<BaseStatusSignal> signalList0 = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem0 : bus0Subsystems){
+          if(subsystem0 == null){
             System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
           }
-          Collections.addAll(signalList, subsystem.getSignals());
+          Collections.addAll(signalList0, subsystem0.getSignals());
         }
-        allSignals = signalList.toArray(new BaseStatusSignal[0]);
+        bus0Signals = signalList0.toArray(new BaseStatusSignal[0]);
+
+        List<BaseStatusSignal> signalList1 = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem1 : bus1Subsystems){
+          if(subsystem1 == null){
+            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+          }
+          Collections.addAll(signalList1, subsystem1.getSignals());
+        }
+        bus1Signals = signalList1.toArray(new BaseStatusSignal[0]);
+
+        List<BaseStatusSignal> signalList2 = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem2 : bus2Subsystems){
+          if(subsystem2 == null){
+            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+          }
+          Collections.addAll(signalList2, subsystem2.getSignals());
+        }
+        bus2Signals = signalList2.toArray(new BaseStatusSignal[0]);
       }else{
-        allSignals = new BaseStatusSignal[0];
+        bus0Signals = new BaseStatusSignal[0];
+        bus1Signals = new BaseStatusSignal[0];
+        bus2Signals = new BaseStatusSignal[0];
+
       }
 
       // System.out.println("Chooser: " + AutoRoutineSelector.Instance);
@@ -207,8 +243,14 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
-    if(allSignals.length > 0) {
-      BaseStatusSignal.refreshAll(allSignals);
+    if(bus0Signals.length > 0) {
+      BaseStatusSignal.refreshAll(bus0Signals);
+    }
+    if(bus1Signals.length > 0) {
+      BaseStatusSignal.refreshAll(bus1Signals);
+    }
+    if(bus2Signals.length > 0) {
+      BaseStatusSignal.refreshAll(bus2Signals);
     }
     CommandScheduler.getInstance().run();
   }
