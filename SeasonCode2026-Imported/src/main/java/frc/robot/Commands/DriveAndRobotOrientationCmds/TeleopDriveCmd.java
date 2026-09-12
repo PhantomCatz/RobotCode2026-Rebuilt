@@ -91,7 +91,7 @@ public class TeleopDriveCmd extends Command {
   public void execute() {
     // Obtain realtime joystick inputs with supplier methods
     joyX = -m_headingPctOutput_Y.get();
-    System.out.println(joyX); // Raw accel
+    // System.out.println(joyX); // Raw accel
     joyY = -m_headingPctOutput_X.get();
     turningVelocity = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching
                                                      // alliances

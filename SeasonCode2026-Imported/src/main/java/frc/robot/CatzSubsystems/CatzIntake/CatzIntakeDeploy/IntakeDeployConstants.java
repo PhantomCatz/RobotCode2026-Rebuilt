@@ -101,7 +101,7 @@ public class IntakeDeployConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] { 2, 2 };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

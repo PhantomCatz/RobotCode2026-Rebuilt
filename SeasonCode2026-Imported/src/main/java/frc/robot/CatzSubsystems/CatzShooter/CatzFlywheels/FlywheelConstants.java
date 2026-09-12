@@ -86,7 +86,7 @@ public class FlywheelConstants {
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 
-		IOConfig.followerBuses = new String[] {FLYWHEEL_FOLLOWER_BUS_ID};
+		IOConfig.followerBuses = new int[] {FLYWHEEL_FOLLOWER_BUS_ID};
 		IOConfig.followerIDs = new int[] {FLYWHEEL_FOLLOWER_MOTOR_ID};
 		return IOConfig;
 	}

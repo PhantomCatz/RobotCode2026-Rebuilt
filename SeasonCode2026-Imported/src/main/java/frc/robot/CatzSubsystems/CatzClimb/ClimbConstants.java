@@ -95,7 +95,7 @@ public class ClimbConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] { 1, 1 };
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;
 	}

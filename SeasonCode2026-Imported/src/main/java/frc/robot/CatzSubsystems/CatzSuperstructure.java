@@ -351,7 +351,7 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
             isIntakeDeployed = true;
-        });
+        }).alongWith(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
     }
 
     public Command stowIntake() {
@@ -372,7 +372,7 @@ public class CatzSuperstructure {
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
 
-        }, CatzIntakeRoller.Instance);
+        }, CatzIntakeRoller.Instance).beforeStarting(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
     }
 
     public Command toggleIntakeRollers() {
@@ -690,6 +690,27 @@ public class CatzSuperstructure {
             }
         });
     }
+    public Command toggleManualBlocker() {
+        return Commands.runOnce(() -> {
+            System.out.println("NK: Test");
+            if (blockerManual == false) {
+                disableManuals(CatzIntakeBlocker.Instance);
+                blockerManual = true;
+
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }));
+
+            } else {
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
+                blockerManual = false;
+            }
+        });
+    }
 
     private void disableManuals(Object excludedSubsystem) {
         // Reset flags
@@ -842,33 +863,14 @@ public class CatzSuperstructure {
     // public Command depotOppositeCornerSwipeRun(){
     //     return depotOppositeCornerSwipeRoutine.getPathCommand();
     // }
-    public Command shotBlockerOut() {
-        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.Blocker);
+    public Command shotBlockerDeploy() {
+                return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.BLOCKER);
+
+        // -
     }
 
-    public Command shotBlockerHome() {
+    public Command shotBlockerStow() {
         return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW);
     }
 
-    public Command toggleManualBlocker() {
-        return Commands.runOnce(() -> {
-
-            if (blockerManual == false) {
-                disableManuals(CatzIntakeBlocker.Instance);
-                hoodManual = true;
-
-                CommandScheduler.getInstance().schedule(CatzHood.Instance.followSetpointCommand(() -> {
-                    double input = -(RobotContainer.xboxAux.getLeftY()) * 6;
-                    if (Math.abs(input) < 0.84)
-                        return Setpoint.withVoltageSetpoint(0.0);
-
-                    return Setpoint.withVoltageSetpoint(input);
-                }));
-
-            } else {
-                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
-                hoodManual = false;
-            }
-        });
-    }
 }

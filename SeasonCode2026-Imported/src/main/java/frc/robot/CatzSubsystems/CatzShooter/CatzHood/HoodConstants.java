@@ -99,7 +99,7 @@ public class HoodConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] {0, 0};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
