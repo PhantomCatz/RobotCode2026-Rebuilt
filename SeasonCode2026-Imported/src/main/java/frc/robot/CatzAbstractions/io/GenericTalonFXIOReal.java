@@ -56,13 +56,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	private final boolean[] connectedBuffer;
 
 	public GenericTalonFXIOReal(MotorIOTalonFXConfig config, boolean requiresFastUpdate) {
-		leaderTalon = new TalonFX(config.mainID, CANBus.systemcore(config.mainBus));
+		leaderTalon = new TalonFX(config.mainID,  CANBus.systemcore(config.mainBus));
 		setMainConfig(config.mainConfig);
 
 		if (config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.followerBuses[i]));
+				followerTalons[i] = new TalonFX(config.followerIDs[i], CANBus.systemcore(config.followerBuses[i]));
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
 			setFollowerConfig(followerConfig);
@@ -133,7 +133,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	public void updateInputs(T inputs) {
 
 		inputs.isLeaderConnected = internalPositionRotations.getStatus().isOK();
-
 		if(followerTalons != null && followerTalons.length > 0) {
 			for(int i = 0; i < followerTalons.length; i++) {
 				connectedBuffer[i] = appliedVoltage.get(i+1).getStatus().isOK();
@@ -327,10 +326,10 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	public static class MotorIOTalonFXConfig {
 		public int mainID = -1;
-		public int mainBus = -1;
+		public int mainBus = 0;
 		public TalonFXConfiguration mainConfig = new TalonFXConfiguration();
 		public int[] followerIDs = new int[0];
-		public String[] followerBuses = new String[0];
+		public int[] followerBuses = new int[0];
 		public TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 		public MotorAlignmentValue[] followerAlignmentValue = new MotorAlignmentValue[0];
 	}

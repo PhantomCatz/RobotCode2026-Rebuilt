@@ -16,11 +16,11 @@ public final class CatzConstants {
   //
   // --------------------------------------------------
   public static final RobotScenario robotScenario = RobotScenario.COMPETITION;
-  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.SIM;
-  private static RobotID robotType = RobotID.SN_TEST;
+  public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
+  private static RobotID robotType = RobotID.SN2;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
   public static boolean disableHAL = false;
-  
+
   public static final double LOOP_TIME = 0.02;
 
   // public static AutoFactory autoFactory;
