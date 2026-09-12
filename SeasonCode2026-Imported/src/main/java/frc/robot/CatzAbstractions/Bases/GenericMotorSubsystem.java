@@ -32,7 +32,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		this.TARGET_SETPOINT_STR = this.name + "Target Setpoint Rot";
 	}
 
-	int logCount = 0;
+	private int logCount = 0;
 	@Override
 	public void periodic() {
 		System.out.println("generic periodic");
