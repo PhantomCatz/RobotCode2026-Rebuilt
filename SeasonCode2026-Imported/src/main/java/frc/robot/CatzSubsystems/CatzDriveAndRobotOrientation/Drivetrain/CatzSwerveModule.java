@@ -100,13 +100,13 @@ public class CatzSwerveModule {
   }
 
   double prevCur = 0.0;
-  int logCount = 0;
+  private int logCount = 0;
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
 
     if(logCount >= 5){
-      Logger.processInputs(motorOutputs, inputs);
+      Logger.processInputs(motorOutputs, inputs); //ooohoooooohwholivesinapinappleundertheseasspongebobsquarepantsoraangeandyuellowandporousishespongebobsquaresomethingsomethingflublikeafishspongebobsqaurepantsspongebobsqaurepantssongebobsqaurepantsspongeeeeboooobbsqaurepantsdododododododododododo
       logCount = 0;
     }
     logCount++;

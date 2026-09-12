@@ -39,9 +39,9 @@ public class FlywheelConstants {
 	public static final double VDEXER_FEED_COMPENSATION_NORM = VDEXER_FEED_COMPENSATION.getNorm();
 
 	private static final int FLYWHEEL_MOTOR_ID = 20;
-	private static final String FLYWHEEL_BUS_ID = "can_s1";
+	private static final int FLYWHEEL_BUS_ID = 1;
 	private static final int FLYWHEEL_FOLLOWER_MOTOR_ID = 21;
-	private static final String FLYWHEEL_FOLLOWER_BUS_ID = "can_s1";
+	private static final int FLYWHEEL_FOLLOWER_BUS_ID = 1;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
