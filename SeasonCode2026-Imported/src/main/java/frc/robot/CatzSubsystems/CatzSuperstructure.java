@@ -336,8 +336,11 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             if (isIntakeDeployed) {
                 intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
+                // CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.BLOCKER);
+
             } else {
                 intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+                // CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW);
             }
             isIntakeDeployed = !isIntakeDeployed;
         });
@@ -359,7 +362,7 @@ public class CatzSuperstructure {
             intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
             isIntakeDeployed = false;
 
-        });
+        }).alongWith(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.BLOCKER));
     }
 
     public Command jiggleIntakeCommand() {

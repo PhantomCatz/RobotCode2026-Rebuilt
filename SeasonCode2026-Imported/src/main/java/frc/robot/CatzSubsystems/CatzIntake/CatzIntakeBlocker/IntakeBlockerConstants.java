@@ -16,19 +16,19 @@ import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class IntakeBlockerConstants {
-	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle BLOCKER_POSITION = Units.Degrees.of(-60.0);
+	public static final Angle STOW_POSITION = Units.Degrees.of(0.0);
+	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.020);
 
 	private static final int INTAKE_BLOCKER_BUS_ID = 2;
 	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
-	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
+	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint BLOCKER = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
 	public static final Angle BLOCKER_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 2 ; // CHANGE !!!!
+	public static final double GRAVITY_FEEDFORWARD = 0.4 ; // CHANGE !!!!
 
 	public static final Gains gains = switch (CatzConstants.getRobotType()) {
 		case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-		case SN2 -> new Gains(160,1.0, 2.0, 0.0, 2, 0.0, 0.0);
+		case SN2 -> new Gains(150.0, 0.0, 4.0, 2.0, 2.0, 0.0, 2.0);
 		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	};
@@ -49,12 +49,12 @@ public class IntakeBlockerConstants {
 		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
 
 		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
-		FXConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
-		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 100.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 100.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-		FXConfig.CurrentLimits.StatorCurrentLimit = 40.0;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 100.0;
 
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;

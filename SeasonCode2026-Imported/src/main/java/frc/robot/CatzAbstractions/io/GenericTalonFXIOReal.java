@@ -133,8 +133,6 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	public void updateInputs(T inputs) {
 
 		inputs.isLeaderConnected = internalPositionRotations.getStatus().isOK();
-		System.out.println("hello"+inputs.isLeaderConnected);
-
 		if(followerTalons != null && followerTalons.length > 0) {
 			for(int i = 0; i < followerTalons.length; i++) {
 				connectedBuffer[i] = appliedVoltage.get(i+1).getStatus().isOK();

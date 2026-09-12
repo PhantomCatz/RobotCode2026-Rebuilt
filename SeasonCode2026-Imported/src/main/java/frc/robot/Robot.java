@@ -36,6 +36,7 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.IntakeBlockerConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
@@ -294,7 +295,7 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
-    CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
+    CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW)));
     CatzDrivetrain.getInstance().setNormalConfig();
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);

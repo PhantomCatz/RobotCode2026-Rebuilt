@@ -19,7 +19,7 @@ public class CatzIntakeBlocker extends ServoMotorSubsystem<IntakeBlockerIO, Inta
 
     private CatzIntakeBlocker() {
         super(io, inputs, "CatzIntakeBlocker", IntakeBlockerConstants.BLOCKER_THRESHOLD);
-        setCurrentPosition(IntakeBlockerConstants.HOME_POSITION);
+        setCurrentPosition(IntakeBlockerConstants.STOW_POSITION);
     }
 
     double prevP = 0.0;
