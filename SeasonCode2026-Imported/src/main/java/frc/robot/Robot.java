@@ -15,11 +15,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
-import choreo.auto.AutoFactory;
+// import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
-import org.wpilib.system.RobotController;
+import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
@@ -27,7 +27,7 @@ import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.Commands;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
-import frc.robot.Autonomous.AutoRoutineSelector;
+// import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -35,6 +35,8 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.IntakeBlockerConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
@@ -51,7 +53,13 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private BaseStatusSignal[] allSignals;
-  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
+  private BaseStatusSignal[] bus0Signals;
+  private BaseStatusSignal[] bus1Signals;
+  private BaseStatusSignal[] bus2Signals;
+  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[9];
+  private GenericMotorSubsystem[] bus0Subsystems = new GenericMotorSubsystem[3];
+  private GenericMotorSubsystem[] bus1Subsystems = new GenericMotorSubsystem[3];
+  private GenericMotorSubsystem[] bus2Subsystems = new GenericMotorSubsystem[3];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -92,6 +100,13 @@ public class Robot extends LoggedRobot {
         CatzIntakeDeploy.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.intakeSetpoint));
       }, CatzIntakeDeploy.Instance)
   );
+
+    CatzIntakeBlocker.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
+      }, CatzIntakeBlocker.Instance)
+    );
+
     Logger.start();
 
     // Log active commands
@@ -121,7 +136,7 @@ public class Robot extends LoggedRobot {
     //         });
 
     // Set Brownout Voltage to WPILIB recommendations
-    RobotController.setBrownoutVoltage(6.3);
+    // RobotController.setBrownoutVoltage(6.3);
 
     // Print out Catz Constant enums
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());
@@ -162,35 +177,67 @@ public class Robot extends LoggedRobot {
     allSubsystems[5] = CatzFlywheels.Instance;
     allSubsystems[6] = CatzHood.Instance;
     allSubsystems[7] = CatzTurret.Instance;
+    allSubsystems[8] = CatzIntakeBlocker.Instance;
+    bus0Subsystems[0] = CatzSpindexer.Instance;
+    bus0Subsystems[1] = CatzYdexer.Instance;
+    bus0Subsystems[2] = CatzTurret.Instance;
+    bus1Subsystems[0] = CatzClimb.Instance;
+    bus1Subsystems[1] = CatzFlywheels.Instance;
+    bus1Subsystems[2] = CatzHood.Instance;
+    bus2Subsystems[0] = CatzIntakeBlocker.Instance;
+    bus2Subsystems[1] = CatzIntakeRoller.Instance;
+    bus2Subsystems[2] = CatzIntakeDeploy.Instance;
 
+    CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();
 
-    CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
-                                                  CatzRobotTracker.getInstance()::resetPose,
-                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-                                                  true,
-                                                  CatzDrivetrain.getInstance()
-                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
-    System.out.println(AutoRoutineSelector.Instance);
+    // CatzConstants.autoFactory = new AutoFactory(
+    //                                               CatzRobotTracker.getInstance()::getEstimatedPose,
+    //                                               CatzRobotTracker.getInstance()::resetPose,
+    //                                               CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
+    //                                               true,
+    //                                               CatzDrivetrain.getInstance()
+    //                                             ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+    // System.out.println(AutoRoutineSelector.Instance);
 
       DriverStationBackend.silenceJoystickConnectionWarning(true);
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
-        List<BaseStatusSignal> signalList = new ArrayList<>();
-        for(GenericMotorSubsystem subsystem : allSubsystems){
-          if(subsystem == null){
+        List<BaseStatusSignal> signalList0 = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem0 : bus0Subsystems){
+          if(subsystem0 == null){
             System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
           }
-          Collections.addAll(signalList, subsystem.getSignals());
+          Collections.addAll(signalList0, subsystem0.getSignals());
         }
-        allSignals = signalList.toArray(new BaseStatusSignal[0]);
+        bus0Signals = signalList0.toArray(new BaseStatusSignal[0]);
+
+        List<BaseStatusSignal> signalList1 = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem1 : bus1Subsystems){
+          if(subsystem1 == null){
+            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+          }
+          Collections.addAll(signalList1, subsystem1.getSignals());
+        }
+        bus1Signals = signalList1.toArray(new BaseStatusSignal[0]);
+
+        List<BaseStatusSignal> signalList2 = new ArrayList<>();
+        for(GenericMotorSubsystem subsystem2 : bus2Subsystems){
+          if(subsystem2 == null){
+            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+          }
+          Collections.addAll(signalList2, subsystem2.getSignals());
+        }
+        bus2Signals = signalList2.toArray(new BaseStatusSignal[0]);
       }else{
-        allSignals = new BaseStatusSignal[0];
+        bus0Signals = new BaseStatusSignal[0];
+        bus1Signals = new BaseStatusSignal[0];
+        bus2Signals = new BaseStatusSignal[0];
+
       }
 
-      System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+      // System.out.println("Chooser: " + AutoRoutineSelector.Instance);
       System.out.println("Led "+CatzLED.Instance);
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
@@ -204,8 +251,14 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
-    if(allSignals.length > 0) {
-      BaseStatusSignal.refreshAll(allSignals);
+    if(bus0Signals.length > 0) {
+      BaseStatusSignal.refreshAll(bus0Signals);
+    }
+    if(bus1Signals.length > 0) {
+      BaseStatusSignal.refreshAll(bus1Signals);
+    }
+    if(bus2Signals.length > 0) {
+      BaseStatusSignal.refreshAll(bus2Signals);
     }
     CommandScheduler.getInstance().run();
   }
@@ -229,12 +282,12 @@ public class Robot extends LoggedRobot {
     autonStartTime = Timer.getTimestamp();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
-    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
+    // m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
-    System.out.println("auton: " + m_autonomousCommand);
-    if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(m_autonomousCommand);
-    }
+    // System.out.println("auton: " + m_autonomousCommand);
+    // if (m_autonomousCommand != null) {
+    //   CommandScheduler.getInstance().schedule(m_autonomousCommand);
+    // }
   }
 
   @Override
@@ -249,6 +302,10 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
+
+    CatzSuperstructure.Instance.canBlock = false;
+    CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+
     CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
     CatzDrivetrain.getInstance().setNormalConfig();
 
@@ -265,7 +322,7 @@ public class Robot extends LoggedRobot {
   public void teleopPeriodic() {
     if(iterations < 20) {
       Alliance alliance = DriverStationBackend.getAlliance().orElse(Alliance.BLUE);
-      System.out.println("hello world!\n" + "\"" + DriverStationBackend.getGameData() + "\"" + " \n boom it");
+      // System.out.println("hello world!\n" + "\"" + DriverStationBackend.getGameData() + "\"" + " \n boom it");
       try{
         if ((DriverStationBackend.getGameData().toString().charAt(0) == 'B'
           && alliance == Alliance.BLUE)

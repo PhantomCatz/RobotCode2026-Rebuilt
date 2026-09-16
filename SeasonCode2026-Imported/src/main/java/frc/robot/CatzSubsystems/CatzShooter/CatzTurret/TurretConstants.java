@@ -39,6 +39,7 @@ public class TurretConstants {
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
+	private static final int TURRET_BUS_ID = 0;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(90.0);
 
@@ -53,7 +54,7 @@ public class TurretConstants {
 	public static final Rotation2d TURRET_RADIAL_ANGLE = new Rotation2d(Math.PI * 0.75);
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
-	public static final CANcoder TURRET_CANCODER = new CANcoder(26, new CANBus());
+	public static final CANcoder TURRET_CANCODER = new CANcoder(26, CANBus.systemcore(TURRET_BUS_ID));
 
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 	public static final Distance TURRET_HEIGHT = Units.Inches.of(18.0);
@@ -101,7 +102,7 @@ public class TurretConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = TURRET_MOTOR_ID;
-		IOConfig.mainBus = "";
+		IOConfig.mainBus = TURRET_BUS_ID;
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
@@ -109,7 +110,7 @@ public class TurretConstants {
 						// .withForwardSoftLimitThreshold(TURRET_MAX)
 						// .withReverseSoftLimitThreshold(TURRET_MIN)); //NOTE add back soft limits
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new int[] {0, 0};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

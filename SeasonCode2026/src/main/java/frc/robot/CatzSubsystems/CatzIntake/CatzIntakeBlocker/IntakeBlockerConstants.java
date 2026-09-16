@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy;
+package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -6,8 +6,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -15,24 +15,22 @@ import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
-public class IntakeDeployConstants {
+public class IntakeBlockerConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle STOW_POSITION = Units.Rotations.of(-0.1);
-	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.30);
-	public static final Angle UP_POSITION = Units.Rotations.of(0.05);
+	public static final Angle Blocker_POSITION = Units.Rotations.of(0.45); // CHANGE !!!
 
 	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
 	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
 	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
 
 	//STOW POSITION: -60.0
-	// public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
-	// public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
-	// public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Pos Rot", UP_POSITION.in(Units.Rotations));
-	// public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("Intake Deploy/Jiggle Frequency", JIGGLE_FREQUENCY);
+	// public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("Intake Blocker/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
+	// public static final LoggedTunableNumber Blocker_POSITION_LOG = new LoggedTunableNumber("Intake Blocker/Blocker Pos Deg", Blocker_POSITION.in(Units.Degrees));
+	// public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("Intake Blocker/Jiggle Pos Rot", UP_POSITION.in(Units.Rotations));
+	// public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("Intake Blocker/Jiggle Frequency", JIGGLE_FREQUENCY);
 
-	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
-	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
+	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(HOME_POSITION);
+	public static final Setpoint Blocker = Setpoint.withMotionMagicSetpoint(Blocker_POSITION);
 
 	public static final Setpoint HoldDown = Setpoint.withVoltageSetpoint(6.0);
 	public static final Setpoint Zero = Setpoint.withVoltageSetpoint(0.0);
@@ -46,18 +44,17 @@ public class IntakeDeployConstants {
     };
 
 
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Deploy/kP", gains.kP());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Deploy/kV", gains.kV());
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Blocker/kP", gains.kP());
+    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Blocker/kV", gains.kV());
 
-    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Deploy/kD", gains.kD());
-    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
+    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Intake Blocker/kD", gains.kD());
+    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Blocker/kS", gains.kS());
 
-	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
-	private static final int INTAKE_DEPLOY_BUS_ID = 2;
+	private static final int INTAKE_Blocker_MOTOR_ID = 30; // CHANGE!!!
 
-	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.7;
-	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Deploy/kG", GRAVITY_FEEDFORWARD);
+	public static final Angle Blocker_THRESHOLD = Units.Degrees.of(2.0);
+	public static final double GRAVITY_FEEDFORWARD = 0.2; //CHANGE !!!!
+	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Intake Blocker/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -94,14 +91,14 @@ public class IntakeDeployConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = INTAKE_DEPLOY_MOTOR_ID;
-		IOConfig.mainBus = INTAKE_DEPLOY_BUS_ID;
+		IOConfig.mainID = INTAKE_Blocker_MOTOR_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 2, 2 };
+		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

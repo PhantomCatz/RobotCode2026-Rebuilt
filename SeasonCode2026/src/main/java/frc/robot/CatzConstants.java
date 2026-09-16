@@ -33,6 +33,7 @@ public final class CatzConstants {
   public static final boolean IntakeOn = true;
   public static final boolean ShooterOn = true;
   public static final boolean TurretOn = true;
+  public static final boolean BlockerOn = true;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers

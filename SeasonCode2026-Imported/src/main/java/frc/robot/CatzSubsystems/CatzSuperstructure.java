@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
 
-import choreo.auto.AutoFactory;
+// import choreo.auto.AutoFactory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
@@ -18,15 +18,14 @@ import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.Commands;
-import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.RobotContainer;
-import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
-import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
-import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
-import frc.robot.Autonomous.autoSequence.TowerSwipe;
+// import frc.robot.Autonomous.autoSequence.DepotCornerSwipe;
+// import frc.robot.Autonomous.autoSequence.DepotMiddleSwipe;
+// import frc.robot.Autonomous.autoSequence.OppositeDepotCornerSwipe;
+// import frc.robot.Autonomous.autoSequence.OppositeDepotMiddleSwipe;
+// import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
+// import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -35,6 +34,8 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
+import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.IntakeBlockerConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
@@ -69,35 +70,35 @@ public class CatzSuperstructure {
     private boolean hoodManual = false;
     private boolean turretManual = false;
     private boolean deployManual = false;
+    private boolean blockerManual = false;
 
     private final SubsystemVisualizer visualizer;
 
-
-
-    private final TowerSwipe outpostSwipeRoutine;
-    private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
-    private final DepotMiddleSwipe depotMiddleSwipeRoutine;
-    private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
-    private final DepotCornerSwipe depotCornerSwipeRoutine;
-    private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
+    // private final TowerSwipe outpostSwipeRoutine;
+    // private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
+    // private final DepotMiddleSwipe depotMiddleSwipeRoutine;
+    // private final OppositeDepotMiddleSwipe depotOppositeMiddleSwipeRoutine;
+    // private final DepotCornerSwipe depotCornerSwipeRoutine;
+    // private final OppositeDepotCornerSwipe depotOppositeCornerSwipeRoutine;
 
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
 
-        CatzConstants.autoFactory = new AutoFactory(
-                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
-                                                  CatzRobotTracker.getInstance()::resetPose,
-                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-                                                  true,
-                                                  CatzDrivetrain.getInstance()
-                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+        // CatzConstants.autoFactory = new AutoFactory(
+        // CatzRobotTracker.getInstance()::getEstimatedPose,
+        // CatzRobotTracker.getInstance()::resetPose,
+        // CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
+        // true,
+        // CatzDrivetrain.getInstance()
+        // ); //it is apparently a good idea to initialize these variables not
+        // statically because there can be race conditions
 
-        outpostSwipeRoutine = new TowerSwipe();
-        outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
-        depotMiddleSwipeRoutine = new DepotMiddleSwipe();
-        depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
-        depotCornerSwipeRoutine = new DepotCornerSwipe();
-        depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
+        // outpostSwipeRoutine = new TowerSwipe();
+        // outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
+        // depotMiddleSwipeRoutine = new DepotMiddleSwipe();
+        // depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
+        // depotCornerSwipeRoutine = new DepotCornerSwipe();
+        // depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -131,14 +132,19 @@ public class CatzSuperstructure {
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
         // if(isHub){
-        //     shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(), CatzDrivetrain.getInstance().futureChassisVelocities);
+        // shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(),
+        // CatzDrivetrain.getInstance().futureChassisVelocities);
         // }else{
-        //     shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
+        // shootWhileMove(isHub, isShooting,
+        // CatzRobotTracker.Instance.getEstimatedPose(),
+        // CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
         // }
-        shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
+        shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getEstimatedPose(),
+                CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
     }
 
-    public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose, ChassisVelocities predictedChassisVelocitiesRobot) {
+    public void shootWhileMove(boolean isHub, boolean isShooting, Pose2d predictedRobotPose,
+            ChassisVelocities predictedChassisVelocitiesRobot) {
         RegressionMode currentMode = calculateDynamicMode(isHub);
         Translation2d baseTarget = getBaseTargetLocation(isHub);
         Translation2d predictedTurretPose = CatzTurret.Instance.getFieldToTurret(predictedRobotPose);
@@ -151,7 +157,7 @@ public class CatzSuperstructure {
             initialShootReady = false;
             activeRegressionMode = currentMode;
         }
-        CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode) );
+        CatzFlywheels.Instance.applySetpoint(ShooterRegression.getShooterSetpoint(dist, currentMode));
         if (isShooting) {
             CatzTurret.Instance
                     .applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(targetLoc, predictedRobotPose,
@@ -186,7 +192,9 @@ public class CatzSuperstructure {
             CatzHood.Instance.applySetpoint(HoodConstants.HOOD_STOW_SETPOINT);
             CatzSpindexer.Instance.applySetpoint(SpindexerConstants.OFF);
             CatzYdexer.Instance.applySetpoint(YdexerConstants.OFF);
-            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));// don't aim at future pose
+            CatzTurret.Instance.applySetpoint(AimCalculations.calculateTurretTrackingSetpoint(baseTarget));// don't aim
+                                                                                                           // at future
+                                                                                                           // pose
 
             initialShootReady = false;
             double intakePower = 0.0;
@@ -211,29 +219,32 @@ public class CatzSuperstructure {
                     isScoring = false;
                     isHoarding = false;
                     CatzDrivetrain.getInstance().setNormalConfig();
-                })
-        );
+                }));
     }
 
     public Command trackStaticHub() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
-    public Command trackOpposingHub(){
+    public Command trackOpposingHub() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateOpposingHubTrackingSetpoint());
     }
 
     public Command trackHoardLocation() {
-        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateTurretTrackingSetpoint(AimCalculations.getCornerHoardingTarget(currentHoardType)));
+        return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations
+                .calculateTurretTrackingSetpoint(AimCalculations.getCornerHoardingTarget(currentHoardType)));
     }
 
     public Command trackTower() {
         return CatzTurret.Instance.followSetpointCommand(
                 () -> {
-                    if(CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getX() < FieldConstants.fieldXHalf){
-                        return AimCalculations.calculateTurretTrackingSetpoint(FieldConstants.getBlueAllianceClimbApriltagLocation());
-                    }else{
-                        return AimCalculations.calculateTurretTrackingSetpoint(AllianceFlipUtil.applyNoCondition(FieldConstants.getBlueAllianceClimbApriltagLocation()));
+                    if (CatzRobotTracker.Instance.getEstimatedPose().getTranslation()
+                            .getX() < FieldConstants.fieldXHalf) {
+                        return AimCalculations
+                                .calculateTurretTrackingSetpoint(FieldConstants.getBlueAllianceClimbApriltagLocation());
+                    } else {
+                        return AimCalculations.calculateTurretTrackingSetpoint(AllianceFlipUtil
+                                .applyNoCondition(FieldConstants.getBlueAllianceClimbApriltagLocation()));
                     }
                 });
     }
@@ -242,32 +253,33 @@ public class CatzSuperstructure {
 
     public Command toggleCmdHoardShoot() {
         return Commands.either(
-            cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> isHoarding = false),
-            cmdHoardShoot().finallyDo(() -> isHoarding = true),
-            () -> isHoarding
-        );
+                cmdShooterStop().andThen(trackStaticHub()).finallyDo(() -> isHoarding = false),
+                cmdHoardShoot().finallyDo(() -> isHoarding = true),
+                () -> isHoarding);
     }
 
     public Command cmdHoardShoot() {
         return Commands.run(() -> {
             updateAndApplyShooterState(false, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-        .beforeStarting(() -> {CatzDrivetrain.getInstance().setShootWhileMoveConfig();
-                               isHoarding = true;})
-        .finallyDo(() -> {
-            double intakePower = 0.0;
-            if (isIntakeOn) {
-                intakePower = 0.05;
-            }
-            RobotContainer.rumbleDrv(intakePower);
-        });
+                .beforeStarting(() -> {
+                    CatzDrivetrain.getInstance().setShootWhileMoveConfig();
+                    isHoarding = true;
+                })
+                .finallyDo(() -> {
+                    double intakePower = 0.0;
+                    if (isIntakeOn) {
+                        intakePower = 0.05;
+                    }
+                    RobotContainer.rumbleDrv(intakePower);
+                });
     }
 
     public Command cmdHoardStandby() {
         return Commands.run(() -> {
             updateAndApplyShooterState(false, false);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-        .beforeStarting(() -> isHoarding = false);
+                .beforeStarting(() -> isHoarding = false);
     }
 
     /* --- HUB SCORING --- */
@@ -275,11 +287,13 @@ public class CatzSuperstructure {
 
     public Command cmdHubShoot() {
         return Commands.run(() -> {
-                updateAndApplyShooterState(true, true);
+            updateAndApplyShooterState(true, true);
         }, CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance)
-                .beforeStarting(() -> {isScoring = true;
-                                       CatzDrivetrain.getInstance().setShootWhileMoveConfig();})
-                .finallyDo(()-> {
+                .beforeStarting(() -> {
+                    isScoring = true;
+                    CatzDrivetrain.getInstance().setShootWhileMoveConfig();
+                })
+                .finallyDo(() -> {
                     double intakePower = 0.0;
                     if (isIntakeOn) {
                         intakePower = 0.05;
@@ -318,6 +332,10 @@ public class CatzSuperstructure {
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     public boolean isIntakeDeployed = true;
+    public boolean canBlock = false; // if the intake blocker can block the ball from going into the intake
+
+    // blocker
+    public Angle blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
 
     // public Command toggleIntakeDeploy() {
     // return Commands.runOnce(() -> {
@@ -334,8 +352,10 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             if (isIntakeDeployed) {
                 intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
-            } else {
+            }
+            else {
                 intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
+                blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
             }
             isIntakeDeployed = !isIntakeDeployed;
         });
@@ -349,6 +369,9 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
             isIntakeDeployed = true;
+
+            blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+            canBlock = false;
         });
     }
 
@@ -356,12 +379,26 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
             isIntakeDeployed = false;
+            canBlock = true;
+        });
+    }
 
+    public Command shotBlockerDeploy() {
+        return Commands.runOnce(() -> {
+            if (canBlock) {
+                blockerSetpoint = IntakeBlockerConstants.BLOCKER_POSITION;
+            }
+        });
+    }
+
+    public Command shotBlockerStow() {
+        return Commands.runOnce(() -> {
+            blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
         });
     }
 
     public Command jiggleIntakeCommand() {
-            return Commands.run(() -> {
+        return Commands.run(() -> {
             double time = Timer.getTimestamp();
             double angleRot = Math.sin(time * IntakeDeployConstants.JIGGLE_FREQUENCY * (2 * Math.PI)) > 0
                     ? IntakeDeployConstants.UP_POSITION.in(Units.Rotations)
@@ -369,6 +406,8 @@ public class CatzSuperstructure {
 
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
+
+            blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
 
         }, CatzIntakeRoller.Instance);
     }
@@ -380,7 +419,7 @@ public class CatzSuperstructure {
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.OFF_SETPOINT);
 
                 // if(!isScoring){
-                //     CatzDrivetrain.getInstance().setNormalConfig();
+                // CatzDrivetrain.getInstance().setNormalConfig();
                 // }
                 RobotContainer.rumbleDrv(0.0);
 
@@ -390,7 +429,7 @@ public class CatzSuperstructure {
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
 
                 // if(!isScoring){
-                    // CatzDrivetrain.getInstance().setIntakeMoveConfig();
+                // CatzDrivetrain.getInstance().setIntakeMoveConfig();
                 // }
                 RobotContainer.rumbleDrv(0.05);
             }
@@ -508,7 +547,8 @@ public class CatzSuperstructure {
     public Command applyHoodInterpolatedSetpoint() {
         return CatzHood.Instance.followSetpointCommand(() -> {
             Distance dist = Units.Meters
-                    .of(CatzTurret.Instance.getFieldToTurret().getDistance(AimCalculations.getCornerHoardingTarget(currentHoardType)));
+                    .of(CatzTurret.Instance.getFieldToTurret()
+                            .getDistance(AimCalculations.getCornerHoardingTarget(currentHoardType)));
             return ShooterRegression.getHoodSetpoint(dist, RegressionMode.OVER_TRENCH_HOARD);
         });
     }
@@ -548,27 +588,27 @@ public class CatzSuperstructure {
     }
 
     // public Command towerSwipe() {
-    //     return Commands.deadline(Commands.sequence(
-    //         deployIntake(),
-    //         intakeON(),
-    //         new PIDDriveCmd(),
-    //         followTrajectory()
-    //     ),
-    //     trackTower());
+    // return Commands.deadline(Commands.sequence(
+    // deployIntake(),
+    // intakeON(),
+    // new PIDDriveCmd(),
+    // followTrajectory()
+    // ),
+    // trackTower());
     // }
 
     public Command alignToBackUpClimb() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             return new PIDDriveCmd(FieldConstants.getClimbAwayPosition(currentTranslation), true);
-        }, Set.of(CatzDrivetrain.getInstance()));//.onlyIf(() -> isClimbMode || DriverStationBackend.isAutonomous());
+        }, Set.of(CatzDrivetrain.getInstance()));// .onlyIf(() -> isClimbMode || DriverStationBackend.isAutonomous());
     }
 
     public Command alignToCloseClimb() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             return new PIDDriveCmd(1.5, FieldConstants.getClimbClosePosition(currentTranslation), true);
-        }, Set.of(CatzDrivetrain.getInstance()));//.onlyIf(() -> isClimbMode || DriverStationBackend.isAutonomous());
+        }, Set.of(CatzDrivetrain.getInstance()));// .onlyIf(() -> isClimbMode || DriverStationBackend.isAutonomous());
     }
 
     public Command autoClimbCommand() {
@@ -585,13 +625,12 @@ public class CatzSuperstructure {
 
     public Command autoClimbLowerCommand() {
         return Commands.deadline(
-            Commands.sequence(
-                cmdClimbReach(),
-                deployIntake()
+                Commands.sequence(
+                        cmdClimbReach(),
+                        deployIntake()
                 // alignToBackUpClimb()
-            ),
-            trackTower()
-        ).andThen(() -> isClimbMode = false);
+                ),
+                trackTower()).andThen(() -> isClimbMode = false);
     }
 
     public Command cmdClimbReach() {
@@ -613,12 +652,14 @@ public class CatzSuperstructure {
                     return Setpoint.withVoltageSetpoint(0.0);
 
                 return Setpoint.withVoltageSetpoint(input);
-            })); // TODO do we nee to wrap around the commandschedule.shcedule() for all these commands?
+            })); // TODO do we nee to wrap around the commandschedule.shcedule() for all these
+                 // commands?
             // if (climbManual == false) {
 
             // } else {
-            //     // CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
-            //     climbManual = false;
+            // //
+            // CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+            // climbManual = false;
             // }
         });
     }
@@ -639,7 +680,8 @@ public class CatzSuperstructure {
                 }));
 
             } else {
-                CommandScheduler.getInstance().schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT));
+                CommandScheduler.getInstance()
+                        .schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_HOME_SETPOINT));
                 hoodManual = false;
             }
         });
@@ -661,7 +703,8 @@ public class CatzSuperstructure {
                 }));
 
             } else {
-                CommandScheduler.getInstance().schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
+                CommandScheduler.getInstance()
+                        .schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
                 turretManual = false;
             }
         });
@@ -683,8 +726,32 @@ public class CatzSuperstructure {
                 }));
 
             } else {
-                CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
+                CommandScheduler.getInstance()
+                        .schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
                 deployManual = false;
+            }
+        });
+    }
+
+    public Command toggleManualBlocker() {
+        return Commands.runOnce(() -> {
+            System.out.println("NK: Test");
+            if (blockerManual == false) {
+                disableManuals(CatzIntakeBlocker.Instance);
+                blockerManual = true;
+
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }));
+
+            } else {
+                CommandScheduler.getInstance()
+                        .schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
+                blockerManual = false;
             }
         });
     }
@@ -695,39 +762,48 @@ public class CatzSuperstructure {
         hoodManual = false;
         turretManual = false;
         deployManual = false;
+        blockerManual = false;
 
         // Only schedule stow if it's NOT the one we are about to manually control
         if (excludedSubsystem != CatzClimb.Instance) {
             CommandScheduler.getInstance().schedule(CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT));
         }
         if (excludedSubsystem != CatzHood.Instance) {
-            CommandScheduler.getInstance().schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
+            CommandScheduler.getInstance()
+                    .schedule(CatzHood.Instance.setpointCommand(HoodConstants.HOOD_STOW_SETPOINT));
         }
         if (excludedSubsystem != CatzTurret.Instance) {
             CommandScheduler.getInstance().schedule(CatzTurret.Instance.setpointCommand(TurretConstants.HOME_SETPOINT));
         }
         if (excludedSubsystem != CatzIntakeDeploy.Instance) {
-            CommandScheduler.getInstance().schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
+            CommandScheduler.getInstance()
+                    .schedule(CatzIntakeDeploy.Instance.setpointCommand(IntakeDeployConstants.STOW));
+        }
+        if (excludedSubsystem != CatzIntakeBlocker.Instance) {
+            CommandScheduler.getInstance()
+                    .schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
         }
     }
 
     public boolean canResetPose = false;
 
     public Command resetClimbPose() {
-        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));//.onlyIf(()->canResetPose);
+        return CatzClimb.Instance.setCurrentPositionCommand(Units.Rotations.of(0.0));// .onlyIf(()->canResetPose);
     }
 
     public Command resetHoodPose() {
-        return CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS).onlyIf(()->canResetPose);
+        return CatzHood.Instance.setCurrentPositionCommand(HoodConstants.HOOD_ZERO_POS).onlyIf(() -> canResetPose);
     }
 
     public Command resetTurretPose() {
         return CatzTurret.Instance
-                .setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos())).onlyIf(()->canResetPose);
+                .setCurrentPositionCommand(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()))
+                .onlyIf(() -> canResetPose);
     }
 
     public Command resetDeployPose() {
-        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(IntakeDeployConstants.STOW_POSITION).onlyIf(()->canResetPose);
+        return CatzIntakeDeploy.Instance.setCurrentPositionCommand(IntakeDeployConstants.STOW_POSITION)
+                .onlyIf(() -> canResetPose);
     }
 
     public Command enableClimbSoftLimit() {
@@ -744,10 +820,11 @@ public class CatzSuperstructure {
 
     public Command toggleDefenseMode() {
         return Commands.either(
-            Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig()).finallyDo(() -> isDefenseMode = false),
-            Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig()).finallyDo(() -> isDefenseMode = true).alongWith(CatzSuperstructure.Instance.stowIntake()),
-            () -> isDefenseMode
-        );
+                Commands.runOnce(() -> CatzDrivetrain.getInstance().setNormalConfig())
+                        .finallyDo(() -> isDefenseMode = false),
+                Commands.runOnce(() -> CatzDrivetrain.getInstance().setDefenseConfig())
+                        .finallyDo(() -> isDefenseMode = true).alongWith(CatzSuperstructure.Instance.stowIntake()),
+                () -> isDefenseMode);
     }
 
     public void UpdateSim() {
@@ -759,81 +836,87 @@ public class CatzSuperstructure {
     }
 
     public Command TowerSwipePosition() {
-    return Commands.defer(() -> {
-        Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
+        return Commands.defer(() -> {
+            Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
 
-        boolean isOpponentSide = false;
-        if(DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE){
-            if(currentTranslation.getX() > FieldConstants.fieldXHalf){
-                isOpponentSide = true;
+            boolean isOpponentSide = false;
+            if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE) {
+                if (currentTranslation.getX() > FieldConstants.fieldXHalf) {
+                    isOpponentSide = true;
+                }
+            } else {
+                if (currentTranslation.getX() < FieldConstants.fieldXHalf) {
+                    isOpponentSide = true;
+                }
             }
-        }else{
-            if(currentTranslation.getX() < FieldConstants.fieldXHalf){
-                isOpponentSide = true;
-            }
-        }
 
-        return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation, isOpponentSide), false, 0.1, 20.0).deadlineFor(trackTower())
-        .alongWith(deployIntake());
-    }, Set.of(CatzDrivetrain.getInstance()));
-  }
+            return new PIDDriveCmd(FieldConstants.getTowerSwipePosition(currentTranslation, isOpponentSide), false, 0.1,
+                    20.0).deadlineFor(trackTower())
+                    .alongWith(deployIntake());
+        }, Set.of(CatzDrivetrain.getInstance()));
+    }
 
     public Command swipe() {
         return Commands.defer(() -> {
             Translation2d currentTranslation = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
             boolean flipAlliance = false;
 
-            if(DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE){
-                if(currentTranslation.getX() > FieldConstants.fieldXHalf){
+            if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE) {
+                if (currentTranslation.getX() > FieldConstants.fieldXHalf) {
                     flipAlliance = true;
                 }
-            }else{
-                if(currentTranslation.getX() < FieldConstants.fieldXHalf){
+            } else {
+                if (currentTranslation.getX() < FieldConstants.fieldXHalf) {
                     flipAlliance = true;
                 }
             }
 
             if (flipAlliance) {
                 // Pass true because we are on the opponent side
-                switch(FieldConstants.getCloserSwipe(currentTranslation, true)) {
-                    case(1): return outpostOppositeSwipeRun();
-                    case(2): return depotOppositeMiddleSwipeRun();
-                    case(3): return depotOppositeCornerSwipeRun();
-                    default: return Commands.none().andThen(Commands.print("none!!!!"));
+                switch (FieldConstants.getCloserSwipe(currentTranslation, true)) {
+                    // case(1): return outpostOppositeSwipeRun();
+                    // case(2): return depotOppositeMiddleSwipeRun();
+                    // case(3): return depotOppositeCornerSwipeRun();
+                    default:
+                        return Commands.none().andThen(Commands.print("none!!!!"));
                 }
             }
             // Pass false because we are on our home side
-            switch(FieldConstants.getCloserSwipe(currentTranslation, false)) {
-                case(1): return outpostSwipeRun();
-                case(2): return depotMiddleSwipeRun();
-                case(3): return depotCornerSwipeRun();
-                default: return Commands.none().andThen(Commands.print("none!!!!"));
+            switch (FieldConstants.getCloserSwipe(currentTranslation, false)) {
+                // case(1): return outpostSwipeRun();
+                // case(2): return depotMiddleSwipeRun();
+                // case(3): return depotCornerSwipeRun();
+                default:
+                    return Commands.none().andThen(Commands.print("none!!!!"));
             }
 
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
-    public Command outpostSwipeRun() {
-        return Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
-    }
+    // public Command outpostSwipeRun() {
+    // return
+    // Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
+    // }
 
-    public Command depotMiddleSwipeRun() {
-        return Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
-    }
+    // public Command depotMiddleSwipeRun() {
+    // return
+    // Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
+    // }
 
-    public Command depotCornerSwipeRun() {
-        return Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
-    }
+    // public Command depotCornerSwipeRun() {
+    // return
+    // Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
+    // }
 
-    public Command outpostOppositeSwipeRun(){
-        return outpostOppositeSwipeRoutine.getPathCommand();
-    }
+    // public Command outpostOppositeSwipeRun(){
+    // return outpostOppositeSwipeRoutine.getPathCommand();
+    // }
 
-    public Command depotOppositeMiddleSwipeRun(){
-        return depotOppositeMiddleSwipeRoutine.getPathCommand();
-    }
+    // public Command depotOppositeMiddleSwipeRun(){
+    // return depotOppositeMiddleSwipeRoutine.getPathCommand();
+    // }
 
-    public Command depotOppositeCornerSwipeRun(){
-        return depotOppositeCornerSwipeRoutine.getPathCommand();
-    }
+    // public Command depotOppositeCornerSwipeRun(){
+    // return depotOppositeCornerSwipeRoutine.getPathCommand();
+    // }
 }

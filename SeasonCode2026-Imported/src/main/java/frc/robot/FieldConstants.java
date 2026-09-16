@@ -21,6 +21,7 @@ import lombok.Getter;
  * have a blue alliance origin.
  */
 public class FieldConstants {
+
   public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
   public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
   public static final double fieldXHalf = fieldLength / 2.0;
@@ -293,24 +294,24 @@ public class FieldConstants {
 
   @Getter
   public enum AprilTagLayoutType {
-
     OFFICIAL("2026-official");
 
     AprilTagLayoutType(String name) {
-      if (CatzConstants.disableHAL) {
-        layout = null;
-      } else {
-        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-      }
+      layout = CatzConstants.disableHAL
+          ? null
+          : AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+
+      layoutString = safeLayoutString(layout);
+    }
+
+    private static String safeLayoutString(AprilTagFieldLayout layout) {
       if (layout == null) {
-        layoutString = "";
-      } else {
-        try {
-          layoutString = new ObjectMapper().writeValueAsString(layout);
-        } catch (JsonProcessingException e) {
-          throw new RuntimeException(
-              "Failed to serialize AprilTag layout JSON " + toString() + "for CatzVision");
-        }
+        return "";
+      }
+      try {
+        return new ObjectMapper().writeValueAsString(layout);
+      } catch (JsonProcessingException e) {
+        return "";
       }
     }
 

@@ -35,7 +35,7 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod({GeomUtil.class})
 public class CatzRobotTracker {
   private static final double POSE_BUFFER_SIZE_SEC = 2.0;
-  private static final Matrix<N3, N1> ODOMETRY_STD_DEVS =
+  final Matrix<N3, N1> ODOMETRY_STD_DEVS =
       new Matrix<>(VecBuilder.fill(0.003, 0.003, 0.002));
 
   public static CatzRobotTracker Instance;
@@ -72,9 +72,9 @@ public class CatzRobotTracker {
   @AutoLogOutput(key = "CatzRobotTracker/ReachedGoal")
   private boolean reachedGoal = false;
 
-  private final TimeInterpolatableBuffer<Pose2d> POSE_BUFFER =
+  final TimeInterpolatableBuffer<Pose2d> POSE_BUFFER =
       TimeInterpolatableBuffer.createBuffer(POSE_BUFFER_SIZE_SEC);
-  private final Matrix<N3, N1> TRACKER_STD_DEVS = new Matrix<>(Nat.N3(), Nat.N1());
+  final Matrix<N3, N1> TRACKER_STD_DEVS = new Matrix<>(Nat.N3(), Nat.N1());
 
   // Odometry
   private final SwerveDriveKinematics KINEMATICS;
