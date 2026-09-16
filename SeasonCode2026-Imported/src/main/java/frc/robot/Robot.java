@@ -15,7 +15,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
-// import choreo.auto.AutoFactory;
+import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
@@ -27,7 +27,7 @@ import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.Commands;
 import frc.robot.CatzConstants.RobotHardwareMode;
 import frc.robot.CatzConstants.RobotID;
-// import frc.robot.Autonomous.AutoRoutineSelector;
+import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
@@ -191,14 +191,14 @@ public class Robot extends LoggedRobot {
     CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();
 
-    // CatzConstants.autoFactory = new AutoFactory(
-    //                                               CatzRobotTracker.getInstance()::getEstimatedPose,
-    //                                               CatzRobotTracker.getInstance()::resetPose,
-    //                                               CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-    //                                               true,
-    //                                               CatzDrivetrain.getInstance()
-    //                                             ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
-    // System.out.println(AutoRoutineSelector.Instance);
+    CatzConstants.autoFactory = new AutoFactory(
+                                                  CatzRobotTracker.getInstance()::getEstimatedPose,
+                                                  CatzRobotTracker.getInstance()::resetPose,
+                                                  CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
+                                                  true,
+                                                  CatzDrivetrain.getInstance()
+                                                ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
+    System.out.println(AutoRoutineSelector.Instance);
 
       DriverStationBackend.silenceJoystickConnectionWarning(true);
 
@@ -237,7 +237,7 @@ public class Robot extends LoggedRobot {
 
       }
 
-      // System.out.println("Chooser: " + AutoRoutineSelector.Instance);
+      System.out.println("Chooser: " + AutoRoutineSelector.Instance);
       System.out.println("Led "+CatzLED.Instance);
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
@@ -282,12 +282,12 @@ public class Robot extends LoggedRobot {
     autonStartTime = Timer.getTimestamp();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
-    // m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
+    m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
-    // System.out.println("auton: " + m_autonomousCommand);
-    // if (m_autonomousCommand != null) {
-    //   CommandScheduler.getInstance().schedule(m_autonomousCommand);
-    // }
+    System.out.println("auton: " + m_autonomousCommand);
+    if (m_autonomousCommand != null) {
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
+    }
   }
 
   @Override

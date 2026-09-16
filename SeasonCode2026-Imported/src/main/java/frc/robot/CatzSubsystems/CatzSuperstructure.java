@@ -84,21 +84,21 @@ public class CatzSuperstructure {
     private CatzSuperstructure() {
         this.visualizer = new SubsystemVisualizer("SuperstructureViz");
 
-        // CatzConstants.autoFactory = new AutoFactory(
-        // CatzRobotTracker.getInstance()::getEstimatedPose,
-        // CatzRobotTracker.getInstance()::resetPose,
-        // CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
-        // true,
-        // CatzDrivetrain.getInstance()
-        // ); //it is apparently a good idea to initialize these variables not
+        CatzConstants.autoFactory = new AutoFactory(
+        CatzRobotTracker.getInstance()::getEstimatedPose,
+        CatzRobotTracker.getInstance()::resetPose,
+        CatzDrivetrain.getInstance()::followChoreoTrajectoryExecute,
+        true,
+        CatzDrivetrain.getInstance()
+        ); //it is apparently a good idea to initialize these variables not
         // statically because there can be race conditions
 
-        // outpostSwipeRoutine = new TowerSwipe();
-        // outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
-        // depotMiddleSwipeRoutine = new DepotMiddleSwipe();
-        // depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
-        // depotCornerSwipeRoutine = new DepotCornerSwipe();
-        // depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
+        outpostSwipeRoutine = new TowerSwipe();
+        outpostOppositeSwipeRoutine = new OppositeTowerSwipe();
+        depotMiddleSwipeRoutine = new DepotMiddleSwipe();
+        depotOppositeMiddleSwipeRoutine = new OppositeDepotMiddleSwipe();
+        depotCornerSwipeRoutine = new DepotCornerSwipe();
+        depotOppositeCornerSwipeRoutine = new OppositeDepotCornerSwipe();
     }
 
     private Translation2d getBaseTargetLocation(boolean isHub) {
@@ -131,14 +131,14 @@ public class CatzSuperstructure {
     public boolean isIntakeOn = false;
 
     public void updateAndApplyShooterState(boolean isHub, boolean isShooting) {
-        // if(isHub){
-        // shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(),
-        // CatzDrivetrain.getInstance().futureChassisVelocities);
-        // }else{
-        // shootWhileMove(isHub, isShooting,
-        // CatzRobotTracker.Instance.getEstimatedPose(),
-        // CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
-        // }
+        if(isHub){
+        shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getFuturePose(),
+        CatzDrivetrain.getInstance().futureChassisVelocities);
+        }else{
+        shootWhileMove(isHub, isShooting,
+        CatzRobotTracker.Instance.getEstimatedPose(),
+        CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
+        }
         shootWhileMove(isHub, isShooting, CatzRobotTracker.Instance.getEstimatedPose(),
                 CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
     }
@@ -587,15 +587,15 @@ public class CatzSuperstructure {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
 
-    // public Command towerSwipe() {
-    // return Commands.deadline(Commands.sequence(
-    // deployIntake(),
-    // intakeON(),
-    // new PIDDriveCmd(),
-    // followTrajectory()
-    // ),
-    // trackTower());
-    // }
+    public Command towerSwipe() {
+    return Commands.deadline(Commands.sequence(
+    deployIntake(),
+    intakeON(),
+    new PIDDriveCmd(),
+    followTrajectory()
+    ),
+    trackTower());
+    }
 
     public Command alignToBackUpClimb() {
         return Commands.defer(() -> {
@@ -874,18 +874,18 @@ public class CatzSuperstructure {
             if (flipAlliance) {
                 // Pass true because we are on the opponent side
                 switch (FieldConstants.getCloserSwipe(currentTranslation, true)) {
-                    // case(1): return outpostOppositeSwipeRun();
-                    // case(2): return depotOppositeMiddleSwipeRun();
-                    // case(3): return depotOppositeCornerSwipeRun();
+                    case(1): return outpostOppositeSwipeRun();
+                    case(2): return depotOppositeMiddleSwipeRun();
+                    case(3): return depotOppositeCornerSwipeRun();
                     default:
                         return Commands.none().andThen(Commands.print("none!!!!"));
                 }
             }
             // Pass false because we are on our home side
             switch (FieldConstants.getCloserSwipe(currentTranslation, false)) {
-                // case(1): return outpostSwipeRun();
-                // case(2): return depotMiddleSwipeRun();
-                // case(3): return depotCornerSwipeRun();
+                case(1): return outpostSwipeRun();
+                case(2): return depotMiddleSwipeRun();
+                case(3): return depotCornerSwipeRun();
                 default:
                     return Commands.none().andThen(Commands.print("none!!!!"));
             }
@@ -893,30 +893,30 @@ public class CatzSuperstructure {
         }, Set.of(CatzDrivetrain.getInstance(), CatzIntakeDeploy.Instance, CatzIntakeRoller.Instance));
     }
 
-    // public Command outpostSwipeRun() {
-    // return
-    // Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
-    // }
+    public Command outpostSwipeRun() {
+    return
+    Commands.print("okay!!1").andThen(outpostSwipeRoutine.getPathCommand());
+    }
 
-    // public Command depotMiddleSwipeRun() {
-    // return
-    // Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
-    // }
+    public Command depotMiddleSwipeRun() {
+    return
+    Commands.print("okay!!2").andThen(depotMiddleSwipeRoutine.getPathCommand());
+    }
 
-    // public Command depotCornerSwipeRun() {
-    // return
-    // Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
-    // }
+    public Command depotCornerSwipeRun() {
+    return
+    Commands.print("okay!!3").andThen(depotCornerSwipeRoutine.getPathCommand());
+    }
 
-    // public Command outpostOppositeSwipeRun(){
-    // return outpostOppositeSwipeRoutine.getPathCommand();
-    // }
+    public Command outpostOppositeSwipeRun(){
+    return outpostOppositeSwipeRoutine.getPathCommand();
+    }
 
-    // public Command depotOppositeMiddleSwipeRun(){
-    // return depotOppositeMiddleSwipeRoutine.getPathCommand();
-    // }
+    public Command depotOppositeMiddleSwipeRun(){
+    return depotOppositeMiddleSwipeRoutine.getPathCommand();
+    }
 
-    // public Command depotOppositeCornerSwipeRun(){
-    // return depotOppositeCornerSwipeRoutine.getPathCommand();
-    // }
+    public Command depotOppositeCornerSwipeRun(){
+    return depotOppositeCornerSwipeRoutine.getPathCommand();
+    }
 }
