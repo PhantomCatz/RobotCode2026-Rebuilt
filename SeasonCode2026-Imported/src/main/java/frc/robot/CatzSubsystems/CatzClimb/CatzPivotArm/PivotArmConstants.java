@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzPivotArm;
+package frc.robot.CatzSubsystems.CatzClimb.CatzPivotArm;
 
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;

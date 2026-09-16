@@ -27,6 +27,7 @@ import frc.robot.RobotContainer;
 // import frc.robot.Autonomous.autoSequence.OppositeTowerSwipe;
 // import frc.robot.Autonomous.autoSequence.TowerSwipe;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
+import frc.robot.CatzSubsystems.CatzClimb.CatzPivotArm.CatzPivotArm;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -602,6 +603,18 @@ public class CatzSuperstructure {
 
     public Command cmdClimbStow() {
         return CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
+    }
+
+    private boolean CBtoggler = false;
+    public Command toggleClimbBlocker() {
+        return Commands.runOnce(() -> {
+            if (CBtoggler == false) {
+                CatzPivotArm.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT);
+            }
+            else {
+                CatzPivotArm.Instance.setpointCommand(ClimbConstants.REACH_SETPOINT);
+            }
+        });
     }
 
     public Command toggleManualExtendClimb() {
