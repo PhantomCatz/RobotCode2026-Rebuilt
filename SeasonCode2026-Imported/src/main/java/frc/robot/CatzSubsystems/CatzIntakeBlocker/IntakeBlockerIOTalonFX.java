@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker;
+package frc.robot.CatzSubsystems.CatzIntakeBlocker;
 
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;

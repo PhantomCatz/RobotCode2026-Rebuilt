@@ -34,12 +34,13 @@ import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.YdexerConstants;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.IntakeBlockerConstants;
+
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzIntakeBlocker.CatzIntakeBlocker;
+import frc.robot.CatzSubsystems.CatzIntakeBlocker.IntakeBlockerConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -919,4 +920,36 @@ public class CatzSuperstructure {
     // public Command depotOppositeCornerSwipeRun(){
     // return depotOppositeCornerSwipeRoutine.getPathCommand();
     // }
+<<<<<<< Updated upstream
+=======
+    public Command shotBlockerOut() {
+        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.Blocker);
+    }
+
+    public Command shotBlockerHome() {
+        return CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW);
+    }
+
+    public Command toggleManualBlocker() {
+        return Commands.runOnce(() -> {
+
+            if (blockerManual == false) {
+                disableManuals(CatzIntakeBlocker.Instance);
+                hoodManual = true;
+
+                CommandScheduler.getInstance().schedule(CatzBlocker.Instance.followSetpointCommand(() -> {
+                    double input = -(RobotContainer.xboxAux.getLeftY()) * 6;
+                    if (Math.abs(input) < 0.84)
+                        return Setpoint.withVoltageSetpoint(0.0);
+
+                    return Setpoint.withVoltageSetpoint(input);
+                }));
+
+            } else {
+                CommandScheduler.getInstance().schedule(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW));
+                hoodManual = false;
+            }
+        });
+    }
+>>>>>>> Stashed changes
 }
