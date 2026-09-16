@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntakeBlocker;
+package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker;
 
 import org.littletonrobotics.junction.AutoLog;
 

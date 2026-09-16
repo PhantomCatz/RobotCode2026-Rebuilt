@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntakeBlocker;
+package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker;
 
 import frc.robot.CatzAbstractions.io.GenericIOSim;
 import frc.robot.Utilities.MotorUtil.Gains;
