@@ -100,6 +100,13 @@ public class Robot extends LoggedRobot {
         CatzIntakeDeploy.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.intakeSetpoint));
       }, CatzIntakeDeploy.Instance)
   );
+
+    CatzIntakeBlocker.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
+      }, CatzIntakeBlocker.Instance)
+    );
+
     Logger.start();
 
     // Log active commands
@@ -295,7 +302,11 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
-    CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzIntakeBlocker.Instance.setpointCommand(IntakeBlockerConstants.STOW)));
+
+    CatzSuperstructure.Instance.canBlock = false;
+    CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+
+    CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
     CatzDrivetrain.getInstance().setNormalConfig();
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
@@ -311,7 +322,7 @@ public class Robot extends LoggedRobot {
   public void teleopPeriodic() {
     if(iterations < 20) {
       Alliance alliance = DriverStationBackend.getAlliance().orElse(Alliance.BLUE);
-      System.out.println("hello world!\n" + "\"" + DriverStationBackend.getGameData() + "\"" + " \n boom it");
+      // System.out.println("hello world!\n" + "\"" + DriverStationBackend.getGameData() + "\"" + " \n boom it");
       try{
         if ((DriverStationBackend.getGameData().toString().charAt(0) == 'B'
           && alliance == Alliance.BLUE)
