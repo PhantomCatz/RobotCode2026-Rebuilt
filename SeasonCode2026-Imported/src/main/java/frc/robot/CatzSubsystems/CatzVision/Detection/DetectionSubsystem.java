@@ -4,7 +4,6 @@ import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.util.Units;
-import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Utilities.LimelightHelpers;
@@ -36,8 +35,7 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 			io.configLimelight(config);
 		}
-		Telemetry.log(config.name + "/Has Fuel", hasFuel());
-		Telemetry.log(config.name + "/Latest Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(config.name));
+
 
 	}
 
@@ -49,6 +47,8 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 			outputTelemetry();
 			Logger.recordOutput("Detection/nearestFuel", inputs.nearestFuel);
 		}
+		Logger.recordOutput(config.name + "/Has Fuel", hasFuel());
+		Logger.recordOutput(config.name + "/Latest Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(config.name));
 	}
 
 	public boolean getDisabled() {
