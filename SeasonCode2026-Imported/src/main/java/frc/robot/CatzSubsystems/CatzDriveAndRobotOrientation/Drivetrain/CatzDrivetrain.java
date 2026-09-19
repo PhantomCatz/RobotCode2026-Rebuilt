@@ -14,6 +14,7 @@ import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
+import org.wpilib.math.trajectory.DrivetrainSplineSample;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
@@ -408,13 +409,12 @@ public class CatzDrivetrain extends SubsystemBase {
       curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
     }
 
-    Trajectory.State state = new Trajectory.SampleType(
+    DrivetrainSplineSample state = new DrivetrainSplineSample(
         sample.t,
+        new Pose2d(new Translation2d(sample.x, sample.y),
+        Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
         velocityMag,
         Math.hypot(sample.ax, sample.ay), // Use raw acceleration here
-        new Pose2d(
-            new Translation2d(sample.x, sample.y),
-            Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
         curvature // Input the calculated curvature here
     );
 

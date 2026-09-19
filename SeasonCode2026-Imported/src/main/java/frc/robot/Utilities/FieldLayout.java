@@ -1,5 +1,6 @@
 package frc.robot.Utilities;
 
+import org.wpilib.fields.Field;
 import org.wpilib.fields.Fields;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
@@ -30,8 +31,8 @@ public class FieldLayout {
 	public static Distance kFieldLength = Units.Feet.of(57.0).plus(Units.Inches.of(6.875));
 	public static Distance kFieldWidth = Units.Feet.of(26.0).plus(Units.Inches.of(5.0));
 
-	public static AprilTagFieldLayout kAprilTagMap =
-			AprilTagFieldLayout.loadField(Fields.FRC_2026_REBUILT_ANDY_MARK);
+	public static Field kAprilTagMap =
+			Field.loadField(Fields.FRC_2026_REBUILT_ANDY_MARK);
 	public static Distance kAprilTagWidth = Units.Inches.of(6.5);
 
 	public static final Pose2d blueRightStationAlignPose =

@@ -4,6 +4,7 @@ package frc.robot;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.wpilib.fields.Field;
 import org.wpilib.fields.Fields;
 import org.wpilib.math.geometry.*;
 import org.wpilib.math.util.Units;
@@ -298,12 +299,12 @@ public class FieldConstants {
     AprilTagLayoutType(String name) {
       layout = CatzConstants.disableHAL
           ? null
-          : AprilTagFieldLayout.loadField(Fields.DEFAULT_FIELD);
+          : Field.loadField(Fields.DEFAULT_FIELD);
 
       layoutString = safeLayoutString(layout);
     }
 
-    private static String safeLayoutString(AprilTagFieldLayout layout) {
+    private static String safeLayoutString(Field layout) {
       if (layout == null) {
         return "";
       }
@@ -314,7 +315,7 @@ public class FieldConstants {
       }
     }
 
-    public final AprilTagFieldLayout layout;
+    public final Field layout;
     private final String layoutString;
   }
 }
