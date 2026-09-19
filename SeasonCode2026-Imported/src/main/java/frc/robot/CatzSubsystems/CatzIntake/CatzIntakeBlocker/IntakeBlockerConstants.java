@@ -1,0 +1,85 @@
+package frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker;
+
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import org.wpilib.hardware.bus.CANPort;
+import org.wpilib.units.Units;
+import org.wpilib.units.measure.Angle;
+import frc.robot.CatzConstants;
+import frc.robot.Robot;
+import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
+import frc.robot.Utilities.LoggedTunableNumber;
+import frc.robot.Utilities.MotorUtil.Gains;
+import frc.robot.Utilities.Setpoint;
+
+public class IntakeBlockerConstants {
+	public static final Angle STOW_POSITION = Units.Degrees.of(0.0);
+	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.040);
+
+	private static final CANPort INTAKE_BLOCKER_BUS_ID = CANPort.CAN_S2;
+	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
+	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
+	public static final Setpoint BLOCKER = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
+	public static final Angle BLOCKER_THRESHOLD = Units.Degrees.of(2.0);
+	public static final double GRAVITY_FEEDFORWARD = 0.4 ; // CHANGE !!!!
+
+	public static final Gains gains = switch (CatzConstants.getRobotType()) {
+		case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
+		case SN2 -> new Gains(85.0, 0.0, 5.0, 2.0, 2.0, 0.0, 2.0);
+		case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	};
+
+	public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake Blocker/kP", gains.kP());
+	public static final LoggedTunableNumber kV = new LoggedTunableNumber("Intake Blocker/kV", gains.kV());
+
+	public static final TalonFXConfiguration getFXConfig() {
+		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
+		FXConfig.Slot0.kP = gains.kP();
+		FXConfig.Slot0.kD = gains.kD();
+		FXConfig.Slot0.kS = gains.kS();
+		FXConfig.Slot0.kV = gains.kV();
+		FXConfig.Slot0.kG = gains.kG();
+
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 5.0;
+		FXConfig.MotionMagic.MotionMagicAcceleration = 500.0;
+		FXConfig.MotionMagic.MotionMagicJerk = 4000.0;
+
+		FXConfig.CurrentLimits.SupplyCurrentLimitEnable = Robot.isReal();
+		FXConfig.CurrentLimits.SupplyCurrentLimit = 75.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 75.0;
+		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+
+		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		FXConfig.CurrentLimits.StatorCurrentLimit = 75.0;
+
+		FXConfig.Voltage.PeakForwardVoltage = 12.0;
+		FXConfig.Voltage.PeakReverseVoltage = -12.0;
+
+		FXConfig.Feedback.SensorToMechanismRatio = 184 / 10.0;
+
+		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+		return FXConfig;
+	}
+
+	public static MotorIOTalonFXConfig getIOConfig() {
+		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
+		IOConfig.mainConfig = getFXConfig();
+		IOConfig.mainID = INTAKE_BLOCKER_MOTOR_ID;
+		IOConfig.mainBus = INTAKE_BLOCKER_BUS_ID;
+		IOConfig.followerConfig = getFXConfig()
+				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
+						.withForwardSoftLimitEnable(false)
+						.withReverseSoftLimitEnable(false));
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
+		IOConfig.followerBuses = new CANPort[] { CANPort.CAN_S2, CANPort.CAN_S2 };
+		IOConfig.followerIDs = new int[] {};
+		return IOConfig;
+	}
+}

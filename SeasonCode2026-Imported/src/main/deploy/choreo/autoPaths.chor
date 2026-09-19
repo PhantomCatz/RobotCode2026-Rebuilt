@@ -1,0 +1,267 @@
+{
+ "name":"autoPaths",
+ "version":2,
+ "type":"Swerve",
+ "variables":{
+  "expressions":{},
+  "poses":{
+   "FakePose":{
+    "x":{
+     "exp":"1.7310060262680054 m",
+     "val":1.7310060262680054
+    },
+    "y":{
+     "exp":"2.0667412281036377 m",
+     "val":2.0667412281036377
+    },
+    "heading":{
+     "exp":"-0.6673061747853652 rad",
+     "val":-0.6673061747853652
+    }
+   },
+   "GoingOut":{
+    "x":{
+     "exp":"0.6960171461105347 m",
+     "val":0.6960171461105347
+    },
+    "y":{
+     "exp":"2.9490268230438232 m",
+     "val":2.9490268230438232
+    },
+    "heading":{
+     "exp":"-0.7551043519121585 rad",
+     "val":-0.7551043519121585
+    }
+   },
+   "NewBotTrench":{
+    "x":{
+     "exp":"4.425 m",
+     "val":4.425
+    },
+    "y":{
+     "exp":"0.41 m",
+     "val":0.41
+    },
+    "heading":{
+     "exp":"90 degrees",
+     "val":1.5707963267948966
+    }
+   },
+   "RightIntake":{
+    "x":{
+     "exp":"6.746779441833496 m",
+     "val":6.746779441833496
+    },
+    "y":{
+     "exp":"1.2103148698806763 m",
+     "val":1.2103148698806765
+    },
+    "heading":{
+     "exp":"0.7621467255501121 rad",
+     "val":0.7621467255501121
+    }
+   },
+   "RightShoot":{
+    "x":{
+     "exp":"4.323790550231934 m",
+     "val":4.323790550231934
+    },
+    "y":{
+     "exp":"0.5927739977836609 m",
+     "val":0.5927739977836609
+    },
+    "heading":{
+     "exp":"0 deg",
+     "val":0.0
+    }
+   },
+   "Start top":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"7.5 m",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "StartBot":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"0.6 m",
+     "val":0.6
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "StartBotBump":{
+    "x":{
+     "exp":"3.6 m",
+     "val":3.6
+    },
+    "y":{
+     "exp":"2.5 m",
+     "val":2.5
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "StartTop":{
+    "x":{
+     "exp":"4.4 m",
+     "val":4.4
+    },
+    "y":{
+     "exp":"7.5 m",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "StartTop1":{
+    "x":{
+     "exp":"StartTop.x",
+     "val":4.4
+    },
+    "y":{
+     "exp":"StartTop.y",
+     "val":7.5
+    },
+    "heading":{
+     "exp":"270 deg",
+     "val":4.71238898038469
+    }
+   },
+   "StartTopBump":{
+    "x":{
+     "exp":"3.6 m",
+     "val":3.6
+    },
+    "y":{
+     "exp":"5.5 m",
+     "val":5.5
+    },
+    "heading":{
+     "exp":"90 deg",
+     "val":1.5707963267948966
+    }
+   },
+   "TestOut":{
+    "x":{
+     "exp":"RightShoot.x",
+     "val":4.323790550231934
+    },
+    "y":{
+     "exp":"RightShoot.y",
+     "val":0.5927739977836609
+    },
+    "heading":{
+     "exp":"RightShoot.heading",
+     "val":0.0
+    }
+   },
+   "depot":{
+    "x":{
+     "exp":"0.9407929182052612 m",
+     "val":0.9407929182052612
+    },
+    "y":{
+     "exp":"5.957403659820557 m",
+     "val":5.957403659820557
+    },
+    "heading":{
+     "exp":"3.141592653589793 rad",
+     "val":3.141592653589793
+    }
+   }
+  }
+ },
+ "config":{
+  "frontLeft":{
+   "x":{
+    "exp":"11 in",
+    "val":0.2794
+   },
+   "y":{
+    "exp":"11 in",
+    "val":0.2794
+   }
+  },
+  "backLeft":{
+   "x":{
+    "exp":"-11 in",
+    "val":-0.2794
+   },
+   "y":{
+    "exp":"11 in",
+    "val":0.2794
+   }
+  },
+  "mass":{
+   "exp":"150 lbs",
+   "val":68.0388555
+  },
+  "inertia":{
+   "exp":"6 kg m ^ 2",
+   "val":6.0
+  },
+  "gearing":{
+   "exp":"5.9",
+   "val":5.9
+  },
+  "radius":{
+   "exp":"1.7 in",
+   "val":0.04318
+  },
+  "vmax":{
+   "exp":"6000 RPM",
+   "val":628.3185307179587
+  },
+  "tmax":{
+   "exp":"0.57 N * m",
+   "val":0.57
+  },
+  "cof":{
+   "exp":"0.5",
+   "val":0.5
+  },
+  "bumper":{
+   "front":{
+    "exp":"23 in",
+    "val":0.5841999999999999
+   },
+   "side":{
+    "exp":"16 in",
+    "val":0.4064
+   },
+   "back":{
+    "exp":"16 in",
+    "val":0.4064
+   }
+  },
+  "differentialTrackWidth":{
+   "exp":"22 in",
+   "val":0.5588
+  }
+ },
+ "generationFeatures":[],
+ "codegen":{
+  "root":"..\\..\\..\\..\\..\\..\\..\\..\\Downloads\\bingbong",
+  "genVars":false,
+  "genTrajData":false,
+  "useChoreoLib":false
+ }
+}
