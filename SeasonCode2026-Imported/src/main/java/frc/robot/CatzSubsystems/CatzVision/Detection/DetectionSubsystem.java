@@ -4,7 +4,7 @@ import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.util.Units;
-import org.wpilib.util.sendable.SendableBuilder;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Utilities.LimelightHelpers;
@@ -36,6 +36,9 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 			io.configLimelight(config);
 		}
+		Telemetry.log(config.name + "/Has Fuel", hasFuel());
+		Telemetry.log(config.name + "/Latest Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(config.name));
+
 	}
 
 	@Override
@@ -93,15 +96,6 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 	public void outputTelemetry() {
 		// LoggedTracer.record(config.name);
-	}
-
-	@Override
-	public void initSendable(SendableBuilder builder) {
-		builder.addBooleanProperty(config.name + "/Has Fuel", () -> hasFuel(), null);
-		builder.addDoubleProperty(
-				config.name + "/Latest Pipeline Index",
-				() -> LimelightHelpers.getCurrentPipelineIndex(config.name),
-				null);
 	}
 
 	@Override

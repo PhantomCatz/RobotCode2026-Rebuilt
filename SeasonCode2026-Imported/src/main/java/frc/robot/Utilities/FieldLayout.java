@@ -1,6 +1,5 @@
 package frc.robot.Utilities;
 
-import org.wpilib.fields.Field;
 import org.wpilib.fields.Fields;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
@@ -31,8 +30,8 @@ public class FieldLayout {
 	public static Distance kFieldLength = Units.Feet.of(57.0).plus(Units.Inches.of(6.875));
 	public static Distance kFieldWidth = Units.Feet.of(26.0).plus(Units.Inches.of(5.0));
 
-	public static Field kAprilTagMap =
-			Field.loadField(Fields.FRC_2026_REBUILT_ANDY_MARK);
+	public static Fields kAprilTagMap =
+			Fields.FRC_2026_REBUILT_ANDY_MARK;
 	public static Distance kAprilTagWidth = Units.Inches.of(6.5);
 
 	public static final Pose2d blueRightStationAlignPose =
@@ -162,12 +161,12 @@ public class FieldLayout {
 		public static Map<Pose2d, Face> blueFaceMap = new HashMap<>();
 
 		static {
-			blueFaceMap.put(kAprilTagMap.getTagPose(17).get().toPose2d(), Face.NEAR_RIGHT);
-			blueFaceMap.put(kAprilTagMap.getTagPose(18).get().toPose2d(), Face.NEAR_CENTER);
-			blueFaceMap.put(kAprilTagMap.getTagPose(19).get().toPose2d(), Face.NEAR_LEFT);
-			blueFaceMap.put(kAprilTagMap.getTagPose(20).get().toPose2d(), Face.FAR_LEFT);
-			blueFaceMap.put(kAprilTagMap.getTagPose(21).get().toPose2d(), Face.FAR_CENTER);
-			blueFaceMap.put(kAprilTagMap.getTagPose(22).get().toPose2d(), Face.FAR_RIGHT);
+			blueFaceMap.put(kAprilTagMap.loadField().getTagPose(17).get().toPose2d(), Face.NEAR_RIGHT);
+			blueFaceMap.put(kAprilTagMap.loadField().getTagPose(18).get().toPose2d(), Face.NEAR_CENTER);
+			blueFaceMap.put(kAprilTagMap.loadField().getTagPose(19).get().toPose2d(), Face.NEAR_LEFT);
+			blueFaceMap.put(kAprilTagMap.loadField().getTagPose(20).get().toPose2d(), Face.FAR_LEFT);
+			blueFaceMap.put(kAprilTagMap.loadField().getTagPose(21).get().toPose2d(), Face.FAR_CENTER);
+			blueFaceMap.put(kAprilTagMap.loadField().getTagPose(22).get().toPose2d(), Face.FAR_RIGHT);
 		}
 
 		public static Face getClosestFace(Pose2d pose, boolean isRedAlliance) {

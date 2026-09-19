@@ -1,8 +1,5 @@
 package frc.robot.Utilities;
 
-import org.wpilib.util.Alert.Level;
-import org.wpilib.util.sendable.Sendable;
-import org.wpilib.util.sendable.SendableBuilder;
 import org.wpilib.system.RobotController;
 import org.wpilib.telemetry.Telemetry;
 import java.util.Comparator;
@@ -181,7 +178,13 @@ public class Alert implements AutoCloseable {
     }
   }
 
-  private static final class SendableAlerts implements Sendable {
+  private static final class SendableAlerts {
+    SendableAlerts() {
+      Telemetry.log("/errors", getStrings(AlertType.kError));
+      Telemetry.log("/warnings", getStrings(AlertType.kWarning));
+      Telemetry.log("/infos", getStrings(AlertType.kInfo));
+    }
+
     private static final Map<String, SendableAlerts> groups = new HashMap<String, SendableAlerts>();
 
     private final Map<AlertType, Set<PublishedAlert>> m_alerts = new HashMap<>();
@@ -200,13 +203,6 @@ public class Alert implements AutoCloseable {
       return getActiveAlertsStorage(type).stream().map(a -> a.text()).toArray(String[]::new);
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-      builder.setSmartDashboardType("Alerts");
-      builder.addStringArrayProperty("errors", () -> getStrings(Level.HIGH), null);
-      builder.addStringArrayProperty("warnings", () -> getStrings(Level.MEDIUM), null);
-      builder.addStringArrayProperty("infos", () -> getStrings(Level.LOW), null);
-    }
 
     /**
      * Returns the SendableAlerts for a given group, initializing and publishing if it does not
