@@ -191,6 +191,9 @@ public class Robot extends LoggedRobot {
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
         List<BaseStatusSignal>[] signalList = new ArrayList[3];
         for (int i=0; i<3; i++) {
+          signalList[i] = new ArrayList<BaseStatusSignal>();
+        }
+        for (int i=0; i<3; i++) {
           for (GenericMotorSubsystem subsystem : allSubsystems[i]) {
             if(subsystem == null){
               System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
