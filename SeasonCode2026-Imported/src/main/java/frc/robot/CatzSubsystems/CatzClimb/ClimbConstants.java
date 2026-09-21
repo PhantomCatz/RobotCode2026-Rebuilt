@@ -44,8 +44,8 @@ public class ClimbConstants {
     // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    private static final int CLIMB_MOTOR_ID = 20;
-	private static final CANPort CLIMB_BUS_ID = CANPort.CAN_S1;
+    private static final int CLIMB_MOTOR_ID = 61;
+	private static final CANPort CLIMB_BUS_ID = CANPort.CAN_S4;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 

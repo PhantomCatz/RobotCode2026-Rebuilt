@@ -95,6 +95,7 @@ public class TeleopDriveCmd extends Command {
     joyY = -m_headingPctOutput_X.get();
     turningVelocity = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching
                                                      // alliances
+                                                     //switch signs if rotation is flipped
 
     // Flip Directions for left joystick if alliance is red
     if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {

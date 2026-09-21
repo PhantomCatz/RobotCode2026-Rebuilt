@@ -143,6 +143,8 @@ public class RobotContainer {
 
     xboxDrv.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
+    xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeBlocker());
+
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
@@ -163,11 +165,11 @@ public class RobotContainer {
     xboxAux.menu().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
     xboxAux.view().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.shotBlockerDeploy());
-    xboxAux.x().onTrue(CatzSuperstructure.Instance.shotBlockerStow());
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.shotBlockerDeploy());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.shotBlockerStow());
 
-    // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
     xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());

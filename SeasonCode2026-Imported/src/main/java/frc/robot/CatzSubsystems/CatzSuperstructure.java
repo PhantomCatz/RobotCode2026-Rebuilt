@@ -335,7 +335,7 @@ public class CatzSuperstructure {
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     public boolean isIntakeDeployed = true;
-    public boolean canBlock = false; // if the intake blocker can block the ball from going into the intake
+    public boolean isBlockerDeployed = false;
 
     // blocker
     public Angle blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
@@ -359,8 +359,22 @@ public class CatzSuperstructure {
             else {
                 intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
                 blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+                isBlockerDeployed = false;
             }
             isIntakeDeployed = !isIntakeDeployed;
+        });
+    }
+
+    public Command toggleIntakeBlocker() {
+        return Commands.runOnce(() -> {
+            if (isBlockerDeployed || isIntakeDeployed) {
+                blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+                isBlockerDeployed = false;
+            }
+            else {
+                blockerSetpoint = IntakeBlockerConstants.BLOCKER_POSITION;
+                isBlockerDeployed = true;
+            }
         });
     }
 
@@ -374,7 +388,7 @@ public class CatzSuperstructure {
             isIntakeDeployed = true;
 
             blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-            canBlock = false;
+            isBlockerDeployed = false;
         });
     }
 
@@ -382,21 +396,6 @@ public class CatzSuperstructure {
         return Commands.runOnce(() -> {
             intakeSetpoint = IntakeDeployConstants.STOW_POSITION;
             isIntakeDeployed = false;
-            canBlock = true;
-        });
-    }
-
-    public Command shotBlockerDeploy() {
-        return Commands.runOnce(() -> {
-            if (canBlock) {
-                blockerSetpoint = IntakeBlockerConstants.BLOCKER_POSITION;
-            }
-        });
-    }
-
-    public Command shotBlockerStow() {
-        return Commands.runOnce(() -> {
-            blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
         });
     }
 
@@ -411,6 +410,7 @@ public class CatzSuperstructure {
             intakeSetpoint = Units.Rotations.of(angleRot);
 
             blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+            isBlockerDeployed = false;
 
         }, CatzIntakeRoller.Instance);
     }

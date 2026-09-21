@@ -268,7 +268,7 @@ public class Robot extends LoggedRobot {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
 
-    CatzSuperstructure.Instance.canBlock = false;
+    CatzSuperstructure.Instance.isBlockerDeployed = false;
     CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
 
     CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
