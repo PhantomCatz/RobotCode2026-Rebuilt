@@ -162,7 +162,7 @@ public class RobotContainer {
 
     // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
-    xboxAux.menu().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
+    // xboxAux.menu().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
     xboxAux.view().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
     // xboxAux.b().onTrue(CatzSuperstructure.Instance.shotBlockerDeploy());
@@ -171,9 +171,11 @@ public class RobotContainer {
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
-    xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    
     xboxAux.menu().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
+
+    xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
     // shooting a y x menu

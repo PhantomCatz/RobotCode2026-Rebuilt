@@ -18,11 +18,12 @@ import org.wpilib.units.measure.AngularVelocity;
 public class GyroIOPigeon implements GyroIO {
 
   private final Pigeon2 pigeon;
+  private final CANPort PIGEON_BUS_ID = CANPort.CAN_S3;
   private final StatusSignal<Angle> yaw;
   private final StatusSignal<AngularVelocity> yawVelocity;
 
   public GyroIOPigeon() {
-    pigeon = new Pigeon2(GYRO_ID, new CANBus(CANPort.CAN_S3)); // TODO why different than shoving in the id of the bus may need the * since it is on the CAN FD bus
+    pigeon = new Pigeon2(GYRO_ID, new CANBus(PIGEON_BUS_ID)); // TODO why different than shoving in the id of the bus may need the * since it is on the CAN FD bus
     yaw = pigeon.getYaw();
     yawVelocity = pigeon.getAngularVelocityZWorld();
 
