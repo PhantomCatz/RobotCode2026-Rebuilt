@@ -143,7 +143,7 @@ public class RobotContainer {
 
     xboxDrv.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
-    xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeBlocker());
+    // xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeBlocker());
 
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS with XBOX AUX
@@ -193,7 +193,7 @@ public class RobotContainer {
 
 
     xboxAux.dpadUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
-    xboxAux.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualBlocker());
+    xboxAux.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxAux.dpadLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
     xboxAux.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 

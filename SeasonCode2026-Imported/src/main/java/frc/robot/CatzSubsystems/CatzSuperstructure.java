@@ -335,10 +335,10 @@ public class CatzSuperstructure {
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     public boolean isIntakeDeployed = true;
-    public boolean isBlockerDeployed = false;
+    // public boolean isBlockerDeployed = false;
 
     // blocker
-    public Angle blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+    // public Angle blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
 
     // public Command toggleIntakeDeploy() {
     // return Commands.runOnce(() -> {
@@ -358,25 +358,26 @@ public class CatzSuperstructure {
             }
             else {
                 intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
-                blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-                isBlockerDeployed = false;
+                // blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+                // isBlockerDeployed = false;
             }
             isIntakeDeployed = !isIntakeDeployed;
         });
     }
 
-    public Command toggleIntakeBlocker() {
-        return Commands.runOnce(() -> {
-            if (isBlockerDeployed || isIntakeDeployed) {
-                blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-                isBlockerDeployed = false;
-            }
-            else {
-                blockerSetpoint = IntakeBlockerConstants.BLOCKER_POSITION;
-                isBlockerDeployed = true;
-            }
-        });
-    }
+    //NK 2026-09-23: no longer pursued
+    // public Command toggleIntakeBlocker() {
+    //     return Commands.runOnce(() -> {
+    //         if (isBlockerDeployed || isIntakeDeployed) {
+    //             blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+    //             isBlockerDeployed = false;
+    //         }
+    //         else {
+    //             blockerSetpoint = IntakeBlockerConstants.BLOCKER_POSITION;
+    //             isBlockerDeployed = true;
+    //         }
+    //     });
+    // }
 
     public Command upIntake() {
         return Commands.runOnce(() -> intakeSetpoint = IntakeDeployConstants.UP_POSITION);
@@ -387,8 +388,8 @@ public class CatzSuperstructure {
             intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
             isIntakeDeployed = true;
 
-            blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-            isBlockerDeployed = false;
+            // blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+            // isBlockerDeployed = false;
         });
     }
 
@@ -409,8 +410,8 @@ public class CatzSuperstructure {
             CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.JIGGLE_SETPOINT);
             intakeSetpoint = Units.Rotations.of(angleRot);
 
-            blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-            isBlockerDeployed = false;
+            // blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+            // isBlockerDeployed = false;
 
         }, CatzIntakeRoller.Instance);
     }
