@@ -60,10 +60,9 @@ public class RobotContainer {
             .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
       }
     }));
+    xboxDrv.menu().multiPress(3, 0.4).onTrue(CatzSuperstructure.Instance.autoClimbCommand());
 
-    // -------------------------------------------------------------------------
-    // HOARDING CONTROLS
-    // Hoard Toggle
+    xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleHoardLocation());
 
     // Robot Position Reset
@@ -72,30 +71,12 @@ public class RobotContainer {
     // Left Field Corner
     xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
-    xboxDrv.dpadUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean())
-    .beforeStarting(() -> Telemetry.log("Swiping?", true))
-    .finallyDo(() -> Telemetry.log("Swiping?", false)));
-
-    // -------------------------------------------------------------------------
-    // HUB SCORING CONTROLS
-    // -------------------------------------------------------------------------
-    // Held: Shoot
-
-    // In RobotContainer.java constructor or a configureDefaultCommands() method
-
-    // Turret stays in a standby tracking mode when not actively shooting
-
-    // When nothing else is running, the turret aims at the Hub
-// HOARDING (Left Bumper)
-    // store the shooting commands so we can check their active state
-// store the shooting commands so we can check their active state
     Command hoardShootCmd = CatzSuperstructure.Instance.cmdHoardShoot();
     Command hubShootCmd = CatzSuperstructure.Instance.cmdHubShoot();
 
     // bind the bumpers to toggle their respective commands
     xboxDrv.leftBumper().toggleOnTrue(hoardShootCmd);
     xboxDrv.rightBumper().toggleOnTrue(hubShootCmd);
-
 
     // create a master trigger that is true if EITHER shooting mode is running
     Trigger isShooterActive = new Trigger(() -> hoardShootCmd.isScheduled() || hubShootCmd.isScheduled());
@@ -106,30 +87,20 @@ public class RobotContainer {
             .alongWith(CatzSuperstructure.Instance.trackStaticHub())
     );
 
-    // -------------------------------------------------------------------------
-    // GLOBAL STOP CONTROL
-    // -------------------------------------------------------------------------
-
-    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(CatzSuperstructure.Instance.intakeOFF()));
-    //X LOCK DRIVETRAIN
+    xboxDrv.dpadUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean())
+    .beforeStarting(() -> Telemetry.log("Swiping?", true))
+    .finallyDo(() -> Telemetry.log("Swiping?", false)));
+    xboxDrv.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
     xboxDrv.dpadLeft().whileTrue(
     Commands.run(
         () -> CatzDrivetrain.getInstance().setXLock(),
         CatzDrivetrain.getInstance()
     )
     );
-    // -------------------------------------------------------------------------
-    // CLIMBING CONTROL
-    // -------------------------------------------------------------------------
+    // xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeBlocker());
 
-    xboxDrv.menu().multiPress(3, 0.4).onTrue(CatzSuperstructure.Instance.autoClimbCommand());
-
-    //--------------------------------------------------------------------------
-    // INTAKE
-    // -------------------------------------------------------------------------
-    xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(CatzSuperstructure.Instance.intakeOFF()));
     xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)));
     xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
     xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 2)))
@@ -141,9 +112,7 @@ public class RobotContainer {
       }
     }, Set.of(CatzIntakeRoller.Instance)))));
 
-    xboxDrv.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());
 
-    // xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeBlocker());
 
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS with XBOX AUX
