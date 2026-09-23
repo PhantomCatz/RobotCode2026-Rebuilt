@@ -94,11 +94,11 @@ public class Robot extends LoggedRobot {
       }, CatzIntakeDeploy.Instance)
   );
 
-    CatzIntakeBlocker.Instance.setDefaultCommand(
-      Commands.run(() -> {
-        CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
-      }, CatzIntakeBlocker.Instance)
-    );
+    // CatzIntakeBlocker.Instance.setDefaultCommand(
+    //   Commands.run(() -> {
+    //     CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
+    //   }, CatzIntakeBlocker.Instance)
+    // );
 
     Logger.start();
 
@@ -268,8 +268,8 @@ public class Robot extends LoggedRobot {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
 
-    CatzSuperstructure.Instance.isBlockerDeployed = false;
-    CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+    // CatzSuperstructure.Instance.isBlockerDeployed = false;
+    // CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
 
     CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
     CatzDrivetrain.getInstance().setNormalConfig();

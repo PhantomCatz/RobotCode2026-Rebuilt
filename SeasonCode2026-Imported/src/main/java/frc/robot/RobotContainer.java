@@ -141,7 +141,7 @@ public class RobotContainer {
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
     xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
-    
+
     xboxAux.menu().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
 
     xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
