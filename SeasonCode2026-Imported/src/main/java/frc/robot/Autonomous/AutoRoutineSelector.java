@@ -1,7 +1,7 @@
 package frc.robot.Autonomous;
 
 import choreo.auto.AutoChooser;
-import org.wpilib.telemetry.Telemetry;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import frc.robot.Autonomous.routines.*;
 
@@ -73,7 +73,7 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Half_Hoard_Cycle_Depot", () -> new Half_Hoard_Cycle_Depot().getRoutine());
         // autoSelector.addRoutine("Half_Hoard_Cycle_Outpost", () -> new Half_Hoard_Cycle_Outpost().getRoutine());
 
-        Telemetry.log("Auto Path Selection", autoSelector);
+        Tunables.publish("Auto Path Selection", autoSelector);
     }
 
     public Command getSelectedCommand(){
