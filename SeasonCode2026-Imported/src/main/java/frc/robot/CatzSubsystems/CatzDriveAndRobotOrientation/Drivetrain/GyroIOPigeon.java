@@ -18,7 +18,7 @@ import org.wpilib.units.measure.AngularVelocity;
 public class GyroIOPigeon implements GyroIO {
 
   private final Pigeon2 pigeon;
-  private final CANPort PIGEON_BUS_ID = CANPort.CAN_S3;
+  private final CANPort PIGEON_BUS_ID = CANPort.CAN_S4;
   private final StatusSignal<Angle> yaw;
   private final StatusSignal<AngularVelocity> yawVelocity;
 
