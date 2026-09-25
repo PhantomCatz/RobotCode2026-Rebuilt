@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
+import org.littletonrobotics.junction.Logger;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.Commands;
 
@@ -30,7 +31,7 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	@Override
 	public void periodic() {
 		super.periodic();
-
+		Logger.recordOutput("Target Hood Angle", setpoint.baseUnits);
 		if (isFullManual) {
 			runFullManual(manualSpeed);
 		}

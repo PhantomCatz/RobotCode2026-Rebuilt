@@ -36,7 +36,7 @@ public class TurretConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Turret/kS", gains.kS());
     // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
-    // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
+    // public static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;

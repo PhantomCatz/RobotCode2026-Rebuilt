@@ -98,6 +98,7 @@ public class AimCalculations {
         // }
 
         double turretAngle = Math.toDegrees(targetRads);
+        Logger.recordOutput("turret angle (angle) aim calculations", turretAngle);
         if (turretAngle < -140.0) { // -180 to -140
 
         } else if (turretAngle < -105.0) { // -140 to -105
@@ -111,7 +112,7 @@ public class AimCalculations {
         } else if (turretAngle < 15.0) { // -15 to 15
             targetRads += Math.toRadians(6.7);
         } else if (turretAngle < 45.0) { // 15 to 45
-            targetRads += Math.toRadians(10.0);
+            targetRads += Math.toRadians(0.0);
         } else if (turretAngle < 75.0) { // 45 to 75
             targetRads += Math.toRadians(6.7);
         } else if (turretAngle < 105.0) { // 75 to 105
