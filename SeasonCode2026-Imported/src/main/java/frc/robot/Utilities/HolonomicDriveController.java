@@ -83,7 +83,7 @@ public class HolonomicDriveController {
   public ChassisVelocities calculate(
       Pose2d currentPose,
       Pose2d trajectoryPose,
-      ChassisVelocities desiredLinearVelocityMetersPerSecond,
+      double desiredLinearVelocityMetersPerSecond,
       Rotation2d desiredHeading) {
     // If this is the first run, then we need to reset the theta controller to the current pose's
     // heading.
@@ -93,8 +93,8 @@ public class HolonomicDriveController {
     }
 
     // Calculate feedforward velocities (field-relative).
-    double xFF = desiredLinearVelocityMetersPerSecond.vx;
-    double yFF = desiredLinearVelocityMetersPerSecond.vy;
+    double xFF = desiredLinearVelocityMetersPerSecond * trajectoryPose.getRotation().getCos();
+    double yFF = desiredLinearVelocityMetersPerSecond * trajectoryPose.getRotation().getSin();
     double thetaFF =
         m_thetaController.calculate(
             currentPose.getRotation().getRadians(), desiredHeading.getRadians());
@@ -103,7 +103,7 @@ public class HolonomicDriveController {
     m_rotationError = desiredHeading.minus(currentPose.getRotation());
 
     if (!m_enabled) {
-      return new ChassisVelocities(xFF, yFF, thetaFF).toFieldRelative(currentPose.getRotation());
+      return new ChassisVelocities(xFF, yFF, thetaFF).toRobotRelative(currentPose.getRotation());
     }
 
     // Calculate feedback velocities (based on position error).
@@ -120,7 +120,7 @@ public class HolonomicDriveController {
 
     // Return next output.
     return new ChassisVelocities(
-        xFF + xFeedback, yFF + yFeedback, thetaFF).toFieldRelative(currentPose.getRotation());
+        xFF + xFeedback, yFF + yFeedback, thetaFF).toRobotRelative(currentPose.getRotation());
   }
 
   /**
@@ -134,7 +134,7 @@ public class HolonomicDriveController {
   public ChassisVelocities calculate(
       Pose2d currentPose,  HolonomicSample desiredState, Rotation2d desiredHeading) {
     return calculate(
-        currentPose, desiredState.pose, desiredState.velocity, desiredHeading);
+        currentPose, desiredState.pose, Math.hypot(desiredState.velocity.vx, desiredState.velocity.vy), desiredHeading);
   }
 
   /**
