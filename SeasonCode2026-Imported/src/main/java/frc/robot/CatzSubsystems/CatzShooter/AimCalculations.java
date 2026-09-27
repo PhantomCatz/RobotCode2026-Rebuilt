@@ -218,7 +218,7 @@ public class AimCalculations {
             Translation2d targetPos,
             RegressionMode mode) {
 
-        if (targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0)
+        if (targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0 || targetVelocity.getAngle().isEmpty())
             return 0.0;
 
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
@@ -226,7 +226,6 @@ public class AimCalculations {
 
         if (targetToTurret.getX() == 0.0 && targetToTurret.getY() == 0.0)
             return 0.0;
-
         double turretTargetRadians = Math.abs(
                 MathUtil.angleModulus(targetToTurret.getAngle().get().getRadians() - targetVelocity.getAngle().get().getRadians()));
         double[] regCoeffs = ShooterRegression.getAirtimeCoeffs(mode);
