@@ -104,15 +104,15 @@ public class AimCalculations {
         } else if (turretAngle < -105.0) { // -140 to -105
 
         } else if (turretAngle < -75.0) { // -105 to -75
-
+            targetRads += Math.toRadians(1.0);
         } else if (turretAngle < -45.0) { // -75 to -45
-            targetRads += Math.toRadians(5.0);
+            targetRads += Math.toRadians(3.0);
         } else if (turretAngle < -15.0) { // -45 to -15
-
+targetRads += Math.toRadians(-1.0);
         } else if (turretAngle < 15.0) { // -15 to 15
             targetRads += Math.toRadians(6.7);
         } else if (turretAngle < 45.0) { // 15 to 45
-            targetRads += Math.toRadians(0.0);
+            targetRads += Math.toRadians(-3.0);
         } else if (turretAngle < 75.0) { // 45 to 75
             targetRads += Math.toRadians(6.7);
         } else if (turretAngle < 105.0) { // 75 to 105

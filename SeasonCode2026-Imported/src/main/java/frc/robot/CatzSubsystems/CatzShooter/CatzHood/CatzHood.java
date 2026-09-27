@@ -1,5 +1,7 @@
 package frc.robot.CatzSubsystems.CatzShooter.CatzHood;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
@@ -44,7 +46,7 @@ public class CatzHood extends ServoMotorSubsystem<HoodIO, HoodIO.HoodIOInputs>{
     @Override
     public void periodic(){
         super.periodic();
-
+        Logger.recordOutput("HoodDesiredAngle", setpoint.baseUnits);
         if(HoodConstants.kP.get() != p || HoodConstants.kD.get() != d || HoodConstants.kS.get() != s || HoodConstants.kV.get() != v || HoodConstants.kG.get() != g){
             setPDSVGGains(HoodConstants.kP.get(), HoodConstants.kD.get(), HoodConstants.kS.get(), HoodConstants.kV.get(), HoodConstants.kG.get());
             p = HoodConstants.kP.get();
