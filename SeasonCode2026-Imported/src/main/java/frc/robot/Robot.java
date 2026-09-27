@@ -50,8 +50,8 @@ public class Robot extends LoggedRobot {
 
   private Command m_autonomousCommand;
 
-  private BaseStatusSignal[][] allSignals = new BaseStatusSignal[3][];
-  private GenericMotorSubsystem[][] allSubsystems = new GenericMotorSubsystem[3][3];
+  private BaseStatusSignal[][] allSignals = new BaseStatusSignal[5][];
+  private GenericMotorSubsystem[][] allSubsystems = new GenericMotorSubsystem[5][3];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -165,12 +165,12 @@ public class Robot extends LoggedRobot {
     allSubsystems[0][0] = CatzSpindexer.Instance;
     allSubsystems[0][1] = CatzYdexer.Instance;
     allSubsystems[0][2] = CatzTurret.Instance;
-    allSubsystems[1][0] = CatzClimb.Instance;
-    allSubsystems[1][1] = CatzFlywheels.Instance;
-    allSubsystems[1][2] = CatzHood.Instance;
+    allSubsystems[1][0] = CatzFlywheels.Instance;
+    allSubsystems[1][1] = CatzHood.Instance;
     allSubsystems[2][0] = CatzIntakeBlocker.Instance;
     allSubsystems[2][1] = CatzIntakeRoller.Instance;
     allSubsystems[2][2] = CatzIntakeDeploy.Instance;
+    allSubsystems[4][0] = CatzClimb.Instance;
 
     CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();
@@ -188,21 +188,25 @@ public class Robot extends LoggedRobot {
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
-        List<BaseStatusSignal>[] signalList = new ArrayList[3];
-        for (int i=0; i<3; i++) {
-          signalList[i] = new ArrayList<BaseStatusSignal>();
+        List<BaseStatusSignal>[] signalList = new ArrayList[5];
+        for (int i=0; i<5; i++) {
+            signalList[i] = new ArrayList<BaseStatusSignal>();
         }
-        for (int i=0; i<3; i++) {
-          for (GenericMotorSubsystem subsystem : allSubsystems[i]) {
-            if(subsystem == null){
-              System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+        for (int i=0; i<5; i++) {
+          if(!(i==3)) {
+            System.out.println(i + "\n hey its me its adijoadijadwy");
+            for (GenericMotorSubsystem subsystem : allSubsystems[i]) {
+              System.out.println(subsystem.getName());
+              if(subsystem == null){
+                System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+              }
+              Collections.addAll(signalList[i], subsystem.getSignals());
             }
-            Collections.addAll(signalList[i], subsystem.getSignals());
+            allSignals[i] = signalList[i].toArray(new BaseStatusSignal[0]);
           }
-          allSignals[i] = signalList[i].toArray(new BaseStatusSignal[0]);
         }
       }else{
-        allSignals = new BaseStatusSignal[3][0];
+        allSignals = new BaseStatusSignal[5][0];
       }
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
@@ -219,8 +223,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
-    for (int i=0; i<3; i++) {
-      if (allSignals[i].length > 0) {
+    for (int i=0; i<5; i++) {
+      System.out.println(i + "\n hey its me its y");
+      if (allSignals[i].length > 0 && !(i==3)) { //We dont have any motors at CANPort 3 right now, temporary fix
         BaseStatusSignal.refreshAll(allSignals[i]);
       }
     }
