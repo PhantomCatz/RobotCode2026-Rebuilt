@@ -102,7 +102,7 @@ public class IntakeDeployConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] { CANPort.CAN_S2, CANPort.CAN_S2 };
+		IOConfig.followerBuses = new CANPort[] {};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

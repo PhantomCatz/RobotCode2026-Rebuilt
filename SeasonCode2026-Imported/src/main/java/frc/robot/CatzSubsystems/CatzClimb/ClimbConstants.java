@@ -96,7 +96,7 @@ public class ClimbConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] { CANPort.CAN_S1, CANPort.CAN_S1 };
+		IOConfig.followerBuses = new CANPort[] {};
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;
 	}

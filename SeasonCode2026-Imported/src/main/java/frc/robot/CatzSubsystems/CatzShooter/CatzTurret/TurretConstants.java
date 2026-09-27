@@ -111,7 +111,7 @@ public class TurretConstants {
 						// .withForwardSoftLimitThreshold(TURRET_MAX)
 						// .withReverseSoftLimitThreshold(TURRET_MIN)); //NOTE add back soft limits
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] {CANPort.CAN_S0, CANPort.CAN_S0};
+		IOConfig.followerBuses = new CANPort[] {};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
