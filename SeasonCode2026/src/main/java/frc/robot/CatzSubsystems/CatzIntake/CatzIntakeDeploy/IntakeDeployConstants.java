@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -54,7 +53,7 @@ public class IntakeDeployConstants {
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
-	private static final CANPort INTAKE_DEPLOY_BUS_ID = CANPort.CAN_S2;
+	private static final int INTAKE_DEPLOY_BUS_ID = 2;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -102,7 +101,7 @@ public class IntakeDeployConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] {};
+		IOConfig.followerBuses = new int[] { 2, 2 };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

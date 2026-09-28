@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -30,23 +29,23 @@ public class HoodConstants {
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(35.0, 0.0, 3.0, 0.25, 1.4,0.0, 0.2);
-        case SN2 -> new Gains(100.0, 0.3, 6.0, 0.0, 2.1,0.0, 0.0);
+        case SN2 -> new Gains(100.0, 0.0, 0.0, 0.0, 2.1,0.0, 0.0);
         case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP", gains.kP());
-    public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI", gains.kI());
-    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD", gains.kD());
-    public static final LoggedTunableNumber kS = new LoggedTunableNumber("Hood/kS", gains.kS());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Hood/kV", gains.kV());
-    public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
-	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG", gains.kG());
+    // public static final LoggedTunableNumber kP = new LoggedTunableNumber("Hood/kP", gains.kP());
+    // public static final LoggedTunableNumber kI = new LoggedTunableNumber("Hood/kI", gains.kI());
+    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Hood/kD", gains.kD());
+    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Hood/kS", gains.kS());
+    // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Hood/kV", gains.kV());
+    // public static final LoggedTunableNumber kA = new LoggedTunableNumber("Hood/kA", gains.kA());
+	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("Hood/kG", gains.kG());
 
 	public static final LoggedTunableNumber adjustableHoodAngle = new LoggedTunableNumber("Hood/HoodelAngle", HOOD_ZERO_POS.in(Units.Degrees));
 
     private static final int HOOD_MOTOR_ID = 22;
-	private static final CANPort HOOD_BUS_ID = CANPort.CAN_S1;
+	private static final int HOOD_BUS_ID = 1;
 	public static final double HOOD_GRAVITY_FF = 0.4;
 	public static final double HOOD_GRAVITY_FF_PHASE_SHIFT = Units.Degrees.of(-10.0).in(Units.Radians);
 	// public static final LoggedTunableNumber hoodPhaseShift = new LoggedTunableNumber("Hood/Gravity Phase Shift Deg", Math.toDegrees(HOOD_GRAVITY_FF_PHASE_SHIFT));
@@ -100,7 +99,7 @@ public class HoodConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] {};
+		IOConfig.followerBuses = new int[] {0, 0};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

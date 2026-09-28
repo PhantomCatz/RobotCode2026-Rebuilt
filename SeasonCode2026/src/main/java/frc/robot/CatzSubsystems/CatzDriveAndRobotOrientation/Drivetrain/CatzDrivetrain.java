@@ -8,18 +8,16 @@ import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.geometry.Twist2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.math.trajectory.DrivetrainSplineSample;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
-import org.wpilib.telemetry.Telemetry;
 import org.wpilib.smartdashboard.Field2d;
+import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SubsystemBase;
@@ -35,9 +33,7 @@ import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
-import frc.robot.Utilities.Alert.AlertType;
-
-import org.wpilib.util.Pair;
+import org.wpilib.math.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,7 +110,7 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroIO = null;
         break;
     }
-    gyroDisconnected = new Alert("Gyro disconnected!", AlertType.kWarning);
+    gyroDisconnected = new Alert("Gyro disconnected!", Alert.AlertType.kWarning);
 
     // Create swerve modules for each corner of the robot
     RT_FRNT_MODULE = new CatzSwerveModule(DriveConstants.MODULE_CONFIGS[INDEX_FR], MODULE_NAMES[INDEX_FR]);
@@ -140,7 +136,7 @@ public class CatzDrivetrain extends SubsystemBase {
     }
 
     field = new Field2d();
-    Telemetry.log("Field", field);
+    SmartDashboard.putData("Field", field);
 
     swerveSetpointGenerator = new SwerveSetpointGenerator(SWERVE_KINEMATICS, MODULE_TRANSLATIONS);
   }
@@ -409,12 +405,13 @@ public class CatzDrivetrain extends SubsystemBase {
       curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
     }
 
-    DrivetrainSplineSample state = new DrivetrainSplineSample(
+    Trajectory.State state = new Trajectory.State(
         sample.t,
-        new Pose2d(new Translation2d(sample.x, sample.y),
-        Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
         velocityMag,
         Math.hypot(sample.ax, sample.ay), // Use raw acceleration here
+        new Pose2d(
+            new Translation2d(sample.x, sample.y),
+            Rotation2d.fromRadians(Math.atan2(sample.vy, sample.vx))),
         curvature // Input the calculated curvature here
     );
 
@@ -423,7 +420,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
     Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
-  }
+  // }
 
   public void setXLock() {
       for (int i = 0; i < 4; i++) {
@@ -484,7 +481,7 @@ public class CatzDrivetrain extends SubsystemBase {
   /** Map Circle orientation for wheel radius characterization */
   public static Rotation2d[] getCircleOrientations() {
     return Arrays.stream(DriveConstants.MODULE_TRANSLATIONS)
-        .map(translation -> translation.getAngle().get().plus(new Rotation2d(Math.PI / 2.0)))
+        .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
         .toArray(Rotation2d[]::new);
   }
 

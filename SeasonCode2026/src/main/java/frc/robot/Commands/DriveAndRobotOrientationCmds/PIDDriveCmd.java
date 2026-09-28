@@ -1,7 +1,6 @@
 package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 
-
 import org.littletonrobotics.junction.Logger;
 
 import org.wpilib.math.util.MathUtil;
@@ -157,7 +156,7 @@ public class PIDDriveCmd extends Command {
 
         Translation2d poseError = goalPos.minus(currentPose).getTranslation();
         double currentDistance = poseError.getNorm();
-        Rotation2d direction = poseError.getAngle().get();
+        Rotation2d direction = poseError.getAngle();
 
         double translationFeedback = translationController.calculate(currentDistance, 0.0);
         double translationFeedforward = translationController.getSetpoint().velocity;

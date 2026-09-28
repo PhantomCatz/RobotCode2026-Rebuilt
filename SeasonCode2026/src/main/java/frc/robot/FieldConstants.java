@@ -4,8 +4,8 @@ package frc.robot;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.wpilib.fields.Field;
-import org.wpilib.fields.Fields;
+import org.wpilib.vision.apriltag.AprilTagFieldLayout;
+import org.wpilib.vision.apriltag.AprilTagFields;
 import org.wpilib.math.geometry.*;
 import org.wpilib.math.util.Units;
 import org.wpilib.units.measure.Distance;
@@ -299,12 +299,12 @@ public class FieldConstants {
     AprilTagLayoutType(String name) {
       layout = CatzConstants.disableHAL
           ? null
-          : Field.loadField(Fields.DEFAULT_FIELD);
+          : AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
       layoutString = safeLayoutString(layout);
     }
 
-    private static String safeLayoutString(Field layout) {
+    private static String safeLayoutString(AprilTagFieldLayout layout) {
       if (layout == null) {
         return "";
       }
@@ -315,7 +315,7 @@ public class FieldConstants {
       }
     }
 
-    public final Field layout;
+    public final AprilTagFieldLayout layout;
     private final String layoutString;
   }
 }

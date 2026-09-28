@@ -1,14 +1,14 @@
 package frc.robot.Utilities;
 
-import org.wpilib.util.Pair;
+import org.wpilib.math.util.Pair;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Transform2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.geometry.Translation3d;
 import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.trajectory.HolonomicSample;
-import org.wpilib.math.trajectory.HolonomicTrajectory;
+import org.wpilib.math.trajectory.Trajectory;
+import org.wpilib.math.trajectory.Trajectory.State;
 import org.wpilib.units.AngleUnit;
 import org.wpilib.units.BaseUnits;
 import org.wpilib.units.DistanceUnit;
@@ -17,7 +17,7 @@ import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.Distance;
 import org.wpilib.units.measure.Time;
 import org.wpilib.system.Timer;
-import org.wpilib.telemetry.Telemetry;
+import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.Commands;
@@ -355,15 +355,15 @@ public class Util {
 			}
 		}
 
-		public Pose2dTimeInterpolable(HolonomicTrajectory trajwithTan, Rotation2d startHeading, Rotation2d endHeading) {
-			double totalTimeSecpnods = trajwithTan.duration;
-			for (HolonomicSample state : trajwithTan.getSamples()) {
+		public Pose2dTimeInterpolable(Trajectory trajwithTan, Rotation2d startHeading, Rotation2d endHeading) {
+			double totalTimeSecpnods = trajwithTan.getTotalTime();
+			for (State state : trajwithTan.getStates()) {
 				Rotation2d poseRotation = startHeading.interpolate(endHeading, state.time / totalTimeSecpnods);
 				poseList.add(new Pair<>(
 						new Pose2d(state.pose.getTranslation(), poseRotation),
 						Units.Seconds.of(state.time)));
 			}
-			Telemetry.log("Auto Align Traj/Number Of Trajectory States", poseList.size());
+			SmartDashboard.putNumber("Auto Align Traj/Number Of Trajectory States", poseList.size());
 		}
 	}
 
@@ -433,7 +433,7 @@ public class Util {
 
 	public static Command smartDashCommand(String message) {
 		return Commands.defer(
-				() -> Commands.runOnce(() -> Telemetry.log(message, Timer.getTimestamp())),
+				() -> Commands.runOnce(() -> SmartDashboard.putNumber(message, Timer.getTimestamp())),
 				getEmptySubsystemSet());
 	}
 

@@ -7,7 +7,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import org.wpilib.math.util.MathUtil;
-import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.math.kinematics.ChassisVelocities;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -35,9 +34,9 @@ public class IntakeRollerConstants {
     };
 
 	private static final int INTAKE_MOTOR_ID = 31;
-	private static final CANPort INTAKE_BUS_ID = CANPort.CAN_S2;
+	private static final int INTAKE_BUS_ID = 2;
 	private static final int INTAKE_FOLLOWER_MOTOR_ID = 32;
-	private static final CANPort INTAKE_FOLLOWER_BUS_ID = CANPort.CAN_S2;
+	private static final int INTAKE_FOLLOWER_BUS_ID = 2;
 	private static final double NO_MOVE_INTAKE_SPEED = 5.0; // TODO make this right
 	private static final double INTAKE_SPEED_SLOPE = 0.3; // TODO make this right
 
@@ -83,7 +82,7 @@ public class IntakeRollerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
-		IOConfig.followerBuses = new CANPort[] {INTAKE_FOLLOWER_BUS_ID};
+		IOConfig.followerBuses = new int[] {INTAKE_FOLLOWER_BUS_ID};
 		IOConfig.followerIDs = new int[] {INTAKE_FOLLOWER_MOTOR_ID};
 		return IOConfig;
 	}

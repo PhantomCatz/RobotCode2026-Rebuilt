@@ -4,6 +4,8 @@ import org.wpilib.framework.RobotBase;
 import org.wpilib.util.Color;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.Alert.AlertType;
+
+
 import choreo.auto.AutoFactory;
 
 public final class CatzConstants {
@@ -13,7 +15,7 @@ public final class CatzConstants {
   //  Robot Modes
   //
   // --------------------------------------------------
-  public static final RobotScenario robotScenario = RobotScenario.TUNING;
+  public static final RobotScenario robotScenario = RobotScenario.COMPETITION;
   public static final RobotHardwareMode hardwareMode = RobotHardwareMode.REAL;
   private static RobotID robotType = RobotID.SN2;
   private static AlertPriority alertWarningPriority = AlertPriority.ONE;
@@ -23,7 +25,7 @@ public final class CatzConstants {
 
   public static AutoFactory autoFactory;
 
-  public static final boolean ClimbOn = false;
+  public static final boolean ClimbOn = true;
   public static final boolean HoodOn = true;
   public static final boolean IndexerOn = true;
   public static final boolean SpindexerOn = true;
@@ -48,7 +50,7 @@ public final class CatzConstants {
   public static RobotID getRobotType() {
     // Checks to ensure that the selected robot Hardware mode is not paired with an illegal Robot Id
     if (RobotBase.isReal() && robotType == RobotID.SN_TEST) {
-      new Alert("","Invalid robot selected, using competition robot as default.", AlertType.kError)
+      new Alert("Invalid robot selected, using competition robot as default.", AlertType.kError)
           .set(true);
       robotType = RobotID.SN_MANTA;
     }

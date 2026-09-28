@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.Distance;
@@ -44,8 +43,8 @@ public class ClimbConstants {
     // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    private static final int CLIMB_MOTOR_ID = 61;
-	private static final CANPort CLIMB_BUS_ID = CANPort.CAN_S4;
+    private static final int CLIMB_MOTOR_ID = 20;
+	private static final int CLIMB_BUS_ID = 1;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
@@ -66,10 +65,10 @@ public class ClimbConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
-		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -0.25146484375;
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.3583984375;
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = converter.toAngle(Units.Inches.of(7.0)).in(Units.Rotations);
 		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -96,7 +95,7 @@ public class ClimbConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] {};
+		IOConfig.followerBuses = new int[] { 1, 1 };
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;
 	}

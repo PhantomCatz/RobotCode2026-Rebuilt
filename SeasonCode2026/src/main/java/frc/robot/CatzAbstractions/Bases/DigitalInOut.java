@@ -16,7 +16,7 @@ public class DigitalInOut {
 	private final DigitalInput beambreak;
 
 	public DigitalInOut(int id, double debounceTime, boolean isInverted, String name) {
-		debouncer = new Debouncer(debounceTime, DebounceType.BOTH);
+		debouncer = new Debouncer(debounceTime, DebounceType.kBoth);
 		this.isInverted = isInverted;
 		this.name = name;
 		this.beambreak = new DigitalInput(id);

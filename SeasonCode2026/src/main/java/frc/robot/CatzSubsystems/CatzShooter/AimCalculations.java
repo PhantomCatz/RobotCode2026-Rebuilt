@@ -61,7 +61,7 @@ public class AimCalculations {
 
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target) {
         Translation2d hubDirection = target.minus(CatzTurret.Instance.getFieldToTurret());
-        double targetRads = hubDirection.getAngle().get().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
+        double targetRads = hubDirection.getAngle().minus(CatzRobotTracker.Instance.getEstimatedPose().getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
         return CatzTurret.Instance.calculateWrappedSetpoint(Units.Radians.of(targetRads));
     }
@@ -69,7 +69,7 @@ public class AimCalculations {
     public static Setpoint calculateTurretTrackingSetpoint(Translation2d target, Pose2d predictedRobotPose,
             Translation2d predictedTurretPose, double distFromHub) {
         Translation2d hubDirection = target.minus(predictedTurretPose);
-        double targetRads = hubDirection.getAngle().get().minus(predictedRobotPose.getRotation())
+        double targetRads = hubDirection.getAngle().minus(predictedRobotPose.getRotation())
                 .minus(TurretConstants.TURRET_ROTATION_OFFSET).getRadians();
 
         // if(Math.toDegrees(targetRads) > -15.0 && Math.toDegrees(targetRads) < 120.0
@@ -98,21 +98,20 @@ public class AimCalculations {
         // }
 
         double turretAngle = Math.toDegrees(targetRads);
-        Logger.recordOutput("turret angle (angle) aim calculations", turretAngle);
         if (turretAngle < -140.0) { // -180 to -140
 
         } else if (turretAngle < -105.0) { // -140 to -105
 
         } else if (turretAngle < -75.0) { // -105 to -75
-            targetRads += Math.toRadians(1.0);
+
         } else if (turretAngle < -45.0) { // -75 to -45
-            targetRads += Math.toRadians(3.0);
+            targetRads += Math.toRadians(5.0);
         } else if (turretAngle < -15.0) { // -45 to -15
-targetRads += Math.toRadians(-1.0);
+
         } else if (turretAngle < 15.0) { // -15 to 15
             targetRads += Math.toRadians(6.7);
         } else if (turretAngle < 45.0) { // 15 to 45
-            targetRads += Math.toRadians(-3.0);
+            targetRads += Math.toRadians(10.0);
         } else if (turretAngle < 75.0) { // 45 to 75
             targetRads += Math.toRadians(6.7);
         } else if (turretAngle < 105.0) { // 75 to 105
@@ -218,7 +217,7 @@ targetRads += Math.toRadians(-1.0);
             Translation2d targetPos,
             RegressionMode mode) {
 
-        if (targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0 || targetVelocity.getAngle().isEmpty())
+        if (targetVelocity.getX() == 0.0 && targetVelocity.getY() == 0.0)
             return 0.0;
 
         Translation2d targetToTurret = fieldToTurret.minus(targetPos);
@@ -226,8 +225,9 @@ targetRads += Math.toRadians(-1.0);
 
         if (targetToTurret.getX() == 0.0 && targetToTurret.getY() == 0.0)
             return 0.0;
+
         double turretTargetRadians = Math.abs(
-                MathUtil.angleModulus(targetToTurret.getAngle().get().getRadians() - targetVelocity.getAngle().get().getRadians()));
+                MathUtil.angleModulus(targetToTurret.getAngle().getRadians() - targetVelocity.getAngle().getRadians()));
         double[] regCoeffs = ShooterRegression.getAirtimeCoeffs(mode);
         // test comment
 

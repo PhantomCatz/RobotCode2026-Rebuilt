@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.AngularVelocity;
 import org.wpilib.units.measure.Voltage;
@@ -42,7 +41,7 @@ public class SpindexerConstants {
 
 
     private static final int SPINDEXER_MOTOR_ID = 40;
-	private static final CANPort SPINDEXER_BUS_ID = CANPort.CAN_S0;
+	private static final int SPINDEXER_BUS_ID = 0;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -85,7 +84,7 @@ public class SpindexerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] {};
+		IOConfig.followerBuses = new int[] { 0, 0 };
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

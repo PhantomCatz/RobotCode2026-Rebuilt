@@ -90,7 +90,7 @@ public class PIDDriveCmdFuel extends Command{
 
         double currentDistance = poseError.getNorm();
         Logger.recordOutput("Current Distance", currentDistance);
-        Rotation2d direction = poseError.getAngle().get();
+        Rotation2d direction = poseError.getAngle();
         double angleError = MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0);
         // The goal of the translation controller is to drive the distance error to zero
         double targetVel = Math.abs(translationController.calculate(currentDistance, 0.0));

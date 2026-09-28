@@ -95,7 +95,6 @@ public class TeleopDriveCmd extends Command {
     joyY = -m_headingPctOutput_X.get();
     turningVelocity = -m_angVelocityPctOutput.get(); // alliance flip shouldn't change for turing speed when switching
                                                      // alliances
-                                                     //switch signs if rotation is flipped
 
     // Flip Directions for left joystick if alliance is red
     if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
@@ -119,7 +118,7 @@ public class TeleopDriveCmd extends Command {
         : 0.0;
 
    // Construct desired chassis speeds normally
-    Translation2d rotated = new Translation2d(finalVelX, finalVelY).rotateBy(CatzRobotTracker.getInstance().getEstimatedPose().getRotation().unaryMinus());
+    Translation2d rotated = new Translation2d(finalVelX, finalVelY).rotateBy(CatzRobotTracker.getInstance().getEstimatedPose().getRotation());
     chassisVelocities = new ChassisVelocities(rotated.getX(), rotated.getY(), turningVelocity);
 
     // Artificially cap the target translation speed if scoring

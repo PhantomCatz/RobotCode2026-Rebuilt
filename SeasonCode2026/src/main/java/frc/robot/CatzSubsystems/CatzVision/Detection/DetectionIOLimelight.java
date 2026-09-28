@@ -148,7 +148,7 @@ public class DetectionIOLimelight extends DetectionIO {
 					Translation2d fuelTranslation = calcDistToFuel(tx, ty)
 					// Logger.recordOutput("Detection/fuelTranslation", fuelTranslation);
 							.plus(config.robotToCameraOffset.getTranslation().toTranslation2d());
-					Rotation2d fuelRotation = fuelTranslation.getAngle().get().plus(Rotation2d.k180deg);
+					Rotation2d fuelRotation = fuelTranslation.getAngle().plus(Rotation2d.k180deg);
 					// System.out.println(fuelRotation);
 					Pose2d fuelPose =
 						poseFromCapture.get().transformBy(new Transform2d(fuelTranslation, fuelRotation));

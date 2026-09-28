@@ -8,7 +8,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.units.Units;
@@ -36,11 +35,11 @@ public class TurretConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Turret/kS", gains.kS());
     // public static final LoggedTunableNumber kV = new LoggedTunableNumber("Turret/kV", gains.kV());
-    // public static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
+    // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Turret/kA", gains.kA());
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
-	private static final CANPort TURRET_BUS_ID = CANPort.CAN_S0;
+	private static final int TURRET_BUS_ID = 0;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(90.0);
 
@@ -55,7 +54,7 @@ public class TurretConstants {
 	public static final Rotation2d TURRET_RADIAL_ANGLE = new Rotation2d(Math.PI * 0.75);
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
-	public static final CANcoder TURRET_CANCODER = new CANcoder(26, new CANBus(TURRET_BUS_ID));
+	public static final CANcoder TURRET_CANCODER = new CANcoder(26, CANBus.systemcore(TURRET_BUS_ID));
 
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 	public static final Distance TURRET_HEIGHT = Units.Inches.of(18.0);
@@ -111,7 +110,7 @@ public class TurretConstants {
 						// .withForwardSoftLimitThreshold(TURRET_MAX)
 						// .withReverseSoftLimitThreshold(TURRET_MIN)); //NOTE add back soft limits
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new CANPort[] {};
+		IOConfig.followerBuses = new int[] {0, 0};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}
