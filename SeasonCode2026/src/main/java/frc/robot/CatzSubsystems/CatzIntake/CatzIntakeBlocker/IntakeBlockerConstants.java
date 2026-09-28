@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
 import frc.robot.CatzConstants;
@@ -19,7 +20,7 @@ public class IntakeBlockerConstants {
 	public static final Angle STOW_POSITION = Units.Degrees.of(0.0);
 	public static final Angle BLOCKER_POSITION = Units.Rotations.of(-0.040);
 
-	private static final int INTAKE_BLOCKER_BUS_ID = 2;
+	private static final CANPort INTAKE_BLOCKER_BUS_ID = CANPort.CAN_S2;
 	private static final int INTAKE_BLOCKER_MOTOR_ID = 32;
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint BLOCKER = Setpoint.withMotionMagicSetpoint(BLOCKER_POSITION);
@@ -77,7 +78,7 @@ public class IntakeBlockerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 2, 2 };
+		IOConfig.followerBuses = new CANPort[] {};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

@@ -6,6 +6,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import org.wpilib.hardware.bus.CANPort;
+
 // 2025 REVLib Imports
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -41,7 +43,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         this.gearRatio = config.gearRatio;
 
         // 1. Initialize Leader
-        leaderMotor = new SparkMax(0, config.mainID, MotorType.kBrushless); // TODO need to have a system for defining buses
+        leaderMotor = new SparkMax(CANPort.CAN_S0, config.mainID, MotorType.kBrushless); // TODO need to have a system for defining buses
         encoder = leaderMotor.getEncoder();
         closedLoopController = leaderMotor.getClosedLoopController();
 
@@ -58,7 +60,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         if (config.followerIDs.length > 0) {
             followerMotors = new SparkMax[config.followerIDs.length];
             for (int i = 0; i < config.followerIDs.length; i++) {
-                followerMotors[i] = new SparkMax(0, config.followerIDs[i], MotorType.kBrushless);
+                followerMotors[i] = new SparkMax(CANPort.CAN_S0, config.followerIDs[i], MotorType.kBrushless);
 
                 // Create a follower config
                 SparkMaxConfig followerConfig = new SparkMaxConfig();

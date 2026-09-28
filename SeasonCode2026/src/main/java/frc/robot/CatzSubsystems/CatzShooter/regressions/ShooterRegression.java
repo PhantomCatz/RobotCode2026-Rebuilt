@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
+import org.littletonrobotics.junction.Logger;
 import org.wpilib.math.interpolation.InterpolatingDoubleTreeMap;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Angle;
@@ -212,12 +213,13 @@ public class ShooterRegression {
             // else { // 140 to 180
 
             // }
+            Logger.recordOutput("turret angle (power) shooter regression", turretAngle);
             if(turretAngle > 90.0 && turretAngle < 180.0){
                 add -= 0.5;
             }
 
             if (turretAngle > -10.0 && turretAngle < 70.0) {
-                add += 2.3;
+                add += 1.3;
             }
 
             if(turretAngle > 30 && turretAngle < 90){

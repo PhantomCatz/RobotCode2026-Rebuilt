@@ -7,6 +7,7 @@ import java.util.List;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.ConsoleSource.Systemcore;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
@@ -17,11 +18,12 @@ import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
+import org.wpilib.units.measure.Temperature;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
-import org.wpilib.driverstation.internal.DriverStationBackend;
+import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.Commands;
@@ -36,7 +38,6 @@ import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDriv
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.CatzIntakeBlocker;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeBlocker.IntakeBlockerConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
@@ -52,14 +53,8 @@ public class Robot extends LoggedRobot {
 
   private Command m_autonomousCommand;
 
-  private BaseStatusSignal[] allSignals;
-  private BaseStatusSignal[] bus0Signals;
-  private BaseStatusSignal[] bus1Signals;
-  private BaseStatusSignal[] bus2Signals;
-  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[9];
-  private GenericMotorSubsystem[] bus0Subsystems = new GenericMotorSubsystem[3];
-  private GenericMotorSubsystem[] bus1Subsystems = new GenericMotorSubsystem[3];
-  private GenericMotorSubsystem[] bus2Subsystems = new GenericMotorSubsystem[3];
+  private BaseStatusSignal[][] allSignals = new BaseStatusSignal[3][];
+  private GenericMotorSubsystem[][] allSubsystems = new GenericMotorSubsystem[3][3];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -101,11 +96,11 @@ public class Robot extends LoggedRobot {
       }, CatzIntakeDeploy.Instance)
   );
 
-    CatzIntakeBlocker.Instance.setDefaultCommand(
-      Commands.run(() -> {
-        CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
-      }, CatzIntakeBlocker.Instance)
-    );
+    // CatzIntakeBlocker.Instance.setDefaultCommand(
+    //   Commands.run(() -> {
+    //     CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
+    //   }, CatzIntakeBlocker.Instance)
+    // );
 
     Logger.start();
 
@@ -136,7 +131,7 @@ public class Robot extends LoggedRobot {
     //         });
 
     // Set Brownout Voltage to WPILIB recommendations
-    // RobotController.setBrownoutVoltage(6.3);
+    RobotController.setBrownoutVoltages(6.3, 7);
 
     // Print out Catz Constant enums
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());
@@ -169,24 +164,16 @@ public class Robot extends LoggedRobot {
         }
       }
     }
-    allSubsystems[0] = CatzClimb.Instance;
-    allSubsystems[1] = CatzSpindexer.Instance;
-    allSubsystems[2] = CatzYdexer.Instance;
-    allSubsystems[3] = CatzIntakeDeploy.Instance;
-    allSubsystems[4] = CatzIntakeRoller.Instance;
-    allSubsystems[5] = CatzFlywheels.Instance;
-    allSubsystems[6] = CatzHood.Instance;
-    allSubsystems[7] = CatzTurret.Instance;
-    allSubsystems[8] = CatzIntakeBlocker.Instance;
-    bus0Subsystems[0] = CatzSpindexer.Instance;
-    bus0Subsystems[1] = CatzYdexer.Instance;
-    bus0Subsystems[2] = CatzTurret.Instance;
-    bus1Subsystems[0] = CatzClimb.Instance;
-    bus1Subsystems[1] = CatzFlywheels.Instance;
-    bus1Subsystems[2] = CatzHood.Instance;
-    bus2Subsystems[0] = CatzIntakeBlocker.Instance;
-    bus2Subsystems[1] = CatzIntakeRoller.Instance;
-    bus2Subsystems[2] = CatzIntakeDeploy.Instance;
+
+    allSubsystems[0][0] = CatzSpindexer.Instance;
+    allSubsystems[0][1] = CatzYdexer.Instance;
+    allSubsystems[0][2] = CatzTurret.Instance;
+    allSubsystems[1][0] = CatzClimb.Instance;
+    allSubsystems[1][1] = CatzFlywheels.Instance;
+    allSubsystems[1][2] = CatzHood.Instance;
+    allSubsystems[2][0] = CatzIntakeBlocker.Instance;
+    allSubsystems[2][1] = CatzIntakeRoller.Instance;
+    allSubsystems[2][2] = CatzIntakeDeploy.Instance;
 
     CatzRobotTracker.getInstance();
     m_robotContainer = new RobotContainer();
@@ -200,41 +187,25 @@ public class Robot extends LoggedRobot {
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
     System.out.println(AutoRoutineSelector.Instance);
 
-      DriverStationBackend.silenceJoystickConnectionWarning(true);
+      DriverStationBackend.silenceJoystickConnectionAlert(true);
 
       if (CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REAL ||
         CatzConstants.hardwareMode == CatzConstants.RobotHardwareMode.REPLAY) {
-        List<BaseStatusSignal> signalList0 = new ArrayList<>();
-        for(GenericMotorSubsystem subsystem0 : bus0Subsystems){
-          if(subsystem0 == null){
-            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
-          }
-          Collections.addAll(signalList0, subsystem0.getSignals());
+        List<BaseStatusSignal>[] signalList = new ArrayList[3];
+        for (int i=0; i<3; i++) {
+          signalList[i] = new ArrayList<BaseStatusSignal>();
         }
-        bus0Signals = signalList0.toArray(new BaseStatusSignal[0]);
-
-        List<BaseStatusSignal> signalList1 = new ArrayList<>();
-        for(GenericMotorSubsystem subsystem1 : bus1Subsystems){
-          if(subsystem1 == null){
-            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+        for (int i=0; i<3; i++) {
+          for (GenericMotorSubsystem subsystem : allSubsystems[i]) {
+            if(subsystem == null){
+              System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+            }
+            Collections.addAll(signalList[i], subsystem.getSignals());
           }
-          Collections.addAll(signalList1, subsystem1.getSignals());
+          allSignals[i] = signalList[i].toArray(new BaseStatusSignal[0]);
         }
-        bus1Signals = signalList1.toArray(new BaseStatusSignal[0]);
-
-        List<BaseStatusSignal> signalList2 = new ArrayList<>();
-        for(GenericMotorSubsystem subsystem2 : bus2Subsystems){
-          if(subsystem2 == null){
-            System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
-          }
-          Collections.addAll(signalList2, subsystem2.getSignals());
-        }
-        bus2Signals = signalList2.toArray(new BaseStatusSignal[0]);
       }else{
-        bus0Signals = new BaseStatusSignal[0];
-        bus1Signals = new BaseStatusSignal[0];
-        bus2Signals = new BaseStatusSignal[0];
-
+        allSignals = new BaseStatusSignal[3][0];
       }
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
@@ -244,23 +215,25 @@ public class Robot extends LoggedRobot {
       // Notifier.setHALThreadPriority(false, 0);
       // System.out.println("Starting deteciton threaadf==================");
       // coralDetectionThread.startPeriodic(0.1);
-      SmartDashboard.putBoolean("Won Auton?", false);
-      SmartDashboard.putBoolean("Swiping?", false);
+      Telemetry.log("Won Auton?", false);
+      Telemetry.log("Swiping?", false);
+      Telemetry.log("On Fire?", false);
   }
 
   @Override
   public void robotPeriodic() {
     VirtualSubsystem.periodicAll();
-    if(bus0Signals.length > 0) {
-      BaseStatusSignal.refreshAll(bus0Signals);
-    }
-    if(bus1Signals.length > 0) {
-      BaseStatusSignal.refreshAll(bus1Signals);
-    }
-    if(bus2Signals.length > 0) {
-      BaseStatusSignal.refreshAll(bus2Signals);
+    for (int i=0; i<3; i++) {
+      if (allSignals[i].length > 0) {
+        BaseStatusSignal.refreshAll(allSignals[i]);
+      }
     }
     CommandScheduler.getInstance().run();
+    if(RobotController.getCPUTemp() > 70.0) {
+      Telemetry.log("On Fire?", true);
+    } else {
+      Telemetry.log("On Fire?", false);
+    }
   }
 
   @Override
@@ -303,8 +276,8 @@ public class Robot extends LoggedRobot {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
 
-    CatzSuperstructure.Instance.canBlock = false;
-    CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+    // CatzSuperstructure.Instance.isBlockerDeployed = false;
+    // CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
 
     CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
     CatzDrivetrain.getInstance().setNormalConfig();
@@ -330,7 +303,7 @@ public class Robot extends LoggedRobot {
           && alliance == Alliance.RED)
           )
         {
-          SmartDashboard.putBoolean("Won Auton?", true);
+          Telemetry.log("Won Auton?", true);
           iterations = 21;
         }
       } catch(Exception e){
@@ -345,16 +318,16 @@ public class Robot extends LoggedRobot {
   }
 
   // @Override
-  // public void testInit() {
+  // public void utilityInit() {
   //   CommandScheduler.getInstance().cancelAll();
   // }
 
   // @Override
-  // public void testPeriodic() {
+  // public void utilityPeriodic() {
   // }
 
   // @Override
-  // public void testExit() {
+  // public void utilityExit() {
   // }
 
   }

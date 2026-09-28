@@ -10,11 +10,13 @@ import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.kinematics.SwerveModulePosition;
 import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.math.util.Units;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.CatzMathUtils;
+import frc.robot.Utilities.Alert.AlertType;
 import frc.robot.Utilities.CatzMathUtils.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -87,9 +89,9 @@ public class CatzSwerveModule {
 
     // Disconnected Alerts
     driveMotorDisconnected =
-        new Alert(m_moduleName + " drive motor disconnected!", Alert.AlertType.kError);
+        new Alert(m_moduleName + " drive motor disconnected!", AlertType.kError);
     steerMotorDisconnected =
-        new Alert(m_moduleName + " steer motor disconnected!", Alert.AlertType.kError);
+        new Alert(m_moduleName + " steer motor disconnected!", AlertType.kError);
 
     resetDriveEncs();
   }
@@ -128,7 +130,7 @@ public class CatzSwerveModule {
     Logger.recordOutput(logKeyCurModAng, getAbsEncRadians());
     Logger.recordOutput(logKeyAbsEnc, inputs.rawAbsEncValueRotation);
 
-    SmartDashboard.putNumber(smartDashAngle, getCurrentRotation().getDegrees());
+    Telemetry.log(smartDashAngle, getCurrentRotation().getDegrees());
   }
 
   /**

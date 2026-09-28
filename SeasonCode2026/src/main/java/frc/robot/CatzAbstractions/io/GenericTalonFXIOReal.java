@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.UnaryOperator;
 
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularAcceleration;
 import org.wpilib.units.measure.AngularVelocity;
@@ -56,13 +57,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	private final boolean[] connectedBuffer;
 
 	public GenericTalonFXIOReal(MotorIOTalonFXConfig config, boolean requiresFastUpdate) {
-		leaderTalon = new TalonFX(config.mainID,  CANBus.systemcore(config.mainBus));
+		leaderTalon = new TalonFX(config.mainID,  new CANBus(config.mainBus));
 		setMainConfig(config.mainConfig);
 
 		if (config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFX(config.followerIDs[i], CANBus.systemcore(config.followerBuses[i]));
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.followerBuses[i]));
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
 			setFollowerConfig(followerConfig);
@@ -326,10 +327,10 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 
 	public static class MotorIOTalonFXConfig {
 		public int mainID = -1;
-		public int mainBus = 0;
+		public CANPort mainBus = CANPort.CAN_S0;
 		public TalonFXConfiguration mainConfig = new TalonFXConfiguration();
 		public int[] followerIDs = new int[0];
-		public int[] followerBuses = new int[0];
+		public CANPort[] followerBuses = new CANPort[0];
 		public TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 		public MotorAlignmentValue[] followerAlignmentValue = new MotorAlignmentValue[0];
 	}

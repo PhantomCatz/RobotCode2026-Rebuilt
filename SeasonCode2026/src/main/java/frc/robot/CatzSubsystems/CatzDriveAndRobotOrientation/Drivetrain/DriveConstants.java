@@ -1,5 +1,6 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.controller.ProfiledPIDController;
 import org.wpilib.math.geometry.Rotation2d;
@@ -33,7 +34,7 @@ public class DriveConstants {
 
   public static final int GYRO_ID = 10;
 
-  public static final int DRIVE_CANBUS = 3;
+  public static final CANPort DRIVE_CANBUS = CANPort.CAN_S3;
 
   // ---------------------------------------------------------------------------------------------------------------
   // Drive Subsytem Config info

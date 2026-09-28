@@ -4,7 +4,6 @@ import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.util.Units;
-import org.wpilib.util.sendable.SendableBuilder;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Utilities.LimelightHelpers;
@@ -36,6 +35,8 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 			io.configLimelight(config);
 		}
+
+
 	}
 
 	@Override
@@ -46,6 +47,8 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 			outputTelemetry();
 			Logger.recordOutput("Detection/nearestFuel", inputs.nearestFuel);
 		}
+		Logger.recordOutput(config.name + "/Has Fuel", hasFuel());
+		Logger.recordOutput(config.name + "/Latest Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(config.name));
 	}
 
 	public boolean getDisabled() {
@@ -74,7 +77,7 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 	 */
 	public Pose2d getFuelTranslationAndPoint() {
 		Translation2d t = getFuelPose().getTranslation();
-		Rotation2d r = t.minus(CatzRobotTracker.Instance.getEstimatedPose().getTranslation()).getAngle();
+		Rotation2d r = t.minus(CatzRobotTracker.Instance.getEstimatedPose().getTranslation()).getAngle().get();
 		// LogUtil.recordPose2d("Detection PID/Fuel Translation And Point", new Pose2d(t, r));
 		return new Pose2d(t, r);
 	}
@@ -93,15 +96,6 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 
 	public void outputTelemetry() {
 		// LoggedTracer.record(config.name);
-	}
-
-	@Override
-	public void initSendable(SendableBuilder builder) {
-		builder.addBooleanProperty(config.name + "/Has Fuel", () -> hasFuel(), null);
-		builder.addDoubleProperty(
-				config.name + "/Latest Pipeline Index",
-				() -> LimelightHelpers.getCurrentPipelineIndex(config.name),
-				null);
 	}
 
 	@Override

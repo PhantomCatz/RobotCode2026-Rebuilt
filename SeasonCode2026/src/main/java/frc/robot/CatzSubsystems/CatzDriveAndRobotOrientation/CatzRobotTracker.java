@@ -47,7 +47,7 @@ public class CatzRobotTracker {
       tagPoses2d.put(
           i,
           FieldConstants.defaultAprilTagType
-              .layout
+              .getLayout()
               .getTagPose(i)
               .map(Pose3d::toPose2d)
               .orElse(new Pose2d()));

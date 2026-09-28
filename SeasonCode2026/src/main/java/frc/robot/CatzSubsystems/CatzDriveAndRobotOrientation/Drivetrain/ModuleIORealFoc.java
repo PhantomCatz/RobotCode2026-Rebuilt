@@ -84,11 +84,11 @@ public class ModuleIORealFoc implements ModuleIO {
     MODULE_MODULE_NAME_DRIVE_TARGET = MODULE_MODULE_NAME + "/drive target mps";
 
 
-    encoder = new CANcoder(config.absoluteEncoderChannel(), CANBus.systemcore(DRIVE_CANBUS));
+    encoder = new CANcoder(config.absoluteEncoderChannel(), new CANBus(DRIVE_CANBUS));
     m_config = config;
     // Init drive controllers from config constants
     // driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
-    driveTalon = new TalonFX(config.driveID(), CANBus.systemcore(DriveConstants.DRIVE_CANBUS));
+    driveTalon = new TalonFX(config.driveID(), new CANBus(DRIVE_CANBUS));
 
     // Restore Factory Defaults
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
@@ -155,7 +155,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.optimizeBusUtilization(0, 1.0);
 
     // Init steer controllers from config constants
-    steerTalon = new TalonFX(config.steerID(), CANBus.systemcore(DRIVE_CANBUS));
+    steerTalon = new TalonFX(config.steerID(), new CANBus(DRIVE_CANBUS));
     absoluteEncoderOffset = Rotation2d.fromRotations(config.absoluteEncoderOffset());
     // absEncoder = new MT6835(config.absoluteEncoderChannel(), false);
 
@@ -268,7 +268,7 @@ public class ModuleIORealFoc implements ModuleIO {
   public void runSteerPositionSetpoint(double currentAngleRads, double targetAngleRads) {
     steerTalon.setControl(
         dutyCycleOutControl.withOutput(
-          steerFeedback.calculate(currentAngleRads, targetAngleRads))
+          steerFeedback.calculate(currentAngleRads, targetAngleRads)) //crazy crazy crazy crazy crazy crazy crazy crazy
     );
 
     // Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);

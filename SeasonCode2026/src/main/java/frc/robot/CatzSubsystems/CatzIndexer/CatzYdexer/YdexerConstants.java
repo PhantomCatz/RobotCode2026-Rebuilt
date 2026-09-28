@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.Units;
 import org.wpilib.units.measure.Voltage;
 import frc.robot.CatzConstants;
@@ -38,7 +39,7 @@ public class YdexerConstants {
 	public static final LoggedTunableNumber kV = new LoggedTunableNumber("VDexer/kV", gains.kV());
 
     private static final int YDEXER_MOTOR_ID = 50;
-	private static final int YDEXER_BUS_ID = 0;
+	private static final CANPort YDEXER_BUS_ID = CANPort.CAN_S0;
 
 	// private static final double[][] FLYWHEEL_VS_VOLTS = {
 	// 	//flywheel rps vs vdexer volts
@@ -86,7 +87,7 @@ public class YdexerConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 0, 0 };
+		IOConfig.followerBuses = new CANPort[] {};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

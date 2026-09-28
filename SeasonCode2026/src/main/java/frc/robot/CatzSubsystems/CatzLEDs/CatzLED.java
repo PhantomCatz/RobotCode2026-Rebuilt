@@ -131,13 +131,13 @@ public class CatzLED extends VirtualSubsystem {
   @Override
   public void periodic() {
     // Update alliance color
-    // if (DriverStation.isDSAttached()) {
+    // if (RobotState.isDSAttached()) {
     //   alliance = DriverStationBackend.getAlliance();
     //   allianceColor =
     //       alliance
-    //           .map(alliance -> alliance == Alliance.BLUE ? Color.kAqua : Color.kOrangeRed)
-    //           .orElse(Color.kPurple);
-    //   secondaryDisabledColor = alliance.isPresent() ? Color.kYellow : Color.kBlack;
+    //           .map(alliance -> alliance == Alliance.BLUE ? Color.AQUA : Color.ORANGERed)
+    //           .orElse(Color.PURPLE);
+    //   secondaryDisabledColor = alliance.isPresent() ? Color.YELLOW : Color.BLACK;
     // }
 
     // Update auto state

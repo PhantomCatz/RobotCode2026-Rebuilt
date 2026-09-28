@@ -16,6 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.UnaryOperator;
 
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularAcceleration;
 import org.wpilib.units.measure.AngularVelocity;
@@ -47,8 +48,8 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
     private static double Final_Ratio;
 
-	private CANBus followerTalonCANBus = CANBus.systemcore(0);
-	private CANBus leaderTalonCANBus = CANBus.systemcore(0);
+	private CANBus followerTalonCANBus = new CANBus(CANPort.CAN_S0);
+	private CANBus leaderTalonCANBus = new CANBus(CANPort.CAN_S0);
 
     /**
      * base for constructors

@@ -35,7 +35,6 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	int logCount = 0;
 	@Override
 	public void periodic() {
-		System.out.println("generic periodic");
 		io.updateInputs(inputs);
 
 		if(logCount >= 0){

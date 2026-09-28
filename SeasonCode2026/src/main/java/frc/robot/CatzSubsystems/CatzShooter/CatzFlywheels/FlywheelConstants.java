@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.math.geometry.Translation2d;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
@@ -39,9 +40,9 @@ public class FlywheelConstants {
 	public static final double VDEXER_FEED_COMPENSATION_NORM = VDEXER_FEED_COMPENSATION.getNorm();
 
 	private static final int FLYWHEEL_MOTOR_ID = 20;
-	private static final int FLYWHEEL_BUS_ID = 1;
+	private static final CANPort FLYWHEEL_BUS_ID = CANPort.CAN_S1;
 	private static final int FLYWHEEL_FOLLOWER_MOTOR_ID = 21;
-	private static final int FLYWHEEL_FOLLOWER_BUS_ID = 1;
+	private static final CANPort FLYWHEEL_FOLLOWER_BUS_ID = CANPort.CAN_S1;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -86,7 +87,7 @@ public class FlywheelConstants {
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
 
-		IOConfig.followerBuses = new int[] {FLYWHEEL_FOLLOWER_BUS_ID};
+		IOConfig.followerBuses = new CANPort[] {FLYWHEEL_FOLLOWER_BUS_ID};
 		IOConfig.followerIDs = new int[] {FLYWHEEL_FOLLOWER_MOTOR_ID};
 		return IOConfig;
 	}
