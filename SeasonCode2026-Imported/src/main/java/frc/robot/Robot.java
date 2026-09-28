@@ -7,7 +7,6 @@ import java.util.List;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.ConsoleSource.Systemcore;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
@@ -18,7 +17,6 @@ import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
-import org.wpilib.units.measure.Temperature;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.RobotController;
@@ -217,7 +215,7 @@ public class Robot extends LoggedRobot {
       // coralDetectionThread.startPeriodic(0.1);
       Telemetry.log("Won Auton?", false);
       Telemetry.log("Swiping?", false);
-      Telemetry.log("On Fire?", false);
+      Telemetry.log("Syscore Overheat?", false);
   }
 
   @Override
@@ -230,9 +228,11 @@ public class Robot extends LoggedRobot {
     }
     CommandScheduler.getInstance().run();
     if(RobotController.getCPUTemp() > 70.0) {
-      Telemetry.log("On Fire?", true);
+      Telemetry.log("Syscore Overheat?", true);
+      DriverStationBackend.reportError("HI SYSCORE TEMP!------- " + (int) RobotController.getCPUTemp() + " DEG C ---------", false);
+      CommandScheduler.getInstance().cancelAll();
     } else {
-      Telemetry.log("On Fire?", false);
+      Telemetry.log("Syscore Overheat?", false);
     }
   }
 
