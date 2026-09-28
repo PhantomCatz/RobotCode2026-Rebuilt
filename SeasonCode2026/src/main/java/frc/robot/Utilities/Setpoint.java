@@ -2,11 +2,11 @@ package frc.robot.Utilities;
 
 import java.util.function.UnaryOperator;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.units.measure.Dimensionless;
-import org.wpilib.units.measure.Voltage;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 
 public class Setpoint {

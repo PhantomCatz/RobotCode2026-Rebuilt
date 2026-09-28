@@ -3,17 +3,18 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 import org.littletonrobotics.junction.Logger;
 
 
-import org.wpilib.math.util.MathUtil;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.interpolation.TimeInterpolatableBuffer;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.system.Timer;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
+import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretIO.TurretIOInputs;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 
@@ -24,7 +25,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
      */
     private final TimeInterpolatableBuffer<Double> angleHistory = TimeInterpolatableBuffer.createDoubleBuffer(1.5);
 
-    private static final TurretIOInputsAutoLogged inputs = new TurretIOInputsAutoLogged();
+    private static final TurretIOInputs inputs = new TurretIOInputsAutoLogged();
 
     private static final TurretIO io = getIOInstance();
 
@@ -86,7 +87,7 @@ public class CatzTurret extends ServoMotorSubsystem<TurretIO, TurretIO.TurretIOI
             Logger.recordOutput("Turret Stalling?", false);
         }
 
-        angleHistory.addSample(Timer.getTimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
+        angleHistory.addSample(Timer.getFPGATimestamp(), getLatencyCompensatedPosition() * 2 * Math.PI);
     }
 
     /**

@@ -1,13 +1,13 @@
 package frc.robot.Utilities;
 
-import org.wpilib.vision.apriltag.AprilTagFieldLayout;
-import org.wpilib.vision.apriltag.AprilTagFields;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Distance;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

@@ -3,15 +3,15 @@ package frc.robot.Commands.DriveAndRobotOrientationCmds;
 
 import org.littletonrobotics.junction.Logger;
 
-import org.wpilib.math.util.MathUtil;
-import org.wpilib.math.controller.ProfiledPIDController;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.trajectory.TrapezoidProfile;
-import org.wpilib.system.Timer;
-import org.wpilib.command2.Command;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightSubsystem;
@@ -140,7 +140,7 @@ public class PIDDriveCmd extends Command {
 
     @Override
     public void initialize(){
-        startTime = Timer.getTimestamp();
+        startTime = Timer.getFPGATimestamp();
         Logger.recordOutput("PID Target Pose", goalPos);
 
         Pose2d currentPose = CatzRobotTracker.getInstance().getEstimatedPose();
@@ -168,12 +168,12 @@ public class PIDDriveCmd extends Command {
 
         double targetOmega = -Math.toRadians(rotationFeedback + rotationFeedforward);
 
-        ChassisVelocities goalChassisVelocities = new ChassisVelocities(
+        ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(
             targetVel * direction.getCos(),
             targetVel * direction.getSin(),
             targetOmega
         );
-        CatzDrivetrain.getInstance().drive(goalChassisVelocities);
+        CatzDrivetrain.getInstance().drive(goalChassisSpeeds);
 
     }
 
@@ -182,7 +182,7 @@ public class PIDDriveCmd extends Command {
         boolean atTargetState = isAtTargetState();
         Logger.recordOutput("Vision Pose Shift", CatzRobotTracker.Instance.getVisionPoseShift().getNorm());
         if(REQUIRES_ACCURACY){
-            double curTime = Timer.getTimestamp();
+            double curTime = Timer.getFPGATimestamp();
             return  atTargetState && LimelightSubsystem.Instance.isSeeingApriltag() && CatzRobotTracker.Instance.getVisionPoseShift().getNorm() < ALLOWABLE_VISION_ADJUST
                     && curTime - startTime > waitTime;
         }else{
@@ -192,10 +192,10 @@ public class PIDDriveCmd extends Command {
 
     private boolean isAtTargetState(){
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisVelocities currentSpeed = CatzRobotTracker.Instance.getRobotRelativeChassisVelocities();
+        ChassisSpeeds currentSpeed = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         double distanceError = currentPose.getTranslation().getDistance(goalPos.getTranslation());
-        double linearVelocity = Math.hypot(currentSpeed.vx, currentSpeed.vy);
+        double linearVelocity = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
 
         double rotationError = Math.abs(MathUtil.inputModulus(goalPos.getRotation().getDegrees() - currentPose.getRotation().getDegrees(), -180.0, 180.0));
         Logger.recordOutput("distance error", distanceError);

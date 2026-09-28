@@ -2,7 +2,7 @@ package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import org.wpilib.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {

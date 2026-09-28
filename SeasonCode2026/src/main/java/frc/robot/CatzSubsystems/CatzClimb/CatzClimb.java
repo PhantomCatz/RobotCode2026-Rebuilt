@@ -1,6 +1,6 @@
 package frc.robot.CatzSubsystems.CatzClimb;
 
-import org.wpilib.units.Units;
+import edu.wpi.first.units.Units;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 

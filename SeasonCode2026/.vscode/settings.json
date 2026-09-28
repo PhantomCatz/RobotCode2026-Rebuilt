@@ -40,7 +40,7 @@
     "org.mockito.Mockito.*",
     "org.mockito.ArgumentMatchers.*",
     "org.mockito.Answers.*",
-    "org.wpilib.units.Units.*"
+    "edu.wpi.first.units.Units.*"
   ],
   "java.completion.filteredTypes": [
     "java.awt.*",
@@ -56,11 +56,12 @@
     "javax.swing.*",
     "javax.management.*",
     "javax.smartcardio.*",
-    "org.wpilib.math.proto.*",
-    "org.wpilib.math.**.proto.*",
-    "org.wpilib.math.**.struct.*",
+    "edu.wpi.first.math.proto.*",
+    "edu.wpi.first.math.**.proto.*",
+    "edu.wpi.first.math.**.struct.*",
     null
   ],
   "java.dependency.enableDependencyCheckup": false,
-  "java.compile.nullAnalysis.mode": "automatic"
+  "java.debug.settings.onBuildFailureProceed": true,
+  "java.compile.nullAnalysis.mode": "disabled"
 }

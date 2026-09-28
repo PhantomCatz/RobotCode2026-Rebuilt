@@ -1,7 +1,7 @@
 package frc.robot.CatzAbstractions.Bases;
 
-import org.wpilib.units.BaseUnits;
-import org.wpilib.units.measure.AngularVelocity;
+import edu.wpi.first.units.BaseUnits;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.Utilities.Util;

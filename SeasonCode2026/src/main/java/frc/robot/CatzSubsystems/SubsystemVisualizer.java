@@ -5,13 +5,13 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
-import org.wpilib.math.geometry.Pose3d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Rotation3d;
-import org.wpilib.math.geometry.Transform3d;
-import org.wpilib.math.geometry.Translation3d;
-import org.wpilib.util.Color;
-import org.wpilib.util.Color8Bit;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class SubsystemVisualizer {
     // --- Constants (Tune these to match your CAD) ---
@@ -43,26 +43,26 @@ public class SubsystemVisualizer {
         this.name = name;
 
         // 1. Initialize Canvas (6m x 6m)
-        mechanism = new LoggedMechanism2d(6.0, 6.0, new Color8Bit(Color.DARK_GRAY));
+        mechanism = new LoggedMechanism2d(6.0, 6.0, new Color8Bit(Color.kDarkGray));
 
         // 2. Build Turret Hierarchy (Root -> Turret -> Hood)
         // The root is where the turret is mounted on the robot chassis
         turretRoot = mechanism.getRoot(name + "TurretRoot", 3.0 + TURRET_X_OFFSET, 3.0 + TURRET_Y_OFFSET);
 
         turretLigament = turretRoot.append(
-            new LoggedMechanismLigament2d("Turret", TURRET_LENGTH, 0, 6, new Color8Bit(Color.BLUE))
+            new LoggedMechanismLigament2d("Turret", TURRET_LENGTH, 0, 6, new Color8Bit(Color.kBlue))
         );
 
         // Append Hood to Turret (so it rotates WITH the turret)
         hoodLigament = turretLigament.append(
-            new LoggedMechanismLigament2d("Hood", HOOD_LENGTH, 0, 4, new Color8Bit(Color.YELLOW))
+            new LoggedMechanismLigament2d("Hood", HOOD_LENGTH, 0, 4, new Color8Bit(Color.kYellow))
         );
 
         // 3. Build Intake Hierarchy (Root -> Intake)
         intakeRoot = mechanism.getRoot(name + "IntakeRoot", 3.0 + INTAKE_X_OFFSET, 3.0);
 
         intakeLigament = intakeRoot.append(
-            new LoggedMechanismLigament2d("Intake", INTAKE_LENGTH, 0, 6, new Color8Bit(Color.ORANGE))
+            new LoggedMechanismLigament2d("Intake", INTAKE_LENGTH, 0, 6, new Color8Bit(Color.kOrange))
         );
     }
 

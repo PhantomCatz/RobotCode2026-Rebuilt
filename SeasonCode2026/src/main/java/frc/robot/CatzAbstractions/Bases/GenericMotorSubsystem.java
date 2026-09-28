@@ -6,16 +6,14 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.google.common.base.Supplier;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.command2.Command;
-import org.wpilib.command2.SubsystemBase;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 import frc.robot.Utilities.Setpoint;
 
 public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I extends GenericMotorIO.MotorIOInputs> extends SubsystemBase {
-	private static final String REAL_INPUTS_PREFIX = "RealInputs/";
-
 	protected final S io;
 	protected final I inputs;
 	protected final String name;
@@ -35,11 +33,10 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	int logCount = 0;
 	@Override
 	public void periodic() {
-		System.out.println("generic periodic");
 		io.updateInputs(inputs);
 
 		if(logCount >= 0){
-			Logger.processInputs(REAL_INPUTS_PREFIX + name, (LoggableInputs) inputs);
+			Logger.processInputs(name, (LoggableInputs) inputs);
 			logCount = 0;
 		}
 		logCount++;

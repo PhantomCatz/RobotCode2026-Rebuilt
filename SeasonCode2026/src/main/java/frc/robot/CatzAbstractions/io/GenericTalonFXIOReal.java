@@ -15,12 +15,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.UnaryOperator;
 
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.AngularAcceleration;
-import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.units.measure.Current;
-import org.wpilib.units.measure.Temperature;
-import org.wpilib.units.measure.Voltage;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Temperature;
+import edu.wpi.first.units.measure.Voltage;
 
 public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T> {
 
@@ -56,13 +56,13 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	private final boolean[] connectedBuffer;
 
 	public GenericTalonFXIOReal(MotorIOTalonFXConfig config, boolean requiresFastUpdate) {
-		leaderTalon = new TalonFX(config.mainID,  CANBus.systemcore(config.mainBus));
+		leaderTalon = new TalonFX(config.mainID, new CANBus(config.mainBus));
 		setMainConfig(config.mainConfig);
 
 		if (config.followerIDs.length != 0) {
 			followerTalons = new TalonFX[config.followerIDs.length];
 			for (int i = 0; i < config.followerIDs.length; i++) {
-				followerTalons[i] = new TalonFX(config.followerIDs[i], CANBus.systemcore(config.followerBuses[i]));
+				followerTalons[i] = new TalonFX(config.followerIDs[i], new CANBus(config.mainBus));
 				followerTalons[i].setControl(new Follower(config.mainID, config.followerAlignmentValue[i]));
 			}
 			setFollowerConfig(followerConfig);
@@ -133,6 +133,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	public void updateInputs(T inputs) {
 
 		inputs.isLeaderConnected = internalPositionRotations.getStatus().isOK();
+
 		if(followerTalons != null && followerTalons.length > 0) {
 			for(int i = 0; i < followerTalons.length; i++) {
 				connectedBuffer[i] = appliedVoltage.get(i+1).getStatus().isOK();
@@ -320,16 +321,16 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 	@Override
 	public void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {
 		configExecutor.submit(() -> {
-			fx.configNeutralMode(neutralMode);
+			fx.setNeutralMode(neutralMode);
 		});
 	}
 
 	public static class MotorIOTalonFXConfig {
 		public int mainID = -1;
-		public int mainBus = 0;
+		public String mainBus = "ASSIGN_BUS";
 		public TalonFXConfiguration mainConfig = new TalonFXConfiguration();
 		public int[] followerIDs = new int[0];
-		public int[] followerBuses = new int[0];
+		public String[] followerBuses = new String[0];
 		public TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 		public MotorAlignmentValue[] followerAlignmentValue = new MotorAlignmentValue[0];
 	}

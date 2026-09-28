@@ -1,26 +1,27 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain;
 
 
-import org.wpilib.math.controller.PIDController;
-import org.wpilib.math.filter.SlewRateLimiter;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.numbers.N1;
-import org.wpilib.math.numbers.N2;
-import org.wpilib.math.system.LinearSystem;
-import org.wpilib.math.system.DCMotor;
-import org.wpilib.math.system.Models;
-import org.wpilib.math.util.Units;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.simulation.DCMotorSim;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 
 public class ModuleIOSim implements ModuleIO {
   private final LinearSystem<N2, N1, N2> plantDrive =
-      Models.singleJointedArmFromPhysicalConstants(
+      LinearSystemId.createDCMotorSystem(
           DCMotor.getKrakenX60(1), 0.025, DriveConstants.MODULE_GAINS_AND_RATIOS.driveReduction());
   private final LinearSystem<N2, N1, N2> plantSteer =
-      Models.singleJointedArmFromPhysicalConstants(
+      LinearSystemId.createDCMotorSystem(
           DCMotor.getKrakenX60(1), 0.004, DriveConstants.MODULE_GAINS_AND_RATIOS.driveReduction());
 
   private final DCMotorSim driveSim =
@@ -49,7 +50,7 @@ public class ModuleIOSim implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
 
-    if (driveCoast && DriverStationBackend.isDisabled()) {
+    if (driveCoast && DriverStation.isDisabled()) {
       runDriveVolts(driveVoltsLimiter.calculate(driveAppliedVolts));
     } else {
       driveVoltsLimiter.reset(driveAppliedVolts);
@@ -58,27 +59,27 @@ public class ModuleIOSim implements ModuleIO {
     driveSim.update(CatzConstants.LOOP_TIME);
     steerSim.update(CatzConstants.LOOP_TIME);
 
-    inputs.driveVelocityRPS = driveSim.getAngularVelocity();
+    inputs.driveVelocityRPS = driveSim.getAngularVelocityRPM() / 60; // Convert to RPS
     inputs.drivePositionUnits =
-        driveSim.getAngularPosition() / (2 * Math.PI) * 4; // Fudged number to get better result
+        driveSim.getAngularPositionRad() / (2 * Math.PI) * 4; // Fudged number to get better result
     inputs.driveAppliedVolts = driveAppliedVolts;
-    inputs.driveSupplyCurrentAmps = Math.abs(driveSim.getCurrentDraw());
+    inputs.driveSupplyCurrentAmps = Math.abs(driveSim.getCurrentDrawAmps());
 
     inputs.steerAbsPosition =
-        new Rotation2d(steerSim.getAngularPosition()).plus(steerAbsoluteInitPosition);
-    inputs.steerPosition = Rotation2d.fromRadians(steerSim.getAngularPosition());
-    inputs.steerVelocityRadsPerSec = steerSim.getAngularVelocity();
+        new Rotation2d(steerSim.getAngularPositionRad()).plus(steerAbsoluteInitPosition);
+    inputs.steerPosition = Rotation2d.fromRadians(steerSim.getAngularPositionRad());
+    inputs.steerVelocityRadsPerSec = steerSim.getAngularVelocityRadPerSec();
     inputs.steerSupplyCurrentAmps = steerAppliedVolts;
-    inputs.steerSupplyCurrentAmps = Math.abs(steerSim.getCurrentDraw());
+    inputs.steerSupplyCurrentAmps = Math.abs(steerSim.getCurrentDrawAmps());
   }
 
   private void runDriveVolts(double volts) {
-    driveAppliedVolts = Math.clamp(volts, -12.0, 12.0);
+    driveAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
     driveSim.setInputVoltage(driveAppliedVolts);
   }
 
   private void runsteerVolts(double volts) {
-    steerAppliedVolts = Math.clamp(volts, -12.0, 12.0);
+    steerAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
     steerSim.setInputVoltage(steerAppliedVolts);
   }
 
@@ -98,12 +99,12 @@ public class ModuleIOSim implements ModuleIO {
     // driveSim.setAngularVelocity(velocityRadsPerSec);
 
     runDriveVolts(
-        driveFeedback.calculate(driveSim.getAngularVelocity(), velocityRadsPerSec));
+        driveFeedback.calculate(driveSim.getAngularVelocityRadPerSec(), velocityRadsPerSec));
   }
 
   @Override
   public void runSteerPositionSetpoint(double currentAngleRad, double angleRads) {
-    runsteerVolts(steerFeedback.calculate(steerSim.getAngularPosition(), angleRads));
+    runsteerVolts(steerFeedback.calculate(steerSim.getAngularPositionRad(), angleRads));
   }
 
   @Override

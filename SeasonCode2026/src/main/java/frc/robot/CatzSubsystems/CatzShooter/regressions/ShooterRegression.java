@@ -1,9 +1,10 @@
 package frc.robot.CatzSubsystems.CatzShooter.regressions;
 
-import org.wpilib.math.interpolation.InterpolatingDoubleTreeMap;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.Distance;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -266,7 +267,7 @@ public class ShooterRegression {
         if (mode == RegressionMode.OVER_TRENCH_HOARD && distMeters > MAX_HOOD_DIST) {
             angle = HoodConstants.HOOD_MAX_POS.in(Units.Degrees);
         }
-        angle = Math.clamp(angle,
+        angle = MathUtil.clamp(angle,
             HoodConstants.HOOD_ZERO_POS.in(Units.Degrees),
             HoodConstants.HOOD_MAX_POS.in(Units.Degrees)
         );

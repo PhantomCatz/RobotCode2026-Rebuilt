@@ -14,14 +14,13 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.CANBus;
-import org.wpilib.math.controller.PIDController;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.util.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.units.measure.Current;
-import org.wpilib.units.measure.Voltage;
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 
 public class ModuleIORealFoc implements ModuleIO {
@@ -72,6 +71,9 @@ public class ModuleIORealFoc implements ModuleIO {
 
   ModuleIDs m_config;
 
+  public CANBus driveTalonCANBus = new CANBus("*");
+  public CANBus steerTalonCANBus = new CANBus("*");
+
   private final CurrentLimitsConfigs con = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs shootWhileMoveCon = new CurrentLimitsConfigs();
   private final CurrentLimitsConfigs intakeMoveCon = new CurrentLimitsConfigs();
@@ -84,11 +86,10 @@ public class ModuleIORealFoc implements ModuleIO {
     MODULE_MODULE_NAME_DRIVE_TARGET = MODULE_MODULE_NAME + "/drive target mps";
 
 
-    encoder = new CANcoder(config.absoluteEncoderChannel(), CANBus.systemcore(DRIVE_CANBUS));
+    encoder = new CANcoder(config.absoluteEncoderChannel(), driveTalonCANBus);
     m_config = config;
     // Init drive controllers from config constants
-    // driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
-    driveTalon = new TalonFX(config.driveID(), CANBus.systemcore(DriveConstants.DRIVE_CANBUS));
+    driveTalon = new TalonFX(config.driveID(), driveTalonCANBus);
 
     // Restore Factory Defaults
     driveTalon.getConfigurator().apply(new TalonFXConfiguration());
@@ -155,7 +156,7 @@ public class ModuleIORealFoc implements ModuleIO {
     driveTalon.optimizeBusUtilization(0, 1.0);
 
     // Init steer controllers from config constants
-    steerTalon = new TalonFX(config.steerID(), CANBus.systemcore(DRIVE_CANBUS));
+    steerTalon = new TalonFX(config.steerID(), steerTalonCANBus);
     absoluteEncoderOffset = Rotation2d.fromRotations(config.absoluteEncoderOffset());
     // absEncoder = new MT6835(config.absoluteEncoderChannel(), false);
 
@@ -261,14 +262,14 @@ public class ModuleIORealFoc implements ModuleIO {
   }
 
   public void runSteerPercentOutput(double percentOutput) {
-    steerTalon.setControl(dutyCycleOutControl.withOutput(percentOutput));
+    steerTalon.set(percentOutput);
   }
 
   @Override
   public void runSteerPositionSetpoint(double currentAngleRads, double targetAngleRads) {
     steerTalon.setControl(
         dutyCycleOutControl.withOutput(
-          steerFeedback.calculate(currentAngleRads, targetAngleRads))
+          -steerFeedback.calculate(currentAngleRads, targetAngleRads)) // if wheels are going crazy change the negative
     );
 
     // Logger.recordOutput("Module " + MODULE_NAME + "/steer Target Angle", targetAngleRads);

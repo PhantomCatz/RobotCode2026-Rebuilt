@@ -2,7 +2,7 @@ package frc.robot.CatzSubsystems.CatzShooter.CatzHood;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
-import org.wpilib.units.Units;
+import edu.wpi.first.units.Units;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal;
 
 public class HoodIOTalonFX extends GenericTalonFXIOReal<HoodIO.HoodIOInputs> implements HoodIO{

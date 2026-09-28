@@ -4,13 +4,13 @@ package frc.robot;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.wpilib.vision.apriltag.AprilTagFieldLayout;
-import org.wpilib.vision.apriltag.AprilTagFields;
-import org.wpilib.math.geometry.*;
-import org.wpilib.math.util.Units;
-import org.wpilib.units.measure.Distance;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.Alliance;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
@@ -21,7 +21,6 @@ import lombok.Getter;
  * have a blue alliance origin.
  */
 public class FieldConstants {
-
   public static final double fieldLength = AprilTagLayoutType.OFFICIAL.getLayout().getFieldLength();
   public static final double fieldWidth = AprilTagLayoutType.OFFICIAL.getLayout().getFieldWidth();
   public static final double fieldXHalf = fieldLength / 2.0;
@@ -92,10 +91,10 @@ public class FieldConstants {
   public static final double NET_LENGTH_HALF = NET_LENGTH / 2.0;
   private static final Translation2d NET_POS = new Translation2d(5.527492523193359, fieldYHalf);
 
-  public static final Distance HUB_HEIGHT = org.wpilib.units.Units.Inches.of(72.0);
-  public static final Distance HUB_RIM_RADIUS = org.wpilib.units.Units.Inches.of(41.0 / 2.0);
-  public static final double HEIGHT_DIFF = FieldConstants.HUB_HEIGHT.in(org.wpilib.units.Units.Meters)
-      - TurretConstants.TURRET_HEIGHT.in(org.wpilib.units.Units.Meters);
+  public static final Distance HUB_HEIGHT = edu.wpi.first.units.Units.Inches.of(72.0);
+  public static final Distance HUB_RIM_RADIUS = edu.wpi.first.units.Units.Inches.of(41.0 / 2.0);
+  public static final double HEIGHT_DIFF = FieldConstants.HUB_HEIGHT.in(edu.wpi.first.units.Units.Meters)
+      - TurretConstants.TURRET_HEIGHT.in(edu.wpi.first.units.Units.Meters);
 
   public static final double BOTTOM_TRENCH_MAX_Y = 1.143760085105896;
   public static final double TOP_TRENCH_MIN_Y = fieldWidth - BOTTOM_TRENCH_MAX_Y;
@@ -127,7 +126,7 @@ public class FieldConstants {
   // }
 
   public static Pose2d getClimbClosePosition(Translation2d robotPose) {
-    if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
       double distRight = robotPose.getDistance(CLIMB_RED_RIGHT.getTranslation());
       double distLeft = robotPose.getDistance(CLIMB_RED_LEFT.getTranslation());
       return (distRight < distLeft) ? CLIMB_RED_RIGHT : CLIMB_RED_LEFT;
@@ -251,7 +250,7 @@ public class FieldConstants {
   }
 
   public static Translation2d getOpposingHubLocation(){
-    if(DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED){
+    if(DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red){
       return HUB_LOCATION;
     }else{
       return AllianceFlipUtil.applyNoCondition(HUB_LOCATION);
@@ -294,24 +293,24 @@ public class FieldConstants {
 
   @Getter
   public enum AprilTagLayoutType {
+
     OFFICIAL("2026-official");
 
     AprilTagLayoutType(String name) {
-      layout = CatzConstants.disableHAL
-          ? null
-          : AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-
-      layoutString = safeLayoutString(layout);
-    }
-
-    private static String safeLayoutString(AprilTagFieldLayout layout) {
-      if (layout == null) {
-        return "";
+      if (CatzConstants.disableHAL) {
+        layout = null;
+      } else {
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
       }
-      try {
-        return new ObjectMapper().writeValueAsString(layout);
-      } catch (JsonProcessingException e) {
-        return "";
+      if (layout == null) {
+        layoutString = "";
+      } else {
+        try {
+          layoutString = new ObjectMapper().writeValueAsString(layout);
+        } catch (JsonProcessingException e) {
+          throw new RuntimeException(
+              "Failed to serialize AprilTag layout JSON " + toString() + "for CatzVision");
+        }
       }
     }
 

@@ -1,13 +1,13 @@
 package frc.robot.Utilities;
 
 
-import org.wpilib.math.controller.PIDController;
-import org.wpilib.math.controller.ProfiledPIDController;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.trajectory.Trajectory;
-import org.wpilib.math.util.Units;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 
 /**
  * This holonomic drive controller can be used to follow trajectories using a holonomic drivetrain
@@ -80,7 +80,7 @@ public class HolonomicDriveController {
    * @param desiredHeading The desired heading.
    * @return The next output of the holonomic drive controller.
    */
-  public ChassisVelocities calculate(
+  public ChassisSpeeds calculate(
       Pose2d currentPose,
       Pose2d trajectoryPose,
       double desiredLinearVelocityMetersPerSecond,
@@ -103,7 +103,7 @@ public class HolonomicDriveController {
     m_rotationError = desiredHeading.minus(currentPose.getRotation());
 
     if (!m_enabled) {
-      return new ChassisVelocities(xFF, yFF, thetaFF).toFieldRelative(currentPose.getRotation());
+      return ChassisSpeeds.fromFieldRelativeSpeeds(xFF, yFF, thetaFF, currentPose.getRotation());
     }
 
     // Calculate feedback velocities (based on position error).
@@ -119,8 +119,8 @@ public class HolonomicDriveController {
     // Logger.recordOutput("xError " , m_xController.getError());
 
     // Return next output.
-    return new ChassisVelocities(
-        xFF + xFeedback, yFF + yFeedback, thetaFF).toFieldRelative(currentPose.getRotation());
+    return ChassisSpeeds.fromFieldRelativeSpeeds(
+        xFF + xFeedback, yFF + yFeedback, thetaFF, currentPose.getRotation());
   }
 
   /**
@@ -131,10 +131,10 @@ public class HolonomicDriveController {
    * @param desiredHeading The desired heading.
    * @return The next output of the holonomic drive controller.
    */
-  public ChassisVelocities calculate(
+  public ChassisSpeeds calculate(
       Pose2d currentPose, Trajectory.State desiredState, Rotation2d desiredHeading) {
     return calculate(
-        currentPose, desiredState.pose, desiredState.velocity, desiredHeading);
+        currentPose, desiredState.poseMeters, desiredState.velocityMetersPerSecond, desiredHeading);
   }
 
   /**

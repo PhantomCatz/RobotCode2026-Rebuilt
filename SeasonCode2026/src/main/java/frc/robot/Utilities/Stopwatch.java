@@ -1,15 +1,15 @@
 package frc.robot.Utilities;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Time;
-import org.wpilib.system.Timer;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Stopwatch {
 
 	private double startTime = Double.POSITIVE_INFINITY;
 
 	public void start() {
-		startTime = Timer.getTimestamp();
+		startTime = Timer.getFPGATimestamp();
 	}
 
 	public void startIfNotRunning() {
@@ -22,14 +22,14 @@ public class Stopwatch {
 		if (Double.isInfinite(startTime)) {
 			return Units.Seconds.of(0.0);
 		}
-		return Units.Seconds.of(Timer.getTimestamp() - startTime);
+		return Units.Seconds.of(Timer.getFPGATimestamp() - startTime);
 	}
 
 	public double getTimeAsDouble() {
 		if (Double.isInfinite(startTime)) {
 			return 0.0;
 		}
-		return Timer.getTimestamp() - startTime;
+		return Timer.getFPGATimestamp() - startTime;
 	}
 
 	public void reset() {

@@ -1,13 +1,13 @@
 package frc.robot.Utilities;
 
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Pose3d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.math.geometry.Transform3d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.geometry.Twist2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 /** Geometry utilities for working with translations, rotations, transforms, and poses. */
 public class GeomUtil {
@@ -122,14 +122,14 @@ public class GeomUtil {
   }
 
   /**
-   * Converts a ChassisVelocities to a Twist2d by extracting two dimensions (Y and Z). chain
+   * Converts a ChassisSpeeds to a Twist2d by extracting two dimensions (Y and Z). chain
    *
    * @param speeds The original translation
    * @return The resulting translation
    */
-  public static Twist2d toTwist2d(ChassisVelocities speeds) {
+  public static Twist2d toTwist2d(ChassisSpeeds speeds) {
     return new Twist2d(
-        speeds.vx, speeds.vy, speeds.omega);
+        speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
   }
 
   /**

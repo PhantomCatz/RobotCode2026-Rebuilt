@@ -2,11 +2,11 @@ package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
 import org.littletonrobotics.junction.Logger;
 
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Time;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
@@ -32,7 +32,7 @@ public class ApriltagScanningIOMovable implements ApriltagScanningIO {
     public void update() {
         updateGyroWithTurret();
 
-        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisVelocities().omega);
+        double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds().omegaRadiansPerSecond);
 
         double turretOmegaDegPerSec = CatzTurret.Instance.getVelocity().in(Units.DegreesPerSecond);
 

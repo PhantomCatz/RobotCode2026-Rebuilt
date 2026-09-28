@@ -6,13 +6,13 @@ import java.util.Set;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.system.Timer;
-import org.wpilib.command2.Command;
-import org.wpilib.command2.Commands;
-import org.wpilib.command2.FunctionalCommand;
-import org.wpilib.command2.InstantCommand;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -82,7 +82,7 @@ public class AutoRoutineBase {
                     () -> {
                         CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
-                        pathStartTime = Timer.getTimestamp();
+                        pathStartTime = Timer.getFPGATimestamp();
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
@@ -97,7 +97,7 @@ public class AutoRoutineBase {
                     () -> {
                         CatzDrivetrain.getInstance().followSlowChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
-                        pathStartTime = Timer.getTimestamp();
+                        pathStartTime = Timer.getFPGATimestamp();
                     },
                     choreoCommand::execute,
                     choreoCommand::end,
@@ -108,7 +108,7 @@ public class AutoRoutineBase {
     protected Command followTrajectoryWithAccuracy(AutoTrajectory traj) {
         return Commands.sequence(
             // Initial trajectory following
-            Commands.runOnce(()->pathStartTime = Timer.getTimestamp()),
+            Commands.runOnce(()->pathStartTime = Timer.getFPGATimestamp()),
             traj.cmd(),
 
             new FunctionalCommand(
@@ -151,12 +151,12 @@ public class AutoRoutineBase {
                     () -> {
                         CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
                         choreoCommand.initialize();
-                        pathStartTime = Timer.getTimestamp();
+                        pathStartTime = Timer.getFPGATimestamp();
                         // CatzDrivetrain.getInstance().setShootWhileMoveConfig();
                     },
                     () -> {
                         choreoCommand.execute();
-                        CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisVelocities());
+                        CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds());
                     },
                     choreoCommand::end,
                     () -> isAtStrictPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
@@ -168,14 +168,14 @@ public class AutoRoutineBase {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_ANGLE_DEG);
         // System.out.println((isAtTrans && isAtRot));
-        return isAtTrans && isAtRot && (Timer.getTimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
+        return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
     private boolean isAtStrictPose(AutoTrajectory trajectory) {
         boolean isAtTrans = translationIsFinished(trajectory, AutonConstants.ACCEPTABLE_STRICT_DIST_METERS);
         boolean isAtRot = rotationIsFinished(trajectory, AutonConstants.ACCEPTABLE_STRICT_ANGLE_DEG);
 
-        return isAtTrans && isAtRot && (Timer.getTimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
+        return isAtTrans && isAtRot && (Timer.getFPGATimestamp() - pathStartTime > trajectory.getRawTrajectory().getTotalTime()/2.0);
     }
 
     private boolean rotationIsFinished(AutoTrajectory trajectory, double epsilonAngleDeg) {

@@ -1,14 +1,14 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
-import org.wpilib.math.linalg.VecBuilder;
-import org.wpilib.math.linalg.Vector;
-import org.wpilib.math.geometry.Pose3d;
-import org.wpilib.math.geometry.Rotation3d;
-import org.wpilib.math.geometry.Translation3d;
-import org.wpilib.math.numbers.N3;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N3;
 
 // Static import the specific units we need to keep code clean
-import static org.wpilib.units.Units.*;
+import static edu.wpi.first.units.Units.*;
 
 public class LimelightConstants {
 

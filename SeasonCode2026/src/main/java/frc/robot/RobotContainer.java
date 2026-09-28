@@ -3,17 +3,15 @@ package frc.robot;
 
 import java.util.Set;
 
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.driverstation.GenericHID.RumbleType;
-import org.wpilib.smartdashboard.SmartDashboard;
-import org.wpilib.command2.Command;
-import org.wpilib.command2.Commands;
-import org.wpilib.command2.InstantCommand;
-import org.wpilib.command2.button.CommandGamepad;
-import org.wpilib.command2.button.Trigger;
-import org.wpilib.driverstation.Gamepad;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
@@ -30,8 +28,8 @@ import frc.robot.Utilities.DoublePressTracker;
 public class RobotContainer {
   private final CatzSuperstructure superstructure = CatzSuperstructure.Instance;
 
-  public static final CommandGamepad xboxDrv = new CommandGamepad(0);
-  public static final CommandGamepad xboxAux = new CommandGamepad(1);
+  public static final CommandXboxController xboxDrv = new CommandXboxController(0);
+  public static final CommandXboxController xboxAux = new CommandXboxController(1);
 
   public RobotContainer() {
     configureBindings();
@@ -73,7 +71,7 @@ public class RobotContainer {
     // Left Field Corner
     xboxDrv.leftTrigger().multiPress(2, 0.4).onTrue(Commands.runOnce(() -> CatzRobotTracker.Instance.resetPose(new Pose2d(FieldConstants.getCorner(false), CatzRobotTracker.Instance.getEstimatedPose().getRotation()))));
 
-    xboxDrv.povUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.button(Gamepad.Button.WEST_FACE).getAsBoolean())
+    xboxDrv.povUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean())
     .beforeStarting(() -> SmartDashboard.putBoolean("Swiping?", true))
     .finallyDo(() -> SmartDashboard.putBoolean("Swiping?", false)));
 
@@ -111,7 +109,7 @@ public class RobotContainer {
     // GLOBAL STOP CONTROL
     // -------------------------------------------------------------------------
 
-    xboxDrv.button(Gamepad.Button.WEST_FACE).onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(CatzSuperstructure.Instance.intakeOFF()));
+    xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(CatzSuperstructure.Instance.intakeOFF()));
     //X LOCK DRIVETRAIN
     xboxDrv.povLeft().whileTrue(
     Commands.run(
@@ -129,11 +127,11 @@ public class RobotContainer {
     // INTAKE
     // -------------------------------------------------------------------------
     xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
-    xboxDrv.button(Gamepad.Button.EAST_FACE).onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
-    xboxDrv.button(Gamepad.Button.NORTH_FACE).onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)));
-    xboxDrv.button(Gamepad.Button.NORTH_FACE).whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    xboxDrv.button(Gamepad.Button.NORTH_FACE).onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 2)))
+    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)));
+    xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
+    xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 2)))
                .alongWith(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
       if(CatzSuperstructure.Instance.isIntakeOn){
         return CatzSuperstructure.Instance.intakeON();
@@ -148,30 +146,27 @@ public class RobotContainer {
     // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
     //x on the drv controller to stop
-    // xboxAux.button(Gamepad.Button.EAST_FACE).onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
-    // xboxAux.button(Gamepad.Button.WEST_FACE).onTrue(CatzSuperstructure.Instance.trackHoardLocation());
+    // xboxAux.b().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.trackHoardLocation());
 
-    // xboxAux.button(Gamepad.Button.NORTH_FACE).onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
-    // xboxAux.button(Gamepad.Button.WEST_FACE).onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer().alongWith(CatzSuperstructure.Instance.toggleSpindexer()));
+    // xboxAux.x().onTrue(CatzSuperstructure.Instance.applyHoodInterpolatedSetpoint());
 
     // xboxAux.start().onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(3.5)));
 
     // xboxAux.povUp().onTrue(CatzSuperstructure.Instance.cmdClimbReach());
     // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
-    // xboxAux.button(Gamepad.Button.NORTH_FACE).onTrue(superstructure.toggleManualExtendClimb());
+    // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
 
     xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
     xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
-    xboxAux.button(Gamepad.Button.EAST_FACE).onTrue(CatzSuperstructure.Instance.shotBlockerDeploy());
-    xboxAux.button(Gamepad.Button.WEST_FACE).onTrue(CatzSuperstructure.Instance.shotBlockerStow());
-
-    // xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-    // xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
-    xboxAux.button(Gamepad.Button.NORTH_FACE).onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
+    xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
+    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
     xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
-    xboxAux.button(Gamepad.Button.SOUTH_FACE).onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
+    xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());
     xboxAux.rightBumper().onTrue(CatzSuperstructure.Instance.toggleTurret());
 
@@ -190,7 +185,7 @@ public class RobotContainer {
 
 
     xboxAux.povUp().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualExtendClimb());
-    xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualBlocker());
+    xboxAux.povDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualHood());
     xboxAux.povLeft().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualTurret());
     xboxAux.povRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleManualDeploy());
 
@@ -204,7 +199,6 @@ public class RobotContainer {
   }
 
   public static void rumbleDrv(double val) {
-    xboxDrv.setRumble(RumbleType.LEFT_RUMBLE, val);
-    xboxDrv.setRumble(RumbleType.RIGHT_RUMBLE, val);
+    xboxDrv.setRumble(RumbleType.kBothRumble, val);
   }
 }

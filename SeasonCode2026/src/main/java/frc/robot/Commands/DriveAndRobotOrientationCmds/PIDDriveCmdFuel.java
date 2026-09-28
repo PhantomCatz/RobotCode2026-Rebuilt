@@ -3,21 +3,21 @@ package frc.robot.Commands.DriveAndRobotOrientationCmds;
 import org.littletonrobotics.junction.Logger;
 
 
-import org.wpilib.math.util.MathUtil;
-import org.wpilib.math.controller.ProfiledPIDController;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.trajectory.TrapezoidProfile;
-import org.wpilib.system.Timer;
-import org.wpilib.command2.Command;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
-import org.wpilib.driverstation.internal.DriverStationBackend;
 
 public class PIDDriveCmdFuel extends Command{
 
@@ -97,14 +97,14 @@ public class PIDDriveCmdFuel extends Command{
         // The goal of the rotation controller is to drive the angle to the target angle
         double targetOmega = -Math.toRadians(rotationController.calculate(angleError, 0.0));
 
-        ChassisVelocities goalChassisVelocities = new ChassisVelocities(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
-        CatzDrivetrain.getInstance().drive(goalChassisVelocities);
+        ChassisSpeeds goalChassisSpeeds = new ChassisSpeeds(targetVel * direction.getCos(), targetVel * direction.getSin(), targetOmega);
+        CatzDrivetrain.getInstance().drive(goalChassisSpeeds);
         Logger.recordOutput("target vel", targetVel);
-        Logger.recordOutput("chassis speed", goalChassisVelocities);
-        if(DriverStationBackend.isAutonomous()){
+        Logger.recordOutput("chassis speed", goalChassisSpeeds);
+        if(DriverStation.isAutonomous()){
             double avgVel = (targetVel + GOAL_VELOCITY) / 2.0;
             double timeToReachTrench = currentPose.getTranslation().getDistance(returnPos.getTranslation()) / avgVel;
-            if (timeToReachTrench > Robot.autonStartTime + 20.0 - timeToSpare - Timer.getTimestamp()) {
+            if (timeToReachTrench > Robot.autonStartTime + 20.0 - timeToSpare - Timer.getFPGATimestamp()) {
                 outOfTime = true;
             }
         }

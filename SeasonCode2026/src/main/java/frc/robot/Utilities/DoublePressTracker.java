@@ -1,7 +1,7 @@
 package frc.robot.Utilities;
 
-import org.wpilib.system.Timer;
-import org.wpilib.command2.button.Trigger;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Tracker that activates only when a button is pressed twice quickly. */
 public class DoublePressTracker {

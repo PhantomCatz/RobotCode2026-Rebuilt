@@ -6,9 +6,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.units.measure.Voltage;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -41,7 +41,6 @@ public class SpindexerConstants {
 
 
     private static final int SPINDEXER_MOTOR_ID = 40;
-	private static final int SPINDEXER_BUS_ID = 0;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -78,13 +77,13 @@ public class SpindexerConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = SPINDEXER_MOTOR_ID;
-		IOConfig.mainBus = SPINDEXER_BUS_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 0, 0 };
+		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

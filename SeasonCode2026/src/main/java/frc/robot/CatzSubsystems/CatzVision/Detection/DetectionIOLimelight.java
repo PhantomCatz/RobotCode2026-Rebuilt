@@ -1,21 +1,21 @@
 package frc.robot.CatzSubsystems.CatzVision.Detection;
 
 
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.interpolation.TimeInterpolatableBuffer;
-import org.wpilib.math.util.Units;
-import org.wpilib.networktables.NetworkTable;
-import org.wpilib.networktables.NetworkTableInstance;
-import org.wpilib.networktables.StructPublisher;
-import org.wpilib.units.BaseUnits;
-import org.wpilib.units.measure.Distance;
-import org.wpilib.units.measure.Time;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.Alliance;
-import org.wpilib.system.Timer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.BaseUnits;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
@@ -26,7 +26,7 @@ import frc.robot.Utilities.LimelightHelpers.RawDetection;
 import frc.robot.Utilities.Stopwatch;
 import frc.robot.Utilities.Util;
 
-import static org.wpilib.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -56,7 +56,7 @@ public class DetectionIOLimelight extends DetectionIO {
 			.publish();
 
 	private Pose2d latestEstimate = new Pose2d();
-	private Time latestEstimateTime = org.wpilib.units.Units.Seconds.of(0.0);
+	private Time latestEstimateTime = edu.wpi.first.units.Units.Seconds.of(0.0);
 	protected StructPublisher<Pose2d> aprilTagPose = NetworkTableInstance.getDefault()
 			.getTable("SmartDashboard/Detection/AprilTagPose")
 			.getStructTopic("", Pose2d.struct)
@@ -95,7 +95,7 @@ public class DetectionIOLimelight extends DetectionIO {
 	}
 
 	private boolean inOpposingArea(Pose2d fuelPose) {
-		if (DriverStationBackend.getAlliance().get() == Alliance.BLUE) {
+		if (DriverStation.getAlliance().get() == Alliance.Blue) {
 			return fuelPose.getX() > 11.928191184997559;
 		}
 		else {
@@ -126,7 +126,7 @@ public class DetectionIOLimelight extends DetectionIO {
 				double latencyMs = LimelightHelpers.getLatency_Capture(config.name) + LimelightHelpers.getLatency_Pipeline(config.name);
 				Translation2d bestTranslation = null;
 				Pose2d bestFuelPose = null;
-				double now = Timer.getTimestamp(); // Account for latency in storing timestamp
+				double now = Timer.getFPGATimestamp(); // Account for latency in storing timestamp
 				Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
 				POSE_BUFFER.addSample(now, curPose);
 				Optional<Pose2d> poseFromCapture = POSE_BUFFER.getSample(now - latencyMs/1000.0);
@@ -183,7 +183,7 @@ public class DetectionIOLimelight extends DetectionIO {
 			mResetStopwatch.resetAndStart();
 			mStopwatch.reset();
 		} else {
-			if (mResetStopwatch.getTime().gte(org.wpilib.units.Units.Seconds.of(0.5))) {
+			if (mResetStopwatch.getTime().gte(edu.wpi.first.units.Units.Seconds.of(0.5))) {
 				LimelightHelpers.setPipelineIndex(config.name, pipelineToSet);
 				mResetStopwatch.reset();
 				mStopwatch.resetAndStart();
@@ -220,7 +220,7 @@ public class DetectionIOLimelight extends DetectionIO {
 		if (currentFuel.size() == 0) { // if can't see, use old pose
 			return;
 		}
-		double now = Timer.getTimestamp();
+		double now = Timer.getFPGATimestamp();
 		Pose2d bestGroupFuelPose = null;
 		Boolean[] visited = new Boolean[currentFuel.size()];
 		Translation2d base = CatzRobotTracker.Instance.getEstimatedPose().getTranslation();
@@ -271,7 +271,7 @@ public class DetectionIOLimelight extends DetectionIO {
 				bestGroupFuelPose = closestFuelPoseInGroup;
 			}
 		}
-		double timeUsed = Timer.getTimestamp() - now;
+		double timeUsed = Timer.getFPGATimestamp() - now;
 		System.out.println("group function time used: "+timeUsed);
 		closestFuelGroupPose = bestGroupFuelPose;
 	}
@@ -316,11 +316,11 @@ public class DetectionIOLimelight extends DetectionIO {
 
 		// SmartDashboard.putNumber(config.name + "/tx", tx);
 		// SmartDashboard.putNumber(config.name + "/ty", ty);
-		Logger.recordOutput(config.name + "/Distance Away Y", distAwayY.in(org.wpilib.units.Units.Meters));
-		Logger.recordOutput(config.name + "/Distance Away X", distAwayX.in(org.wpilib.units.Units.Meters));
+		Logger.recordOutput(config.name + "/Distance Away Y", distAwayY.in(edu.wpi.first.units.Units.Meters));
+		Logger.recordOutput(config.name + "/Distance Away X", distAwayX.in(edu.wpi.first.units.Units.Meters));
 		Logger.recordOutput(config.name + "/Total Angle Y", Units.radiansToDegrees(totalAngleY));
 		Logger.recordOutput(
-				config.name + "Detection/Distance Away Hyp ", distHypotenuseYToGround.in(org.wpilib.units.Units.Meters));
+				config.name + "Detection/Distance Away Hyp ", distHypotenuseYToGround.in(edu.wpi.first.units.Units.Meters));
 
 		return new Translation2d(distAwayY, distAwayX);
 	}
@@ -343,12 +343,12 @@ public class DetectionIOLimelight extends DetectionIO {
 
 	public void setLatestEstimate(PoseEstimate poseEstimate, int minTagNum) {
 		// SmartDashboard.putNumber(config.name + "/Tag Count", poseEstimate.tagCount);
-		// SmartDashboard.putNumber(config.name + "/FGPA Timestamp", Timer.getTimestamp());
+		// SmartDashboard.putNumber(config.name + "/FGPA Timestamp", Timer.getFPGATimestamp());
 		// SmartDashboard.putNumber(
 		// 		config.name + "/Estimate to FGPA Timestamp", Utils.fpgaToCurrentTime(poseEstimate.timestampSeconds));
 		if (poseEstimate.tagCount >= minTagNum) {
 			latestEstimate = poseEstimate.pose;
-			latestEstimateTime = org.wpilib.units.Units.Seconds.of(poseEstimate.timestampSeconds);
+			latestEstimateTime = edu.wpi.first.units.Units.Seconds.of(poseEstimate.timestampSeconds);
 			aprilTagPose.set(poseEstimate.pose);
 			CatzRobotTracker.getInstance().addVisionObservation(
                 new VisionObservation(config.name, poseEstimate.pose, poseEstimate.timestampSeconds, config.aprilTagVisionStdDevs.times(poseEstimate.avgTagDist))

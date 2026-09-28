@@ -1,22 +1,22 @@
 package frc.robot.Utilities;
 
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.kinematics.SwerveModuleVelocity;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
 
 public class CatzMathUtils {
 
-  public static SwerveModuleVelocity optimize(
-      SwerveModuleVelocity desiredState, Rotation2d currentAngle) {
+  public static SwerveModuleState optimize(
+      SwerveModuleState desiredState, Rotation2d currentAngle) {
     double targetAngle =
         placeTargetInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
-    double targetSpeed = desiredState.velocity;
+    double targetSpeed = desiredState.speedMetersPerSecond;
     double delta = targetAngle - currentAngle.getDegrees();
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
       targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
     }
-    return new SwerveModuleVelocity(targetSpeed, Rotation2d.fromDegrees(targetAngle));
+    return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
 
   /**

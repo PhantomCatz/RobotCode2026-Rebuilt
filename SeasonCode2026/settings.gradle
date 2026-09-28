@@ -2,27 +2,27 @@ import org.gradle.internal.os.OperatingSystem
 
 pluginManagement {
     repositories {
-        String wpilibYear = '2027_alpha5'
-        File wpilibHome
+        mavenLocal()
+        gradlePluginPortal()
+        String frcYear = '2026'
+        File frcHome
         if (OperatingSystem.current().isWindows()) {
             String publicFolder = System.getenv('PUBLIC')
             if (publicFolder == null) {
                 publicFolder = "C:\\Users\\Public"
             }
             def homeRoot = new File(publicFolder, "wpilib")
-            wpilibHome = new File(homeRoot, wpilibYear)
+            frcHome = new File(homeRoot, frcYear)
         } else {
             def userFolder = System.getProperty("user.home")
             def homeRoot = new File(userFolder, "wpilib")
-            wpilibHome = new File(homeRoot, wpilibYear)
+            frcHome = new File(homeRoot, frcYear)
         }
-        def wpilibHomeMaven = new File(wpilibHome, 'maven')
+        def frcHomeMaven = new File(frcHome, 'maven')
         maven {
-            name = 'wpilibHome'
-            url = wpilibHomeMaven
+            name = 'frcHome'
+            url = frcHomeMaven
         }
-        mavenLocal()
-        gradlePluginPortal()
     }
 }
 

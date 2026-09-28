@@ -1,9 +1,9 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Time;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.VisionObservation;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
@@ -25,7 +25,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	public void setLatestEstimate(PoseEstimate poseEstimate, int minTagNum) {
 		if(poseEstimate == null) return;
 		// SmartDashboard.putNumber(config.name + "/Tag Count", poseEstimate.tagCount);
-		// SmartDashboard.putNumber(config.name + "/FGPA Timestamp", Timer.getTimestamp());
+		// SmartDashboard.putNumber(config.name + "/FGPA Timestamp", Timer.getFPGATimestamp());
 		// SmartDashboard.putNumber(
 		// 		config.name + "/Estimate to FGPA Timestamp", Utils.fpgaToCurrentTime(poseEstimate.timestampSeconds));
         latestEstimateNumTags = poseEstimate.tagCount;
@@ -54,7 +54,7 @@ public class ApriltagScanningIOLimelight implements ApriltagScanningIO {
 	public void update() {
 		updateGyro();
 
-		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisVelocities().omega);
+		double robotOmegaDegPerSec = Math.toDegrees(CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds().omegaRadiansPerSecond);
 		if (Math.abs(robotOmegaDegPerSec) > 300.0) {
             return; // Reject vision update if spinning too fast
         }

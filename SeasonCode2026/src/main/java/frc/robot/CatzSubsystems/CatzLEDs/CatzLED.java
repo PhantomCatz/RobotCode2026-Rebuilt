@@ -1,13 +1,17 @@
 package frc.robot.CatzSubsystems.CatzLEDs;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.Utilities.VirtualSubsystem;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.wpilib.driverstation.Alliance;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.util.Color;
 
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.EmptyAnimation;
 import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SingleFadeAnimation;
@@ -16,15 +20,10 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 
-import frc.robot.CatzSubsystems.CatzSuperstructure;
-import frc.robot.Utilities.VirtualSubsystem;
-import lombok.Getter;
-import lombok.Setter;
-
 public class CatzLED extends VirtualSubsystem {
   public static final CatzLED Instance = new CatzLED();
 
-  private CANdle candle = new CANdle(10, new CANBus());
+  private CANdle candle = new CANdle(10);
 
   // ----------------------------------------------------------------------------------------------
   // Robot state LED tracking
@@ -46,8 +45,8 @@ public class CatzLED extends VirtualSubsystem {
   public int loopCycleCount = 0;
 
   private Optional<Alliance> alliance = Optional.empty();
-  private Color allianceColor = Color.PURPLE;
-  private Color secondaryDisabledColor = Color.DARK_BLUE;
+  private Color allianceColor = Color.kPurple;
+  private Color secondaryDisabledColor = Color.kDarkBlue;
   private boolean lastEnabledAuto = false;
   private double lastEnabledTime = 0.0;
   private boolean estopped = false;
@@ -89,19 +88,19 @@ public class CatzLED extends VirtualSubsystem {
 
     climb = new RainbowAnimation(START, END);
 
-    disabledRed.Color = new RGBWColor(Color.RED);
-    disabledBlue.Color = new RGBWColor(Color.BLUE);
+    disabledRed.Color = new RGBWColor(Color.kRed);
+    disabledBlue.Color = new RGBWColor(Color.kBlue);
 
-    stow.Color = new RGBWColor(Color.RED);
-    on.Color = new RGBWColor(Color.GREEN);
-    off.Color = new RGBWColor(Color.RED);
+    stow.Color = new RGBWColor(Color.kRed);
+    on.Color = new RGBWColor(Color.kGreen);
+    off.Color = new RGBWColor(Color.kRed);
 
   }
 
   private void updateControllerState() {
-    if (DriverStationBackend.isDisabled()) {
-      if(DriverStationBackend.isDSAttached()){
-        if (DriverStationBackend.getAlliance().orElseThrow() == Alliance.BLUE) {
+    if (DriverStation.isDisabled()) {
+      if(DriverStation.isDSAttached()){
+        if (DriverStation.getAlliance().orElseThrow() == Alliance.Blue) {
           curLEDState = LEDState.DISABLED_BLUE;
         }
         else {
@@ -132,20 +131,20 @@ public class CatzLED extends VirtualSubsystem {
   public void periodic() {
     // Update alliance color
     // if (DriverStation.isDSAttached()) {
-    //   alliance = DriverStationBackend.getAlliance();
+    //   alliance = DriverStation.getAlliance();
     //   allianceColor =
     //       alliance
-    //           .map(alliance -> alliance == Alliance.BLUE ? Color.kAqua : Color.kOrangeRed)
+    //           .map(alliance -> alliance == Alliance.Blue ? Color.kAqua : Color.kOrangeRed)
     //           .orElse(Color.kPurple);
     //   secondaryDisabledColor = alliance.isPresent() ? Color.kYellow : Color.kBlack;
     // }
 
     // Update auto state
-    // if (DriverStationBackend.isDisabled()) {
+    // if (DriverStation.isDisabled()) {
 
     // } else {
-    //   lastEnabledAuto = DriverStationBackend.isAutonomous();
-    //   lastEnabledTime = Timer.getTimestamp();
+    //   lastEnabledAuto = DriverStation.isAutonomous();
+    //   lastEnabledTime = Timer.getFPGATimestamp();
     // }
 
     // Update estop state

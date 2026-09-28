@@ -1,6 +1,5 @@
 package frc.robot.CatzSubsystems.CatzShooter.CatzTurret;
 
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -8,11 +7,11 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.Distance;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -39,7 +38,6 @@ public class TurretConstants {
 
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
     private static final int TURRET_MOTOR_ID = 25;
-	private static final int TURRET_BUS_ID = 0;
 
 	public static final Angle TURRET_THRESHOLD = Units.Degrees.of(90.0);
 
@@ -54,7 +52,7 @@ public class TurretConstants {
 	public static final Rotation2d TURRET_RADIAL_ANGLE = new Rotation2d(Math.PI * 0.75);
 	public static final Rotation2d TURRET_ROTATION_OFFSET = Rotation2d.fromDegrees(180.0);
 
-	public static final CANcoder TURRET_CANCODER = new CANcoder(26, CANBus.systemcore(TURRET_BUS_ID));
+	public static final CANcoder TURRET_CANCODER = new CANcoder(26);
 
 	public static final double CANCODER_RATIO = 1.0 / 8.5;//1.0 / 7.5;
 	public static final Distance TURRET_HEIGHT = Units.Inches.of(18.0);
@@ -102,7 +100,7 @@ public class TurretConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = TURRET_MOTOR_ID;
-		IOConfig.mainBus = TURRET_BUS_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
@@ -110,7 +108,7 @@ public class TurretConstants {
 						// .withForwardSoftLimitThreshold(TURRET_MAX)
 						// .withReverseSoftLimitThreshold(TURRET_MIN)); //NOTE add back soft limits
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] {0, 0};
+		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

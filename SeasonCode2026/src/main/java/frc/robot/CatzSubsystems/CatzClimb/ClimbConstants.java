@@ -6,9 +6,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.Distance;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -43,8 +43,7 @@ public class ClimbConstants {
     // private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
     // private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    private static final int CLIMB_MOTOR_ID = 20;
-	private static final int CLIMB_BUS_ID = 1;
+    private static final int CLIMB_MOTOR_ID = 61;
 
 	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
 
@@ -89,13 +88,13 @@ public class ClimbConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = CLIMB_MOTOR_ID; //TODO magic numbers!!
-		IOConfig.mainBus = CLIMB_BUS_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 1, 1 };
+		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {}; //TODO magic numbers!!
 		return IOConfig;
 	}

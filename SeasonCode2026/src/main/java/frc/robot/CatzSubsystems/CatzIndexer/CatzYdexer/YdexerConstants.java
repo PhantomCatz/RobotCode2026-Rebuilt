@@ -6,8 +6,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Voltage;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -38,7 +38,6 @@ public class YdexerConstants {
 	public static final LoggedTunableNumber kV = new LoggedTunableNumber("VDexer/kV", gains.kV());
 
     private static final int YDEXER_MOTOR_ID = 50;
-	private static final int YDEXER_BUS_ID = 0;
 
 	// private static final double[][] FLYWHEEL_VS_VOLTS = {
 	// 	//flywheel rps vs vdexer volts
@@ -80,13 +79,13 @@ public class YdexerConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = YDEXER_MOTOR_ID;
-		IOConfig.mainBus = YDEXER_BUS_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 0, 0 };
+		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

@@ -7,10 +7,9 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.CANBus;
-import org.wpilib.math.util.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.AngularVelocity;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 
 /** IO implementation for Pigeon2 */
 public class GyroIOPigeon implements GyroIO {
@@ -20,7 +19,7 @@ public class GyroIOPigeon implements GyroIO {
   private final StatusSignal<AngularVelocity> yawVelocity;
 
   public GyroIOPigeon() {
-    pigeon = new Pigeon2(GYRO_ID, new CANBus()); // TODO why different than shoving in the id of the bus may need the * since it is on the CAN FD bus
+    pigeon = new Pigeon2(GYRO_ID);
     yaw = pigeon.getYaw();
     yawVelocity = pigeon.getAngularVelocityZWorld();
 

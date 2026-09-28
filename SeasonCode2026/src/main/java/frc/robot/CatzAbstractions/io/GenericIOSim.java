@@ -4,11 +4,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.math.controller.PIDController;
-import org.wpilib.math.system.DCMotor;
-import org.wpilib.math.system.Models;
-import org.wpilib.math.util.Units;
-import org.wpilib.simulation.DCMotorSim;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Utilities.MotorUtil.Gains;
 import java.util.function.UnaryOperator;
 
@@ -55,7 +56,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
         this.pid = new PIDController(gains.kP(), gains.kI(), gains.kD());
 
         // Using a standard DC motor system
-        var plant = Models.singleJointedArmFromPhysicalConstants(gearBox, J_KG_M2, GEAR_REDUCTION);
+        var plant = LinearSystemId.createDCMotorSystem(gearBox, J_KG_M2, GEAR_REDUCTION);
         motorSim = new DCMotorSim(plant, gearBox, GEAR_REDUCTION - 0.01, GEAR_REDUCTION + 0.01);
     }
 
@@ -66,21 +67,21 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
             // Calculate voltage to get to position
             // Note: motorSim.getAngularPosition() returns Radians
             // We assume setpoints are in Rotations (as per GenericTalonFXIOReal)
-            double currentRotations = Units.radiansToRotations(motorSim.getAngularPosition());
+            double currentRotations = Units.radiansToRotations(motorSim.getAngularPositionRad());
             double pidOutput = pid.calculate(currentRotations, targetSetpoint);
 
             // Add kF/Feedforward logic here if desired (e.g., kG for arms)
             currentVoltage = pidOutput;
 
         } else if (currentControlMode == ControlMode.VELOCITY) {
-            double currentRps = Units.radiansToRotations(motorSim.getAngularVelocity());
+            double currentRps = Units.radiansToRotations(motorSim.getAngularVelocityRadPerSec());
             double pidOutput = pid.calculate(currentRps, targetSetpoint);
             currentVoltage = pidOutput + (targetSetpoint * simConfig.Slot0.kV); // Simple kV Feedforward
         }
 
         // 2. Handle Soft Limits
         if (softLimitsEnabled) {
-            double currentPos = Units.radiansToRotations(motorSim.getAngularPosition());
+            double currentPos = Units.radiansToRotations(motorSim.getAngularPositionRad());
             if (currentPos > forwardSoftLimit && currentVoltage > 0) {
                 currentVoltage = 0;
             } else if (currentPos < reverseSoftLimit && currentVoltage < 0) {
@@ -90,7 +91,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
 
         // Apply Voltage to Physics Sim
         // Clamp to battery voltage
-        currentVoltage = Math.clamp(currentVoltage, -12.0, 12.0);
+        currentVoltage = MathUtil.clamp(currentVoltage, -12.0, 12.0);
 
         motorSim.setInputVoltage(currentVoltage);
 
@@ -102,13 +103,13 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
         inputs.isFollowerConnected = new boolean[0]; // No followers simulated here
 
         // Convert Sim Units (Radians) to Robot Units (Rotations)
-        inputs.position = Units.radiansToRotations(motorSim.getAngularPosition());
-        inputs.velocityRPS = Units.radiansToRotations(motorSim.getAngularVelocity());
+        inputs.position = Units.radiansToRotations(motorSim.getAngularPositionRad());
+        inputs.velocityRPS = Units.radiansToRotations(motorSim.getAngularVelocityRadPerSec());
         // Simple derivative for acceleration
 
         inputs.appliedVolts = new double[] { currentVoltage };
-        inputs.supplyCurrentAmps = new double[] { motorSim.getCurrentDraw() };
-        inputs.torqueCurrentAmps = new double[] { motorSim.getCurrentDraw() };
+        inputs.supplyCurrentAmps = new double[] { motorSim.getCurrentDrawAmps() };
+        inputs.torqueCurrentAmps = new double[] { motorSim.getCurrentDrawAmps() };
         inputs.tempCelcius = new double[] { 45.0 }; // Dummy temp
     }
 
@@ -154,7 +155,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
         // Reset the simulation state to a specific position
         // Sim uses Radians
         double rads = Units.rotationsToRadians(mechanismPosition);
-        motorSim.setState(rads, motorSim.getAngularVelocity());
+        motorSim.setState(rads, motorSim.getAngularVelocityRadPerSec());
     }
 
     @Override

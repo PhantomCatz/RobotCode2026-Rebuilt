@@ -1,27 +1,27 @@
 package frc.robot.Utilities;
 
-import org.wpilib.math.util.Pair;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.geometry.Translation3d;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.trajectory.Trajectory;
-import org.wpilib.math.trajectory.Trajectory.State;
-import org.wpilib.units.AngleUnit;
-import org.wpilib.units.BaseUnits;
-import org.wpilib.units.DistanceUnit;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.Distance;
-import org.wpilib.units.measure.Time;
-import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SmartDashboard;
-import org.wpilib.command2.Command;
-import org.wpilib.command2.CommandScheduler;
-import org.wpilib.command2.Commands;
-import org.wpilib.command2.Subsystem;
+import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.BaseUnits;
+import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -109,15 +109,15 @@ public class Util {
 				&& epsilonEquals(a.getY(), b.getY(), epsilon.in(Units.Meters));
 	}
 
-	public static boolean epsilonEquals(ChassisVelocities a, ChassisVelocities b) {
-		return epsilonEquals(a.vx, b.vx)
-				&& epsilonEquals(a.vy, b.vy)
-				&& epsilonEquals(a.omega, b.omega);
+	public static boolean epsilonEquals(ChassisSpeeds a, ChassisSpeeds b) {
+		return epsilonEquals(a.vxMetersPerSecond, b.vxMetersPerSecond)
+				&& epsilonEquals(a.vyMetersPerSecond, b.vyMetersPerSecond)
+				&& epsilonEquals(a.omegaRadiansPerSecond, b.omegaRadiansPerSecond);
 	}
 
-	public static boolean epsilonEquals(ChassisVelocities a, ChassisVelocities b, double linearVelocityEpsilon) {
-		return epsilonEquals(a.vx, b.vx, linearVelocityEpsilon)
-				&& epsilonEquals(a.vy, b.vy, linearVelocityEpsilon);
+	public static boolean epsilonEquals(ChassisSpeeds a, ChassisSpeeds b, double linearVelocityEpsilon) {
+		return epsilonEquals(a.vxMetersPerSecond, b.vxMetersPerSecond, linearVelocityEpsilon)
+				&& epsilonEquals(a.vyMetersPerSecond, b.vyMetersPerSecond, linearVelocityEpsilon);
 	}
 
 	public static boolean allCloseTo(final List<Double> list, double value, double epsilon) {
@@ -356,12 +356,12 @@ public class Util {
 		}
 
 		public Pose2dTimeInterpolable(Trajectory trajwithTan, Rotation2d startHeading, Rotation2d endHeading) {
-			double totalTimeSecpnods = trajwithTan.getTotalTime();
+			double totalTimeSecpnods = trajwithTan.getTotalTimeSeconds();
 			for (State state : trajwithTan.getStates()) {
-				Rotation2d poseRotation = startHeading.interpolate(endHeading, state.time / totalTimeSecpnods);
+				Rotation2d poseRotation = startHeading.interpolate(endHeading, state.timeSeconds / totalTimeSecpnods);
 				poseList.add(new Pair<>(
-						new Pose2d(state.pose.getTranslation(), poseRotation),
-						Units.Seconds.of(state.time)));
+						new Pose2d(state.poseMeters.getTranslation(), poseRotation),
+						Units.Seconds.of(state.timeSeconds)));
 			}
 			SmartDashboard.putNumber("Auto Align Traj/Number Of Trajectory States", poseList.size());
 		}
@@ -433,7 +433,7 @@ public class Util {
 
 	public static Command smartDashCommand(String message) {
 		return Commands.defer(
-				() -> Commands.runOnce(() -> SmartDashboard.putNumber(message, Timer.getTimestamp())),
+				() -> Commands.runOnce(() -> SmartDashboard.putNumber(message, Timer.getFPGATimestamp())),
 				getEmptySubsystemSet());
 	}
 

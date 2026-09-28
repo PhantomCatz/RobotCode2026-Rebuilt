@@ -1,18 +1,16 @@
 package frc.robot.CatzSubsystems.CatzShooter;
 
-
 import org.littletonrobotics.junction.Logger;
 
-import org.wpilib.math.util.MathUtil;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.geometry.Twist2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.units.Units;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.Alliance;
-
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -44,7 +42,7 @@ public class AimCalculations {
         double distToRim = distToCenter - FieldConstants.HUB_RIM_RADIUS.in(Units.Meter);
 
         double slopeAngle = Math.atan2(FieldConstants.HEIGHT_DIFF, distToRim);
-        return Math.clamp(
+        return MathUtil.clamp(
                 Math.PI / 2.0 - (slopeAngle + (Math.PI / 2.0)) / 2.0
                         - Math.toRadians(EpsilonRegression.HOOD_ANGLE_OFFSET),
                 HoodConstants.HOOD_ZERO_POS.in(Units.Radians),
@@ -134,7 +132,7 @@ public class AimCalculations {
         boolean shouldMirror = false;
 
         boolean isLeftHalf = turretPos.getY() >= FieldConstants.fieldYHalf;
-        if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.RED) {
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
             isLeftHalf = turretPos.getY() <= FieldConstants.fieldYHalf;
         }
 
@@ -191,24 +189,25 @@ public class AimCalculations {
     }
 
     public static Translation2d calculateAndGetPredictedTargetLocation(Translation2d baseTarget, RegressionMode mode,
-            Pose2d predictedRobotPose, Translation2d predictedTurretPose, ChassisVelocities predictedChassisVelocities) {
-        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose, predictedChassisVelocities);
+            Pose2d predictedRobotPose, Translation2d predictedTurretPose, ChassisSpeeds predictedChassisSpeeds) {
+        Translation2d targetVelocity = getTargetVelocityRelativeToRobot(predictedRobotPose, predictedChassisSpeeds);
         double futureAirtime = getFutureShootAirtime(predictedTurretPose, targetVelocity, baseTarget, mode);
         return baseTarget.plus(targetVelocity.times(futureAirtime));
     }
 
     private static Translation2d getTargetVelocityRelativeToRobot(Pose2d predictedRobotPose,
-            ChassisVelocities predictedChassisVelocities) {
+            ChassisSpeeds predictedChassisSpeeds) {
 
-        ChassisVelocities currentVelocity = predictedChassisVelocities.toFieldRelative(predictedRobotPose.getRotation());
+        ChassisSpeeds currentVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(predictedChassisSpeeds,
+                predictedRobotPose.getRotation());
 
         double turretRadialAngle = (predictedRobotPose.getRotation().plus(TurretConstants.TURRET_RADIAL_ANGLE))
                 .getRadians();
 
         double turretXVelocity = -Math.sin(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
-                * currentVelocity.omega + currentVelocity.vx;
+                * currentVelocity.omegaRadiansPerSecond + currentVelocity.vxMetersPerSecond;
         double turretYVelocity = Math.cos(turretRadialAngle) * TurretConstants.TURRET_DIST_TO_CENTER
-                * currentVelocity.omega + currentVelocity.vy;
+                * currentVelocity.omegaRadiansPerSecond + currentVelocity.vyMetersPerSecond;
 
         return new Translation2d(-turretXVelocity, -turretYVelocity);
     }
@@ -260,14 +259,14 @@ public class AimCalculations {
 
     public static Pose2d getPredictedRobotPose() {
         Pose2d currentPose = CatzRobotTracker.Instance.getEstimatedPose();
-        ChassisVelocities robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisVelocities();
+        ChassisSpeeds robotVelocity = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
 
         Twist2d twist = new Twist2d(
-                robotVelocity.vx * phaseDelay,
-                robotVelocity.vy * phaseDelay,
-                robotVelocity.omega * phaseDelay);
+                robotVelocity.vxMetersPerSecond * phaseDelay,
+                robotVelocity.vyMetersPerSecond * phaseDelay,
+                robotVelocity.omegaRadiansPerSecond * phaseDelay);
 
-        return currentPose.plus(twist.exp());
+        return currentPose.exp(twist);
     }
 
     public static boolean readyToShoot() {

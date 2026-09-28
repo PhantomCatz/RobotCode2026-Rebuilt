@@ -2,7 +2,7 @@ package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import org.wpilib.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.ApriltagScanningIO.VisionIOInputs;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 import frc.robot.Utilities.LimelightHelpers.PoseEstimate;

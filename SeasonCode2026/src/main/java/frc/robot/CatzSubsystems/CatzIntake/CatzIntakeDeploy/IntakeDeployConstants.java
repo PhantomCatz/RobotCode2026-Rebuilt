@@ -6,8 +6,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Angle;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -53,7 +53,6 @@ public class IntakeDeployConstants {
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("Intake Deploy/kS", gains.kS());
 
 	private static final int INTAKE_DEPLOY_MOTOR_ID = 30;
-	private static final int INTAKE_DEPLOY_BUS_ID = 2;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -95,13 +94,13 @@ public class IntakeDeployConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = INTAKE_DEPLOY_MOTOR_ID;
-		IOConfig.mainBus = INTAKE_DEPLOY_BUS_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new int[] { 2, 2 };
+		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

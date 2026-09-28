@@ -1,11 +1,11 @@
 package frc.robot.CatzSubsystems.CatzVision.Detection;
 
-import org.wpilib.math.linalg.VecBuilder;
-import org.wpilib.math.geometry.Pose3d;
-import org.wpilib.math.geometry.Rotation3d;
-import org.wpilib.math.geometry.Translation3d;
-import org.wpilib.units.Units;
-import org.wpilib.units.measure.Distance;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.Robot;
 import frc.robot.CatzSubsystems.CatzVision.ApriltagScanning.LimelightConstants.LimelightConfig;
 

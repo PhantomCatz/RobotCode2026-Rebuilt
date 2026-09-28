@@ -16,12 +16,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.UnaryOperator;
 
-import org.wpilib.units.measure.Angle;
-import org.wpilib.units.measure.AngularAcceleration;
-import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.units.measure.Current;
-import org.wpilib.units.measure.Temperature;
-import org.wpilib.units.measure.Voltage;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Temperature;
+import edu.wpi.first.units.measure.Voltage;
 
 public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInputs> implements GenericMotorIO<T>  {
 
@@ -47,8 +47,8 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 
     private static double Final_Ratio;
 
-	private CANBus followerTalonCANBus = CANBus.systemcore(0);
-	private CANBus leaderTalonCANBus = CANBus.systemcore(0);
+	private CANBus followerTalonCANBus = new CANBus("*");
+	private CANBus leaderTalonCANBus = new CANBus("*");
 
     /**
      * base for constructors
@@ -296,7 +296,7 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
 	public void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {
 		threadPoolExecutor.submit(() -> {
-			fx.configNeutralMode(neutralMode);
+			fx.setNeutralMode(neutralMode);
 		});
 	}
 

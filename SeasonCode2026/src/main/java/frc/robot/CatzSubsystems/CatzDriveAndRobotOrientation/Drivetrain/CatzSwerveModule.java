@@ -6,11 +6,11 @@ import static frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.D
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.BaseStatusSignal; // Import added
 
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.kinematics.SwerveModulePosition;
-import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.math.util.Units;
-import org.wpilib.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.CatzConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
 import frc.robot.Utilities.Alert;
@@ -39,7 +39,7 @@ public class CatzSwerveModule {
   private final String motorOutputs;
 
   // Global swerve module variables
-  private SwerveModuleVelocity m_SwerveModuleVelocity = new SwerveModuleVelocity();
+  private SwerveModuleState m_swerveModuleState = new SwerveModuleState();
 
   // Alerts
   private final Alert driveMotorDisconnected;
@@ -122,9 +122,9 @@ public class CatzSwerveModule {
   public void debugLogsSwerve() {
     // OPTIMIZATION: Use pre-cached keys
     Logger.recordOutput(logKeyDriveRecFPS, Units.metersToFeet(Conversions.RPSToMPS(inputs.driveVelocityRPS)));
-    Logger.recordOutput(logKeyDriveTargFPS, Units.metersToFeet(m_SwerveModuleVelocity.velocity));
-    Logger.recordOutput(logKeyCurModState, m_SwerveModuleVelocity.angle.getRadians());
-    Logger.recordOutput(logKeyAngleErr, Math.toDegrees(m_SwerveModuleVelocity.angle.getRadians() - getAbsEncRadians()));
+    Logger.recordOutput(logKeyDriveTargFPS, Units.metersToFeet(m_swerveModuleState.speedMetersPerSecond));
+    Logger.recordOutput(logKeyCurModState, m_swerveModuleState.angle.getRadians());
+    Logger.recordOutput(logKeyAngleErr, Math.toDegrees(m_swerveModuleState.angle.getRadians() - getAbsEncRadians()));
     Logger.recordOutput(logKeyCurModAng, getAbsEncRadians());
     Logger.recordOutput(logKeyAbsEnc, inputs.rawAbsEncValueRotation);
 
@@ -136,12 +136,12 @@ public class CatzSwerveModule {
    *
    * @param state Desired state with speed and angle.
    */
-  public void setModuleAngleAndVelocity(SwerveModuleVelocity state) {
-    this.m_SwerveModuleVelocity = state;
+  public void setModuleAngleAndVelocity(SwerveModuleState state) {
+    this.m_swerveModuleState = state;
     double targetAngleRads = state.angle.getRadians();
     double currentAngleRads = getAbsEncRadians();
 
-    io.runDriveVelocityRPSIO(Conversions.MPSToRPS(state.velocity));
+    io.runDriveVelocityRPSIO(Conversions.MPSToRPS(state.speedMetersPerSecond));
     io.runSteerPositionSetpoint(currentAngleRads, targetAngleRads);
   }
 
@@ -189,19 +189,19 @@ public class CatzSwerveModule {
     io.setDrvSensorPositionIO(0.0);
   }
 
-  public SwerveModuleVelocity optimizeWheelAngles(SwerveModuleVelocity unoptimizedState) {
-    SwerveModuleVelocity optimizedState =
+  public SwerveModuleState optimizeWheelAngles(SwerveModuleState unoptimizedState) {
+    SwerveModuleState optimizedState =
         CatzMathUtils.optimize(unoptimizedState, getCurrentRotation());
     return optimizedState;
   }
 
-  public SwerveModuleVelocity getModuleState() {
+  public SwerveModuleState getModuleState() {
     double velocityMPS = CatzMathUtils.Conversions.RPSToMPS(inputs.driveVelocityRPS);
-    return new SwerveModuleVelocity(velocityMPS, getCurrentRotation());
+    return new SwerveModuleState(velocityMPS, getCurrentRotation());
   }
 
-  public SwerveModuleVelocity getModuleStateSetpoint() {
-    return m_SwerveModuleVelocity;
+  public SwerveModuleState getModuleStateSetpoint() {
+    return m_swerveModuleState;
   }
 
   public SwerveModulePosition getModulePosition() {

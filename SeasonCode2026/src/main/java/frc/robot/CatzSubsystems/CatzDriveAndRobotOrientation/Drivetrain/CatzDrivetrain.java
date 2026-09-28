@@ -6,21 +6,23 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Twist2d;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.kinematics.SwerveDriveKinematics;
-import org.wpilib.math.kinematics.SwerveModulePosition;
-import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.driverstation.Alliance;
-import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.Field2d;
-import org.wpilib.smartdashboard.SmartDashboard;
-import org.wpilib.command2.Command;
-import org.wpilib.command2.InstantCommand;
-import org.wpilib.command2.SubsystemBase;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzConstants;
 import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -33,7 +35,7 @@ import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
 import frc.robot.Utilities.SwerveSetpoint;
 import frc.robot.Utilities.SwerveSetpointGenerator;
-import org.wpilib.math.util.Pair;
+import edu.wpi.first.math.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +62,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   // Array of swerve modules representing each wheel in the drive train
   private CatzSwerveModule[] m_swerveModules = new CatzSwerveModule[4];
-  private SwerveModuleVelocity[] optimizedDesiredStates = new SwerveModuleVelocity[4];
+  private SwerveModuleState[] optimizedDesiredStates = new SwerveModuleState[4];
 
   // Swerve modules representing each corner of the robot
   public final CatzSwerveModule RT_FRNT_MODULE;
@@ -72,7 +74,7 @@ public class CatzDrivetrain extends SubsystemBase {
   private HolonomicDriveController hoController_Slow = DriveConstants.getNewHolController_Slow();
 
   private Queue<Pair<Double, SwerveSetpoint>> futureSwerveSetpoints = new LinkedList<>();
-  public ChassisVelocities futureChassisVelocities = new ChassisVelocities();
+  public ChassisSpeeds futureChassisSpeeds = new ChassisSpeeds();
 
   private final Field2d field;
 
@@ -85,12 +87,12 @@ public class CatzDrivetrain extends SubsystemBase {
   public boolean isAntihoarding = false;
 
   private SwerveSetpoint currentSetpoint = new SwerveSetpoint(
-      new ChassisVelocities(),
-      new SwerveModuleVelocity[] {
-          new SwerveModuleVelocity(),
-          new SwerveModuleVelocity(),
-          new SwerveModuleVelocity(),
-          new SwerveModuleVelocity()
+      new ChassisSpeeds(),
+      new SwerveModuleState[] {
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState()
       });
 
   private final SwerveSetpointGenerator swerveSetpointGenerator;
@@ -183,7 +185,7 @@ public class CatzDrivetrain extends SubsystemBase {
         wheelPositions,
         getModuleStates(),
         gyroAngle2d,
-        Timer.getTimestamp());
+        Timer.getFPGATimestamp());
     CatzRobotTracker.Instance.addOdometryObservation(observation);
 
     Logger.recordOutput("Dist from hoard", CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
@@ -203,7 +205,7 @@ public class CatzDrivetrain extends SubsystemBase {
       return false;
     }
     Pose2d pose = CatzRobotTracker.Instance.getEstimatedPose();
-    if (DriverStationBackend.getAlliance().orElse(Alliance.BLUE) == Alliance.BLUE) {
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
       return (pose.getX() > FieldConstants.fieldLength - FieldConstants.fieldTrenchX);
     }
     else {
@@ -216,19 +218,19 @@ public class CatzDrivetrain extends SubsystemBase {
   // Driving methods
   //
   // --------------------------------------------------------------------------------------------------------------------------
-  public ChassisVelocities appliedChassisVelocities = new ChassisVelocities();
+  public ChassisSpeeds appliedChassisSpeeds = new ChassisSpeeds();
 
-  public void drive(ChassisVelocities ChassisVelocities) {
-    appliedChassisVelocities = ChassisVelocities;
-    ChassisVelocities descreteSpeeds = ChassisVelocities.discretize(CatzConstants.LOOP_TIME);
+  public void drive(ChassisSpeeds chassisSpeeds) {
+    appliedChassisSpeeds = chassisSpeeds;
+    ChassisSpeeds descreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, CatzConstants.LOOP_TIME);
     // --------------------------------------------------------
     // Convert chassis speeds to individual module states and set module states
     // --------------------------------------------------------
-    SwerveModuleVelocity[] unoptimizedModuleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleVelocities(descreteSpeeds);
+    SwerveModuleState[] unoptimizedModuleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(descreteSpeeds);
     // --------------------------------------------------------
     // Scale down wheel speeds
     // --------------------------------------------------------
-    unoptimizedModuleStates = SwerveDriveKinematics.desaturateWheelVelocities(unoptimizedModuleStates,
+    SwerveDriveKinematics.desaturateWheelSpeeds(unoptimizedModuleStates,
         DriveConstants.DRIVE_CONFIG.maxLinearVelocity());
     // --------------------------------------------------------
     // Optimize Wheel Angles
@@ -243,8 +245,8 @@ public class CatzDrivetrain extends SubsystemBase {
     }
   }
 
-  public void simpleDrive(ChassisVelocities speeds) {
-    SwerveModuleVelocity[] moduleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleVelocities(speeds);
+  public void simpleDrive(ChassisSpeeds speeds) {
+    SwerveModuleState[] moduleStates = DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
 
     for (int i = 0; i < 4; i++) {
       // The module returns the optimized state that prevents it from overturn, useful
@@ -257,10 +259,10 @@ public class CatzDrivetrain extends SubsystemBase {
   }
 
   public void swerveSetpointDrive(SwerveSetpoint setpoint) {
-    SwerveModuleVelocity[] setpointStates = setpoint.moduleStates();
+    SwerveModuleState[] setpointStates = setpoint.moduleStates();
 
     for (int i = 0; i < 4; i++) {
-      SwerveModuleVelocity optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
+      SwerveModuleState optimizedState = m_swerveModules[i].optimizeWheelAngles(setpointStates[i]);
 
       m_swerveModules[i].setModuleAngleAndVelocity(optimizedState);
 
@@ -278,7 +280,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   /** Runs in a circle at omega. */
   public void runWheelRadiusCharacterization(double omegaSpeed) {
-    simpleDrive(new ChassisVelocities(0.0, 0.0, omegaSpeed));
+    simpleDrive(new ChassisSpeeds(0.0, 0.0, omegaSpeed));
   }
 
   /** Disables the characterization mode. */
@@ -288,7 +290,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
   /** Runs forwards at the commanded voltage or amps. */
   public void runCharacterization(double input) {
-    simpleDrive(new ChassisVelocities(0.0, 0.0, input));
+    simpleDrive(new ChassisSpeeds(0.0, 0.0, input));
   }
 
   // -----------------------------------------------------------------------------------------------------------
@@ -400,7 +402,7 @@ public class CatzDrivetrain extends SubsystemBase {
 
     double curvature = 0.0;
 
-  //   // 2. Protect against division by zero if the robot is stopped
+    // 2. Protect against division by zero if the robot is stopped
     if (velocityMag > 1e-6) {
       curvature = Math.abs(sample.vx * sample.ay - sample.vy * sample.ax) / (velocitySq * velocityMag);
     }
@@ -416,11 +418,11 @@ public class CatzDrivetrain extends SubsystemBase {
     );
 
     Pose2d curPose = CatzRobotTracker.getInstance().getEstimatedPose();
-    ChassisVelocities adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
+    ChassisSpeeds adjustedSpeeds = hoController.calculate(curPose, state, Rotation2d.fromRadians(sample.heading));
 
     Logger.recordOutput("Target Auton Pose", new Pose2d(sample.x, sample.y, Rotation2d.fromRadians(sample.heading)));
     drive(adjustedSpeeds);
-  // }
+  }
 
   public void setXLock() {
       for (int i = 0; i < 4; i++) {
@@ -453,8 +455,8 @@ public class CatzDrivetrain extends SubsystemBase {
   }
 
   /** Get an array of swerve module states */
-  public SwerveModuleVelocity[] getModuleStates() {
-    SwerveModuleVelocity[] moduleStates = new SwerveModuleVelocity[4];
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[4];
     for (int i = 0; i < m_swerveModules.length; i++) {
       moduleStates[i] = m_swerveModules[i].getModuleState();
     }

@@ -6,8 +6,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.math.util.MathUtil;
-import org.wpilib.math.kinematics.ChassisVelocities;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
@@ -34,9 +34,6 @@ public class IntakeRollerConstants {
     };
 
 	private static final int INTAKE_MOTOR_ID = 31;
-	private static final int INTAKE_BUS_ID = 2;
-	private static final int INTAKE_FOLLOWER_MOTOR_ID = 32;
-	private static final int INTAKE_FOLLOWER_BUS_ID = 2;
 	private static final double NO_MOVE_INTAKE_SPEED = 5.0; // TODO make this right
 	private static final double INTAKE_SPEED_SLOPE = 0.3; // TODO make this right
 
@@ -76,21 +73,21 @@ public class IntakeRollerConstants {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
 		IOConfig.mainID = INTAKE_MOTOR_ID;
-		IOConfig.mainBus = INTAKE_BUS_ID;
+		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Opposed};
-		IOConfig.followerBuses = new int[] {INTAKE_FOLLOWER_BUS_ID};
-		IOConfig.followerIDs = new int[] {INTAKE_FOLLOWER_MOTOR_ID};
+		IOConfig.followerBuses = new String[] {""};
+		IOConfig.followerIDs = new int[] {32};
 		return IOConfig;
 	}
 
 	public static Setpoint getOnSetpoint() {
-		ChassisVelocities speeds = CatzRobotTracker.Instance.getRobotRelativeChassisVelocities();
-		double vx = speeds.vx;
-		double vy = speeds.vy;
+		ChassisSpeeds speeds = CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds();
+		double vx = speeds.vxMetersPerSecond;
+		double vy = speeds.vyMetersPerSecond;
 		double driveDirection = Math.atan2(vy, vx);
 		double intakeDirection = CatzRobotTracker.Instance.getEstimatedPose().getRotation().getRadians();
 		double angleBetween = Math.abs(MathUtil.angleModulus(intakeDirection-driveDirection));

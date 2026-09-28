@@ -1,41 +1,34 @@
 package frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation;
 
+import edu.wpi.first.math.*;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.interpolation.*;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import frc.robot.FieldConstants;
+import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
+import frc.robot.Utilities.GeomUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Pose3d;
-import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.geometry.Twist2d;
-import org.wpilib.math.interpolation.TimeInterpolatableBuffer;
-import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.kinematics.SwerveDriveKinematics;
-import org.wpilib.math.kinematics.SwerveModulePosition;
-import org.wpilib.math.kinematics.SwerveModuleVelocity;
-import org.wpilib.math.linalg.Matrix;
-import org.wpilib.math.linalg.VecBuilder;
-import org.wpilib.math.numbers.N1;
-import org.wpilib.math.numbers.N3;
-import org.wpilib.math.util.Nat;
-
-import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants;
-import frc.robot.FieldConstants;
-import frc.robot.Utilities.GeomUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.ExtensionMethod;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 
 @ExtensionMethod({GeomUtil.class})
 public class CatzRobotTracker {
   private static final double POSE_BUFFER_SIZE_SEC = 2.0;
-  final Matrix<N3, N1> ODOMETRY_STD_DEVS =
+  private static final Matrix<N3, N1> ODOMETRY_STD_DEVS =
       new Matrix<>(VecBuilder.fill(0.003, 0.003, 0.002));
 
   public static CatzRobotTracker Instance;
@@ -47,7 +40,7 @@ public class CatzRobotTracker {
       tagPoses2d.put(
           i,
           FieldConstants.defaultAprilTagType
-              .layout
+              .getLayout()
               .getTagPose(i)
               .map(Pose3d::toPose2d)
               .orElse(new Pose2d()));
@@ -72,9 +65,9 @@ public class CatzRobotTracker {
   @AutoLogOutput(key = "CatzRobotTracker/ReachedGoal")
   private boolean reachedGoal = false;
 
-  final TimeInterpolatableBuffer<Pose2d> POSE_BUFFER =
+  private final TimeInterpolatableBuffer<Pose2d> POSE_BUFFER =
       TimeInterpolatableBuffer.createBuffer(POSE_BUFFER_SIZE_SEC);
-  final Matrix<N3, N1> TRACKER_STD_DEVS = new Matrix<>(Nat.N3(), Nat.N1());
+  private final Matrix<N3, N1> TRACKER_STD_DEVS = new Matrix<>(Nat.N3(), Nat.N1());
 
   // Odometry
   private final SwerveDriveKinematics KINEMATICS;
@@ -87,17 +80,17 @@ public class CatzRobotTracker {
       };
 
   @Getter
-  private SwerveModuleVelocity[] currentModuleStates =
-      new SwerveModuleVelocity[] {
-        new SwerveModuleVelocity(),
-        new SwerveModuleVelocity(),
-        new SwerveModuleVelocity(),
-        new SwerveModuleVelocity()
+  private SwerveModuleState[] currentModuleStates =
+      new SwerveModuleState[] {
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState()
       };
 
   private Rotation2d lastGyroAngle = new Rotation2d();
   private Twist2d robotAccelerations = new Twist2d();
-  private ChassisVelocities m_lastChassisVelocities = new ChassisVelocities();
+  private ChassisSpeeds m_lastChassisSpeeds = new ChassisSpeeds();
   private Translation2d visionPoseShift = new Translation2d();
   private double lastTimestamp = 0.0;
 
@@ -136,22 +129,22 @@ public class CatzRobotTracker {
 
     //Add twist to odometry pose
     if((twist.dx != 0 || twist.dy != 0 || twist.dtheta != 0) && (!Double.isNaN(twist.dx) && !Double.isNaN(twist.dy) && !Double.isNaN(twist.dtheta))){
-      odometryPose = odometryPose.plus(twist.exp());
-      estimatedPose = estimatedPose.plus(twist.exp());
+      odometryPose = odometryPose.exp(twist);
+      estimatedPose = estimatedPose.exp(twist);
     }
     // Add pose to buffer at timestamp
     POSE_BUFFER.addSample(observation.timestamp(), odometryPose);
-    ChassisVelocities ChassisVelocities = KINEMATICS.toChassisVelocities(observation.moduleStates);
+    ChassisSpeeds chassisSpeeds = KINEMATICS.toChassisSpeeds(observation.moduleStates);
     robotAccelerations =
       new Twist2d(
-        (ChassisVelocities.vx - m_lastChassisVelocities.vx) / (observation.timestamp - lastTimestamp),
-        (ChassisVelocities.vy - m_lastChassisVelocities.vy) / (observation.timestamp - lastTimestamp),
-        (ChassisVelocities.omega - m_lastChassisVelocities.omega) / (observation.timestamp - lastTimestamp)
+        (chassisSpeeds.vxMetersPerSecond - m_lastChassisSpeeds.vxMetersPerSecond) / (observation.timestamp - lastTimestamp),
+        (chassisSpeeds.vyMetersPerSecond - m_lastChassisSpeeds.vyMetersPerSecond) / (observation.timestamp - lastTimestamp),
+        (chassisSpeeds.omegaRadiansPerSecond - m_lastChassisSpeeds.omegaRadiansPerSecond) / (observation.timestamp - lastTimestamp)
       );
 
-    m_lastChassisVelocities = ChassisVelocities;
+    m_lastChassisSpeeds = chassisSpeeds;
     lastTimestamp = observation.timestamp;
-    Logger.recordOutput("CatzRobotTracker/ChassisVelocities", Math.hypot(m_lastChassisVelocities.vx, m_lastChassisVelocities.vy));
+    Logger.recordOutput("CatzRobotTracker/ChassisSpeeds", Math.hypot(m_lastChassisSpeeds.vxMetersPerSecond, m_lastChassisSpeeds.vyMetersPerSecond));
     // Calculate diff from last odometry pose and add onto pose estimate
 
     Logger.recordOutput("CatzRobotTracker/EstimatedPose", estimatedPose);
@@ -257,12 +250,12 @@ public class CatzRobotTracker {
   }
 
 
-  public ChassisVelocities getRobotRelativeChassisVelocities() {
-    return m_lastChassisVelocities;
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
+    return m_lastChassisSpeeds;
   }
 
-  public ChassisVelocities getFieldRelativeChassisVelocities() {
-    return m_lastChassisVelocities.toFieldRelative(estimatedPose.getRotation());
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(m_lastChassisSpeeds, estimatedPose.getRotation());
   }
 
   /********************************************************************************************************************************
@@ -272,7 +265,7 @@ public class CatzRobotTracker {
    ********************************************************************************************************************************/
   public record OdometryObservation(
       SwerveModulePosition[] wheelPositions,
-      SwerveModuleVelocity[] moduleStates,
+      SwerveModuleState[] moduleStates,
       Rotation2d gyroAngle,
       double timestamp) {}
 

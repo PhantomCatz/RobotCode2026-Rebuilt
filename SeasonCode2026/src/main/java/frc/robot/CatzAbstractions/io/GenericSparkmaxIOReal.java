@@ -10,10 +10,9 @@ import java.util.function.Consumer;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLowLevel.ControlType;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.util.Signal;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
@@ -41,7 +40,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         this.gearRatio = config.gearRatio;
 
         // 1. Initialize Leader
-        leaderMotor = new SparkMax(0, config.mainID, MotorType.kBrushless); // TODO need to have a system for defining buses
+        leaderMotor = new SparkMax(config.mainID, MotorType.kBrushless);
         encoder = leaderMotor.getEncoder();
         closedLoopController = leaderMotor.getClosedLoopController();
 
@@ -58,7 +57,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         if (config.followerIDs.length > 0) {
             followerMotors = new SparkMax[config.followerIDs.length];
             for (int i = 0; i < config.followerIDs.length; i++) {
-                followerMotors[i] = new SparkMax(0, config.followerIDs[i], MotorType.kBrushless);
+                followerMotors[i] = new SparkMax(config.followerIDs[i], MotorType.kBrushless);
 
                 // Create a follower config
                 SparkMaxConfig followerConfig = new SparkMaxConfig();
@@ -84,22 +83,22 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         inputs.isLeaderConnected = true;
 
         // Position: REV rotations -> Adjusted rotations
-        inputs.position = encoder.getPosition().get() * gearRatio;
+        inputs.position = encoder.getPosition() * gearRatio;
 
         // Velocity: REV RPM -> RPS -> Adjusted RPS
-        inputs.velocityRPS = (encoder.getVelocity().get() / 60.0) * gearRatio;
+        inputs.velocityRPS = (encoder.getVelocity() / 60.0) * gearRatio;
 
         // Acceleration: SparkMax does not provide raw acceleration signal
         inputs.accelerationRPS = 0.0;
 
         // Electrical
-        Signal<Double> busVoltage = leaderMotor.getBusVoltage();
-        Signal<Double> appliedOutput = leaderMotor.getAppliedOutput();
+        double busVoltage = leaderMotor.getBusVoltage();
+        double appliedOutput = leaderMotor.getAppliedOutput();
 
-        inputs.appliedVolts = new double[] { appliedOutput.get() * busVoltage.get() };
-        inputs.supplyCurrentAmps = new double[] { leaderMotor.getOutputCurrent().get() };
-        inputs.torqueCurrentAmps = new double[] { leaderMotor.getOutputCurrent().get() };
-        inputs.tempCelcius = new double[] { leaderMotor.getMotorTemperature().get() };
+        inputs.appliedVolts = new double[] { appliedOutput * busVoltage };
+        inputs.supplyCurrentAmps = new double[] { leaderMotor.getOutputCurrent() };
+        inputs.torqueCurrentAmps = new double[] { leaderMotor.getOutputCurrent() };
+        inputs.tempCelcius = new double[] { leaderMotor.getMotorTemperature() };
 
         // Handle Followers
         inputs.isFollowerConnected = new boolean[followerMotors.length];
@@ -121,8 +120,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
     @Override
     public void setDutyCycleSetpoint(double percent) {
         System.out.println("hiii");
-        // leaderMotor.set(percent);
-        leaderMotor.setVoltage(percent * leaderMotor.getBusVoltage().get());
+        leaderMotor.set(percent);
     }
 
     @Override

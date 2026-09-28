@@ -1,8 +1,8 @@
 package frc.robot.CatzSubsystems.CatzVision.ApriltagScanning;
 
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.util.Units;
-import org.wpilib.command2.SubsystemBase;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
