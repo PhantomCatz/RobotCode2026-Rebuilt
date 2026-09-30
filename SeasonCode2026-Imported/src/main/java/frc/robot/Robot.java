@@ -7,7 +7,6 @@ import java.util.List;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.ConsoleSource.Systemcore;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.rlog.RLOGServer;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
@@ -18,7 +17,6 @@ import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
-import org.wpilib.units.measure.Temperature;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.RobotController;
@@ -185,7 +183,6 @@ public class Robot extends LoggedRobot {
                                                   true,
                                                   CatzDrivetrain.getInstance()
                                                 ); //it is apparently a good idea to initialize these variables not statically because there can be race conditions
-    System.out.println(AutoRoutineSelector.Instance);
 
       DriverStationBackend.silenceJoystickConnectionAlert(true);
 
@@ -198,7 +195,7 @@ public class Robot extends LoggedRobot {
         for (int i=0; i<3; i++) {
           for (GenericMotorSubsystem subsystem : allSubsystems[i]) {
             if(subsystem == null){
-              System.out.println("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!");
+             DriverStationBackend.reportError("subsystem is null !!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nwowwwwwwwwwwwwwwww\n\n\n\n\n\n\n\n!!!!!!!!!!!!!!!!!!!!", true);
             }
             Collections.addAll(signalList[i], subsystem.getSignals());
           }
@@ -217,7 +214,7 @@ public class Robot extends LoggedRobot {
       // coralDetectionThread.startPeriodic(0.1);
       Telemetry.log("Won Auton?", false);
       Telemetry.log("Swiping?", false);
-      Telemetry.log("On Fire?", false);
+      Telemetry.log("Syscore Overheat?", false);
   }
 
   @Override
@@ -230,9 +227,11 @@ public class Robot extends LoggedRobot {
     }
     CommandScheduler.getInstance().run();
     if(RobotController.getCPUTemp() > 70.0) {
-      Telemetry.log("On Fire?", true);
+      Telemetry.log("Syscore Overheat?", true);
+      DriverStationBackend.reportError("--------HI SYSCORE TEMP!------- " + (int) RobotController.getCPUTemp() + " DEG C ---------", false);
+      CommandScheduler.getInstance().cancelAll();
     } else {
-      Telemetry.log("On Fire?", false);
+      Telemetry.log("Syscore Overheat?", false);
     }
   }
 
@@ -257,7 +256,7 @@ public class Robot extends LoggedRobot {
     CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
-    System.out.println("auton: " + m_autonomousCommand);
+    System.out.println("-------- SELECTED AUTON: " + m_autonomousCommand);
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }

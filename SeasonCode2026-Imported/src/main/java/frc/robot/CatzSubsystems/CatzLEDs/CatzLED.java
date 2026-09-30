@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.internal.DriverStationBackend;
+import org.wpilib.system.RobotController;
 import org.wpilib.util.Color;
 
 import com.ctre.phoenix6.CANBus;
@@ -39,7 +40,8 @@ public class CatzLED extends VirtualSubsystem {
     STOW,
     DISABLED_BLUE,
     DISABLED_RED,
-    CLIMB
+    CLIMB,
+    FIRE
   }
   // MISC
 
@@ -78,6 +80,8 @@ public class CatzLED extends VirtualSubsystem {
 
   private final RainbowAnimation climb;
 
+  private final StrobeAnimation fire;
+
   private CatzLED() {
     disabledRed = new SingleFadeAnimation(START, END);
     disabledBlue = new SingleFadeAnimation(START, END);
@@ -95,6 +99,10 @@ public class CatzLED extends VirtualSubsystem {
     stow.Color = new RGBWColor(Color.RED);
     on.Color = new RGBWColor(Color.GREEN);
     off.Color = new RGBWColor(Color.RED);
+
+    fire = new StrobeAnimation(START, END);
+    fire.FrameRate = 2;
+    fire.Color = new RGBWColor(Color.ORANGE_RED);
 
   }
 
@@ -122,6 +130,9 @@ public class CatzLED extends VirtualSubsystem {
     }
     if (CatzSuperstructure.Instance.isIntakeOn) {
       curLEDState = LEDState.ON;
+    }
+    if(RobotController.getCPUTemp() > 70.0) {
+      curLEDState = LEDState.FIRE;
     }
     else {
       curLEDState = LEDState.OFF;
@@ -182,6 +193,8 @@ public class CatzLED extends VirtualSubsystem {
           break;
         case CLIMB:
           candle.setControl(climb);
+        case FIRE:
+          candle.setControl(fire);
           break;
       }
     }
