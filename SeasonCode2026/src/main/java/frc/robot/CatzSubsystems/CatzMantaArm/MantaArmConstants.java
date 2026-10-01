@@ -52,7 +52,7 @@ public class MantaArmConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("MantaArm Deploy/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("MantaArm Deploy/kS", gains.kS());
 
-	private static final int MantaArm_DEPLOY_MOTOR_ID = 30;
+	private static final int MantaArm_DEPLOY_MOTOR_ID = 99;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -100,7 +100,7 @@ public class MantaArmConstants {
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
 		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
-		IOConfig.followerBuses = new String[] {"", ""};
+		IOConfig.followerBuses = new String[] {};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;
 	}

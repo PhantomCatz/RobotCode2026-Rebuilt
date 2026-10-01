@@ -30,9 +30,11 @@ public final class CatzConstants {
   public static final boolean IndexerOn = false;
   public static final boolean SpindexerOn = false;
   public static final boolean YdexerOn = false;
-  public static final boolean IntakeOn = false;
+  public static final boolean IntakeOn = true;
   public static final boolean ShooterOn = false;
   public static final boolean TurretOn = false;
+  public static final boolean MantaPivotOn = true;
+  public static final boolean MantaArmOn = false;
 
   public static enum RobotScenario {
     TUNING, // In PID enviroment with logged tunable numbers

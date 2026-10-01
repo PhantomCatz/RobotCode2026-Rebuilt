@@ -39,6 +39,7 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
+import frc.robot.CatzSubsystems.CatzMantaPivot.CatzMantaPivot;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
@@ -51,7 +52,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private BaseStatusSignal[] allSignals;
-  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[8];
+  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[9];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -166,6 +167,7 @@ public class Robot extends LoggedRobot {
     allSubsystems[5] = CatzFlywheels.Instance;
     allSubsystems[6] = CatzHood.Instance;
     allSubsystems[7] = CatzTurret.Instance;
+    allSubsystems[8] = CatzMantaPivot.Instance;
 
     m_robotContainer = new RobotContainer();
 

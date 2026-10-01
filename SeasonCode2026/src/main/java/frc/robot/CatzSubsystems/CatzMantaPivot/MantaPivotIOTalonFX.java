@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntake.CatzMantaPivot;
+package frc.robot.CatzSubsystems.CatzMantaPivot;
 
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;

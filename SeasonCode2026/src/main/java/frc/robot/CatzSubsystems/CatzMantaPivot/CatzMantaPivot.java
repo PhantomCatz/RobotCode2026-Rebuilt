@@ -39,7 +39,7 @@ public class CatzMantaPivot extends ServoMotorSubsystem<MantaPivotIO, MantaPivot
     }
 
     private static MantaPivotIO getIOInstance() {
-        if (CatzConstants.IntakeOn == false) {
+        if (CatzConstants.MantaPivotOn == false) {
             System.out.println("Intake Deploy Disabled by CatzConstants");
             return new MantaPivotIOSim(MantaPivotConstants.gains);
         }

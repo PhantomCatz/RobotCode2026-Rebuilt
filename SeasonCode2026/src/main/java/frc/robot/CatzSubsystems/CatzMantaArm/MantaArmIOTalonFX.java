@@ -1,4 +1,4 @@
-package frc.robot.CatzSubsystems.CatzIntake.CatzMantaArm;
+package frc.robot.CatzSubsystems.CatzMantaArm;
 
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -14,10 +14,10 @@ public class MantaArmIOTalonFX extends GenericTalonFXIOReal<MantaArmIO.MantaArmI
     @Override
     public void setMotionMagicSetpoint(double target){
         double feedforward;
-        if(MantaArm.Instance.getLatencyCompensatedPosition() > 0.28){
+        if(CatzMantaArm.Instance.getLatencyCompensatedPosition() > 0.28){
             feedforward = 0.0;
         }else{
-            feedforward = -MantaArmConstants.GRAVITY_FEEDFORWARD* Math.sin(MantaArm.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
+            feedforward = -MantaArmConstants.GRAVITY_FEEDFORWARD* Math.sin(CatzMantaArm.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
         }
         // Logger.recordOutput("Intake Deploy Setpoint", target);
         setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));

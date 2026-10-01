@@ -17,7 +17,7 @@ import frc.robot.Utilities.Setpoint;
 
 public class MantaPivotConstants {
 	public static final Angle HOME_POSITION = Units.Degrees.of(0.0);
-	public static final Angle STOW_POSITION = Units.Rotations.of(-0.1);
+	public static final Angle STOW_POSITION = Units.Rotations.of(0);
 	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.30);
 	public static final Angle UP_POSITION = Units.Rotations.of(0.05);
 
@@ -52,7 +52,7 @@ public class MantaPivotConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("MantaPivot Deploy/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("MantaPivot Deploy/kS", gains.kS());
 
-	private static final int MantaPivot_DEPLOY_MOTOR_ID = 30;
+	private static final int MantaPivot_DEPLOY_MOTOR_ID = 90;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -99,7 +99,7 @@ public class MantaPivotConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Aligned, MotorAlignmentValue.Opposed, MotorAlignmentValue.Aligned};
 		IOConfig.followerBuses = new String[] {"", ""};
 		IOConfig.followerIDs = new int[] {};
 		return IOConfig;

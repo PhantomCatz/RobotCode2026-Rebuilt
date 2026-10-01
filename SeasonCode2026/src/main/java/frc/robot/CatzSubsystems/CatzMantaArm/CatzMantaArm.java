@@ -5,7 +5,7 @@ package frc.robot.CatzSubsystems.CatzMantaArm;
 import frc.robot.CatzConstants;
 import frc.robot.CatzAbstractions.Bases.ServoMotorSubsystem;
 
-public class MantaArm extends ServoMotorSubsystem<MantaArmIO, MantaArmIO.MantaArmIOInputs>{
+public class CatzMantaArm extends ServoMotorSubsystem<MantaArmIO, MantaArmIO.MantaArmIOInputs>{
 
     private static final MantaArmIO io = getIOInstance();
     private static final MantaArmIOInputsAutoLogged inputs = new MantaArmIOInputsAutoLogged();
@@ -39,7 +39,7 @@ public class MantaArm extends ServoMotorSubsystem<MantaArmIO, MantaArmIO.MantaAr
     }
 
     private static MantaArmIO getIOInstance() {
-        if (CatzConstants.IntakeOn == false) {
+        if (CatzConstants.MantaArmOn == false) {
             System.out.println("Intake Deploy Disabled by CatzConstants");
             return new MantaArmIOSim(MantaArmConstants.gains);
         }
