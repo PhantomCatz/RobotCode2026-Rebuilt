@@ -59,7 +59,7 @@ public class RobotContainer {
             .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
       }
     }));
-
+     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     // -------------------------------------------------------------------------
     // HOARDING CONTROLS
     // Hoard Toggle

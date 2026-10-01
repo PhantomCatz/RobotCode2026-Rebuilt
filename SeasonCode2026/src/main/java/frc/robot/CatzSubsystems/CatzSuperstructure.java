@@ -38,6 +38,8 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzMantaArm.MantaArmConstants;
+import frc.robot.CatzSubsystems.CatzMantaPivot.MantaPivotConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -199,6 +201,51 @@ public class CatzSuperstructure {
     // --------------------------------------------------------------------------
     // Public Command States
     // --------------------------------------------------------------------------
+
+    public Angle mantaArmSetpoint = MantaArmConstants.DEPLOY_POSITION;
+    public boolean isMantaArmDeployed = false;
+    public Angle mantaPivotSetpoint = MantaArmConstants.DEPLOY_POSITION;
+    public boolean isMantaPivotDeployed = false;
+
+    public Command MantaArmMoveOut(){
+        return Commands.runOnce(() -> {
+            mantaArmSetpoint = MantaArmConstants.DEPLOY_POSITION;
+            isMantaArmDeployed = true;
+        });
+    }
+    public Command MantaArmMoveIn(){
+        return Commands.runOnce(() -> {
+            mantaArmSetpoint = MantaArmConstants.STOW_POSITION;
+            isMantaArmDeployed = false;
+        });
+    }
+    public Command MantaPivotUp(){
+        return Commands.runOnce(() -> {
+            mantaPivotSetpoint = MantaPivotConstants.DEPLOY_POSITION;
+            isMantaPivotDeployed = true;
+        });
+    }
+    public Command MantaPivotDown(){
+        return Commands.runOnce(() -> {
+            mantaPivotSetpoint = MantaPivotConstants.STOW_POSITION;
+            isMantaPivotDeployed = false;
+        });
+
+    }
+    public Command MantaPivotAndArmDeploy(){
+        return Commands.sequence(
+                        MantaPivotUp(),
+                        MantaArmMoveOut()
+                // alignToBackUpClimb()
+                );
+    }
+    public Command MantaPivotAndArmRetract(){
+        return Commands.sequence(
+                        MantaPivotDown(),
+                        MantaArmMoveIn()
+                // alignToBackUpClimb()
+                );
+    }
     public Command cmdShooterStop() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
