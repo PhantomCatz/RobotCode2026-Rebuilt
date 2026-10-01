@@ -39,9 +39,11 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
+import frc.robot.CatzSubsystems.CatzMantaArm.MantaArm;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.MantaPivot.MantaPivot;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.VirtualSubsystem;
 
@@ -91,6 +93,18 @@ public class Robot extends LoggedRobot {
       Commands.run(() -> {
         CatzIntakeDeploy.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.intakeSetpoint));
       }, CatzIntakeDeploy.Instance)
+  );
+
+  MantaArm.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        MantaArm.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.mantaArmSetpoint));
+      }, MantaArm.Instance)
+  );
+
+  MantaPivot.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        MantaPivot.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.mantaPivotSetpoint));
+      }, MantaPivot.Instance)
   );
 
     // CatzIntakeBlocker.Instance.setDefaultCommand(

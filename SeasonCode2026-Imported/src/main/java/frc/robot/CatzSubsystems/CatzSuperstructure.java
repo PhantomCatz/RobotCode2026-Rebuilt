@@ -43,6 +43,7 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
+import frc.robot.CatzSubsystems.CatzMantaArm.MantaArmConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
@@ -53,6 +54,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
+import frc.robot.CatzSubsystems.MantaPivot.MantaPivotConstants;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.Setpoint;
@@ -224,7 +226,50 @@ public class CatzSuperstructure {
                     CatzDrivetrain.getInstance().setNormalConfig();
                 }));
     }
+    public Angle mantaArmSetpoint = MantaArmConstants.DEPLOY_POSITION;
+    public boolean isMantaArmDeployed = false;
+    public Angle mantaPivotSetpoint = MantaArmConstants.DEPLOY_POSITION;
+    public boolean isMantaPivotDeployed = false;
 
+    public Command MantaArmMoveOut(){
+        return Commands.runOnce(() -> {
+            mantaArmSetpoint = MantaArmConstants.DEPLOY_POSITION;
+            isMantaArmDeployed = true;
+        });
+    }
+    public Command MantaArmMoveIn(){
+        return Commands.runOnce(() -> {
+            mantaArmSetpoint = MantaArmConstants.STOW_POSITION;
+            isMantaArmDeployed = false;
+        });
+    }
+    public Command MantaPivotUp(){
+        return Commands.runOnce(() -> {
+            mantaPivotSetpoint = MantaPivotConstants.DEPLOY_POSITION;
+            isMantaPivotDeployed = true;
+        });
+    }
+    public Command MantaPivotDown(){
+        return Commands.runOnce(() -> {
+            mantaPivotSetpoint = MantaPivotConstants.STOW_POSITION;
+            isMantaPivotDeployed = false;
+        });
+
+    }
+    public Command MantaPivotAndArmDeploy(){
+        return Commands.sequence(
+                        MantaPivotUp(),
+                        MantaArmMoveOut()
+                // alignToBackUpClimb()
+                );
+    }
+    public Command MantaPivotAndArmRetract(){
+        return Commands.sequence(
+                        MantaPivotDown(),
+                        MantaArmMoveIn()
+                // alignToBackUpClimb()
+                );
+    }
     public Command trackStaticHub() {
         return CatzTurret.Instance.followSetpointCommand(() -> AimCalculations.calculateHubTrackingSetpoint());
     }
@@ -351,6 +396,7 @@ public class CatzSuperstructure {
     // }
     // }, CatzIntakeDeploy.Instance);
     // }
+
     public Command toggleIntakeDeploy() {
         return Commands.runOnce(() -> {
             if (isIntakeDeployed) {
