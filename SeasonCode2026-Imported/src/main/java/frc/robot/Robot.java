@@ -214,7 +214,6 @@ public class Robot extends LoggedRobot {
       // coralDetectionThread.startPeriodic(0.1);
       Telemetry.log("Won Auton?", false);
       Telemetry.log("Swiping?", false);
-      Telemetry.log("Syscore Overheat?", false);
   }
 
   @Override
@@ -226,13 +225,6 @@ public class Robot extends LoggedRobot {
       }
     }
     CommandScheduler.getInstance().run();
-    // if(RobotController.getCPUTemp() > 70.0) {
-    //   Telemetry.log("Syscore Overheat?", true);
-    //   DriverStationBackend.reportError("--------HI SYSCORE TEMP!------- " + (int) RobotController.getCPUTemp() + " DEG C ---------", false);
-    //   CommandScheduler.getInstance().cancelAll();
-    // } else {
-    //   Telemetry.log("Syscore Overheat?", false);
-    // }
   }
 
   @Override
