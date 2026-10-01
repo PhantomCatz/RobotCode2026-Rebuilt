@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.internal.DriverStationBackend;
-import org.wpilib.system.RobotController;
 import org.wpilib.util.Color;
 
 import com.ctre.phoenix6.CANBus;
@@ -131,9 +130,9 @@ public class CatzLED extends VirtualSubsystem {
     if (CatzSuperstructure.Instance.isIntakeOn) {
       curLEDState = LEDState.ON;
     }
-    if(RobotController.getCPUTemp() > 70.0) {
-      curLEDState = LEDState.FIRE;
-    }
+    // if(RobotController.getCPUTemp() > 70.0) {
+    //   curLEDState = LEDState.FIRE;
+    // }
     else {
       curLEDState = LEDState.OFF;
     }
