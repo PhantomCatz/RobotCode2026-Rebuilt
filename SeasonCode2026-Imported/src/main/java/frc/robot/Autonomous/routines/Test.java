@@ -5,7 +5,6 @@ import choreo.auto.AutoTrajectory;
 import org.wpilib.command2.Commands;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 
 public class Test extends AutoRoutineBase{
     public Test(){
@@ -17,7 +16,6 @@ public class Test extends AutoRoutineBase{
 
         prepRoutine(
             traj1,
-            CatzSuperstructure.Instance.cmdHubStandby(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT + AutonConstants.PRELOAD_SHOOTING_WAIT + AutonConstants.OUTPOST_SCORING_WAIT),
             Commands.print("done")
         );
