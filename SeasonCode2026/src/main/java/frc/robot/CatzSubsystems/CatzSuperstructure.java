@@ -39,6 +39,7 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstant
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
 import frc.robot.CatzSubsystems.CatzMantaArm.MantaArmConstants;
+import frc.robot.CatzSubsystems.CatzMantaPivot.CatzMantaPivot;
 import frc.robot.CatzSubsystems.CatzMantaPivot.MantaPivotConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
@@ -650,10 +651,30 @@ public class CatzSuperstructure {
 
     public Command toggleManualExtendClimb() {
         return Commands.runOnce(() -> {
-            disableManuals(CatzClimb.Instance);
+
+
+            CatzMantaPivot.Instance.followSetpointCommand(() -> {
+                double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                if (Math.abs(input) < 0.84)
+                    return Setpoint.withVoltageSetpoint(0.0);
+
+                return Setpoint.withVoltageSetpoint(input);
+            }).schedule();
+            // if (climbManual == false) {
+
+            // } else {
+            //     // CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
+            //     climbManual = false;
+            // }
+        });
+    }
+
+    public Command toggleManualMantaPivot() {
+        return Commands.runOnce(() -> {
+            disableManuals(CatzMantaPivot.Instance);
             climbManual = true;
 
-            CatzClimb.Instance.followSetpointCommand(() -> {
+            CatzMantaPivot.Instance.followSetpointCommand(() -> {
                 double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
                 if (Math.abs(input) < 0.84)
                     return Setpoint.withVoltageSetpoint(0.0);

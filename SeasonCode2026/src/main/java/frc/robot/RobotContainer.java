@@ -158,13 +158,14 @@ public class RobotContainer {
     // xboxAux.povDown().onTrue(CatzSuperstructure.Instance.cmdClimbStow());
 
     // xboxAux.y().onTrue(superstructure.toggleManualExtendClimb());
+    xboxAux.y().onTrue(superstructure.toggleManualMantaPivot());
 
     xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
     xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
 
     xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxAux.x().onTrue(CatzSuperstructure.Instance.toggleSpindexer());
-    xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
+    // xboxAux.y().onTrue(CatzSuperstructure.Instance.toggleYdexer());
     xboxAux.leftBumper().onTrue(CatzSuperstructure.Instance.toggleHood());
     xboxAux.a().onTrue(CatzSuperstructure.Instance.applyFlywheelTuningSetpoint());
     xboxAux.start().onTrue(CatzSuperstructure.Instance.cmdShooterStop());

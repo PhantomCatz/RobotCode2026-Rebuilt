@@ -52,7 +52,7 @@ public class MantaPivotConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("MantaPivot Deploy/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("MantaPivot Deploy/kS", gains.kS());
 
-	private static final int MantaPivot_DEPLOY_MOTOR_ID = 90;
+	private static final int MantaPivot_DEPLOY_MOTOR_ID = 11;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -99,9 +99,9 @@ public class MantaPivotConstants {
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()
 						.withForwardSoftLimitEnable(false)
 						.withReverseSoftLimitEnable(false));
-		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Aligned, MotorAlignmentValue.Opposed, MotorAlignmentValue.Aligned};
+		IOConfig.followerAlignmentValue = new MotorAlignmentValue[] {MotorAlignmentValue.Aligned, MotorAlignmentValue.Opposed, MotorAlignmentValue.Opposed};
 		IOConfig.followerBuses = new String[] {"", ""};
-		IOConfig.followerIDs = new int[] {};
+		IOConfig.followerIDs = new int[] {12,13,14};
 		return IOConfig;
 	}
 }
