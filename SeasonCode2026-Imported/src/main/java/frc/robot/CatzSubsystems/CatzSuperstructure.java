@@ -367,13 +367,30 @@ public class CatzSuperstructure {
 
     public Command toggleShotBlocker() {
         return Commands.runOnce(() -> {
-            if (isBlockerDeployed || isIntakeDeployed) {
+            if (isBlockerDeployed) {
                 blockerSetpoint = ClimbConstants.STOW_POSITION;
             }
             else {
                 blockerSetpoint = ClimbConstants.REACH_POSITION;
             }
             isBlockerDeployed = !isBlockerDeployed;
+        });
+    }
+
+    public Command deployShotBlocker() {
+        return Commands.runOnce(() -> {
+            blockerSetpoint = ClimbConstants.REACH_POSITION;
+            isBlockerDeployed = true;
+
+            // blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+            // isBlockerDeployed = false;
+        });
+    }
+
+    public Command stowShotBlocker() {
+        return Commands.runOnce(() -> {
+            blockerSetpoint = ClimbConstants.STOW_POSITION;
+            isBlockerDeployed = false;
         });
     }
 

@@ -247,6 +247,7 @@ public class Robot extends LoggedRobot {
     autonStartTime = Timer.getTimestamp();
     CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
+    CatzClimb.Instance.setCurrentPosition(ClimbConstants.STOW_POSITION);
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
     System.out.println("-------- SELECTED AUTON: " + m_autonomousCommand);

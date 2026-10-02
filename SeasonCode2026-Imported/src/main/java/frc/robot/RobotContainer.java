@@ -97,11 +97,11 @@ public class RobotContainer {
         CatzDrivetrain.getInstance()
     )
     );
-    xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleShotBlocker());
+    xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.stowIntake().andThen(Commands.waitSeconds(0.3)).andThen(CatzSuperstructure.Instance.toggleShotBlocker()));
 
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(CatzSuperstructure.Instance.intakeOFF()));
-    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)));
+    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)).beforeStarting(CatzSuperstructure.Instance.stowShotBlocker()));
     xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
     xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 2)))
                .alongWith(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
