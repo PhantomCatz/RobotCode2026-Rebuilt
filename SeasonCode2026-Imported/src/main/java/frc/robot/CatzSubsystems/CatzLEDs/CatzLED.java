@@ -112,7 +112,7 @@ public class CatzLED extends VirtualSubsystem {
       }
       return;
     }
-    if (CatzSuperstructure.Instance.isClimbMode || CatzSuperstructure.Instance.isDefenseMode) {
+    if (CatzSuperstructure.Instance.isClimbMode || CatzSuperstructure.Instance.isDefenseMode || CatzSuperstructure.Instance.isBlockerDeployed) {
       curLEDState = LEDState.CLIMB;
       return;
     }

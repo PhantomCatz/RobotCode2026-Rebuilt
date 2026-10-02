@@ -97,7 +97,7 @@ public class RobotContainer {
         CatzDrivetrain.getInstance()
     )
     );
-    // xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeBlocker());
+    xboxDrv.dpadRight().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleShotBlocker());
 
     xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
     xboxDrv.x().onTrue(CatzSuperstructure.Instance.cmdShooterStop().alongWith(CatzSuperstructure.Instance.trackStaticHub()).alongWith(CatzSuperstructure.Instance.intakeOFF()));

@@ -31,6 +31,7 @@ import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
+import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
@@ -94,11 +95,11 @@ public class Robot extends LoggedRobot {
       }, CatzIntakeDeploy.Instance)
   );
 
-    // CatzIntakeBlocker.Instance.setDefaultCommand(
-    //   Commands.run(() -> {
-    //     CatzIntakeBlocker.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
-    //   }, CatzIntakeBlocker.Instance)
-    // );
+    CatzClimb.Instance.setDefaultCommand(
+      Commands.run(() -> {
+        CatzClimb.Instance.applySetpoint(Setpoint.withMotionMagicSetpoint(CatzSuperstructure.Instance.blockerSetpoint));
+      }, CatzClimb.Instance)
+    );
 
     Logger.start();
 
@@ -267,8 +268,8 @@ public class Robot extends LoggedRobot {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
 
-    // CatzSuperstructure.Instance.isBlockerDeployed = false;
-    // CatzSuperstructure.Instance.blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+    CatzSuperstructure.Instance.isBlockerDeployed = false;
+    CatzSuperstructure.Instance.blockerSetpoint = ClimbConstants.STOW_POSITION;
 
     CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.cmdShooterStop());
     CatzDrivetrain.getInstance().setNormalConfig();

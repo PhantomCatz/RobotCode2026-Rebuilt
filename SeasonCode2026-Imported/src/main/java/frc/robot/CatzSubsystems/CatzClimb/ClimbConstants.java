@@ -22,12 +22,12 @@ public class ClimbConstants {
 	private static final double SPOOL_DIAMETER_INCH = 1.5;
 	public static final Util.DistanceAngleConverter converter = new Util.DistanceAngleConverter(Units.Inches.of(SPOOL_DIAMETER_INCH / 2.0));
 
-	private static final Angle REACH_POSITION = converter.toAngle(Units.Inches.of(9.3));
-	private static final Angle STOW_POSITION = converter.toAngle(Units.Inches.of(0.0));
+	public static final Angle REACH_POSITION = Units.Rotations.of(-0.5);
+	public static final Angle STOW_POSITION = Units.Rotations.of(0);
 	public static final LoggedTunableNumber REACH_POSITION_LOG = new LoggedTunableNumber("CatzClimb/Reach Inch", 5.0);
 
-	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(0.6389);
-	public static final Setpoint STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(STOW_POSITION.in(Units.Rotations));
+	public static final Setpoint REACH_SETPOINT = Setpoint.withMotionMagicSetpoint(REACH_POSITION);
+	public static final Setpoint STOW_SETPOINT = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN1 -> new Gains(0.18, 0, 0.0006, 0.38367, 0.00108, 0, 0.0);
@@ -47,7 +47,7 @@ public class ClimbConstants {
     private static final int CLIMB_MOTOR_ID = 61;
 	private static final CANPort CLIMB_BUS_ID = CANPort.CAN_S4;
 
-	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(1.0);
+	public static final Distance CLIMB_THRESHOLD = Units.Inches.of(0.5);
 
     public static final Setpoint OFF = Setpoint.withVoltageSetpoint(0.0);
 
@@ -66,10 +66,10 @@ public class ClimbConstants {
 		FXConfig.CurrentLimits.SupplyCurrentLowerLimit = 40.0;
 		FXConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1;
 
-		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -0.55;
 		FXConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = converter.toAngle(Units.Inches.of(7.0)).in(Units.Rotations);
+		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.0;
 		FXConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
 
 		FXConfig.CurrentLimits.StatorCurrentLimitEnable = true;

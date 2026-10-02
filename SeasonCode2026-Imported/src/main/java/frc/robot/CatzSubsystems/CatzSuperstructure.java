@@ -335,10 +335,10 @@ public class CatzSuperstructure {
     /* --- INTAKE --- */
     public Angle intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     public boolean isIntakeDeployed = true;
-    // public boolean isBlockerDeployed = false;
+    public boolean isBlockerDeployed = false;
 
     // blocker
-    // public Angle blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
+    public Angle blockerSetpoint = ClimbConstants.STOW_POSITION;
 
     // public Command toggleIntakeDeploy() {
     // return Commands.runOnce(() -> {
@@ -358,26 +358,25 @@ public class CatzSuperstructure {
             }
             else {
                 intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
-                // blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-                // isBlockerDeployed = false;
             }
             isIntakeDeployed = !isIntakeDeployed;
         });
     }
 
     //NK 2026-09-23: no longer pursued
-    // public Command toggleIntakeBlocker() {
-    //     return Commands.runOnce(() -> {
-    //         if (isBlockerDeployed || isIntakeDeployed) {
-    //             blockerSetpoint = IntakeBlockerConstants.STOW_POSITION;
-    //             isBlockerDeployed = false;
-    //         }
-    //         else {
-    //             blockerSetpoint = IntakeBlockerConstants.BLOCKER_POSITION;
-    //             isBlockerDeployed = true;
-    //         }
-    //     });
-    // }
+    public Command toggleShotBlocker() {
+        System.out.println("youna");
+        return Commands.runOnce(() -> {
+            if (isBlockerDeployed) {
+                blockerSetpoint = ClimbConstants.STOW_POSITION;
+
+            }
+            else {
+                blockerSetpoint = ClimbConstants.REACH_POSITION;
+            }
+            isBlockerDeployed = !isBlockerDeployed;
+        });
+    }
 
     public Command upIntake() {
         return Commands.runOnce(() -> intakeSetpoint = IntakeDeployConstants.UP_POSITION);
