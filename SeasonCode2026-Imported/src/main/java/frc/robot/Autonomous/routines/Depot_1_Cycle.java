@@ -13,13 +13,6 @@ public class Depot_1_Cycle extends AutoRoutineBase{
         AutoTrajectory traj2 = getTrajectory("Depot_1_Cycle",1);
         AutoTrajectory traj3 = getTrajectory("Depot_1_Cycle",2);
 
-
-        // traj2.atTime("Intake2").onTrue(CatzSuperstructure.Instance.intakeON());
-        // traj6.atTime("RampUp+StopIntake6").onTrue(CatzSuperstructure.Instance.intakeOFF());
-        // traj7.atTime("StowIntake+TrackTower7").onTrue();
-
-
-
         prepRoutine(
             traj1,
             Commands.deadline(

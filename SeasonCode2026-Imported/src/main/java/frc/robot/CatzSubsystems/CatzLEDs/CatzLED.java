@@ -122,9 +122,11 @@ public class CatzLED extends VirtualSubsystem {
     }
     if (CatzSuperstructure.Instance.isIntakeOn) {
       curLEDState = LEDState.ON;
+      return;
     }
     else {
       curLEDState = LEDState.OFF;
+      return;
     }
   }
 
