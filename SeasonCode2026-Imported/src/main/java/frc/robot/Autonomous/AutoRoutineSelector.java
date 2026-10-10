@@ -11,12 +11,12 @@ public class AutoRoutineSelector {
     private AutoChooser autoSelector = new AutoChooser();
 
     private AutoRoutineSelector(){
-        autoSelector.addRoutine("TEST NK", () -> new NewPath().getRoutine());
+        // autoSelector.addRoutine("TEST NK", () -> new NewPath().getRoutine());
         // autoSelector.addRoutine("Better_Outpost_2_Cycle_Outpost", () -> new Better_Outpost_2_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Decon_Depot_1_Cycle", () -> new Decon_Depot_1_Cycle().getRoutine());
 
         // autoSelector.addRoutine("Center_Outpost_Depot_Climb", () -> new Center_Outpost_Depot_Climb().getRoutine());
-        autoSelector.addRoutine("Center_Outpost_Depot_Climb_Decon", () -> new Center_Outpost_Depot_Climb_Decon().getRoutine());
+        // autoSelector.addRoutine("Center_Outpost_Depot_Climb_Decon", () -> new Center_Outpost_Depot_Climb_Decon().getRoutine());
         // autoSelector.addRoutine("Center_Outpost_Depot_Neutral", () -> new Center_Outpost_Depot_Neutral().getRoutine());
 
         // autoSelector.addRoutine("Decon_Depot_2_Cycle_Bump_Fast", () -> new Decon_Depot_2_Cycle_Bump_Fast().getRoutine());
@@ -27,7 +27,6 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Depot_1_Cycle_Climbb", () -> new Depot_1_Cycle_Climbb().getRoutine());
         // autoSelector.addRoutine("Depot_1_Cycle", () -> new Depot_1_Cycle().getRoutine());
         // autoSelector.addRoutine("Depot_2_Cycle_Bump_Full_Hopper", () -> new Depot_2_Cycle_Bump_Full_Hopper().getRoutine());
-        autoSelector.addRoutine("Depot_2_Cycle_Bump", () -> new Depot_2_Cycle_Bump().getRoutine());
         // autoSelector.addRoutine("Depot_2_Cycle_Bump_Mg", () -> new Depot_2_Cycle_Bump_Mg().getRoutine());
         // autoSelector.addRoutine("Depot_2_Cycle", () -> new Depot_2_Cycle().getRoutine());
         // autoSelector.addRoutine("Depot_3_Cycle", () -> new Depot_3_Cycle().getRoutine());
@@ -36,7 +35,8 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("MiddlePath", () -> new MiddlePath().getRoutine());
         // autoSelector.addRoutine("Outpost_1_Cycle_Outpost", () -> new Outpost_1_Cycle_Outpost().getRoutine());
         // autoSelector.addRoutine("Outpost_1_Cycle", () -> new Outpost_1_Cycle().getRoutine());
-        autoSelector.addRoutine("Outpost_2_Cycle_Bump", () -> new Outpost_2_Cycle_Bump().getRoutine());
+        autoSelector.addRoutine("A_Depot_2_Cycle_Bump", () -> new A_Depot_2_Cycle_Bump().getRoutine());//Fact checked 1000%  works
+        autoSelector.addRoutine("A_Outpost_2_Cycle_Bump", () -> new A_Outpost_2_Cycle_Bump().getRoutine()); //Fact checked 1000%  works
         // autoSelector.addRoutine("Outpost_2_Cycle_Bump_Mg", () -> new Outpost_2_Cycle_Bump_Mg().getRoutine());
 
         // autoSelector.addRoutine("NZ_Hoard_Depot_Bump", () -> new NZ_Hoard_Depot_Bump().getRoutine());
@@ -48,7 +48,7 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("New_Swipe_Outpost_Trench", () -> new New_Swipe_Outpost_Trench().getRoutine());
 
         autoSelector.addRoutine("Swipe_Depot_Wait", () -> new Swipe_Depot_Wait().getRoutine());
-        autoSelector.addRoutine("Swipe_Depot_Bump", () -> new Swipe_Depot_Bump().getRoutine());
+        autoSelector.addRoutine("Swipe_Depot_Bump", () -> new Swipe_Depot_Bump().getRoutine());             //Fact checked 1000%  works
         autoSelector.addRoutine("Swipe_Outpost_Bump", () -> new Swipe_Outpost_Bump().getRoutine());
         autoSelector.addRoutine("Swipe_Outpost", () -> new Swipe_Outpost().getRoutine());
         // autoSelector.addRoutine("Swipe_Outpost_Depot", () -> new Swipe_Outpost_Depot().getRoutine());

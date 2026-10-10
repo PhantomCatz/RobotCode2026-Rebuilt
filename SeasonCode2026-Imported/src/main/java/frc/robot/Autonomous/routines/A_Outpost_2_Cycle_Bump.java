@@ -6,17 +6,17 @@ import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 
-public class Outpost_2_Cycle_Bump extends AutoRoutineBase {
-    public Outpost_2_Cycle_Bump(){
-        super("Outpost_2_Cycle_Bump");
+public class A_Outpost_2_Cycle_Bump extends AutoRoutineBase {
+    public A_Outpost_2_Cycle_Bump(){
+        super("A_Outpost_2_Cycle_Bump");
 
-        AutoTrajectory traj1 = getTrajectory("Outpost_2_Cycle_Bump",0);
-        AutoTrajectory traj2 = getTrajectory("Outpost_2_Cycle_Bump",1);
-        AutoTrajectory traj3 = getTrajectory("Outpost_2_Cycle_Bump",2);
-        AutoTrajectory traj4 = getTrajectory("Outpost_2_Cycle_Bump",3);
-        AutoTrajectory traj5 = getTrajectory("Outpost_2_Cycle_Bump",4);
-        AutoTrajectory traj6 = getTrajectory("Outpost_2_Cycle_Bump",5);
-        // AutoTrajectory traj7 = getTrajectory("Outpost_2_Cycle_Bump",6);
+        AutoTrajectory traj1 = getTrajectory("A_Outpost_2_Cycle_Bump",0);
+        AutoTrajectory traj2 = getTrajectory("A_Outpost_2_Cycle_Bump",1);
+        AutoTrajectory traj3 = getTrajectory("A_Outpost_2_Cycle_Bump",2);
+        AutoTrajectory traj4 = getTrajectory("A_Outpost_2_Cycle_Bump",3);
+        AutoTrajectory traj5 = getTrajectory("A_Outpost_2_Cycle_Bump",4);
+        AutoTrajectory traj6 = getTrajectory("A_Outpost_2_Cycle_Bump",5);
+        // AutoTrajectory traj7 = getTrajectory("A_Outpost_2_Cycle_Bump",6);
 
 
         prepRoutine(

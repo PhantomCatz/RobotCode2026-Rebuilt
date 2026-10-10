@@ -2,7 +2,6 @@ package frc.robot.Autonomous.routines;
 
 import choreo.auto.AutoTrajectory;
 import org.wpilib.command2.Commands;
-import frc.robot.Robot;
 import frc.robot.Autonomous.AutoRoutineBase;
 import frc.robot.Autonomous.AutonConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
@@ -18,11 +17,10 @@ public class Center_Outpost_Depot_Climb_Decon extends AutoRoutineBase {
 
         prepRoutine(
             traj1,
-            Commands.runOnce(()->Robot.climbedInAuton = true),
             Commands.deadline(
                 Commands.sequence(
                     CatzSuperstructure.Instance.deployIntake(),
-                    followTrajectory(traj1).alongWith(Commands.print("traj1")),
+                    followTrajectoryWithAccuracy(traj1).alongWith(Commands.print("traj1")),
                     Commands.waitSeconds(1.4), //Waiting for depot fuel to go into hopper
                     followTrajectory(traj2),
                     CatzSuperstructure.Instance.intakeON()
@@ -30,14 +28,13 @@ public class Center_Outpost_Depot_Climb_Decon extends AutoRoutineBase {
                 CatzSuperstructure.Instance.trackStaticHub()
             ),
             Commands.deadline(
-                followTrajectory(traj3).alongWith(Commands.print("3")),
+                followTrajectoryWithAccuracy(traj3).alongWith(Commands.print("3")),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
             CatzSuperstructure.Instance.intakeOFF().alongWith(Commands.print("IntakeOFF")),
             // CatzSuperstructure.Instance.cmdClimbReach(),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT+0.5),
-            followTrajectory(traj4),
-            CatzSuperstructure.Instance.autoClimbCommand(),
+            followTrajectoryWithAccuracy(traj4),
             Commands.print("done")
         );
     }

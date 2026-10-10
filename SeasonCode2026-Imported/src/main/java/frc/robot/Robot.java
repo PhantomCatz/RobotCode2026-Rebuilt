@@ -163,7 +163,6 @@ public class Robot extends LoggedRobot {
         }
       }
     }
-
     allSubsystems[0][0] = CatzSpindexer.Instance;
     allSubsystems[0][1] = CatzYdexer.Instance;
     allSubsystems[0][2] = CatzTurret.Instance;
@@ -282,6 +281,7 @@ public class Robot extends LoggedRobot {
     // if (climbedInAuton) {
     //   CatzSuperstructure.Instance.autoClimbLowerCommand().schedule();
     // }
+    // CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.trackStaticHub());
   }
 
   @Override
