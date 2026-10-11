@@ -35,7 +35,7 @@ public class A_Depot_2_Cycle_Bump extends AutoRoutineBase {
                 followTrajectory(traj3),
                 CatzSuperstructure.Instance.cmdHubStandby()
             ),
-            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT),
+            shootAllBallsNoJiggle(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT+0.5),
 
             Commands.deadline(
                 Commands.sequence(

@@ -87,7 +87,7 @@ public class RobotContainer {
             .alongWith(CatzSuperstructure.Instance.trackStaticHub())
     );
 
-    xboxDrv.dpadUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean())
+    xboxDrv.dpadUp().multiPress(2, 0.4).toggleOnTrue(CatzSuperstructure.Instance.TowerSwipePosition().withTimeout(0.67).andThen(CatzSuperstructure.Instance.swipe()).until(() -> xboxDrv.x().getAsBoolean())
     .beforeStarting(() -> Telemetry.log("Swiping?", true))
     .finallyDo(() -> Telemetry.log("Swiping?", false)));
     xboxDrv.dpadDown().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.reverseIndexers());

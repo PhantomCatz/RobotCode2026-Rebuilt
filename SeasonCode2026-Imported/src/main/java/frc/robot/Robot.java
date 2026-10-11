@@ -261,6 +261,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousExit() {
+    CommandScheduler.getInstance().schedule(CatzSuperstructure.Instance.trackStaticHub());
   }
 
   @Override
