@@ -446,7 +446,7 @@ public class CatzSuperstructure {
                 isIntakeOn = true;
                 // CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.getOnSetpoint());
                 CatzIntakeRoller.Instance.applySetpoint(IntakeRollerConstants.ON_SETPOINT);
-
+                System.out.println("hello");
                 // if(!isScoring){
                 // CatzDrivetrain.getInstance().setIntakeMoveConfig();
                 // }
