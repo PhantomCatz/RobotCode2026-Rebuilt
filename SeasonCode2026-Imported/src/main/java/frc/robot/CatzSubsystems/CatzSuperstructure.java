@@ -440,6 +440,7 @@ public class CatzSuperstructure {
                 // if(!isScoring){
                 // CatzDrivetrain.getInstance().setNormalConfig();
                 // }
+                //BLAHBLAHBLAH
                 RobotContainer.rumbleDrv(0.0);
 
             } else {
