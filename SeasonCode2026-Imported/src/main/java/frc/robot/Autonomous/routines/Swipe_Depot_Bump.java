@@ -22,7 +22,7 @@ public class Swipe_Depot_Bump extends AutoRoutineBase {
                     CatzSuperstructure.Instance.deployIntake(),
                     followTrajectoryWithAccuracy(traj1),
                     CatzSuperstructure.Instance.intakeON(),
-                    Commands.waitSeconds(0.5),
+                    Commands.waitSeconds(0.75),
                     followTrajectoryWithAccuracy(traj2)
                 ),
                 CatzSuperstructure.Instance.trackStaticHub()
@@ -36,7 +36,7 @@ public class Swipe_Depot_Bump extends AutoRoutineBase {
             ),
             shootAllBallsNoJiggleNoStop(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-2),
             shootAllBalls(AutonConstants.RETURN_FROM_COLLECTING_SHOOTING_WAIT-1.8),
-            followTrajectoryWithAccuracy(traj4),
+            // followTrajectoryWithAccuracy(traj4),
             Commands.print("done")
         );
     }

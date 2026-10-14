@@ -37,6 +37,8 @@ public class AutoRoutineSelector {
         // autoSelector.addRoutine("Outpost_1_Cycle", () -> new Outpost_1_Cycle().getRoutine());
         autoSelector.addRoutine("A_Depot_2_Cycle_Bump", () -> new A_Depot_2_Cycle_Bump().getRoutine());//Fact checked 1000%  works
         autoSelector.addRoutine("A_Outpost_2_Cycle_Bump", () -> new A_Outpost_2_Cycle_Bump().getRoutine()); //Fact checked 1000%  works
+        autoSelector.addRoutine("Swiped", () -> new Swiped().getRoutine());
+        autoSelector.addRoutine("DepotSwiped", () -> new DepotSwiped().getRoutine());
         // autoSelector.addRoutine("Outpost_2_Cycle_Bump_Mg", () -> new Outpost_2_Cycle_Bump_Mg().getRoutine());
 
         // autoSelector.addRoutine("NZ_Hoard_Depot_Bump", () -> new NZ_Hoard_Depot_Bump().getRoutine());
