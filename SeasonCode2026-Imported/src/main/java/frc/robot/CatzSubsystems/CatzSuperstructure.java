@@ -939,15 +939,18 @@ public class CatzSuperstructure {
     public Command depotOppositeCornerSwipeRun(){
     return depotOppositeCornerSwipeRoutine.getPathCommand();
     }
-    public Command toggleIntakeRoller(){
-        return Commands.either(
-            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.OFF_SETPOINT)
-            .finallyDo(() -> IsIntakeOn = false),
-            CatzIntakeRoller.Instance.setpointCommand(IntakeRollerConstants.ON_SETPOINT)
-            .finallyDo(() -> IsIntakeOn = true),
-            () -> IsIntakeOn
+    public Command DeployAndIntake(){
+        return CatzSuperstructure.Instance.deployIntake()
+        .andThen(CatzSuperstructure.Instance.toggleIntakeRollers());
+    }
+    public Command TrackAndShoot(){
+        return Commands.sequence(
+            CatzSuperstructure.Instance.trackStaticHub().withTimeout(5),
+            CatzSuperstructure.Instance.cmdHubShoot()
         );
     }
+
+
     public Command CoolCommandAHHHHH(){
         return Commands.parallel(
             CatzSuperstructure.Instance.deployIntake()
@@ -966,4 +969,5 @@ public class CatzSuperstructure {
             }
         }, Set.of(CatzIntakeRoller.Instance));
     }
+
 }

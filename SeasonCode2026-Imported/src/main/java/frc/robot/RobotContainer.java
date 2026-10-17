@@ -176,7 +176,7 @@ public class RobotContainer {
     xboxAux.getHID().povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
     xboxAux.getHID().povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
     // xboxAux.view().multiPress(2, 0.4).onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(12.0)));
-    xboxWilliam.a().onTrue(CatzSuperstructure.Instance.toggleIntakeRoller());
+    xboxWilliam.a().onTrue(CatzSuperstructure.Instance.DeployAndIntake());
     xboxWilliam.x().onTrue(CatzSuperstructure.Instance.CoolCommandAHHHHH());
     xboxWilliam.y().onTrue(CatzSuperstructure.Instance.getCurrentPos());
   }
