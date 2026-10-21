@@ -63,6 +63,7 @@ public class CatzSuperstructure {
     public boolean isClimbMode = false;
     public boolean isDefenseMode = false;
     private HoardTargetType currentHoardType = HoardTargetType.RELATIVE_CLOSE;
+    private boolean IsIntakeOn = false;
     private boolean isScoring = false;
     private boolean isHoarding = false;
 
@@ -938,4 +939,35 @@ public class CatzSuperstructure {
     public Command depotOppositeCornerSwipeRun(){
     return depotOppositeCornerSwipeRoutine.getPathCommand();
     }
+    public Command DeployAndIntake(){
+        return CatzSuperstructure.Instance.deployIntake()
+        .andThen(CatzSuperstructure.Instance.toggleIntakeRollers());
+    }
+    public Command TrackAndShoot(){
+        return Commands.sequence(
+            CatzSuperstructure.Instance.trackStaticHub().withTimeout(5),
+            CatzSuperstructure.Instance.cmdHubShoot()
+        );
+    }
+
+
+    public Command CoolCommandAHHHHH(){
+        return Commands.parallel(
+            CatzSuperstructure.Instance.deployIntake()
+            .andThen(CatzSuperstructure.Instance.toggleIntakeRoller()),
+            (CatzSuperstructure.Instance.trackStaticHub())
+        );
+    }
+    public Command getCurrentPos(){
+        return Commands.defer(() -> {
+            double CurrentPos = CatzRobotTracker.Instance.getEstimatedPose().getX();
+            if (CurrentPos > 5) {
+                return CatzSuperstructure.Instance.toggleIntakeRoller();
+            }
+            else {
+                return CatzSuperstructure.Instance.toggleFlywheel();
+            }
+        }, Set.of(CatzIntakeRoller.Instance));
+    }
+
 }

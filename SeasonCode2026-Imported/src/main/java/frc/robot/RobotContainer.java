@@ -31,6 +31,9 @@ public class RobotContainer {
 
   public static final CommandXboxController xboxDrv = new CommandXboxController(0);
   public static final CommandXboxController xboxAux = new CommandXboxController(1);
+  public static final CommandXboxController xboxWilliam = new CommandXboxController(2);
+
+  
 
   public RobotContainer() {
     configureBindings();
@@ -173,7 +176,12 @@ public class RobotContainer {
     xboxAux.getHID().povUpLeft().onTrue(CatzSuperstructure.Instance.resetTurretPose());
     xboxAux.getHID().povDownRight().onTrue(CatzSuperstructure.Instance.resetDeployPose());
     // xboxAux.view().multiPress(2, 0.4).onTrue(CatzFlywheels.Instance.setpointCommand(Setpoint.withVoltageSetpoint(12.0)));
+    xboxWilliam.a().onTrue(CatzSuperstructure.Instance.DeployAndIntake());
+    xboxWilliam.x().onTrue(CatzSuperstructure.Instance.CoolCommandAHHHHH());
+    xboxWilliam.y().onTrue(CatzSuperstructure.Instance.getCurrentPos());
   }
+
+
 
   public static void rumbleDrv(double val) {
     xboxDrv.getHID().setRumble(RumbleType.LEFT_RUMBLE, val);
