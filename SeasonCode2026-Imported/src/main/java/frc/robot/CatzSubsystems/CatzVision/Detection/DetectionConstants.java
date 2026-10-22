@@ -17,7 +17,7 @@ public class DetectionConstants {
 			// roll (along robot y axis), pitch (along robot x axis), yaw (along robot z axis)
 			new Rotation3d(Units.Degree.of(0.0), Units.Degree.of(-12.0), Units.Degree.of(0.0)));
 	public static final int kTelePipeline = 3;
-	public static final int kAutoPipeline = 0;
+	public static final int kAutoPipeline = 9;
 	public static final int kDisabledPipeline = 1;
 	public static final Distance kFuelRadius = Units.Inches.of(3.0);
 	public static final double DETECTION_POSE_BUFFER_SIZE_SEC = 2.0;

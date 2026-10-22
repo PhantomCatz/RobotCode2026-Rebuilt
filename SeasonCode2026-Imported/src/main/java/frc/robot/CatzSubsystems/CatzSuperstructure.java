@@ -54,6 +54,7 @@ import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression;
 import frc.robot.CatzSubsystems.CatzShooter.regressions.ShooterRegression.RegressionMode;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmd;
+import frc.robot.Commands.DriveAndRobotOrientationCmds.PIDDriveCmdFuel;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.Setpoint;
 
@@ -615,6 +616,10 @@ public class CatzSuperstructure {
     // ),
     // trackTower());
     // }
+
+    public Command runTowardsFuel() {
+        return new PIDDriveCmdFuel(new Pose2d(FieldConstants.getHubLocation(), new Rotation2d()), 0.0, new Pose2d(FieldConstants.getHubLocation(), new Rotation2d()), 0.0);
+    }
 
     public Command alignToBackUpClimb() {
         return Commands.defer(() -> {

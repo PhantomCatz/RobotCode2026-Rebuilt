@@ -44,6 +44,7 @@ import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.VirtualSubsystem;
 
@@ -207,6 +208,7 @@ public class Robot extends LoggedRobot {
 
       System.out.println("Chooser: " + AutoRoutineSelector.Instance);
       System.out.println("Led "+CatzLED.Instance);
+      System.out.println("Initializing " + Detection.Instance.getName());
 
       // Notifier coralDetectionThread = new Notifier(Detection.Instance::setNearestGroupPose);
       // Notifier.setHALThreadPriority(false, 0);

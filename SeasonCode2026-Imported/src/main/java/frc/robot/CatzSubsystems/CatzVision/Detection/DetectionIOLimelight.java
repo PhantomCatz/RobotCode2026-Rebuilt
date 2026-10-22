@@ -45,7 +45,7 @@ public class DetectionIOLimelight extends DetectionIO {
 	private Pose2d closestFuelGroupPose = null;
 	//private ArrayList<Fuel> tracker = new ArrayList<Fuel>();
 	private Stopwatch mStopwatch = new Stopwatch();
-	private int pipelineToSet = 0;
+	private int pipelineToSet = 9;
 	private Stopwatch mResetStopwatch = new Stopwatch();
 	private LimelightConfig config = new LimelightConfig();
 	private final NetworkTable visTable = ntInstance.getTable("SmartDashboard/Detection");
@@ -117,7 +117,6 @@ public class DetectionIOLimelight extends DetectionIO {
 	public void updateInputs(DetectionIOInputs inputs) {
 
 		inputs.nearestFuel = getFuelPose();
-		// System.out.println("nearest fuel "+inputs.nearestFuel);
 		mStopwatch.startIfNotRunning();
 		if (pipelineToSet == LimelightHelpers.getCurrentPipelineIndex(config.name)) {
 			if (pipelineToSet == DetectionMode.AUTO.index) {
