@@ -21,16 +21,6 @@ public class MantaPivotConstants {
 	public static final Angle DEPLOY_POSITION = Units.Rotations.of(0.30);
 	public static final Angle UP_POSITION = Units.Rotations.of(0.05);
 
-	public static final Angle JIGGLE_POSITION = Units.Rotations.of(0.30);
-	public static final Angle JIGGLE_AMPLITUDE = Units.Rotations.of(0.067);
-	public static final double JIGGLE_FREQUENCY = 1.0; //times per second
-
-	//STOW POSITION: -60.0
-	// public static final LoggedTunableNumber STOW_POSITION_LOG = new LoggedTunableNumber("MantaPivot Deploy/Stow Pos Deg", STOW_POSITION.in(Units.Degrees));
-	// public static final LoggedTunableNumber DEPLOY_POSITION_LOG = new LoggedTunableNumber("MantaPivot Deploy/Deploy Pos Deg", DEPLOY_POSITION.in(Units.Degrees));
-	// public static final LoggedTunableNumber JIGGLE_POSITION_LOG = new LoggedTunableNumber("MantaPivot Deploy/Jiggle Pos Rot", UP_POSITION.in(Units.Rotations));
-	// public static final LoggedTunableNumber JIGGLE_FREQUENCY_LOG = new LoggedTunableNumber("MantaPivot Deploy/Jiggle Frequency", JIGGLE_FREQUENCY);
-
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint DEPLOY = Setpoint.withMotionMagicSetpoint(DEPLOY_POSITION);
 
@@ -52,7 +42,7 @@ public class MantaPivotConstants {
     // public static final LoggedTunableNumber kD = new LoggedTunableNumber("MantaPivot Deploy/kD", gains.kD());
     // public static final LoggedTunableNumber kS = new LoggedTunableNumber("MantaPivot Deploy/kS", gains.kS());
 
-	private static final int MantaPivot_DEPLOY_MOTOR_ID = 11;
+	private static final int MANTA_PIVOT_DEPLOY_MOTOR_ID = 11;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
@@ -93,7 +83,7 @@ public class MantaPivotConstants {
 	public static MotorIOTalonFXConfig getIOConfig() {
 		MotorIOTalonFXConfig IOConfig = new MotorIOTalonFXConfig();
 		IOConfig.mainConfig = getFXConfig();
-		IOConfig.mainID = MantaPivot_DEPLOY_MOTOR_ID;
+		IOConfig.mainID = MANTA_PIVOT_DEPLOY_MOTOR_ID;
 		IOConfig.mainBus = "";
 		IOConfig.followerConfig = getFXConfig()
 				.withSoftwareLimitSwitch(new SoftwareLimitSwitchConfigs()

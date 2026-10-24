@@ -30,6 +30,9 @@ import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzClimb.ClimbConstants;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
+import frc.robot.CatzSubsystems.CatzElevator.CatzElevator;
+import frc.robot.CatzSubsystems.CatzElevator.ElevatorConstants;
+import frc.robot.CatzSubsystems.CatzElevator.ElevatorConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.SpindexerConstants;
 import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
@@ -38,7 +41,6 @@ import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.IntakeRollerConstants;
-import frc.robot.CatzSubsystems.CatzMantaArm.MantaArmConstants;
 import frc.robot.CatzSubsystems.CatzMantaPivot.CatzMantaPivot;
 import frc.robot.CatzSubsystems.CatzMantaPivot.MantaPivotConstants;
 import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
@@ -203,21 +205,22 @@ public class CatzSuperstructure {
     // Public Command States
     // --------------------------------------------------------------------------
 
-    public Angle mantaArmSetpoint = MantaArmConstants.DEPLOY_POSITION;
-    public boolean isMantaArmDeployed = false;
-    public Angle mantaPivotSetpoint = MantaArmConstants.DEPLOY_POSITION;
+    // This stuff doesn't do anything
+    public Angle elevatorSetpoint = ElevatorConstants.DEPLOY_POSITION;
+    public boolean isElevatorDeployed = false;
+    public Angle mantaPivotSetpoint = ElevatorConstants.DEPLOY_POSITION;
     public boolean isMantaPivotDeployed = false;
 
-    public Command MantaArmMoveOut(){
+    public Command ElevatorMoveOut(){
         return Commands.runOnce(() -> {
-            mantaArmSetpoint = MantaArmConstants.DEPLOY_POSITION;
-            isMantaArmDeployed = true;
+            elevatorSetpoint = ElevatorConstants.DEPLOY_POSITION;
+            isElevatorDeployed = true;
         });
     }
-    public Command MantaArmMoveIn(){
+    public Command ElevatorMoveIn(){
         return Commands.runOnce(() -> {
-            mantaArmSetpoint = MantaArmConstants.STOW_POSITION;
-            isMantaArmDeployed = false;
+            elevatorSetpoint = ElevatorConstants.STOW_POSITION;
+            isElevatorDeployed = false;
         });
     }
     public Command MantaPivotUp(){
@@ -236,17 +239,17 @@ public class CatzSuperstructure {
     public Command MantaPivotAndArmDeploy(){
         return Commands.sequence(
                         MantaPivotUp(),
-                        MantaArmMoveOut()
-                // alignToBackUpClimb()
+                        ElevatorMoveOut()
                 );
     }
     public Command MantaPivotAndArmRetract(){
         return Commands.sequence(
                         MantaPivotDown(),
-                        MantaArmMoveIn()
-                // alignToBackUpClimb()
+                        ElevatorMoveIn()
                 );
     }
+    // end of stuff that doesn't do anything
+
     public Command cmdShooterStop() {
         return Commands.parallel(
                 CatzFlywheels.Instance.setpointCommand(FlywheelConstants.OFF_SETPOINT),
@@ -672,7 +675,6 @@ public class CatzSuperstructure {
     public Command toggleManualMantaPivot() {
         return Commands.runOnce(() -> {
             disableManuals(CatzMantaPivot.Instance);
-            climbManual = true;
 
             CatzMantaPivot.Instance.followSetpointCommand(() -> {
                 double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
@@ -681,13 +683,17 @@ public class CatzSuperstructure {
 
                 return Setpoint.withVoltageSetpoint(input);
             }).schedule();
-            // if (climbManual == false) {
-
-            // } else {
-            //     // CatzClimb.Instance.setpointCommand(ClimbConstants.STOW_SETPOINT).schedule();
-            //     climbManual = false;
-            // }
         });
+    }
+
+    public Command toggleManualElevator() {
+    return CatzElevator.Instance.followSetpointCommand(() -> {
+                double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                if (Math.abs(input) < 0.84)
+                    return Setpoint.withVoltageSetpoint(0.0);
+
+                return Setpoint.withVoltageSetpoint(input);
+        }).beforeStarting(() -> disableManuals(CatzElevator.Instance));
     }
 
     public Command toggleManualHood() {

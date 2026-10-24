@@ -12,7 +12,7 @@ public class CatzMantaPivot extends ServoMotorSubsystem<MantaPivotIO, MantaPivot
 
     public static final CatzMantaPivot Instance = new CatzMantaPivot();
 
-    public enum IntakeState{
+    public enum PivotState{
         ON,
         OFF,
         AUTO; //object detection mode
@@ -40,18 +40,18 @@ public class CatzMantaPivot extends ServoMotorSubsystem<MantaPivotIO, MantaPivot
 
     private static MantaPivotIO getIOInstance() {
         if (CatzConstants.MantaPivotOn == false) {
-            System.out.println("Intake Deploy Disabled by CatzConstants");
+            System.out.println("Pivot Disabled by CatzConstants");
             return new MantaPivotIOSim(MantaPivotConstants.gains);
         }
         switch (CatzConstants.hardwareMode) {
             case REAL:
-                System.out.println("Intake Deploy Configured for Real");
+                System.out.println("Pivot Configured for Real");
                 return new MantaPivotIOTalonFX(MantaPivotConstants.getIOConfig());
             case SIM:
-                System.out.println("Intake Deploy Configured for Simulation");
+                System.out.println("Pivot Configured for Simulation");
                 return new MantaPivotIOSim(MantaPivotConstants.gains);
                 default:
-                System.out.println("Intake Deploy Unconfigured");
+                System.out.println("Pivot Unconfigured");
                 return new MantaPivotIOSim(MantaPivotConstants.gains);
         }
     }
