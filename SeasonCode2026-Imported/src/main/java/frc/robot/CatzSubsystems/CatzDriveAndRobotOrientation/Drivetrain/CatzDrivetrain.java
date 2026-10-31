@@ -18,8 +18,6 @@ import org.wpilib.math.trajectory.DrivetrainSplineSample;
 import org.wpilib.driverstation.internal.DriverStationBackend;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.Timer;
-import org.wpilib.telemetry.Telemetry;
-import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SubsystemBase;
@@ -77,8 +75,6 @@ public class CatzDrivetrain extends SubsystemBase {
 
   private Queue<Pair<Double, SwerveSetpoint>> futureSwerveSetpoints = new LinkedList<>();
   public ChassisVelocities futureChassisVelocities = new ChassisVelocities();
-
-  private final Field2d field;
 
   private boolean wasAntihoarding;
 
@@ -138,9 +134,6 @@ public class CatzDrivetrain extends SubsystemBase {
     } else {
       allSignals = new BaseStatusSignal[0];
     }
-
-    field = new Field2d();
-    Telemetry.log("Field", field);
 
     swerveSetpointGenerator = new SwerveSetpointGenerator(SWERVE_KINEMATICS, MODULE_TRANSLATIONS);
   }

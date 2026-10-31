@@ -218,6 +218,8 @@ public class Robot extends LoggedRobot {
       // coralDetectionThread.startPeriodic(0.1);
       Telemetry.log("Won Auton?", false);
       Telemetry.log("Swiping?", false);
+
+      LimelightHelpers.setRewindEnabled(DetectionConstants.kLimelightName, true);
   }
 
   @Override
@@ -229,8 +231,6 @@ public class Robot extends LoggedRobot {
       }
     }
     CommandScheduler.getInstance().run();
-
-    LimelightHelpers.setRewindEnabled(DetectionConstants.kLimelightName, true);
   }
 
   @Override
