@@ -28,8 +28,6 @@ import frc.robot.FieldConstants;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker.OdometryObservation;
-import frc.robot.CatzSubsystems.CatzShooter.AimCalculations;
-import frc.robot.CatzSubsystems.CatzShooter.AimCalculations.HoardTargetType;
 import frc.robot.Robot;
 import frc.robot.Utilities.Alert;
 import frc.robot.Utilities.HolonomicDriveController;
@@ -187,8 +185,6 @@ public class CatzDrivetrain extends SubsystemBase {
         gyroAngle2d,
         Timer.getFPGATimestamp());
     CatzRobotTracker.Instance.addOdometryObservation(observation);
-
-    Logger.recordOutput("Dist from hoard", CatzRobotTracker.Instance.getEstimatedPose().getTranslation().getDistance(AimCalculations.getCornerHoardingTarget(HoardTargetType.RELATIVE_CLOSE)));
 
     isAntihoarding = isAntihoarding();
     if (isAntihoarding && !wasAntihoarding) { // started antihoarding

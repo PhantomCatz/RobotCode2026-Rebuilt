@@ -14,14 +14,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.CatzConstants;
-import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
-import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 
 public class AutoRoutineBase {
     private AutoRoutine routine;
@@ -36,42 +30,6 @@ public class AutoRoutineBase {
                     CatzRobotTracker.getInstance().resetPose(startTraj.getInitialPose().get());
                 })
                         .andThen(Commands.sequence(sequence)));
-    }
-
-    protected Command shootAllBalls(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
-            CatzSuperstructure.Instance.cmdShooterStop()
-        ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
-        .andThen(CatzSuperstructure.Instance.intakeOFF()
-        .andThen(CatzSuperstructure.Instance.deployIntake()));
-    }
-
-    protected Command shootAllBallsNoJiggle(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls w/out jiggle command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time),
-            CatzSuperstructure.Instance.cmdShooterStop()
-        )
-        .andThen(CatzSuperstructure.Instance.intakeOFF());
-    }
-
-    protected Command shootAllBallsNoJiggleNoStop(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls noStop w/out jiggle command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time)
-        )
-        .andThen(CatzSuperstructure.Instance.intakeOFF());
-    }
-
-    protected Command shootAllBallsNoStop(double time){
-        return Commands.sequence(
-            Commands.print("shootAllBalls noStop command"),
-            CatzSuperstructure.Instance.cmdHubShoot().withTimeout(time)
-        ).deadlineFor(CatzSuperstructure.Instance.jiggleIntakeCommand())
-        .andThen(CatzSuperstructure.Instance.intakeOFF()
-        .andThen(CatzSuperstructure.Instance.deployIntake()));
     }
 
     private double pathStartTime = 0.0;
@@ -142,26 +100,6 @@ public class AutoRoutineBase {
                     CatzDrivetrain.getInstance()
             ).unless(() -> isAtStrictPose(traj))
         ).withTimeout(traj.getRawTrajectory().getTotalTime() + 5.0);
-    }
-
-    protected Command followTrajectoryWhileShooting(AutoTrajectory traj) {
-        return Commands.defer(() -> {
-            final Command choreoCommand = traj.cmd();
-            return new FunctionalCommand(
-                    () -> {
-                        CatzDrivetrain.getInstance().followChoreoTrajectoryInit(traj);
-                        choreoCommand.initialize();
-                        pathStartTime = Timer.getFPGATimestamp();
-                        // CatzDrivetrain.getInstance().setShootWhileMoveConfig();
-                    },
-                    () -> {
-                        choreoCommand.execute();
-                        CatzSuperstructure.Instance.shootWhileMove(true, true, CatzRobotTracker.Instance.getEstimatedPose(), CatzRobotTracker.Instance.getRobotRelativeChassisSpeeds());
-                    },
-                    choreoCommand::end,
-                    () -> isAtStrictPose(traj)).withTimeout(traj.getRawTrajectory().getTotalTime() + 5);
-        }, Set.of(CatzDrivetrain.getInstance(), CatzTurret.Instance, CatzFlywheels.Instance, CatzHood.Instance, CatzSpindexer.Instance, CatzYdexer.Instance))
-        .andThen(CatzSuperstructure.Instance.cmdShooterStop());
     }
 
     private boolean isAtPose(AutoTrajectory trajectory) {

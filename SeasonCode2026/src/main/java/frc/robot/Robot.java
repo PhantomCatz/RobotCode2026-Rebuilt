@@ -16,7 +16,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 
 import choreo.auto.AutoFactory;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
@@ -30,19 +29,14 @@ import frc.robot.CatzConstants.RobotID;
 import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
+import frc.robot.CatzSubsystems.CatzArm.CatzMantaPivot.CatzMantaPivot;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzSpindexer.CatzSpindexer;
-import frc.robot.CatzSubsystems.CatzIndexer.CatzYdexer.CatzYdexer;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.IntakeDeployConstants;
 import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
-import frc.robot.CatzSubsystems.CatzMantaPivot.CatzMantaPivot;
-import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
-import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
-import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.VirtualSubsystem;
 
@@ -160,14 +154,9 @@ public class Robot extends LoggedRobot {
       }
     }
     allSubsystems[0] = CatzClimb.Instance;
-    allSubsystems[1] = CatzSpindexer.Instance;
-    allSubsystems[2] = CatzYdexer.Instance;
-    allSubsystems[3] = CatzIntakeDeploy.Instance;
-    allSubsystems[4] = CatzIntakeRoller.Instance;
-    allSubsystems[5] = CatzFlywheels.Instance;
-    allSubsystems[6] = CatzHood.Instance;
-    allSubsystems[7] = CatzTurret.Instance;
-    allSubsystems[8] = CatzMantaPivot.Instance;
+    allSubsystems[1] = CatzIntakeDeploy.Instance;
+    allSubsystems[2] = CatzIntakeRoller.Instance;
+    allSubsystems[3] = CatzMantaPivot.Instance;
 
     m_robotContainer = new RobotContainer();
 
@@ -233,7 +222,6 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
     autonStartTime = Timer.getFPGATimestamp();
-    CatzTurret.Instance.setCurrentPosition(Units.Rotations.of(CatzTurret.Instance.getCANCoderAbsPos()));
     CatzIntakeDeploy.Instance.setCurrentPosition(IntakeDeployConstants.HOME_POSITION);
     m_autonomousCommand = AutoRoutineSelector.Instance.getSelectedCommand();
 
@@ -255,7 +243,6 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     CatzSuperstructure.Instance.intakeSetpoint = IntakeDeployConstants.DEPLOY_POSITION;
     CatzSuperstructure.Instance.isIntakeDeployed = true;
-    CatzSuperstructure.Instance.cmdShooterStop().schedule();
     CatzDrivetrain.getInstance().setNormalConfig();
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);

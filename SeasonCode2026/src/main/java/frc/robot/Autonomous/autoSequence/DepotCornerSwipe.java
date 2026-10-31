@@ -18,15 +18,11 @@ public class DepotCornerSwipe extends AutoRoutineBase{
     }
 
     public Command getPathCommand() {
-        return Commands.deadline(
-            Commands.sequence(
-                CatzSuperstructure.Instance.deployIntake(),
-                CatzSuperstructure.Instance.intakeON(),
-                followTrajectory(traj1),
-                // followTrajectory(traj2),
-                CatzSuperstructure.Instance.intakeOFF()
-            ),
-            CatzSuperstructure.Instance.trackTower()
+        return Commands.sequence(
+            CatzSuperstructure.Instance.deployIntake(),
+            CatzSuperstructure.Instance.intakeON(),
+            followTrajectory(traj1),
+            CatzSuperstructure.Instance.intakeOFF()
         );
     }
 }

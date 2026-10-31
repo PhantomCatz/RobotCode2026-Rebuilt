@@ -16,14 +16,11 @@ public class TowerSwipe extends AutoRoutineBase{
     }
 
     public Command getPathCommand() {
-        return Commands.deadline(
-            Commands.sequence(
-                CatzSuperstructure.Instance.deployIntake(),
-                CatzSuperstructure.Instance.intakeON(),
-                followTrajectory(traj1),
-                CatzSuperstructure.Instance.intakeOFF()
-            ),
-            CatzSuperstructure.Instance.trackTower()
+        return Commands.sequence(
+            CatzSuperstructure.Instance.deployIntake(),
+            CatzSuperstructure.Instance.intakeON(),
+            followTrajectory(traj1),
+            CatzSuperstructure.Instance.intakeOFF()
         );
     }
 }

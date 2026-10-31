@@ -74,6 +74,10 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		io.setGainsSlot0(p, 0.0, 0.0, 0.0, v, 0.0, 0.0);
 	}
 
+	public void setGainsPIDSVAG(double p, double i, double d, double s, double v, double a, double g) {
+		io.setGainsSlot0(p, i, d, s, v, a, g);
+	}
+
 	public BaseStatusSignal[] getSignals(){
 		return io.getSignals();
 	}

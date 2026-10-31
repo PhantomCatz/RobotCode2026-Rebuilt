@@ -11,7 +11,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.TurretConstants;
 import frc.robot.Utilities.AllianceFlipUtil;
 import lombok.Getter;
 
@@ -93,8 +92,6 @@ public class FieldConstants {
 
   public static final Distance HUB_HEIGHT = edu.wpi.first.units.Units.Inches.of(72.0);
   public static final Distance HUB_RIM_RADIUS = edu.wpi.first.units.Units.Inches.of(41.0 / 2.0);
-  public static final double HEIGHT_DIFF = FieldConstants.HUB_HEIGHT.in(edu.wpi.first.units.Units.Meters)
-      - TurretConstants.TURRET_HEIGHT.in(edu.wpi.first.units.Units.Meters);
 
   public static final double BOTTOM_TRENCH_MAX_Y = 1.143760085105896;
   public static final double TOP_TRENCH_MIN_Y = fieldWidth - BOTTOM_TRENCH_MAX_Y;

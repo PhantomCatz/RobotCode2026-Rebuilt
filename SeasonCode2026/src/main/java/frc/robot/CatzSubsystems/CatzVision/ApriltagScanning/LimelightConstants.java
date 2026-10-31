@@ -19,7 +19,7 @@ public class LimelightConstants {
     private static final double limelightCrosshairCompensationYaw = -1.0; // -2.0 for sushi
 
     public static final ApriltagScanningIO[] LIMELIGHT_ARRAY = new ApriltagScanningIO[] {
-        new ApriltagScanningIOMovable(new LimelightConfig("limelight-cheese",
+        new ApriltagScanningIOLimelight(new LimelightConfig("limelight-cheese",
             new Pose3d(
                 new Translation3d(
                     Inches.of(1.064).in(Meters), //NOTE this offset is limelight's offset relative to the turret.
