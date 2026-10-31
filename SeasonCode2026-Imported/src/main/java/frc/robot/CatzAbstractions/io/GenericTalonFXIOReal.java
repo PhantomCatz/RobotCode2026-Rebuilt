@@ -5,6 +5,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
@@ -314,6 +315,26 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 					break;
 			}
 		});
+	}
+
+	public void setCurrentLimits(TalonFX fx, int SupplyCurrentLimit, int SupplyCurrentLowerLimit, int StatorCurrentLimit) {
+		configExecutor.submit(() -> {
+			TalonFXConfiguration FXConfig = new TalonFXConfiguration();
+			TalonFXConfigurator motorConfig = fx.getConfigurator();
+			TalonFXConfiguration DefaultConfigs = new TalonFXConfiguration();
+			motorConfig.refresh(DefaultConfigs.CurrentLimits);
+			FXConfig.CurrentLimits.SupplyCurrentLimit = SupplyCurrentLimit;
+			FXConfig.CurrentLimits.SupplyCurrentLowerLimit = SupplyCurrentLowerLimit;
+			FXConfig.CurrentLimits.StatorCurrentLimit = StatorCurrentLimit;
+			FXConfig.CurrentLimits.SupplyCurrentLowerTime = DefaultConfigs.CurrentLimits.SupplyCurrentLowerTime;
+			FXConfig.CurrentLimits.SupplyCurrentLimitEnable = DefaultConfigs.CurrentLimits.SupplyCurrentLimitEnable;
+			FXConfig.CurrentLimits.StatorCurrentLimitEnable = DefaultConfigs.CurrentLimits.StatorCurrentLimitEnable;
+			for (int i = 0; i < 5; i++) {
+				StatusCode result = fx.getConfigurator().apply(FXConfig.CurrentLimits);
+				if (result.isOK())
+					break;
+			}
+		})
 	}
 
 	// ... (Use configExecutor for other config methods too) ...

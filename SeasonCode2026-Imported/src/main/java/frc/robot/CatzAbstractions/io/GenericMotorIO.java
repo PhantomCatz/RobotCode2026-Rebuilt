@@ -3,6 +3,7 @@ package frc.robot.CatzAbstractions.io;
 
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -126,5 +127,7 @@ public interface GenericMotorIO<T extends GenericMotorIO.MotorIOInputs> {
   public default void setNeutralMode(TalonFX fx, NeutralModeValue neutralMode) {}
 
   public default void setNeutralMode(TalonFXS fx, NeutralModeValue neutralMode) {}
+
+  public default void applyConfig(TalonFX fx, TalonFXConfiguration config) {}
 
 }
