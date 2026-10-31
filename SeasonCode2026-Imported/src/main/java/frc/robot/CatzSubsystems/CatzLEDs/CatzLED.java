@@ -11,7 +11,6 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.EmptyAnimation;
 import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SingleFadeAnimation;
-import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
@@ -74,7 +73,7 @@ public class CatzLED extends VirtualSubsystem {
 
   private final StrobeAnimation stow;
   private final StrobeAnimation on;
-  private final SolidColor off;
+  private final StrobeAnimation off;
 
   private final RainbowAnimation climb;
 
@@ -85,14 +84,14 @@ public class CatzLED extends VirtualSubsystem {
     stow = new StrobeAnimation(START, END);
     stow.FrameRate = 6.7;
     on = new StrobeAnimation(START, END);
-    off = new SolidColor(START, END);
+    off = new StrobeAnimation(START, END);
 
     climb = new RainbowAnimation(START, END);
 
     disabledRed.Color = new RGBWColor(Color.RED);
     disabledBlue.Color = new RGBWColor(Color.BLUE);
 
-    stow.Color = new RGBWColor(Color.RED);
+    stow.Color = new RGBWColor(Color.PURPLE);
     on.Color = new RGBWColor(Color.GREEN);
     off.Color = new RGBWColor(Color.RED);
 

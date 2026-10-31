@@ -1694,4 +1694,30 @@ public class LimelightHelpers {
 
         return results;
     }
+
+    //grabbed from v1.14
+
+    /**
+     * Enables or pauses the rewind buffer recording.
+     * @param limelightName Name of the Limelight camera
+     * @param enabled True to enable recording, false to pause
+     */
+    public static void setRewindEnabled(String limelightName, boolean enabled) {
+        setLimelightNTDouble(limelightName, "rewind_enable_set", enabled ? 1 : 0);
+    }
+
+    /**
+     * Triggers a rewind capture with the specified duration.
+     * Maximum duration is 165 seconds. Rate-limited on the Limelight.
+     * @param limelightName Name of the Limelight camera
+     * @param durationSeconds Duration of rewind capture in seconds (max 165)
+     */
+    public static void triggerRewindCapture(String limelightName, double durationSeconds) {
+        double[] currentArray = getLimelightNTDoubleArray(limelightName, "capture_rewind");
+        double counter = (currentArray.length > 0) ? currentArray[0] : 0;
+        double[] entries = new double[2];
+        entries[0] = counter + 1;
+        entries[1] = Math.min(durationSeconds, 165);
+        setLimelightNTDoubleArray(limelightName, "capture_rewind", entries);
+    }
 }

@@ -44,6 +44,8 @@ import frc.robot.CatzSubsystems.CatzLEDs.CatzLED;
 import frc.robot.CatzSubsystems.CatzShooter.CatzFlywheels.CatzFlywheels;
 import frc.robot.CatzSubsystems.CatzShooter.CatzHood.CatzHood;
 import frc.robot.CatzSubsystems.CatzShooter.CatzTurret.CatzTurret;
+import frc.robot.CatzSubsystems.CatzVision.Detection.DetectionConstants;
+import frc.robot.Utilities.LimelightHelpers;
 import frc.robot.CatzSubsystems.CatzVision.Detection.Detection;
 import frc.robot.Utilities.Setpoint;
 import frc.robot.Utilities.VirtualSubsystem;
@@ -227,11 +229,14 @@ public class Robot extends LoggedRobot {
       }
     }
     CommandScheduler.getInstance().run();
+
+    LimelightHelpers.setRewindEnabled(DetectionConstants.kLimelightName, true);
   }
 
   @Override
   public void disabledInit() {
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(200);
+    LimelightHelpers.triggerRewindCapture(DetectionConstants.kLimelightName, 165);
   }
 
   @Override
