@@ -18,12 +18,12 @@ import frc.robot.Utilities.Setpoint;
 public class ElevatorConstants {
 	// TODO make real numbers
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
-	public static final Angle HOLD_POSITION = Units.Rotations.of(0.30);
-	public static final Angle L1_POSITION = Units.Rotations.of(0.40);
-	public static final Angle L2_POSITION = Units.Rotations.of(0.50);
-	public static final Angle L3_POSITION = Units.Rotations.of(0.60);
-	public static final Angle L4_POSITION = Units.Rotations.of(0.70);
-	public static final Angle ALGAE_POSITION = Units.Rotations.of(0.90);
+	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20); //0.388 max
+	public static final Angle L1_POSITION = Units.Rotations.of(0.20);
+	public static final Angle L2_POSITION = Units.Rotations.of(0.20);
+	public static final Angle L3_POSITION = Units.Rotations.of(0.20);
+	public static final Angle L4_POSITION = Units.Rotations.of(0.20);
+	public static final Angle ALGAE_POSITION = Units.Rotations.of(0.20);
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint HOLD = Setpoint.withMotionMagicSetpoint(HOLD_POSITION);
@@ -34,7 +34,7 @@ public class ElevatorConstants {
 	public static final Setpoint ALGAE = Setpoint.withMotionMagicSetpoint(ALGAE_POSITION);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-		case SN_MANTA -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
+		case SN_MANTA -> new Gains(5.5, 0, 0.0, 0.35, 0.0, 0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -79,7 +79,7 @@ public class ElevatorConstants {
 		FXConfig.Feedback.SensorToMechanismRatio = 4*1.432*Math.PI*2; // inches the elevator raises per rotation of motor
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 
 		return FXConfig;

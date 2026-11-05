@@ -18,12 +18,12 @@ import frc.robot.Utilities.Setpoint;
 public class MantaPivotConstants {
 	// TODO make real numbers
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
-	public static final Angle HOLD_POSITION = Units.Rotations.of(0.30);
-	public static final Angle L1_POSITION = Units.Rotations.of(0.40);
-	public static final Angle L2_POSITION = Units.Rotations.of(0.50);
-	public static final Angle L3_POSITION = Units.Rotations.of(0.60);
-	public static final Angle L4_POSITION = Units.Rotations.of(0.70);
-	public static final Angle ALGAE_POSITION = Units.Rotations.of(0.90);
+	public static final Angle HOLD_POSITION = Units.Rotations.of(-0.30);
+	public static final Angle L1_POSITION = Units.Rotations.of(-0.40);
+	public static final Angle L2_POSITION = Units.Rotations.of(-0.50);
+	public static final Angle L3_POSITION = Units.Rotations.of(-0.60);
+	public static final Angle L4_POSITION = Units.Rotations.of(-0.70);
+	public static final Angle ALGAE_POSITION = Units.Rotations.of(-0.90);
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint HOLD = Setpoint.withMotionMagicSetpoint(HOLD_POSITION);
@@ -34,9 +34,7 @@ public class MantaPivotConstants {
 	public static final Setpoint ALGAE = Setpoint.withMotionMagicSetpoint(ALGAE_POSITION);
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN1 -> new Gains(0.5, 0, 0.0, 0.35, 0.0, 0, 1.9);
-        case SN2 -> new Gains(10.0, 0.0, 0.0, 0.0, 2, 0.0, 0.0);
-        case SN_TEST -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        case SN_MANTA -> new Gains(2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 

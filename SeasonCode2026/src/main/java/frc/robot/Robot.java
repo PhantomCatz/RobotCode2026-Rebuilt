@@ -30,6 +30,7 @@ import frc.robot.Autonomous.AutoRoutineSelector;
 import frc.robot.CatzAbstractions.Bases.GenericMotorSubsystem;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzArm.CatzMantaPivot.CatzMantaPivot;
+import frc.robot.CatzSubsystems.CatzArm.CatzElevator.CatzElevator;
 import frc.robot.CatzSubsystems.CatzClimb.CatzClimb;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
@@ -46,7 +47,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private BaseStatusSignal[] allSignals;
-  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[9];
+  private GenericMotorSubsystem[] allSubsystems = new GenericMotorSubsystem[5];
 
   public static double autonStartTime = 0.0;
   public static boolean climbedInAuton = false;
@@ -157,6 +158,7 @@ public class Robot extends LoggedRobot {
     allSubsystems[1] = CatzIntakeDeploy.Instance;
     allSubsystems[2] = CatzIntakeRoller.Instance;
     allSubsystems[3] = CatzMantaPivot.Instance;
+    allSubsystems[4] = CatzElevator.Instance;
 
     m_robotContainer = new RobotContainer();
 
