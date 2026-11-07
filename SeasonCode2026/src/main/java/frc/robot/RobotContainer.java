@@ -96,6 +96,7 @@ public class RobotContainer {
 
     xboxDrv.povUp().onTrue(superstructure.incrementScorePosition());
     xboxDrv.povDown().onTrue(superstructure.decrementScorePosition());
+    xboxDrv.leftBumper().onTrue(superstructure.toggleFrontBack());
     xboxDrv.a().onTrue(superstructure.armLX());
     xboxDrv.x().onTrue(superstructure.armStow());
 

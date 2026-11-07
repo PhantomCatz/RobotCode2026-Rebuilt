@@ -11,27 +11,50 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.CatzConstants;
 import frc.robot.Robot;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal.MotorIOTalonFXConfig;
+import frc.robot.CatzSubsystems.CatzArm.CatzElevator.CatzElevator.ArmState;
 import frc.robot.Utilities.LoggedTunableNumber;
 import frc.robot.Utilities.MotorUtil.Gains;
 import frc.robot.Utilities.Setpoint;
 
 public class ElevatorConstants {
 	// TODO make real numbers
+	// inches of arm (even though it says rotations)
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
 	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20); //0.388 max
-	public static final Angle L1_POSITION = Units.Rotations.of(0.20);
-	public static final Angle L2_POSITION = Units.Rotations.of(0.20);
-	public static final Angle L3_POSITION = Units.Rotations.of(0.20);
-	public static final Angle L4_POSITION = Units.Rotations.of(0.20);
-	public static final Angle ALGAE_POSITION = Units.Rotations.of(0.20);
+
+	public static final Angle L1_FRONT_POSITION = Units.Rotations.of(5.0);
+	public static final Angle L2_FRONT_POSITION = Units.Rotations.of(10.0);
+	public static final Angle L3_FRONT_POSITION = Units.Rotations.of(15.0);
+	public static final Angle L4_FRONT_POSITION = Units.Rotations.of(20.0);
+
+	public static final Angle L1_BACK_POSITION = Units.Rotations.of(5.0);
+	public static final Angle L2_BACK_POSITION = Units.Rotations.of(10.0);
+	public static final Angle L3_BACK_POSITION = Units.Rotations.of(15.0);
+	public static final Angle L4_BACK_POSITION = Units.Rotations.of(20.0);
+
+	public static final Angle ALGAE_FRONT_POSITION = Units.Rotations.of(25.0);
+	public static final Angle ALGAE_BACK_POSITION = Units.Rotations.of(25.0);
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint HOLD = Setpoint.withMotionMagicSetpoint(HOLD_POSITION);
-	public static final Setpoint L1 = Setpoint.withMotionMagicSetpoint(L1_POSITION);
-	public static final Setpoint L2 = Setpoint.withMotionMagicSetpoint(L2_POSITION);
-	public static final Setpoint L3 = Setpoint.withMotionMagicSetpoint(L3_POSITION);
-	public static final Setpoint L4 = Setpoint.withMotionMagicSetpoint(L4_POSITION);
-	public static final Setpoint ALGAE = Setpoint.withMotionMagicSetpoint(ALGAE_POSITION);
+
+	public static final Setpoint L1_FRONT = Setpoint.withMotionMagicSetpoint(L1_FRONT_POSITION);
+	public static final Setpoint L2_FRONT = Setpoint.withMotionMagicSetpoint(L2_FRONT_POSITION);
+	public static final Setpoint L3_FRONT = Setpoint.withMotionMagicSetpoint(L3_FRONT_POSITION);
+	public static final Setpoint L4_FRONT = Setpoint.withMotionMagicSetpoint(L4_FRONT_POSITION);
+
+	public static final Setpoint L1_BACK = Setpoint.withMotionMagicSetpoint(L1_BACK_POSITION);
+	public static final Setpoint L2_BACK = Setpoint.withMotionMagicSetpoint(L2_BACK_POSITION);
+	public static final Setpoint L3_BACK = Setpoint.withMotionMagicSetpoint(L3_BACK_POSITION);
+	public static final Setpoint L4_BACK = Setpoint.withMotionMagicSetpoint(L4_BACK_POSITION);
+
+	public static final Setpoint ALGAE_FRONT = Setpoint.withMotionMagicSetpoint(ALGAE_FRONT_POSITION);
+	public static final Setpoint ALGAE_BACK = Setpoint.withMotionMagicSetpoint(ALGAE_BACK_POSITION);
+
+	public static final Setpoint[][] ELEVATOR_SCORE_SETPOINTS = {{L1_FRONT, L2_FRONT, L3_FRONT, L4_FRONT}, {L1_BACK, L2_BACK, L3_BACK, L4_BACK}};
+	public static final Setpoint[] ELEVATOR_ALGAE_SETPOINTS = {ALGAE_FRONT, ALGAE_BACK};
+	public static final ArmState[][] ARM_SCORE_STATES = {{ArmState.L1_FRONT, ArmState.L2_FRONT, ArmState.L3_FRONT, ArmState.L4_FRONT}, {ArmState.L1_BACK, ArmState.L2_BACK, ArmState.L3_BACK, ArmState.L4_BACK}};
+	public static final ArmState[] ARM_ALGAE_STATES = {ArmState.ALGAE_FRONT, ArmState.ALGAE_BACK};
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
 		case SN_MANTA -> new Gains(5.5, 0, 0.0, 0.35, 0.0, 0, 0.0);
@@ -76,7 +99,7 @@ public class ElevatorConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-		FXConfig.Feedback.SensorToMechanismRatio = 4*1.432*Math.PI*2; // inches the elevator raises per rotation of motor
+		FXConfig.Feedback.SensorToMechanismRatio = 4*1.432*Math.PI*2; // rotations of motor for one inch raise elevator
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

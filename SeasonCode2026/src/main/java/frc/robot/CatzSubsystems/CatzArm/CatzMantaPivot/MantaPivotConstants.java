@@ -17,21 +17,42 @@ import frc.robot.Utilities.Setpoint;
 
 public class MantaPivotConstants {
 	// TODO make real numbers
+	// Arm angle in rotations
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
-	public static final Angle HOLD_POSITION = Units.Rotations.of(-0.30);
-	public static final Angle L1_POSITION = Units.Rotations.of(-0.40);
-	public static final Angle L2_POSITION = Units.Rotations.of(-0.50);
-	public static final Angle L3_POSITION = Units.Rotations.of(-0.60);
-	public static final Angle L4_POSITION = Units.Rotations.of(-0.70);
-	public static final Angle ALGAE_POSITION = Units.Rotations.of(-0.90);
+	public static final Angle HORIZONTAL_POSITION = Units.Rotation.of(5.0/360.0);
+	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20);
+
+	public static final Angle L1_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.05));
+	public static final Angle L2_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.10));
+	public static final Angle L3_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.15));
+	public static final Angle L4_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.20));
+
+	public static final Angle L1_BACK_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.45));
+	public static final Angle L2_BACK_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.40));
+	public static final Angle L3_BACK_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.35));
+	public static final Angle L4_BACK_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.30));
+
+	public static final Angle ALGAE_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.15));
+	public static final Angle ALGAE_BACK_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.35));
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint HOLD = Setpoint.withMotionMagicSetpoint(HOLD_POSITION);
-	public static final Setpoint L1 = Setpoint.withMotionMagicSetpoint(L1_POSITION);
-	public static final Setpoint L2 = Setpoint.withMotionMagicSetpoint(L2_POSITION);
-	public static final Setpoint L3 = Setpoint.withMotionMagicSetpoint(L3_POSITION);
-	public static final Setpoint L4 = Setpoint.withMotionMagicSetpoint(L4_POSITION);
-	public static final Setpoint ALGAE = Setpoint.withMotionMagicSetpoint(ALGAE_POSITION);
+
+	public static final Setpoint L1_FRONT = Setpoint.withMotionMagicSetpoint(L1_FRONT_POSITION);
+	public static final Setpoint L2_FRONT = Setpoint.withMotionMagicSetpoint(L2_FRONT_POSITION);
+	public static final Setpoint L3_FRONT = Setpoint.withMotionMagicSetpoint(L3_FRONT_POSITION);
+	public static final Setpoint L4_FRONT = Setpoint.withMotionMagicSetpoint(L4_FRONT_POSITION);
+
+	public static final Setpoint L1_BACK = Setpoint.withMotionMagicSetpoint(L1_BACK_POSITION);
+	public static final Setpoint L2_BACK = Setpoint.withMotionMagicSetpoint(L2_BACK_POSITION);
+	public static final Setpoint L3_BACK = Setpoint.withMotionMagicSetpoint(L3_BACK_POSITION);
+	public static final Setpoint L4_BACK = Setpoint.withMotionMagicSetpoint(L4_BACK_POSITION);
+
+	public static final Setpoint ALGAE_FRONT = Setpoint.withMotionMagicSetpoint(ALGAE_FRONT_POSITION);
+	public static final Setpoint ALGAE_BACK = Setpoint.withMotionMagicSetpoint(ALGAE_BACK_POSITION);
+
+	public static final Setpoint[][] PIVOT_SCORE_SETPOINTS = {{L1_FRONT, L2_FRONT, L3_FRONT, L4_FRONT}, {L1_BACK, L2_BACK, L3_BACK, L4_BACK}};
+	public static final Setpoint[] PIVOT_ALGAE_SETPOINTS = {ALGAE_FRONT, ALGAE_BACK};
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
         case SN_MANTA -> new Gains(2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

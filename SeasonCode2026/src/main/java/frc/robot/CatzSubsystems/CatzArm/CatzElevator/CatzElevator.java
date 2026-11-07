@@ -13,11 +13,16 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
     public enum ArmState {
         STOW,
         HOLD,
-        L1,
-        L2,
-        L3,
-        L4,
-        ALGAE
+        L1_FRONT,
+        L2_FRONT,
+        L3_FRONT,
+        L4_FRONT,
+        L1_BACK,
+        L2_BACK,
+        L3_BACK,
+        L4_BACK,
+        ALGAE_FRONT,
+        ALGAE_BACK
     }
 
     private CatzElevator() {

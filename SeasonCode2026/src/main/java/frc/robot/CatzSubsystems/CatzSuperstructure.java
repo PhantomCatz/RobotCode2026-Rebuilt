@@ -56,8 +56,8 @@ public class CatzSuperstructure {
     private final SubsystemVisualizer visualizer;
 
     private ArmState armState = ArmState.STOW;
-    private final Command[] scoreCommands = {armL1(), armL2(), armL3(), armL4()};
     private int scoreLevel = 0;
+    private boolean isBack = false;
 
     private final TowerSwipe outpostSwipeRoutine;
     private final OppositeTowerSwipe outpostOppositeSwipeRoutine;
@@ -115,33 +115,20 @@ public class CatzSuperstructure {
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.HOLD))
         .beforeStarting(() -> armState = ArmState.HOLD);
     }
-    public Command armL1() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.L1)
-        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.L1))
-        .beforeStarting(() -> armState = ArmState.L1);
-    }
-    public Command armL2() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.L2)
-        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.L2))
-        .beforeStarting(() -> armState = ArmState.L2);
-    }
-    public Command armL3() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.L3)
-        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.L3))
-        .beforeStarting(() -> armState = ArmState.L3);
-    }
-    public Command armL4() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.L4)
-        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.L4))
-        .beforeStarting(() -> armState = ArmState.L4);
-    }
     public Command armAlgae() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.ALGAE)
-        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.ALGAE))
-        .beforeStarting(() -> armState = ArmState.ALGAE);
+        return CatzElevator.Instance.setpointCommand(ElevatorConstants.ELEVATOR_ALGAE_SETPOINTS[isBack ? 1 : 0])
+        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.PIVOT_ALGAE_SETPOINTS[isBack ? 1 : 0]))
+        .beforeStarting(() -> armState = ElevatorConstants.ARM_ALGAE_STATES[isBack ? 1 : 0])
+        .andThen(() -> System.out.println(armState));
     }
     public Command armLX() {
-        return scoreCommands[scoreLevel];
+        return Commands.defer(() -> {
+            return CatzElevator.Instance.setpointCommand(ElevatorConstants.ELEVATOR_SCORE_SETPOINTS[isBack ? 1 : 0][scoreLevel])
+            .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.PIVOT_SCORE_SETPOINTS[isBack ? 1 : 0][scoreLevel]))
+            .beforeStarting(() -> armState = ElevatorConstants.ARM_SCORE_STATES[isBack ? 1 : 0][scoreLevel])
+            .andThen(() -> System.out.println(armState));
+        },
+        Set.of(CatzElevator.Instance, CatzMantaPivot.Instance));
     }
 
     /* --- INTAKE --- */
@@ -396,8 +383,14 @@ public class CatzSuperstructure {
 
     public Command decrementScorePosition() {
         return Commands.runOnce(() -> {
-            scoreLevel--;
+            scoreLevel += 3;
             scoreLevel %= 4;
+        });
+    }
+
+    public Command toggleFrontBack() {
+        return Commands.runOnce(() -> {
+            isBack = !isBack;
         });
     }
 

@@ -9,6 +9,7 @@ import com.google.common.base.Supplier;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.CatzAbstractions.io.GenericMotorIO;
 import frc.robot.Utilities.Setpoint;
@@ -27,7 +28,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		this.io = io;
 		this.inputs = inputs;
 		this.name = name;
-		this.TARGET_SETPOINT_STR = this.name + "Target Setpoint Rot";
+		this.TARGET_SETPOINT_STR = this.name + "Target Setpoint Mech Rots";
 	}
 
 	int logCount = 0;
@@ -46,7 +47,7 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 		this.setpoint = setpoint;
 		setpoint.apply(io);
 		if (setpoint.mode.isVelocityControl() || setpoint.mode.isPositionControl()) {
-			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits);
+			Logger.recordOutput(TARGET_SETPOINT_STR, setpoint.baseUnits*TO_ROT);
 		}
 	}
 
@@ -62,7 +63,6 @@ public abstract class GenericMotorSubsystem<S extends GenericMotorIO<I>, I exten
 	}
 
 	public Command setpointCommand(Setpoint setpoint){
-		// System.out.println("settt:: " + setpoint.mode);
 		return runOnce(() -> applySetpoint(setpoint));
 	}
 
