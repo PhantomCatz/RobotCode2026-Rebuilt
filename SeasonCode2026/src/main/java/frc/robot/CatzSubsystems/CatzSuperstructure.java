@@ -302,7 +302,7 @@ public class CatzSuperstructure {
 
     public Command toggleManualElevator() {
     return CatzElevator.Instance.followSetpointCommand(() -> {
-                double input = -(RobotContainer.xboxAux.getLeftY()) * 12;
+                double input = -(RobotContainer.xboxAux.getLeftY());
                 if (Math.abs(input) < 0.84)
                     return Setpoint.withVoltageSetpoint(0.0);
 

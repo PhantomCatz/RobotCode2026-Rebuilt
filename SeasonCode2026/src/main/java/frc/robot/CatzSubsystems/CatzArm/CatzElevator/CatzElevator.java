@@ -63,7 +63,6 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
             prevG = newG;
             prevFF = newFF;
             setGainsPIDSVAG(newP, newI, newD, newS, newV, newA, newG);
-            ElevatorConstants.GRAVITY_FEEDFORWARD = newFF;
         }
     }
 

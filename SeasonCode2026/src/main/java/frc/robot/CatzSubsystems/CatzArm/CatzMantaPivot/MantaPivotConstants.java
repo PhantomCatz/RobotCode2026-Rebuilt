@@ -73,7 +73,7 @@ public class MantaPivotConstants {
 	private static final int MANTA_PIVOT_DEPLOY_MOTOR_ID = 11;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.7;
+	public static final double GRAVITY_FEEDFORWARD = 0.0;
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -100,7 +100,7 @@ public class MantaPivotConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-		FXConfig.Feedback.SensorToMechanismRatio = 60/12*46/30*56/18*48/12;
+		FXConfig.Feedback.SensorToMechanismRatio = 60/10*46/30*56/18*48/18;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

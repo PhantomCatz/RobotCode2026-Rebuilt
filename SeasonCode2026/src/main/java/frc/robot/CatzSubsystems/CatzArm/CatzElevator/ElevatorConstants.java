@@ -20,7 +20,7 @@ public class ElevatorConstants {
 	// TODO make real numbers
 	// inches of arm (even though it says rotations)
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
-	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20); //0.388 max
+	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20);
 
 	public static final Angle L1_FRONT_POSITION = Units.Rotations.of(5.0);
 	public static final Angle L2_FRONT_POSITION = Units.Rotations.of(10.0);
@@ -72,7 +72,7 @@ public class ElevatorConstants {
 	private static final int ELEVATOR_MOTOR_ID = 30;
 
 	public static final Angle ELEVATOR_THRESHOLD = Units.Degrees.of(2.0);
-	public static double GRAVITY_FEEDFORWARD = 0.7; // TODO change back to final after tuning
+	public static final double GRAVITY_FEEDFORWARD = 0.85;
 
 	public static final LoggedTunableNumber gravityFF = new LoggedTunableNumber("Elevator/gravityFF", GRAVITY_FEEDFORWARD);
 
