@@ -112,7 +112,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 			BaseStatusSignal.setUpdateFrequencyForAll(4.0, allSignals);
 			BaseStatusSignal.setUpdateFrequencyForAll(100.0, internalPositionRotations, velocityRps, leaderTalon.getMotorVoltage());
 		}else{
-			BaseStatusSignal.setUpdateFrequencyForAll(4.0, allSignals);
+			BaseStatusSignal.setUpdateFrequencyForAll(50.0, allSignals);
 		}
 		if (followerTalons != null && followerTalons.length > 0) {
 			BaseStatusSignal.setUpdateFrequencyForAll(100.0,

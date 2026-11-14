@@ -152,7 +152,7 @@ public class ModuleIORealFoc implements ModuleIO {
         100.0, drivePosition, driveVelocity); //our robot runs on 50 hertz. this update frequency is twice as fast
 
     // Optimize bus utilization
-    driveTalon.optimizeBusUtilization(0, 1.0);
+    // driveTalon.optimizeBusUtilization(50, 1.0);
 
     // Init steer controllers from config constants
     steerTalon = new TalonFX(config.steerID(), new CANBus(DRIVE_CANBUS));
@@ -185,7 +185,7 @@ public class ModuleIORealFoc implements ModuleIO {
     BaseStatusSignal.setUpdateFrequencyForAll(
         100.0, steerPosition, steerVelocity); //frequency twice as fast again
 
-    steerTalon.optimizeBusUtilization(0, 1.0);
+    steerTalon.optimizeBusUtilization(50, 1.0);
 
     // check if motors are initialized correctly
     for (int i = 0; i < 5; i++) {
@@ -214,7 +214,7 @@ public class ModuleIORealFoc implements ModuleIO {
     inputs.isAbsEncoderConnected = encoder.isConnected();
     inputs.isDriveMotorConnected = drivePosition.getStatus().isOK();
     inputs.isSteerMotorConnected = steerPosition.getStatus().isOK();
-    // Refresh drive motor valuesp
+    // Refresh drive motor values
     inputs.drivePositionUnits     = drivePosition.getValueAsDouble();
     inputs.driveVelocityRPS       = driveVelocity.getValueAsDouble();
     inputs.driveAppliedVolts      = driveAppliedVolts.getValueAsDouble();
@@ -232,6 +232,7 @@ public class ModuleIORealFoc implements ModuleIO {
     inputs.steerVelocityRadsPerSec = Units.rotationsToRadians(steerVelocity.getValueAsDouble());
     inputs.steerSupplyCurrentAmps  = steerSupplyCurrent.getValueAsDouble();
     inputs.steerTorqueCurrentAmps  = steerTorqueCurrent.getValueAsDouble();
+    inputs.steerAppliedVolts       = steerAppliedVolts.getValueAsDouble();
   }
 
   public void runDriveVolts(double volts) {
