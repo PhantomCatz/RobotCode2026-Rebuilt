@@ -1,7 +1,6 @@
 package frc.robot;
 
 
-import java.util.Set;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.CatzSubsystems.CatzSuperstructure;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.CatzRobotTracker;
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.CatzDrivetrain;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeDeploy.CatzIntakeDeploy;
-import frc.robot.CatzSubsystems.CatzIntake.CatzIntakeRoller.CatzIntakeRoller;
 import frc.robot.Commands.DriveAndRobotOrientationCmds.TeleopDriveCmd;
 import frc.robot.Utilities.AllianceFlipUtil;
 import frc.robot.Utilities.DoublePressTracker;
@@ -87,18 +84,17 @@ public class RobotContainer {
     xboxDrv.a().onTrue(superstructure.armLX());
     xboxDrv.x().onTrue(superstructure.armStow());
     xboxDrv.b().onTrue(superstructure.armHold());
-    xboxDrv.y().onTrue(superstructure.armAlgae());
+    xboxDrv.y().onTrue(superstructure.armVertical());
 
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
 
     xboxAux.y().onTrue(superstructure.toggleManualMantaPivot());
+    xboxAux.b().onTrue(superstructure.toggleManualElevator());
 
     xboxAux.start().multiPress(2, 0.4).onTrue(superstructure.enableClimbSoftLimit().alongWith(superstructure.resetClimbPose()));
     xboxAux.back().multiPress(2, 0.4).onTrue(superstructure.disableClimbSoftLimit());
-
-    xboxAux.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     xboxAux.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.cmdClimbStow().andThen(Commands.waitSeconds(0.5).andThen(CatzSuperstructure.Instance.deployIntake())));
     xboxAux.rightStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.stowIntake().andThen(Commands.waitSeconds(0.5)).andThen(CatzSuperstructure.Instance.cmdClimbReach()));

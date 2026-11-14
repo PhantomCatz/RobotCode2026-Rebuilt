@@ -110,6 +110,10 @@ public class CatzSuperstructure {
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.STOW))
         .beforeStarting(() -> armState = ArmState.STOW);
     }
+    public Command armVertical() {
+        return CatzElevator.Instance.setpointCommand(ElevatorConstants.L1_FRONT)
+        .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.VERTICAL));
+    }
     public Command armHold() {
         return CatzElevator.Instance.setpointCommand(ElevatorConstants.HOLD)
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.HOLD))

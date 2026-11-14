@@ -57,7 +57,7 @@ public class ElevatorConstants {
 	public static final ArmState[] ARM_ALGAE_STATES = {ArmState.ALGAE_FRONT, ArmState.ALGAE_BACK};
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-		case SN_MANTA -> new Gains(5.5, 0, 0.0, 0.35, 0.0, 0, 0.0);
+		case SN_MANTA -> new Gains(0.0, 0, 0.0, 0.0, 0.0, 0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 
@@ -72,7 +72,9 @@ public class ElevatorConstants {
 	private static final int ELEVATOR_MOTOR_ID = 30;
 
 	public static final Angle ELEVATOR_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.7;
+	public static double GRAVITY_FEEDFORWARD = 0.7; // TODO change back to final after tuning
+
+	public static final LoggedTunableNumber gravityFF = new LoggedTunableNumber("Elevator/gravityFF", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -99,7 +101,7 @@ public class ElevatorConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-		FXConfig.Feedback.SensorToMechanismRatio = 4*1.432*Math.PI*2; // rotations of motor for one inch raise elevator
+		FXConfig.Feedback.SensorToMechanismRatio = 4/1.432/Math.PI/2; // rotations of motor for one inch raise elevator
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

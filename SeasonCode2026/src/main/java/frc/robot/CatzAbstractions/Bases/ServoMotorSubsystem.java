@@ -6,6 +6,8 @@ import frc.robot.Utilities.EqualsUtil;
 
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -30,6 +32,8 @@ public abstract class ServoMotorSubsystem<S extends GenericMotorIO<I>, I extends
 	@Override
 	public void periodic() {
 		super.periodic();
+
+		Logger.processInputs(name, (LoggableInputs) inputs);
 
 		if (isFullManual) {
 			runFullManual(manualSpeed);

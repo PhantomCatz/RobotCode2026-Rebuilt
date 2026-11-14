@@ -20,6 +20,7 @@ public class MantaPivotConstants {
 	// Arm angle in rotations
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
 	public static final Angle HORIZONTAL_POSITION = Units.Rotation.of(0.0);
+	public static final Angle VERTICAL_POSITION = Units.Rotation.of(0.25);
 	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20);
 
 	public static final Angle L1_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.05));
@@ -37,6 +38,7 @@ public class MantaPivotConstants {
 
 	public static final Setpoint STOW = Setpoint.withMotionMagicSetpoint(STOW_POSITION);
 	public static final Setpoint HOLD = Setpoint.withMotionMagicSetpoint(HOLD_POSITION);
+	public static final Setpoint VERTICAL = Setpoint.withMotionMagicSetpoint(VERTICAL_POSITION);
 
 	public static final Setpoint L1_FRONT = Setpoint.withMotionMagicSetpoint(L1_FRONT_POSITION);
 	public static final Setpoint L2_FRONT = Setpoint.withMotionMagicSetpoint(L2_FRONT_POSITION);
@@ -60,22 +62,18 @@ public class MantaPivotConstants {
     };
 
 
-    public static final LoggedTunableNumber kP = new LoggedTunableNumber("MantaPivot Deploy/kP", gains.kP());
-	public static final LoggedTunableNumber kI = new LoggedTunableNumber("MantaPivot Deploy/kI", gains.kI());
-	public static final LoggedTunableNumber kD = new LoggedTunableNumber("MantaPivot Deploy/kD", gains.kD());
-	public static final LoggedTunableNumber kS = new LoggedTunableNumber("MantaPivot Deploy/kS", gains.kS());
-    public static final LoggedTunableNumber kV = new LoggedTunableNumber("MantaPivot Deploy/kV", gains.kV());
-	public static final LoggedTunableNumber kA = new LoggedTunableNumber("MantaPivot Deploy/kA", gains.kA());
-	public static final LoggedTunableNumber kG = new LoggedTunableNumber("MantaPivot Deploy/kG", gains.kG());
-
-    // public static final LoggedTunableNumber kD = new LoggedTunableNumber("MantaPivot Deploy/kD", gains.kD());
-    // public static final LoggedTunableNumber kS = new LoggedTunableNumber("MantaPivot Deploy/kS", gains.kS());
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Manta Pivot/kP", gains.kP());
+	public static final LoggedTunableNumber kI = new LoggedTunableNumber("Manta Pivot/kI", gains.kI());
+	public static final LoggedTunableNumber kD = new LoggedTunableNumber("Manta Pivot/kD", gains.kD());
+	public static final LoggedTunableNumber kS = new LoggedTunableNumber("Manta Pivot/kS", gains.kS());
+    public static final LoggedTunableNumber kV = new LoggedTunableNumber("Manta Pivot/kV", gains.kV());
+	public static final LoggedTunableNumber kA = new LoggedTunableNumber("Manta Pivot/kA", gains.kA());
+	public static final LoggedTunableNumber kG = new LoggedTunableNumber("Manta Pivot/kG", gains.kG());
 
 	private static final int MANTA_PIVOT_DEPLOY_MOTOR_ID = 11;
 
 	public static final Angle DEPLOY_THRESHOLD = Units.Degrees.of(2.0);
 	public static final double GRAVITY_FEEDFORWARD = 0.7;
-	// public static final LoggedTunableNumber kG = new LoggedTunableNumber("MantaPivot Deploy/kG", GRAVITY_FEEDFORWARD);
 
     public static final TalonFXConfiguration getFXConfig() {
 		TalonFXConfiguration FXConfig = new TalonFXConfiguration();
@@ -102,7 +100,7 @@ public class MantaPivotConstants {
 		FXConfig.Voltage.PeakForwardVoltage = 12.0;
 		FXConfig.Voltage.PeakReverseVoltage = -12.0;
 
-		FXConfig.Feedback.SensorToMechanismRatio = 60/11*46/30*56/18*54/12;
+		FXConfig.Feedback.SensorToMechanismRatio = 60/12*46/30*56/18*48/12;
 
 		FXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		FXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

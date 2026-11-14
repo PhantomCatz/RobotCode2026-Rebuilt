@@ -1,7 +1,6 @@
 package frc.robot.CatzSubsystems.CatzArm.CatzMantaPivot;
 
 
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal;

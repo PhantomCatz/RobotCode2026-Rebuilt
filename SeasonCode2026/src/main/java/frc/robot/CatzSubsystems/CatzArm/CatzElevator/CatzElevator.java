@@ -37,6 +37,7 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
     double prevV = 0.0;
     double prevA = 0.0;
     double prevG = 0.0;
+    double prevFF = 0.0;
 
     @Override
     public void periodic(){
@@ -50,8 +51,9 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
         double newV = ElevatorConstants.kV.get();
         double newA = ElevatorConstants.kA.get();
         double newG = ElevatorConstants.kG.get();
+        double newFF = ElevatorConstants.gravityFF.get();
 
-        if(newP != prevP || newI != prevI || newD != prevD || newS != prevS || newV != prevV || newA != prevA || newG != prevG){
+        if(newP != prevP || newI != prevI || newD != prevD || newS != prevS || newV != prevV || newA != prevA || newG != prevG || newFF != prevFF){
             prevP = newP;
             prevI = newI;
             prevD = newD;
@@ -59,7 +61,9 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
             prevV = newV;
             prevA = newA;
             prevG = newG;
+            prevFF = newFF;
             setGainsPIDSVAG(newP, newI, newD, newS, newV, newA, newG);
+            ElevatorConstants.GRAVITY_FEEDFORWARD = newFF;
         }
     }
 

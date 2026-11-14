@@ -2,9 +2,10 @@ package frc.robot.CatzSubsystems.CatzArm.CatzElevator;
 
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.CatzAbstractions.io.GenericTalonFXIOReal;
+import frc.robot.CatzSubsystems.CatzArm.CatzMantaPivot.CatzMantaPivot;
 
 public class ElevatorIOTalonFX extends GenericTalonFXIOReal<ElevatorIO.ElevatorIOInputs> implements ElevatorIO{
     public ElevatorIOTalonFX(MotorIOTalonFXConfig config){
@@ -13,19 +14,9 @@ public class ElevatorIOTalonFX extends GenericTalonFXIOReal<ElevatorIO.ElevatorI
 
     @Override
     public void setMotionMagicSetpoint(double target){
-        double feedforward; // TODO make feedforward logic
-        if(CatzElevator.Instance.getLatencyCompensatedPosition() > 0.28){
-            feedforward = 0.0;
-        }else{
-            feedforward = -ElevatorConstants.GRAVITY_FEEDFORWARD* Math.sin(CatzElevator.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
-        }
-        // Logger.recordOutput("Elevator Setpoint", target);
+        // Make feedforward depending on angle of pivot
+        double feedforward = ElevatorConstants.GRAVITY_FEEDFORWARD * Math.sin(Units.rotationsToRadians(CatzMantaPivot.Instance.getLatencyCompensatedPosition()));
+        System.out.println("feedforward"+feedforward);
         setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
-    }
-
-    @Override
-    public void setVoltageSetpoint(double target){
-        double feedforward = -ElevatorConstants.GRAVITY_FEEDFORWARD * Math.sin(CatzElevator.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
-        setControl(new VoltageOut(target + feedforward));
     }
 }
