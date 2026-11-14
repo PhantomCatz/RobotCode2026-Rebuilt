@@ -19,7 +19,7 @@ public class MantaPivotConstants {
 	// TODO make real numbers
 	// Arm angle in rotations
 	public static final Angle STOW_POSITION = Units.Rotations.of(0.0);
-	public static final Angle HORIZONTAL_POSITION = Units.Rotation.of(5.0/360.0);
+	public static final Angle HORIZONTAL_POSITION = Units.Rotation.of(0.0);
 	public static final Angle HOLD_POSITION = Units.Rotations.of(0.20);
 
 	public static final Angle L1_FRONT_POSITION = HORIZONTAL_POSITION.plus(Units.Rotations.of(0.05));
