@@ -83,7 +83,7 @@ public abstract class GenericSparkmaxIOReal<T extends GenericMotorIO.MotorIOInpu
         inputs.isLeaderConnected = true;
 
         // Position: REV rotations -> Adjusted rotations
-        inputs.position = encoder.getPosition() * gearRatio;
+        inputs.positionRot = encoder.getPosition() * gearRatio;
 
         // Velocity: REV RPM -> RPS -> Adjusted RPS
         inputs.velocityRPS = (encoder.getVelocity() / 60.0) * gearRatio;

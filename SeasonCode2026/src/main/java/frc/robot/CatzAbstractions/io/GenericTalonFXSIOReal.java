@@ -135,7 +135,7 @@ public abstract class GenericTalonFXSIOReal<T extends GenericMotorIO.MotorIOInpu
 			inputs.isFollowerConnected = new boolean[0];
 		}
 
-        inputs.position = internalPositionRotations.getValueAsDouble() * Final_Ratio; //TODO Constants should be ALL_CAPS // Yuyhun said that because we get it from constructor that it should be lowercase
+        inputs.positionRot = internalPositionRotations.getValueAsDouble() * Final_Ratio; //TODO Constants should be ALL_CAPS // Yuyhun said that because we get it from constructor that it should be lowercase
         inputs.velocityRPS = velocityRps.getValueAsDouble() * Final_Ratio;
         inputs.accelerationRPS = acceleration.getValueAsDouble() * Final_Ratio;
         inputs.appliedVolts = appliedVoltage.stream()

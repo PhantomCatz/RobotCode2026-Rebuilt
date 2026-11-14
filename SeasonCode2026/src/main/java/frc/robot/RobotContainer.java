@@ -48,7 +48,6 @@ public class RobotContainer {
             .resetPose(new Pose2d(CatzRobotTracker.Instance.getEstimatedPose().getTranslation(), new Rotation2d()));
       }
     }));
-    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
 
     // Robot Position Reset
     // Right field Corner
@@ -81,31 +80,18 @@ public class RobotContainer {
     // INTAKE
     // -------------------------------------------------------------------------
     xboxDrv.leftStick().multiPress(2, 0.4).onTrue(CatzSuperstructure.Instance.toggleIntakeDeploy());
-    xboxDrv.b().onTrue(CatzSuperstructure.Instance.toggleIntakeRollers());
-
-    xboxDrv.y().onTrue(Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 1.5)));
-    xboxDrv.y().whileTrue(CatzSuperstructure.Instance.jiggleIntakeCommand());
-    xboxDrv.y().onFalse((Commands.runOnce(() -> CatzIntakeDeploy.Instance.setGainsPV(10.5, 2)))
-               .alongWith(CatzSuperstructure.Instance.deployIntake().andThen(Commands.defer(() -> {
-      if(CatzSuperstructure.Instance.isIntakeOn){
-        return CatzSuperstructure.Instance.intakeON();
-      }else{
-        return CatzSuperstructure.Instance.intakeOFF();
-      }
-    }, Set.of(CatzIntakeRoller.Instance)))));
 
     xboxDrv.povUp().onTrue(superstructure.incrementScorePosition());
     xboxDrv.povDown().onTrue(superstructure.decrementScorePosition());
     xboxDrv.leftBumper().onTrue(superstructure.toggleFrontBack());
     xboxDrv.a().onTrue(superstructure.armLX());
     xboxDrv.x().onTrue(superstructure.armStow());
+    xboxDrv.b().onTrue(superstructure.armHold());
+    xboxDrv.y().onTrue(superstructure.armAlgae());
 
     // -------------------------------------------------------------------------
     // FUNCTIONAL CONTROLS with XBOX AUX
     // -------------------------------------------------------------------------
-
-    xboxAux.a().onTrue(superstructure.armHold());
-    xboxAux.x().onTrue(superstructure.armAlgae());
 
     xboxAux.y().onTrue(superstructure.toggleManualMantaPivot());
 

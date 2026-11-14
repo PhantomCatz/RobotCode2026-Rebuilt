@@ -11,17 +11,17 @@ public class MantaPivotIOTalonFX extends GenericTalonFXIOReal<MantaPivotIO.Manta
         super(config, true);
     }
 
-    @Override
-    public void setMotionMagicSetpoint(double target){
-        double feedforward; // TODO make feedforward logic
-        if(CatzMantaPivot.Instance.getLatencyCompensatedPosition() > 0.28){
-            feedforward = 0.0;
-        }else{
-            feedforward = -MantaPivotConstants.GRAVITY_FEEDFORWARD* Math.sin(CatzMantaPivot.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
-        }
-        // Logger.recordOutput("Intake Deploy Setpoint", target);
-        setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
-    }
+    // @Override
+    // public void setMotionMagicSetpoint(double target){
+    //     double feedforward; // TODO make feedforward logic
+    //     if(CatzMantaPivot.Instance.getLatencyCompensatedPosition() > 0.28){
+    //         feedforward = 0.0;
+    //     }else{
+    //         feedforward = -MantaPivotConstants.GRAVITY_FEEDFORWARD* Math.sin(CatzMantaPivot.Instance.getLatencyCompensatedPosition() * 2 * Math.PI);
+    //     }
+    //     // Logger.recordOutput("Intake Deploy Setpoint", target);
+    //     setControl(new MotionMagicVoltage(target).withFeedForward(feedforward));
+    // }
 
     @Override
     public void setVoltageSetpoint(double target){

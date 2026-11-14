@@ -141,7 +141,7 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		}
 		inputs.isFollowerConnected = connectedBuffer;
 
-		inputs.position = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
+		inputs.positionRot = BaseStatusSignal.getLatencyCompensatedValueAsDouble(internalPositionRotations, velocityRps);
 		inputs.velocityRPS = velocityRps.getValueAsDouble();
 		inputs.accelerationRPS = acceleration.getValueAsDouble();
 

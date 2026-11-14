@@ -103,7 +103,7 @@ public class GenericIOSim<T extends GenericMotorIO.MotorIOInputs> implements Gen
         inputs.isFollowerConnected = new boolean[0]; // No followers simulated here
 
         // Convert Sim Units (Radians) to Robot Units (Rotations)
-        inputs.position = Units.radiansToRotations(motorSim.getAngularPositionRad());
+        inputs.positionRot = Units.radiansToRotations(motorSim.getAngularPositionRad());
         inputs.velocityRPS = Units.radiansToRotations(motorSim.getAngularVelocityRadPerSec());
         // Simple derivative for acceleration
 
