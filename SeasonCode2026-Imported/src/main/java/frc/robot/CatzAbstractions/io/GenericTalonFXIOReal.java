@@ -9,6 +9,8 @@ import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 
+import frc.robot.Utilities.CANBusManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -107,6 +109,17 @@ public abstract class GenericTalonFXIOReal<T extends GenericMotorIO.MotorIOInput
 		signalList.addAll(tempCelsius);
 
 		allSignals = signalList.toArray(new BaseStatusSignal[0]);
+
+		CANBusManager.register(
+			config.mainBus,
+			internalPositionRotations,
+			velocityRps,
+			acceleration,
+			appliedVoltage.get(0),
+			supplyCurrent.get(0),
+			torqueCurrent.get(0),
+			tempCelsius.get(0)
+		);
 
 		if(requiresFastUpdate){
 			BaseStatusSignal.setUpdateFrequencyForAll(4.0, allSignals);

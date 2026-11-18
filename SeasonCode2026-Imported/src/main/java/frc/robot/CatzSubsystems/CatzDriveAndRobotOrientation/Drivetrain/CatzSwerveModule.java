@@ -106,12 +106,7 @@ public class CatzSwerveModule {
   public void periodic() {
     // Process and Log Module Inputs
     io.updateInputs(inputs);
-
-    if(logCount >= 5){
-      Logger.processInputs(motorOutputs, inputs);
-      logCount = 0;
-    }
-    logCount++;
+    Logger.processInputs(motorOutputs, inputs);
 
     // Display alerts
     driveMotorDisconnected.set(!inputs.isDriveMotorConnected);

@@ -143,9 +143,9 @@ public class CatzDrivetrain extends SubsystemBase {
     // ----------------------------------------------------------------------------------------------------
     // Update inputs (sensors/encoders) for code logic and advantage kit
     // ----------------------------------------------------------------------------------------------------
-    if (allSignals.length > 0) {
-      BaseStatusSignal.refreshAll(allSignals);
-    }
+    // if (allSignals.length > 0) {
+    //   BaseStatusSignal.refreshAll(allSignals);
+    // } //Replaced by CANBusManager.java
 
     for (CatzSwerveModule module : m_swerveModules) {
       module.periodic();

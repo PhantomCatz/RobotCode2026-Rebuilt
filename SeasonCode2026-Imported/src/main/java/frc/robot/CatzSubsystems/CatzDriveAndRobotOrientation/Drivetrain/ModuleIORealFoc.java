@@ -23,6 +23,7 @@ import org.wpilib.units.measure.Current;
 import org.wpilib.units.measure.Voltage;
 
 import frc.robot.CatzSubsystems.CatzDriveAndRobotOrientation.Drivetrain.DriveConstants.ModuleIDs;
+import frc.robot.Utilities.CANBusManager;
 
 public class ModuleIORealFoc implements ModuleIO {
   // Hardware
@@ -184,6 +185,8 @@ public class ModuleIORealFoc implements ModuleIO {
     // Set Update Frequency
     BaseStatusSignal.setUpdateFrequencyForAll(
         100.0, steerPosition, steerVelocity); //frequency twice as fast again
+
+    CANBusManager.register(DRIVE_CANBUS, getSignals());
 
     steerTalon.optimizeBusUtilization(50, 1.0);
 
