@@ -18,6 +18,7 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.auto.AutoFactory;
 import org.wpilib.units.Units;
 import org.wpilib.driverstation.internal.DriverStationBackend;
+import org.wpilib.simulation.RoboRioSim;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
@@ -133,7 +134,7 @@ public class Robot extends LoggedRobot {
     //         });
 
     // Set Brownout Voltage to WPILIB recommendations
-    RobotController.setBrownoutVoltages(6.3, 7);
+    RobotController.setBrownoutVoltages(5.00, 6.00);
 
     // Print out Catz Constant enums
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());

@@ -46,9 +46,9 @@ public class DetectionSubsystem<IO extends DetectionIOLimelight> extends Subsyst
 			Logger.processInputs("RealInputs/Detection", inputs);
 			outputTelemetry();
 			Logger.recordOutput("Detection/nearestFuel", inputs.nearestFuel);
+			Logger.recordOutput(config.name + "/Has Fuel", hasFuel());
+			Logger.recordOutput(config.name + "/Latest Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(config.name));
 		}
-		Logger.recordOutput(config.name + "/Has Fuel", hasFuel());
-		Logger.recordOutput(config.name + "/Latest Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(config.name));
 	}
 
 	public boolean getDisabled() {
