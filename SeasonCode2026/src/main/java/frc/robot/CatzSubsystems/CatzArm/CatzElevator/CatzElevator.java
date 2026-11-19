@@ -51,9 +51,9 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
         double newV = ElevatorConstants.kV.get();
         double newA = ElevatorConstants.kA.get();
         double newG = ElevatorConstants.kG.get();
-        double newFF = ElevatorConstants.gravityFF.get();
 
-        if(newP != prevP || newI != prevI || newD != prevD || newS != prevS || newV != prevV || newA != prevA || newG != prevG || newFF != prevFF){
+
+        if(newP != prevP || newI != prevI || newD != prevD || newS != prevS || newV != prevV || newA != prevA || newG != prevG){
             prevP = newP;
             prevI = newI;
             prevD = newD;
@@ -61,7 +61,6 @@ public class CatzElevator extends ServoMotorSubsystem<ElevatorIO, ElevatorIO.Ele
             prevV = newV;
             prevA = newA;
             prevG = newG;
-            prevFF = newFF;
             setGainsPIDSVAG(newP, newI, newD, newS, newV, newA, newG);
         }
     }

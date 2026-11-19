@@ -106,28 +106,28 @@ public class CatzSuperstructure {
 
 
     public Command armStow() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.STOW)
+        return CatzElevator.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(ElevatorConstants.STOW_POSITION))
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.STOW))
         .beforeStarting(() -> armState = ArmState.STOW);
     }
     public Command armVertical() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.L1_FRONT)
+        return CatzElevator.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(ElevatorConstants.L1_FRONT_POSITION))
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.VERTICAL));
     }
     public Command armHold() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.HOLD)
+        return CatzElevator.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(ElevatorConstants.HOLD_POSITION))
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.HOLD))
         .beforeStarting(() -> armState = ArmState.HOLD);
     }
     public Command armAlgae() {
-        return CatzElevator.Instance.setpointCommand(ElevatorConstants.ELEVATOR_ALGAE_SETPOINTS[isBack ? 1 : 0])
+        return CatzElevator.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(ElevatorConstants.ELEVATOR_ALGAE_SETPOINTS[isBack ? 1 : 0]))
         .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.PIVOT_ALGAE_SETPOINTS[isBack ? 1 : 0]))
         .beforeStarting(() -> armState = ElevatorConstants.ARM_ALGAE_STATES[isBack ? 1 : 0])
         .andThen(() -> System.out.println(armState));
     }
     public Command armLX() {
         return Commands.defer(() -> {
-            return CatzElevator.Instance.setpointCommand(ElevatorConstants.ELEVATOR_SCORE_SETPOINTS[isBack ? 1 : 0][scoreLevel])
+            return CatzElevator.Instance.followSetpointCommand(() -> Setpoint.withMotionMagicSetpoint(ElevatorConstants.ELEVATOR_SCORE_SETPOINTS[isBack ? 1 : 0][scoreLevel]))
             .alongWith(CatzMantaPivot.Instance.setpointCommand(MantaPivotConstants.PIVOT_SCORE_SETPOINTS[isBack ? 1 : 0][scoreLevel]))
             .beforeStarting(() -> armState = ElevatorConstants.ARM_SCORE_STATES[isBack ? 1 : 0][scoreLevel])
             .andThen(() -> System.out.println(armState));

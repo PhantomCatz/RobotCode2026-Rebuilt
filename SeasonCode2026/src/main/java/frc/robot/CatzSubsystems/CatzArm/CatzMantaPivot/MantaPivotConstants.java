@@ -57,7 +57,7 @@ public class MantaPivotConstants {
 	public static final Setpoint[] PIVOT_ALGAE_SETPOINTS = {ALGAE_FRONT, ALGAE_BACK};
 
     public static final Gains gains = switch (CatzConstants.getRobotType()) {
-        case SN_MANTA -> new Gains(2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        case SN_MANTA -> new Gains(50.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0);
 		default -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     };
 

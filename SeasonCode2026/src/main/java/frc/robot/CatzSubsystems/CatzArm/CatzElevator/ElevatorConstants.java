@@ -51,8 +51,8 @@ public class ElevatorConstants {
 	public static final Setpoint ALGAE_FRONT = Setpoint.withMotionMagicSetpoint(ALGAE_FRONT_POSITION);
 	public static final Setpoint ALGAE_BACK = Setpoint.withMotionMagicSetpoint(ALGAE_BACK_POSITION);
 
-	public static final Setpoint[][] ELEVATOR_SCORE_SETPOINTS = {{L1_FRONT, L2_FRONT, L3_FRONT, L4_FRONT}, {L1_BACK, L2_BACK, L3_BACK, L4_BACK}};
-	public static final Setpoint[] ELEVATOR_ALGAE_SETPOINTS = {ALGAE_FRONT, ALGAE_BACK};
+	public static final Angle[][] ELEVATOR_SCORE_SETPOINTS = {{L1_FRONT_POSITION, L2_FRONT_POSITION, L3_FRONT_POSITION, L4_FRONT_POSITION}, {L1_BACK_POSITION, L2_BACK_POSITION, L3_BACK_POSITION, L4_BACK_POSITION}};
+	public static final Angle[] ELEVATOR_ALGAE_SETPOINTS = {ALGAE_FRONT_POSITION, ALGAE_BACK_POSITION};
 	public static final ArmState[][] ARM_SCORE_STATES = {{ArmState.L1_FRONT, ArmState.L2_FRONT, ArmState.L3_FRONT, ArmState.L4_FRONT}, {ArmState.L1_BACK, ArmState.L2_BACK, ArmState.L3_BACK, ArmState.L4_BACK}};
 	public static final ArmState[] ARM_ALGAE_STATES = {ArmState.ALGAE_FRONT, ArmState.ALGAE_BACK};
 
@@ -72,7 +72,7 @@ public class ElevatorConstants {
 	private static final int ELEVATOR_MOTOR_ID = 30;
 
 	public static final Angle ELEVATOR_THRESHOLD = Units.Degrees.of(2.0);
-	public static final double GRAVITY_FEEDFORWARD = 0.85;
+	public static final double GRAVITY_FEEDFORWARD = 0.28001;
 
 	public static final LoggedTunableNumber gravityFF = new LoggedTunableNumber("Elevator/gravityFF", GRAVITY_FEEDFORWARD);
 
@@ -86,7 +86,7 @@ public class ElevatorConstants {
 		FXConfig.Slot0.kA = gains.kA();
 		FXConfig.Slot0.kG = gains.kG();
 
-		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 0.85;
+		FXConfig.MotionMagic.MotionMagicCruiseVelocity = 20.0;
         FXConfig.MotionMagic.MotionMagicAcceleration = 25.0;
 		FXConfig.MotionMagic.MotionMagicJerk = 250.0;
 
