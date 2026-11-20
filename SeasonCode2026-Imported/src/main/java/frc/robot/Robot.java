@@ -144,18 +144,18 @@ public class Robot extends LoggedRobot {
 
     // Run hardware mode check
     if (Robot.isReal()) { // REAL ROBOT
-      if (CatzConstants.hardwareMode == RobotHardwareMode.SIM) {
+      if (CatzConstants.hardwareMode != RobotHardwareMode.REAL) {
         System.out.println("Wrong Robot Constant selection, Check CatzConstants hardwareMode");
         System.exit(0);
       }
 
-      if (CatzConstants.getRobotType() == RobotID.SN_TEST) {
+      if (CatzConstants.getRobotType() != RobotID.SN2) {
         System.out.println("Wrong Robot ID selection, Check CatzConstants robotID");
         System.exit(0);
       }
 
     } else { // SIM ROBOT
-      if (CatzConstants.hardwareMode == RobotHardwareMode.REAL) {
+      if (CatzConstants.hardwareMode != RobotHardwareMode.SIM) {
         System.out.println("Wrong Robot Constant selection, Check CatzConstants hardwareMode");
         System.exit(0);
       }
