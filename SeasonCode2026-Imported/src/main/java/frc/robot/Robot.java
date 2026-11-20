@@ -134,7 +134,7 @@ public class Robot extends LoggedRobot {
     //         });
 
     // Set Brownout Voltage to WPILIB recommendations
-    RobotController.setBrownoutVoltages(5.00, 6.00);
+    RobotController.setBrownoutVoltages(6.00, 7.00);
 
     // Print out Catz Constant enums
     System.out.println("Enviroment: " + CatzConstants.robotScenario.toString());
